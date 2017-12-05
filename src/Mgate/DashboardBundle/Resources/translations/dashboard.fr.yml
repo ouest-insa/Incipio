@@ -34,7 +34,7 @@ dashboard:
   gestion_utilisateurs_clients: Gestion des Clients et des Utilisateurs
   guide_utilisateur: Guide utilisateur
   impayes_lister: Lister les impayés
-  indicateur: Indicateur
+  indicateurs: Indicateurs
   intervenants: Intervenants
   intervenants_lister: Lister les intervenants
   liste_diffusion: Liste de diffusion
