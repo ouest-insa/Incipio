@@ -118,7 +118,7 @@ class IndicateursController extends Controller
         $categories = [];
         foreach ($nombreJoursParMandat as $idMandat => $datas) {
             if ($datas > 0) {
-                $categories[] = $etudeManager->mandatToString($idMandat);
+                $categories[] = $idMandat;
                 $data[] = ['y' => 100 * ($nombreJoursAvecAvenantParMandat[$idMandat] - $datas) / $datas, 'nombreEtudes' => $datas, 'nombreEtudesAvecAv' => $nombreJoursAvecAvenantParMandat[$idMandat] - $datas];
             }
         }
@@ -132,7 +132,6 @@ class IndicateursController extends Controller
         $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
         $ob->tooltip->pointFormat('Les études ont duré en moyenne {point.y:.2f} % de plus que prévu<br/>avec {point.nombreEtudesAvecAv} jours de retard sur {point.nombreEtudes} jours travaillés');
         $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
-        $ob->xAxis->labels(['style' => self::DEFAULT_STYLE, 'rotation' => -45]);
         $ob->yAxis->max(100);
         $ob->yAxis->title(['text' => 'Taux (%)', 'style' => self::DEFAULT_STYLE]);
 
@@ -177,7 +176,7 @@ class IndicateursController extends Controller
         $categories = [];
         foreach ($nombreEtudesParMandat as $idMandat => $datas) {
             if ($datas > 0) {
-                $categories[] = $etudeManager->mandatToString($idMandat);
+                $categories[] = $idMandat;
                 $data[] = ['y' => $datas];
             }
         }
@@ -191,7 +190,6 @@ class IndicateursController extends Controller
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} études');
         $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
-        $ob->xAxis->labels(['style' => self::DEFAULT_STYLE, 'rotation' => -45]);
         $ob->yAxis->allowDecimals(false);
         $ob->yAxis->max(null);
         $ob->yAxis->title(['text' => 'Nombre d\'études', 'style' => self::DEFAULT_STYLE]);
@@ -272,7 +270,6 @@ class IndicateursController extends Controller
      */
     private function getSortie()
     {
-        $etudeManager = $this->get('Mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
 
         $sortiesParMandat = $em->getRepository('MgateTresoBundle:NoteDeFrais')->findAllByMandat();
@@ -334,7 +331,7 @@ class IndicateursController extends Controller
         }
 
         foreach ($mandats as $mandat) {
-            $categories[] = $etudeManager->mandatToString($mandat);
+            $categories[] = $mandat;
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
@@ -346,7 +343,6 @@ class IndicateursController extends Controller
         $ob->yAxis->title(['text' => 'Montant (€)', 'style' => self::DEFAULT_STYLE]);
         $ob->yAxis->max(null);
         $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
-        $ob->xAxis->labels(['style' => self::DEFAULT_STYLE, 'rotation' => -45]);
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} € HT');
 
@@ -424,7 +420,6 @@ class IndicateursController extends Controller
      */
     private function getNombreDePresentFormationsTimed()
     {
-        $etudeManager = $this->get('Mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
         $formationsParMandat = $em->getRepository('MgateFormationBundle:Formation')->findAllByMandat();
 
@@ -448,7 +443,7 @@ class IndicateursController extends Controller
 
         $series = [];
         foreach ($mandats as $mandat => $data) {
-            $series[] = ['name' => 'Mandat ' . $etudeManager->mandatToString($mandat), 'data' => $data];
+            $series[] = ['name' => 'Mandat ' . $mandat, 'data' => $data];
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
@@ -481,7 +476,6 @@ class IndicateursController extends Controller
      */
     private function getNombreFormationsParMandat()
     {
-        $etudeManager = $this->get('Mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
 
         $formationsParMandat = $em->getRepository('MgateFormationBundle:Formation')->findAllByMandat();
@@ -492,7 +486,7 @@ class IndicateursController extends Controller
         ksort($formationsParMandat); // Tri selon les promos
         foreach ($formationsParMandat as $mandat => $formations) {
             $data[] = count($formations);
-            $categories[] = $etudeManager->mandatToString($mandat);
+            $categories[] = $mandat;
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
@@ -500,11 +494,10 @@ class IndicateursController extends Controller
         $ob = $chartFactory->newColumnChart($series, $categories);
 
         $ob->chart->renderTo(__FUNCTION__);
-        $ob->title->text('Nombre de formations théorique par mandat');
+        $ob->title->text('Nombre de formations par mandat');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
         $ob->tooltip->pointFormat('{point.y} formations');
         $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
-        $ob->xAxis->labels(['style' => self::DEFAULT_STYLE, 'rotation' => -45]);
         $ob->yAxis->title(['text' => 'Nombre de formations', 'style' => self::DEFAULT_STYLE]);
         $ob->yAxis->max(null);
 
@@ -558,7 +551,7 @@ class IndicateursController extends Controller
         $categories = [];
         foreach ($nombreEtudesParMandat as $idMandat => $datas) {
             if ($datas > 0) {
-                $categories[] = $etudeManager->mandatToString($idMandat);
+                $categories[] = $idMandat;
                 $data[] = ['y' => 100 * $nombreEtudesAvecAvenantParMandat[$idMandat] / $datas, 'nombreEtudes' => $datas, 'nombreEtudesAvecAv' => $nombreEtudesAvecAvenantParMandat[$idMandat]];
             }
         }
@@ -571,7 +564,6 @@ class IndicateursController extends Controller
         $ob->title->text('Taux d\'avenants du mandat');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y:.2f} %<br/>avec {point.nombreEtudesAvecAv} sur {point.nombreEtudes} études');
-        $ob->xAxis->labels(['style' => self::DEFAULT_STYLE, 'rotation' => -45]);
         $ob->yAxis->max(100);
         $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
         $ob->yAxis->title(['text' => 'Taux (%)', 'style' => self::DEFAULT_STYLE]);
@@ -876,7 +868,7 @@ class IndicateursController extends Controller
         $categories = [];
         foreach ($cumuls as $idMandat => $datas) {
             if ($datas > 0) {
-                $categories[] = $etudeManager->mandatToString($idMandat);
+                $categories[] = $idMandat;
                 $data[] = ['y' => $datas, 'JEH' => $cumulsJEH[$idMandat], 'moyJEH' => ($datas - $cumulsFrais[$idMandat]) / $cumulsJEH[$idMandat]];
             }
         }
@@ -905,7 +897,6 @@ class IndicateursController extends Controller
         $ob = $chartFactory->newColumnChart($series, $categories);
 
         $ob->chart->renderTo(__FUNCTION__);
-        $ob->xAxis->labels(['style' => self::DEFAULT_STYLE, 'rotation' => -45]);
         $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
         $ob->yAxis->max(null);
         $ob->yAxis->title(['text' => 'CA (€)', 'style' => self::DEFAULT_STYLE]);
@@ -965,7 +956,7 @@ class IndicateursController extends Controller
 
         $series = [];
         foreach ($mandats as $idMandat => $data) {
-            $series[] = ['name' => 'Mandat ' . $etudeManager->mandatToString($idMandat), 'data' => $data];
+            $series[] = ['name' => 'Mandat ' . $idMandat, 'data' => $data];
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
@@ -1087,8 +1078,7 @@ class IndicateursController extends Controller
         // Chart
         $series = [];
         foreach ($mandats as $idMandat => $data) {
-            //if($idMandat>=4)
-            $series[] = ['name' => 'Mandat ' . $idMandat . ' - ' . $etudeManager->mandatToString($idMandat), 'data' => $data];
+            $series[] = ['name' => 'Mandat ' . $idMandat, 'data' => $data];
         }
 
         $style = ['color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px'];
@@ -1251,7 +1241,7 @@ class IndicateursController extends Controller
         }
 
         for ($i = $MANDAT_MIN; $i <= $MANDAT_MAX; ++$i) {
-            $categories[] = $etudeManager->mandatToString($i);
+            $categories[] = $i;
         }
 
         //remove mandats with no skills used
