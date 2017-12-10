@@ -239,14 +239,10 @@ class IndicateursController extends Controller
             $montantTotal += $bv->getRemunerationBrute() + $bv->getPartJunior();
         }
 
-        if (0 == $montantTotal) {
-            $montantTotal = 1; //set to 1 to avoid division by 0
-        }
-
         ksort($comptes);
         $data = [];
         foreach ($comptes as $compte => $montantHT) {
-            $data[] = ['name' => $compte, 'y' => 100 * $montantHT / $montantTotal, 'montantHT' => $montantHT, 'montantTotal' => $montantTotal];
+            $data[] = ['name' => $compte, 'y' => (0 == $montantTotal) ? 0 : 100 * $montantHT / $montantTotal, 'montantHT' => $montantHT, 'montantTotal' => $montantTotal];
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
