@@ -61,4 +61,18 @@ class ChartFactory
 
         return $ob;
     }
+
+    public function newColumnDrilldownChart($series, $drilldownSeries)
+    {
+        $ob = new Highchart();
+        $ob->chart->type('column');
+        $ob->drilldown->series($drilldownSeries);
+        $ob->series($series);
+
+        $ob->xAxis->type('category');
+        $ob->credits->enabled(false);
+        $ob->legend->enabled(false);
+
+        return $ob;
+    }
 }

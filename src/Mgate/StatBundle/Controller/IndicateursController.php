@@ -55,6 +55,10 @@ class IndicateursController extends Controller
 
     /**
      * @Security("has_role('ROLE_CA')")
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function ajaxAction(Request $request)
     {
@@ -267,88 +271,71 @@ class IndicateursController extends Controller
     private function getSortie()
     {
         $em = $this->getDoctrine()->getManager();
-
         $sortiesParMandat = $em->getRepository('MgateTresoBundle:NoteDeFrais')->findAllByMandat();
         $bvsParMandat = $em->getRepository('MgateTresoBundle:BV')->findAllByMandat();
 
-        $categories = [];
-
-        $comptes = [];
-        $comptes['Honoraires BV'] = [];
-        $comptes['URSSAF'] = [];
         $mandats = [];
+        $libelles = [];
         ksort($sortiesParMandat); // Tri selon les mandats
         foreach ($sortiesParMandat as $mandat => $nfs) { // Pour chaque Mandat
-            $mandats[] = $mandat;
+            $mandats[$mandat] = ['Honoraires BV' => 0, 'URSSAF' => 0];
             foreach ($nfs as $nf) { // Pour chaque NF d'un mandat
                 foreach ($nf->getDetails() as $detail) { // Pour chaque détail d'une NF
                     $compte = $detail->getCompte();
                     if (null !== $compte) {
-                        $compte = $detail->getCompte()->getLibelle();
-                        if (array_key_exists($compte, $comptes)) {
-                            if (array_key_exists($mandat, $comptes[$compte])) {
-                                $comptes[$compte][$mandat] += $detail->getMontantHT();
-                            } else {
-                                $comptes[$compte][$mandat] = $detail->getMontantHT();
-                            }
+                        $libelle = $compte->getLibelle();
+                        $libelles[] = $libelle;
+                        if (array_key_exists($libelle, $mandats[$mandat])) {
+                            $mandats[$mandat][$libelle] += $detail->getMontantHT();
                         } else {
-                            $comptes[$compte] = [$mandat => $detail->getMontantHT()];
+                            $mandats[$mandat][$libelle] = $detail->getMontantHT();
                         }
                     }
                 }
             }
         }
+
         foreach ($bvsParMandat as $mandat => $bvs) { // Pour chaque Mandat
-            if (!in_array($mandat, $mandats)) {
-                $mandats[] = $mandat;
+            if (!array_key_exists($mandat, $mandats)) {
+                $mandats[$mandat] = [];
             }
-            $comptes['Honoraires BV'][$mandat] = 0;
-            $comptes['URSSAF'][$mandat] = 0;
+
             foreach ($bvs as $bv) {
-                // Pour chaque BV d'un mandat
-                $comptes['Honoraires BV'][$mandat] += $bv->getRemunerationBrute();
-                $comptes['URSSAF'][$mandat] += $bv->getPartJunior();
+                $mandats[$mandat]['Honoraires BV'] += $bv->getRemunerationBrute();
+                $mandats[$mandat]['URSSAF'] += $bv->getPartJunior();
             }
         }
 
-        $series = [];
         ksort($mandats);
-        ksort($comptes);
-        foreach ($comptes as $libelle => $compte) {
-            $data = [];
-            foreach ($mandats as $mandat) {
-                if (array_key_exists($mandat, $compte)) {
-                    $data[] = round((float) $compte[$mandat], 2);
-                } else {
-                    $data[] = 0;
-                }
-            }
-            $series[] = ['name' => $libelle, 'data' => $data];
-        }
 
-        foreach ($mandats as $mandat) {
+        $categories = [];
+        $dataSeries = [];
+        $drilldownSeries = [];
+        foreach ($mandats as $mandat => $comptes) {
+            $total = 0;
             $categories[] = $mandat;
+            $drilldownData = [];
+
+            foreach ($comptes as $libelle => $compte) {
+                $total += $compte;
+                $drilldownData[] = [$libelle, round((float) $compte, 2)];
+            }
+
+            $drilldownSeries[] = ['name' => 'Dépenses du mandat ' . $mandat, 'id' => $mandat, 'data' => $drilldownData];
+            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float) $total, 2), 'drilldown' => $mandat];
         }
+        $series = [['name' => 'Montant des dépenses', 'colorByPoint' => true, 'data' => $dataSeries]];
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
-        $ob = $chartFactory->newColumnChart($series, $categories);
-        $ob->plotOptions->column(['stacking' => 'normal']);
+        $ob = $chartFactory->newColumnDrilldownChart($series, $drilldownSeries);
 
         $ob->chart->renderTo(__FUNCTION__);
         $ob->title->text('Montant HT des dépenses');
-        $ob->yAxis->title(['text' => 'Montant (€)', 'style' => self::DEFAULT_STYLE]);
+        $ob->subtitle->text('Sélectionner une colonne pour en voir le détail');
+        $ob->yAxis->title(['text' => 'Montant (€)']);
         $ob->yAxis->max(null);
-        $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} € HT');
-
-        $ob->legend->enabled(true);
-        $ob->legend->floatinf(false);
-        $ob->legend->layout('vertical');
-        $ob->legend->y(20);
-        $ob->legend->verticalAlign('bottom');
-        $ob->legend->align('right');
-        $ob->legend->backgroundColor('#F6F6F6');
 
         return $this->render('MgateStatBundle:Indicateurs:Indicateur.html.twig', [
             'chart' => $ob,
@@ -723,7 +710,8 @@ class IndicateursController extends Controller
         $ob->yAxis->min(0);
         $ob->yAxis->title(['text' => 'Nombre de membres', 'style' => self::DEFAULT_STYLE]);
         $ob->plotOptions->area(['stacking' => 'normal']);
-        $ob->title->text('Nombre de membres (zoomable)');
+        $ob->title->text('Nombre de membres');
+        $ob->subtitle->text('Zoomable en sélectionnant une zone horizontalement');
         $ob->tooltip->shared(true);
         $ob->tooltip->valueSuffix(' cotisants');
 
