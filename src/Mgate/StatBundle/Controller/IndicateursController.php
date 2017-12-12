@@ -824,48 +824,37 @@ class IndicateursController extends Controller
      */
     private function getCAM()
     {
-        $etudeManager = $this->get('Mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
-
-        $Ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
+        $ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
 
         $cumuls = [];
         $cumulsJEH = [];
-        $cumulsFrais = [];
-
-        $maxMandat = $etudeManager->getMaxMandatCc();
-
-        for ($i = 0; $i <= $maxMandat; ++$i) {
-            $cumuls[$i] = 0;
-        }
-        for ($i = 0; $i <= $maxMandat; ++$i) {
-            $cumulsJEH[$i] = 0;
-        }
-        for ($i = 0; $i <= $maxMandat; ++$i) {
-            $cumulsFrais[$i] = 0;
-        }
-
-        foreach ($Ccs as $cc) {
+        $cumulsFraisDossier = [];
+        foreach ($ccs as $cc) {
             $etude = $cc->getEtude();
             $dateSignature = $cc->getDateSignature();
-            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID()
-                || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $mandat = $etude->getMandat();
+            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID();
 
             if ($dateSignature && $signee) {
-                $idMandat = $etudeManager->dateToMandat($dateSignature);
-
-                $cumuls[$idMandat] += $etude->getMontantHT();
-                $cumulsJEH[$idMandat] += $etude->getNbrJEH();
-                $cumulsFrais[$idMandat] += $etude->getFraisDossier();
+                if (array_key_exists($mandat, $cumuls)) {
+                    $cumuls[$mandat] += $etude->getMontantHT();
+                    $cumulsJEH[$mandat] += $etude->getNbrJEH();
+                    $cumulsFraisDossier[$mandat] += $etude->getFraisDossier();
+                } else {
+                    $cumuls[$mandat] = $etude->getMontantHT();
+                    $cumulsJEH[$mandat] = $etude->getNbrJEH();
+                    $cumulsFraisDossier[$mandat] = $etude->getFraisDossier();
+                }
             }
         }
 
         $data = [];
         $categories = [];
-        foreach ($cumuls as $idMandat => $datas) {
+        foreach ($cumuls as $mandat => $datas) {
             if ($datas > 0) {
-                $categories[] = $idMandat;
-                $data[] = ['y' => $datas, 'JEH' => $cumulsJEH[$idMandat], 'moyJEH' => ($datas - $cumulsFrais[$idMandat]) / $cumulsJEH[$idMandat]];
+                $categories[] = $mandat;
+                $data[] = ['y' => $datas, 'JEH' => $cumulsJEH[$mandat], 'moyJEH' => ($datas - $cumulsFraisDossier[$mandat]) / $cumulsJEH[$mandat]];
             }
         }
 
