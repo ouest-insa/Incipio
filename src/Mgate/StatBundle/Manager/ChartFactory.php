@@ -14,19 +14,11 @@ class ChartFactory
         $ob->chart->type('column');
         $ob->yAxis->min(0);
         $ob->yAxis->max(100);
-        $style = IndicateursController::DEFAULT_STYLE;
-        $ob->title->style(['fontWeight' => 'bold', 'fontSize' => '20px']);
-        $ob->xAxis->labels(['style' => $style]);
-        $ob->yAxis->labels(['style' => $style]);
         $ob->credits->enabled(false);
         $ob->legend->enabled(false);
 
         $ob->series($series);
         $ob->xAxis->categories($categories);
-
-        $ob->title->text('Title');
-        $ob->yAxis->title(['text' => 'Title y', 'style' => $style]);
-        $ob->xAxis->title(['text' => 'Title x', 'style' => $style]);
 
         return $ob;
     }
@@ -37,7 +29,6 @@ class ChartFactory
 
         $ob->plotOptions->pie(['allowPointSelect' => true, 'cursor' => 'pointer', 'showInLegend' => true, 'dataLabels' => ['enabled' => false]]);
         $ob->series($series);
-        $ob->title->style(['fontWeight' => 'bold', 'fontSize' => '20px']);
         $ob->credits->enabled(false);
 
         return $ob;
@@ -55,7 +46,6 @@ class ChartFactory
         $ob->legend->layout('vertical');
         $ob->legend->reversed(true);
         $ob->legend->verticalAlign('middle');
-        $ob->title->style(['fontWeight' => 'bold', 'fontSize' => '20px']);
 
         $ob->series($series);
 

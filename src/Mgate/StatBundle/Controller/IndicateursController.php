@@ -24,8 +24,6 @@ class IndicateursController extends Controller
 
     const STATE_ID_TERMINEE_X = 4;
 
-    const DEFAULT_STYLE = ['color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px'];
-
     /**
      * @Security("has_role('ROLE_CA')")
      */
@@ -135,9 +133,9 @@ class IndicateursController extends Controller
         $ob->title->text('Retard par Mandat');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
         $ob->tooltip->pointFormat('Les études ont duré en moyenne {point.y:.2f} % de plus que prévu<br/>avec {point.nombreEtudesAvecAv} jours de retard sur {point.nombreEtudes} jours travaillés');
-        $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Mandat']);
         $ob->yAxis->max(100);
-        $ob->yAxis->title(['text' => 'Taux (%)', 'style' => self::DEFAULT_STYLE]);
+        $ob->yAxis->title(['text' => 'Taux (%)']);
 
         return $this->render('MgateStatBundle:Indicateurs:Indicateur.html.twig', [
             'chart' => $ob,
@@ -193,10 +191,10 @@ class IndicateursController extends Controller
         $ob->title->text('Nombre d\'études par mandat');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} études');
-        $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Mandat']);
         $ob->yAxis->allowDecimals(false);
         $ob->yAxis->max(null);
-        $ob->yAxis->title(['text' => 'Nombre d\'études', 'style' => self::DEFAULT_STYLE]);
+        $ob->yAxis->title(['text' => 'Nombre d\'études']);
 
         return $this->render('MgateStatBundle:Indicateurs:Indicateur.html.twig', [
             'chart' => $ob,
@@ -331,7 +329,7 @@ class IndicateursController extends Controller
 
         $ob->chart->renderTo(__FUNCTION__);
         $ob->title->text('Montant HT des dépenses');
-        $ob->subtitle->text('Sélectionner une colonne pour en voir le détail');
+        $ob->subtitle->text('Sélectionnez une colonne pour en voir le détail');
         $ob->yAxis->title(['text' => 'Montant (€)']);
         $ob->yAxis->max(null);
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
@@ -439,12 +437,10 @@ class IndicateursController extends Controller
         $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
         $ob->tooltip->pointFormat('{point.y} présents le {point.date}<br/>{point.name}');
         $ob->xAxis->dateTimeLabelFormats(['month' => '%b']);
-        $ob->xAxis->labels(['style' => self::DEFAULT_STYLE]);
-        $ob->xAxis->title(['text' => 'Date', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Date']);
         $ob->xAxis->type('datetime');
         $ob->yAxis->allowDecimals(false);
-        $ob->yAxis->title(['text' => 'Nombre de présents', 'style' => self::DEFAULT_STYLE]);
-        $ob->yAxis->labels(['style' => self::DEFAULT_STYLE]);
+        $ob->yAxis->title(['text' => 'Nombre de présents']);
         $ob->yAxis->min(0);
 
         return $this->render('MgateStatBundle:Indicateurs:Indicateur.html.twig', [
@@ -480,8 +476,8 @@ class IndicateursController extends Controller
         $ob->title->text('Nombre de formations par mandat');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
         $ob->tooltip->pointFormat('{point.y} formations');
-        $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
-        $ob->yAxis->title(['text' => 'Nombre de formations', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Mandat']);
+        $ob->yAxis->title(['text' => 'Nombre de formations']);
         $ob->yAxis->max(null);
 
         return $this->render('MgateStatBundle:Indicateurs:Indicateur.html.twig', [
@@ -548,8 +544,8 @@ class IndicateursController extends Controller
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y:.2f} %<br/>avec {point.nombreEtudesAvecAv} sur {point.nombreEtudes} études');
         $ob->yAxis->max(100);
-        $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
-        $ob->yAxis->title(['text' => 'Taux (%)', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Mandat']);
+        $ob->yAxis->title(['text' => 'Taux (%)']);
 
         return $this->render('MgateStatBundle:Indicateurs:Indicateur.html.twig', [
             'chart' => $ob,
@@ -703,12 +699,11 @@ class IndicateursController extends Controller
         $ob->chart->type('area');
         $ob->chart->zoomType('x');
         $ob->xAxis->categories($categories);
-        $ob->xAxis->labels(['style' => self::DEFAULT_STYLE, 'rotation' => -45]);
-        $ob->xAxis->title(['text' => 'Date', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->labels(['rotation' => -45]);
+        $ob->xAxis->title(['text' => 'Date']);
         $ob->yAxis->allowDecimals(false);
-        $ob->yAxis->labels(['style' => self::DEFAULT_STYLE]);
         $ob->yAxis->min(0);
-        $ob->yAxis->title(['text' => 'Nombre de membres', 'style' => self::DEFAULT_STYLE]);
+        $ob->yAxis->title(['text' => 'Nombre de membres']);
         $ob->plotOptions->area(['stacking' => 'normal']);
         $ob->title->text('Nombre de membres');
         $ob->subtitle->text('Zoomable en sélectionnant une zone horizontalement');
@@ -751,9 +746,9 @@ class IndicateursController extends Controller
         $ob = $chartFactory->newColumnChart($series, $categories);
 
         $ob->chart->renderTo(__FUNCTION__);
-        $ob->xAxis->title(['text' => 'Promotion', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Promotion']);
         $ob->yAxis->max(null);
-        $ob->yAxis->title(['text' => 'Nombre de membres', 'style' => self::DEFAULT_STYLE]);
+        $ob->yAxis->title(['text' => 'Nombre de membres']);
         $ob->title->text('Nombre de membres par promotion');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
         $ob->tooltip->pointFormat('{point.y}');
@@ -793,9 +788,9 @@ class IndicateursController extends Controller
         $ob = $chartFactory->newColumnChart($series, $categories);
 
         $ob->chart->renderTo(__FUNCTION__);
-        $ob->xAxis->title(['text' => 'Promotion', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Promotion']);
         $ob->yAxis->max(null);
-        $ob->yAxis->title(['text' => "Nombre d'intervenants", 'style' => self::DEFAULT_STYLE]);
+        $ob->yAxis->title(['text' => "Nombre d'intervenants"]);
         $ob->title->text('Nombre d\'intervenants par promotion');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y}');
@@ -870,9 +865,9 @@ class IndicateursController extends Controller
         $ob = $chartFactory->newColumnChart($series, $categories);
 
         $ob->chart->renderTo(__FUNCTION__);
-        $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Mandat']);
         $ob->yAxis->max(null);
-        $ob->yAxis->title(['text' => 'CA (€)', 'style' => self::DEFAULT_STYLE]);
+        $ob->yAxis->title(['text' => 'CA (€)']);
         $ob->title->text('Chiffre d\'affaires signé cumulé par mandat');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} €<br/>En {point.JEH} JEH<br/>Soit {point.moyJEH:.2f} €/JEH');
@@ -938,16 +933,13 @@ class IndicateursController extends Controller
         $ob->chart->renderTo(__FUNCTION__);  // The #id of the div where to render the chart
         $ob->global->useUTC(false);
         $ob->title->text('Évolution par mandat du chiffre d\'affaires signé cumulé');
-        $ob->title->style(['fontWeight' => 'bold', 'fontSize' => '20px']);
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name} à {point.prix} €');
-        $ob->xAxis->labels(['style' => self::DEFAULT_STYLE]);
         $ob->xAxis->dateTimeLabelFormats(['month' => '%b']);
-        $ob->xAxis->title(['text' => 'Date', 'style' => self::DEFAULT_STYLE]);
-        $ob->yAxis->labels(['style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Date']);
         $ob->xAxis->type('datetime');
         $ob->yAxis->min(0);
-        $ob->yAxis->title(['text' => "Chiffre d'affaire signé cumulé (€)", 'style' => self::DEFAULT_STYLE]);
+        $ob->yAxis->title(['text' => "Chiffre d'affaire signé cumulé (€)"]);
 
         return $this->render('MgateStatBundle:Indicateurs:Indicateur.html.twig', [
             'chart' => $ob,
@@ -1064,15 +1056,12 @@ class IndicateursController extends Controller
         $ob->chart->renderTo('getRh');  // The #id of the div where to render the chart
         ///
         $ob->chart->type('spline');
-        $ob->xAxis->labels(['style' => self::DEFAULT_STYLE]);
-        $ob->yAxis->labels(['style' => self::DEFAULT_STYLE]);
         $ob->title->text("Évolution par mandat du nombre d'intervenant");
-        $ob->title->style(['fontWeight' => 'bold', 'fontSize' => '20px']);
-        $ob->xAxis->title(['text' => 'Date', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Date']);
         $ob->xAxis->type('datetime');
         $ob->xAxis->dateTimeLabelFormats(['month' => '%b']);
         $ob->yAxis->min(0);
-        $ob->yAxis->title(['text' => "Nombre d'intervenant", 'style' => self::DEFAULT_STYLE]);
+        $ob->yAxis->title(['text' => "Nombre d'intervenant"]);
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->credits->enabled(false);
         $ob->legend->floating(true);
@@ -1236,9 +1225,9 @@ class IndicateursController extends Controller
         $ob = $chartFactory->newColumnChart($series, $categories);
 
         $ob->chart->renderTo(__FUNCTION__);
-        $ob->xAxis->title(['text' => 'Mandat', 'style' => self::DEFAULT_STYLE]);
+        $ob->xAxis->title(['text' => 'Mandat']);
         $ob->yAxis->max(null);
-        $ob->yAxis->title(['text' => 'Revenus (€)', 'style' => self::DEFAULT_STYLE]);
+        $ob->yAxis->title(['text' => 'Revenus (€)']);
         $ob->title->text('Revenus par compétences');
         $ob->tooltip->headerFormat('<b>Mandat {point.x}</b><br/>');
 
