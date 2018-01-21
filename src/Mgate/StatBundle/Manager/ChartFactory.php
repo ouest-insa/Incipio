@@ -2,7 +2,6 @@
 
 namespace Mgate\StatBundle\Manager;
 
-use Mgate\StatBundle\Controller\IndicateursController;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 
 class ChartFactory

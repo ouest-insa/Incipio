@@ -83,45 +83,35 @@ class IndicateursController extends Controller
      */
     private function getRetardParMandat()
     {
-        $etudeManager = $this->get('Mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
+        $ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
 
-        $Ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
-
-        /* Initialisation */
         $nombreJoursParMandat = [];
         $nombreJoursAvecAvenantParMandat = [];
 
-        $maxMandat = $etudeManager->getMaxMandatCc();
-
-        for ($i = 0; $i <= $maxMandat; ++$i) {
-            $nombreJoursParMandat[$i] = 0;
-        }
-        for ($i = 0; $i <= $maxMandat; ++$i) {
-            $nombreJoursAvecAvenantParMandat[$i] = 0;
-        }
-
-        foreach ($Ccs as $cc) {
+        foreach ($ccs as $cc) {
             $etude = $cc->getEtude();
             $dateSignature = $cc->getDateSignature();
-            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID()
-                || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $mandat = $etude->getMandat();
 
-            if ($dateSignature && $signee) {
-                $idMandat = $etudeManager->dateToMandat($dateSignature);
-                if ($etude->getDelai()) {
-                    $nombreJoursParMandat[$idMandat] += $etude->getDelai(false)->days;
-                    $nombreJoursAvecAvenantParMandat[$idMandat] += $etude->getDelai(true)->days;
+            if ($dateSignature && $signee && $etude->getDelai()) {
+                if (array_key_exists($mandat, $nombreJoursParMandat)) {
+                    $nombreJoursParMandat[$mandat] += $etude->getDelai(false)->days;
+                    $nombreJoursAvecAvenantParMandat[$mandat] += $etude->getDelai(true)->days;
+                } else {
+                    $nombreJoursParMandat[$mandat] = $etude->getDelai(false)->days;
+                    $nombreJoursAvecAvenantParMandat[$mandat] = $etude->getDelai(true)->days;
                 }
             }
         }
 
         $data = [];
         $categories = [];
-        foreach ($nombreJoursParMandat as $idMandat => $datas) {
+        foreach ($nombreJoursParMandat as $mandat => $datas) {
             if ($datas > 0) {
-                $categories[] = $idMandat;
-                $data[] = ['y' => 100 * ($nombreJoursAvecAvenantParMandat[$idMandat] - $datas) / $datas, 'nombreEtudes' => $datas, 'nombreEtudesAvecAv' => $nombreJoursAvecAvenantParMandat[$idMandat] - $datas];
+                $categories[] = $mandat;
+                $data[] = ['y' => 100 * ($nombreJoursAvecAvenantParMandat[$mandat] - $datas) / $datas, 'nombreEtudes' => $datas, 'nombreEtudesAvecAv' => $nombreJoursAvecAvenantParMandat[$mandat] - $datas];
             }
         }
 
@@ -146,39 +136,34 @@ class IndicateursController extends Controller
      * @Security("has_role('ROLE_CA')")
      *
      * Nombre d'études par mandat (gestion d'études)
-     * Basé sur les dates de signature CC et non pas les numéros
      */
     private function getNombreEtudes()
     {
-        $etudeManager = $this->get('Mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
+        $ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
 
-        $Ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
-
-        /* Initialisation */
         $nombreEtudesParMandat = [];
 
-        $maxMandat = $etudeManager->getMaxMandatCc();
-
-        for ($i = 0; $i <= $maxMandat; ++$i) {
-            $nombreEtudesParMandat[$i] = 0;
-        }
-
-        foreach ($Ccs as $cc) {
+        foreach ($ccs as $cc) {
             $etude = $cc->getEtude();
             $dateSignature = $cc->getDateSignature();
-            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID()
-                || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $mandat = $etude->getMandat();
+
             if ($dateSignature && $signee) {
-                $idMandat = $etudeManager->dateToMandat($dateSignature);
-                $nombreEtudesParMandat[$idMandat] += 1;
+                if (array_key_exists($mandat, $nombreEtudesParMandat)) {
+                    $nombreEtudesParMandat[$mandat] += 1;
+                } else {
+                    $nombreEtudesParMandat[$mandat] = 1;
+                }
             }
         }
+
         $data = [];
         $categories = [];
-        foreach ($nombreEtudesParMandat as $idMandat => $datas) {
+        foreach ($nombreEtudesParMandat as $mandat => $datas) {
             if ($datas > 0) {
-                $categories[] = $idMandat;
+                $categories[] = $mandat;
                 $data[] = ['y' => $datas];
             }
         }
@@ -493,45 +478,44 @@ class IndicateursController extends Controller
      */
     private function getTauxDAvenantsParMandat()
     {
-        $etudeManager = $this->get('Mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
-
-        $Ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
+        $ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
 
         $nombreEtudesParMandat = [];
         $nombreEtudesAvecAvenantParMandat = [];
+        $nombreAvsParMandat = [];
 
-        $maxMandat = $etudeManager->getMaxMandatCc();
-
-        for ($i = 0; $i <= $maxMandat; ++$i) {
-            $nombreEtudesParMandat[$i] = 0;
-        }
-        for ($i = 0; $i <= $maxMandat; ++$i) {
-            $nombreEtudesAvecAvenantParMandat[$i] = 0;
-        }
-
-        foreach ($Ccs as $cc) {
+        foreach ($ccs as $cc) {
             $etude = $cc->getEtude();
             $dateSignature = $cc->getDateSignature();
-            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID()
-                || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $mandat = $etude->getMandat();
 
             if ($dateSignature && $signee) {
-                $idMandat = $etudeManager->dateToMandat($dateSignature);
+                if (array_key_exists($mandat, $nombreEtudesParMandat)) {
+                    $nombreEtudesParMandat[$mandat] += 1;
+                } else {
+                    $nombreEtudesParMandat[$mandat] = 1;
+                    $nombreEtudesAvecAvenantParMandat[$mandat] = 0;
+                    $nombreAvsParMandat[$mandat] = 0;
+                }
 
-                ++$nombreEtudesParMandat[$idMandat];
                 if (count($etude->getAvs()->toArray())) {
-                    ++$nombreEtudesAvecAvenantParMandat[$idMandat];
+                    $nombreEtudesAvecAvenantParMandat[$mandat] += 1;
+                    $nombreAvsParMandat[$mandat] += count($etude->getAvs()->toArray());
                 }
             }
         }
 
         $data = [];
         $categories = [];
-        foreach ($nombreEtudesParMandat as $idMandat => $datas) {
+        foreach ($nombreEtudesParMandat as $mandat => $datas) {
             if ($datas > 0) {
-                $categories[] = $idMandat;
-                $data[] = ['y' => 100 * $nombreEtudesAvecAvenantParMandat[$idMandat] / $datas, 'nombreEtudes' => $datas, 'nombreEtudesAvecAv' => $nombreEtudesAvecAvenantParMandat[$idMandat]];
+                $categories[] = $mandat;
+                $data[] = ['y' => 100 * $nombreEtudesAvecAvenantParMandat[$mandat] / $datas,
+                    'nombreEtudes' => $datas,
+                    'nombreEtudesAvecAv' => $nombreEtudesAvecAvenantParMandat[$mandat],
+                    'nombreAvs' => $nombreAvsParMandat[$mandat], ];
             }
         }
 
@@ -542,7 +526,7 @@ class IndicateursController extends Controller
         $ob->chart->renderTo(__FUNCTION__);
         $ob->title->text('Taux d\'avenants du mandat');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
-        $ob->tooltip->pointFormat('{point.y:.2f} %<br/>avec {point.nombreEtudesAvecAv} sur {point.nombreEtudes} études');
+        $ob->tooltip->pointFormat('{point.y:.2f} %<br/>Avec {point.nombreEtudesAvecAv} sur {point.nombreEtudes} études<br/>Pour un total de {point.nombreAvs} Avenants');
         $ob->yAxis->max(100);
         $ob->xAxis->title(['text' => 'Mandat']);
         $ob->yAxis->title(['text' => 'Taux (%)']);
@@ -698,6 +682,7 @@ class IndicateursController extends Controller
         $ob->chart->renderTo(__FUNCTION__);
         $ob->chart->type('area');
         $ob->chart->zoomType('x');
+        $ob->legend->reversed(false);
         $ob->xAxis->categories($categories);
         $ob->xAxis->labels(['rotation' => -45]);
         $ob->xAxis->title(['text' => 'Date']);
@@ -816,8 +801,8 @@ class IndicateursController extends Controller
         foreach ($ccs as $cc) {
             $etude = $cc->getEtude();
             $dateSignature = $cc->getDateSignature();
-            $mandat = $etude->getMandat();
             $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $mandat = $etude->getMandat();
 
             if ($dateSignature && $signee) {
                 if (array_key_exists($mandat, $cumuls)) {
@@ -885,46 +870,47 @@ class IndicateursController extends Controller
     private function getCA()
     {
         $etudeManager = $this->get('Mgate.etude_manager');
-        $Ccs = $this->getDoctrine()->getManager()->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
+        $ccs = $this->getDoctrine()->getManager()->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
+
         if ($this->get('app.json_key_value_store')->exists('namingConvention')) {
             $namingConvention = $this->get('app.json_key_value_store')->get('namingConvention');
         } else {
             $namingConvention = 'id';
         }
+
         $mandats = [];
         $maxMandat = $etudeManager->getMaxMandatCc();
 
         $cumuls = [];
-        for ($i = 0; $i <= $maxMandat; ++$i) {
-            $cumuls[$i] = 0;
-        }
 
-        foreach ($Ccs as $cc) {
+        foreach ($ccs as $cc) {
             $etude = $cc->getEtude();
             $dateSignature = $cc->getDateSignature();
-            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID()
-                || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $mandat = $etude->getMandat();
 
             if ($dateSignature && $signee) {
-                $idMandat = $etudeManager->dateToMandat($dateSignature);
+                if (array_key_exists($mandat, $cumuls)) {
+                    $cumuls[$mandat] += $etude->getMontantHT();
+                } else {
+                    $cumuls[$mandat] = $etude->getMontantHT();
+                }
 
-                $cumuls[$idMandat] += $etude->getMontantHT();
-
-                $interval = new \DateInterval('P' . ($maxMandat - $idMandat) . 'Y');
+                $interval = new \DateInterval('P' . ($maxMandat - $mandat) . 'Y');
                 $dateDecale = clone $dateSignature;
                 $dateDecale->add($interval);
 
-                $mandats[$idMandat][]
+                $mandats[$mandat][]
                     = ['x' => $dateDecale->getTimestamp() * 1000,
-                    'y' => $cumuls[$idMandat], 'name' => $etude->getReference($namingConvention) . ' - ' . $etude->getNom(),
-                    'date' => $dateDecale->format('d/m/Y'),
+                    'y' => $cumuls[$mandat], 'name' => $etude->getReference($namingConvention) . ' - ' . $etude->getNom(),
+                    'date' => $dateSignature->format('d/m/Y'),
                     'prix' => $etude->getMontantHT(), ];
             }
         }
 
         $series = [];
-        foreach ($mandats as $idMandat => $data) {
-            $series[] = ['name' => 'Mandat ' . $idMandat, 'data' => $data];
+        foreach ($mandats as $mandat => $data) {
+            $series[] = ['name' => 'Mandat ' . $mandat, 'data' => $data];
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
