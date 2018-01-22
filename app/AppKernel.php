@@ -61,6 +61,8 @@ class AppKernel extends Kernel
             new EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle(),
             new N7consulting\RhBundle\N7consultingRhBundle(),
             new N7consulting\PrivacyBundle\N7consultingPrivacyBundle(),
+
+            new OuestINSA\SignatureBundle\OuestINSASignatureBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'])) {

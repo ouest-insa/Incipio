@@ -1,0 +1,3 @@
+OuestINSA_signature_homepage:
+    path:  /
+    defaults: { _controller: OuestINSASignatureBundle:Signature:index }

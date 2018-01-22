@@ -68,7 +68,7 @@ fos_user_resetting:
 
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
-    prefix: /profile   
+    prefix: /profile
 ### FOS User end
 
 
@@ -77,6 +77,11 @@ fos_comment_api:
     resource: "@FOSCommentBundle/Resources/config/routing.yml"
     prefix: /api
     defaults: { _format: html }
-    
+
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+
+OuestINSA_Signature:
+    resource: "@OuestINSASignatureBundle/Resources/config/routing.yml"
+    prefix:   /Signature
