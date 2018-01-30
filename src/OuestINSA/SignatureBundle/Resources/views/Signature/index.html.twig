@@ -29,7 +29,7 @@
                    <form class="signature-form">
                 Prénom Nom : <input class="form-control" name="nom" placeholder="Prénom Nom" id="nameInput" onchange="update();"  onpaste="this.onchange();" oninput="this.onchange();" type="text"><br>
                 Pôle : <input class="form-control" name="pole" placeholder="Pôle SI" id="poleInput" onchange="update();" onpaste="this.onchange();" oninput="this.onchange();" type="text"><br>
-                Mobile : <input class="form-control" name="mobile" placeholder="(+33) (0)6 00 00 00 00" id="mobileInput" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();" type="text"><br>
+                Mobile : <input class="form-control" name="mobile" placeholder="(+33) (0)6 00 00 00 00" id="mobileInput" onchange="update();" onpaste="this.onchange();" oninput="this.onchange();" type="text"><br>
                 Mail personnel : <input class="form-control" name="mail" placeholder="prenom.nom@ouest-insa.fr" id="mailInput" onchange="update();" onpaste="this.onchange();" oninput="this.onchange();" type="text"><br>
             </form>
 
@@ -51,7 +51,7 @@
 
 	<style>/* Couleurs logo Ouest-INSA : 6FC7D8 1E4093 */
     	.custom-col {                    		
-            width: 570px;
+            width: 550px;
     	}
 
     	.oi_signature_border {                    		
@@ -91,12 +91,7 @@
         .oi_content em{
             font-style: normal;
         }
-        /*.signature-form{
-          text-align:right;
-        }*/
-        /*.signature-form input {
-        	width: 285px;
-        }*/
+
 
         #css-xnjket{
         	background: rgba(0, 0, 0, 0.5) none repeat scroll 0% 0%;
@@ -124,11 +119,11 @@
 		    cursor: pointer;
 		}
 		#canvas-parent{
-			position: fixed;
-			opacity: 1;
-			z-index: 99999999;
-			transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s, opacity 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s, -webkit-transform 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s;
-			padding: 0;
+	 	    position: fixed;
+		    opacity: 1;
+		    z-index: 99999999;
+		    transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s, opacity 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s, -webkit-transform 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s;
+		    padding: 0;
 		    margin: auto;
 		    display: block;
 		    width: 570px;
@@ -179,7 +174,7 @@
         	document.getElementById("css-xnjket").style.visibility = "hidden"; 
         }
   	</script>
-  	<script type="text/javascript" src="../js/html2canvas.min.js"></script>
+  	<script type="text/javascript" src="/js/html2canvas.min.js"></script>
 </div>
 
 {% endblock %}
