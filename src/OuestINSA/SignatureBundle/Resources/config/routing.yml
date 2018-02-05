@@ -1,3 +1,8 @@
 OuestINSA_signature_homepage:
     path:  /
     defaults: { _controller: OuestINSASignatureBundle:Signature:index }
+
+
+OuestINSA_signature_signaturetemp:
+    path: signaturetemp
+    defaults: { _controller: OuestINSASignatureBundle:Signature:signatureTemp }

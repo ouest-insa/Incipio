@@ -29,5 +29,7 @@ class SignatureController extends Controller
       return new Response("Work in progess");
     }
 
-
+    public function signatureTempAction(){
+      return $this->render('OuestINSASignatureBundle:Signature:temp.html.twig');
+    }
 }
