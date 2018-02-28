@@ -20,6 +20,11 @@ class FeatureContext extends MinkContext implements Context
 
     const DEFAULT_USERS = [
         'admin' => ['username' => 'admin', 'password' => 'admin', 'roles' => ['ROLE_SUPER_ADMIN']],
+        'eleve' => ['username' => 'eleve', 'password' => 'eleve', 'roles' => ['ROLE_ELEVE']],
+        'suiveur' => ['username' => 'suiveur', 'password' => 'suiveur', 'roles' => ['ROLE_SUIVEUR']],
+        'treso' => ['username' => 'treso', 'password' => 'treso', 'roles' => ['ROLE_TRESO']],
+        'rgpd' => ['username' => 'rgpd', 'password' => 'rgpd', 'roles' => ['ROLE_RGPD']],
+        'ca' => ['username' => 'ca', 'password' => 'ca', 'roles' => ['ROLE_CA']],
     ];
 
     /**
@@ -88,6 +93,12 @@ class FeatureContext extends MinkContext implements Context
 
         $input = new ArrayInput([
             'command' => 'demo:create_data',
+        ]);
+        $output = new BufferedOutput();
+        $application->run($input, $output);
+
+        $input = new ArrayInput([
+            'command' => 'demo:create_users',
         ]);
         $output = new BufferedOutput();
         $application->run($input, $output);
