@@ -18,15 +18,6 @@ class FeatureContext extends MinkContext implements Context
 {
     use KernelDictionary;
 
-    const DEFAULT_USERS = [
-        'admin' => ['username' => 'admin', 'password' => 'admin', 'roles' => ['ROLE_SUPER_ADMIN']],
-        'eleve' => ['username' => 'eleve', 'password' => 'eleve', 'roles' => ['ROLE_ELEVE']],
-        'suiveur' => ['username' => 'suiveur', 'password' => 'suiveur', 'roles' => ['ROLE_SUIVEUR']],
-        'treso' => ['username' => 'treso', 'password' => 'treso', 'roles' => ['ROLE_TRESO']],
-        'rgpd' => ['username' => 'rgpd', 'password' => 'rgpd', 'roles' => ['ROLE_RGPD']],
-        'ca' => ['username' => 'ca', 'password' => 'ca', 'roles' => ['ROLE_CA']],
-    ];
-
     /**
      * @var array
      */
@@ -131,7 +122,7 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->visit('/login');
         $this->fillField('_username', $username);
-        $this->fillField('_password', self::DEFAULT_USERS[$username]['password']);
+        $this->fillField('_password', \Mgate\DashboardBundle\Command\CreateTestUsersCommand::DEFAULT_USERS[$username]['password']);
         $this->pressButton('Connexion');
     }
 

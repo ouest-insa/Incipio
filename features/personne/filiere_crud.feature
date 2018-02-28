@@ -41,6 +41,42 @@ Feature: Filiere
     Then the url should match "/personne/poste"
     And I should see "Impossible de supprimer une filiere ayant des membres."
 
+  Scenario Outline: Users without ROLE_ADMIN can't access Filiere module
+    Given I am logged in as "<user>"
+    Given I am on "<page>"
+    Then the response status code should be 403
+    And I should see "Page interdite"
+    And I should not see "Filières"
+
+    Examples:
+      | user    | page                         |
+      | eleve   | /personne/poste              |
+      | eleve   | /personne/filiere/add        |
+      | eleve   | /personne/filiere/modifier/1 |
+      | suiveur | /personne/filiere/add        |
+      | suiveur | /personne/filiere/modifier/1 |
+      | treso   | /personne/poste              |
+      | treso   | /personne/filiere/add        |
+      | treso   | /personne/filiere/modifier/1 |
+      | rgpd    | /personne/poste              |
+      | rgpd    | /personne/filiere/add        |
+      | rgpd    | /personne/filiere/modifier/1 |
+      | ca      | /personne/filiere/add        |
+      | ca      | /personne/filiere/modifier/1 |
+
+  Scenario Outline: Users with ROLE_SUIVEUR can access page but can't act on Filiere
+    Given I am logged in as "<user>"
+    Given I am on "<page>"
+    Then the response status code should be 200
+    And I should not see "Ajouter une filière"
+    And I should not see "Filière d'exemple"
+
+    Examples:
+      | user    | page                         |
+      | suiveur | /personne/poste              |
+      | ca      | /personne/poste              |
+
+
   # The "@dropSchema" annotation must be added on the last scenario of the feature file to drop the temporary SQLite database
   @dropSchema
   Scenario: I can delete a Filiere

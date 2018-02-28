@@ -4,20 +4,24 @@ namespace Mgate\DashboardBundle\Command;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Mgate\UserBundle\Entity\User;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateTestUsersCommand extends Command
+class CreateTestUsersCommand extends ContainerAwareCommand
 {
+    /** user by tests, should remain public */
+    public const DEFAULT_USERS = [
+        'admin' => ['username' => 'admin', 'password' => 'admin', 'roles' => ['ROLE_SUPER_ADMIN']],
+        'eleve' => ['username' => 'eleve', 'password' => 'eleve', 'roles' => ['ROLE_ELEVE']],
+        'suiveur' => ['username' => 'suiveur', 'password' => 'suiveur', 'roles' => ['ROLE_SUIVEUR']],
+        'treso' => ['username' => 'treso', 'password' => 'treso', 'roles' => ['ROLE_TRESO']],
+        'rgpd' => ['username' => 'rgpd', 'password' => 'rgpd', 'roles' => ['ROLE_RGPD']],
+        'ca' => ['username' => 'ca', 'password' => 'ca', 'roles' => ['ROLE_CA']],
+    ];
+
     /** @var ObjectManager */
     private $em;
-
-    public function __construct(ObjectManager $em)
-    {
-        parent::__construct();
-        $this->em = $em;
-    }
 
     /**
      * {@inheritdoc}
@@ -35,6 +39,8 @@ class CreateTestUsersCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->em = $this->getContainer()->get('doctrine.orm.entity_manager');
+
         $this->createUsers($output);
 
         $output->writeln('Done.');
@@ -47,7 +53,7 @@ class CreateTestUsersCommand extends Command
      */
     private function createUsers(OutputInterface $output)
     {
-        foreach (\FeatureContext::DEFAULT_USERS as $user => $attributes) {
+        foreach (self::DEFAULT_USERS as $user => $attributes) {
             if ('admin' === $user) { // already created by fixtures
                 continue;
             }
