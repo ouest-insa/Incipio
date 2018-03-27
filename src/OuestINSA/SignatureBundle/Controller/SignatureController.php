@@ -17,8 +17,8 @@ class SignatureController extends Controller
     public function indexAction()
     {
         //$entities = $this->getDoctrine()->getManager()->getRepository('OuestINSASignatureBundle:Signature')->findAll();
-        $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('MgateUserBundle:User')->findAll();
+        //$em = $this->getDoctrine()->getManager();
+        //$entities = $em->getRepository('MgateUserBundle:User')->findAll();
         return $this->render('OuestINSASignatureBundle:Signature:index.html.twig', ['users' => $entities]);
         //return $this->render('OuestINSASignatureBundle:Signature:index.html.twig');
         //return new Response("It works !");
@@ -30,6 +30,6 @@ class SignatureController extends Controller
     }
 
     public function signatureTempAction(){
-      return $this->render('OuestINSASignatureBundle:Signature:temp.html.twig');
+      return $this->render('OuestINSASignatureBundle:Signature:temp.html.twig', ['users' => $entities]);
     }
 }
