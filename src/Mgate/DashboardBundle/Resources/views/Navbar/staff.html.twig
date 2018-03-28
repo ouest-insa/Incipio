@@ -46,7 +46,9 @@
     {% if is_granted('ROLE_RGPD') %}
         <li>
             <a href="{{ path('privacy_homepage') }}">
-                {{ 'dashboard.vie_privee'|trans({}, 'dashboard') }}
+            	<span class="nav-label">
+                	{{ 'dashboard.vie_privee'|trans({}, 'dashboard') }}
+                </span>
             </a>
         </li>
     {% endif %}
