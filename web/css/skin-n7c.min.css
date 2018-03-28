@@ -113,6 +113,13 @@
     border-bottom-left-radius: 0 !important;
 }
 
+.sidebar-menu > li > a > .icon-mini {
+    display: none;
+}
+.sidebar-collapse .sidebar-menu > li > a > .icon-mini {
+    display: inline;
+}
+
 .breadcrumb{background-color: #f8f8f8;}
 
 /* From Bootstrap 2.3.* removed in 3. @from Mgate.css* */

@@ -46,7 +46,7 @@
                 </td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.rolesDisplay }}</td>
-                <td>{{ user.lastLogin | date('Y/m/d H:i')}}</td>
+                <td>{{ user.lastLogin is empty ? "Jamais connecté" : user.lastLogin | date('Y/m/d H:i')}}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td><a href="{{ path('Mgate_user_modifier', {'id': user.id}) }}">modifier</a></td>
                 {% endif %}
