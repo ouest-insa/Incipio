@@ -19,27 +19,16 @@
         </tr>
     </table>
     <br/>
-    <table class="table">
-        <tr>
-            {% if is_granted('ROLE_CA') %}
-                <td style="text-align: left;">
-                    <button type="button" class="btn btn-primary"
-                            onclick="location.href='{{ path('Mgate_formation_modifier', {'id': formation.id}) }}';">
-                        {{ 'formation.formation_modifier'|trans({}, 'formation') }}
-                    </button>
-                </td>
-            {% endif %}
-            <td style="text-align: center;">
-                <button class="btn btn-success">{{ 'formation.documents_telecharger'|trans({}, 'formation') }}</button>
-            </td>
-            {% if is_granted('ROLE_ADMIN') %}
-                <td style="text-align: right;">
-                    <button type="button" class="btn btn-danger"
-                            onclick="location.href='{{ path('Mgate_formation_supprimer', {'id': formation.id}) }}';">
-                        {{ 'formation.formation_supprimer'|trans({}, 'formation') }}
-                    </button>
-                </td>
-            {% endif %}
-        </tr>
-    </table>
+    <div class="row">
+        {% if is_granted('ROLE_CA') %}
+            <div class="col-md-2 col-xs-4">
+                <a href="{{ path('Mgate_formation_modifier', {'id': formation.id}) }}" class="btn btn-primary">
+                    {{ 'formation.formation_modifier'|trans({}, 'formation') }}
+                </a>
+            </div>
+        {% endif %}
+        <div class="col-md-2 col-xs-4">
+            <button class="btn btn-success">{{ 'formation.documents_telecharger'|trans({}, 'formation') }}</button>
+        </div>
+    </div>
 {% endblock %}

@@ -32,7 +32,7 @@ Mgate_formation_supprimer:
     defaults: { _controller: MgateFormationBundle:Formation:supprimer }
     requirements:
         id: \d+
-    methods:  [GET, HEAD, POST]
+    methods:  [POST]
 
 Mgate_formation_participation:
     path:  /formations/admin/participation/{mandat}

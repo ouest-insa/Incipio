@@ -29,9 +29,6 @@
         <td>{{ form_widget(form.docPath) }}</td>
     </tr>
 </table>
-<input class="btn btn-success" type="submit"
-       value="{{ 'formation.formation_enregistrer'|trans({}, 'formation') }}"/>
-<br/><br/>
 <table class="table table-bordered table-striped" id="formateurs"
        data-prototype="{{ form_widget(form.formateurs.vars.prototype) | e }}">
     <tr>
@@ -71,10 +68,29 @@
     </tr>
 </table>
 
-<input class="btn btn-success" type="submit" value="{{ 'formation.formation_enregistrer'|trans({}, 'formation') }}"/>
-{{ form_end(form) }}
+<div class="row">
+    <div class="col-md-2 col-xs-4">
 
-{{ form_javascript(form) }}
+        <button type="submit"
+                class="btn btn-success">{{ 'formation.formation_enregistrer'|trans({}, 'formation') }}</button>
+
+        {{ form_end(form) }}
+
+        {{ form_javascript(form) }}
+    </div>
+
+    {% if is_granted('ROLE_ADMIN') and delete_form is defined and delete_form is not none %}
+        <div class="col-md-2 col-xs-4">
+
+            <form class="bootbox-confirm inline"
+                  data-content="{{ 'formation.confirmation_supprimer_formation'|trans({}, 'formation') }}"
+                  action="{{ path('Mgate_formation_supprimer', { 'id': delete_form.vars.value.id }) }}" method="post">
+                {{ form_widget(delete_form) }}
+                <button class="btn btn-danger">{{ 'formation.formation_supprimer'|trans({}, 'formation') }}</button>
+            </form>
+        </div>
+    {% endif %}
+</div>
 
 <script type="text/javascript">
     // Récupère le div qui contient la collection de tags
@@ -107,18 +123,14 @@
 
 
         $addFormateurButton.on('click', function (e) {
-            // empêche le lien de créer un « # » dans l'URL
             e.preventDefault();
-
             // ajoute un nouveau formulaire formateur (voir le prochain bloc de code)
             addTagForm(collectionHolderFormateurs, i, 'formateur');
             i++;
         });
 
         $addMembreButton.on('click', function (e) {
-            // empêche le lien de créer un « # » dans l'URL
             e.preventDefault();
-
             // ajoute un nouveau formulaire formateur (voir le prochain bloc de code)
             addTagForm(collectionHolderMembres, j, 'membre');
             j++;
@@ -149,19 +161,18 @@
         triggerJavascript(type, id);
     }
 
-    function addDeleteButton($tag) {
-        var $delete = $('<button class="btn btn-danger" id="myButtonDelete">X</button>');
-        $($tag).children().first().append($delete);
+    function addDeleteButton(tag) {
 
-        $delete.on('click', function (e) {
-            // prevent the link from creating a "#" on the URL
+        var deleteButton =  $('<button class="btn btn-danger" id="myButtonDelete">X</button>');
+        $(tag).children().first().append(deleteButton);
+
+        deleteButton.on('click', function (e) {
             e.preventDefault();
-
             //CONFIRM confirmation suppression
             var message = "Êtes vous sûr de vouloir supprimer ce membre ?";
             bootbox.confirm(message, function (result) {
                 if (result) {
-                    $tag.remove();
+                    tag.remove();
                 }
             });
         });

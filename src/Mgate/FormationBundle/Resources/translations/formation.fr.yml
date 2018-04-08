@@ -1,6 +1,7 @@
 formation:
   categories: Categories
   chercher: Chercher
+  confirmation_supprimer_formation: Etes-vous sûr de vouloir supprimer définitivement cette formation ?
   date: Date
   description: Description
   documents: Documents
@@ -9,7 +10,7 @@ formation:
   espace_admin: Espace Admin
   formateurs: Formateurs
   formation_enregistrer: Enregistrer la Formation
-  formation_modifier: Modifier une formation
+  formation_modifier: Modifier la formation
   formation_supprimer: Supprimer la Formation
   formations: Formations
   formations_presence: Présence aux formations
