@@ -58,7 +58,7 @@ class AppKernel extends Kernel
             new Mgate\PersonneBundle\MgatePersonneBundle(),
             new Mgate\CommentBundle\MgateCommentBundle(),
             new Mgate\SuiviBundle\MgateSuiviBundle(),
-            new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
+            new EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle(),
             new N7consulting\RhBundle\N7consultingRhBundle(),
             new N7consulting\PrivacyBundle\N7consultingPrivacyBundle(),
         ];
