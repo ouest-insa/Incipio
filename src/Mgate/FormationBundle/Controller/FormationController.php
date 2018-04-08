@@ -16,6 +16,8 @@ use Mgate\FormationBundle\Form\Type\FormationType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -99,15 +101,16 @@ class FormationController extends Controller
     /**
      * @Security("has_role('ROLE_CA')")
      *
+     * @param Request   $request
      * @param Formation $formation The training to modify
      *
-     * @return Response
-     *                  Manage creation and update of a training
+     * @return Response Manage creation and update of a training
      */
     public function modifierAction(Request $request, Formation $formation)
     {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(FormationType::class, $formation);
+        $deleteForm = $this->createDeleteForm($formation->getId());
 
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
@@ -122,7 +125,9 @@ class FormationController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateFormationBundle:Gestion:modifier.html.twig', ['form' => $form->createView(),
+        return $this->render('MgateFormationBundle:Gestion:modifier.html.twig', [
+            'delete_form' => $deleteForm->createView(),
+            'form' => $form->createView(),
             'formation' => $formation,
         ]);
     }
@@ -187,18 +192,38 @@ class FormationController extends Controller
     /**
      * @Security("has_role('ROLE_ADMIN')")
      *
+     * @param Request   $request
      * @param Formation $formation The training to delete (paramconverter from id)
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     *                                                            Delete a training
+     * @return RedirectResponse Delete a training
      */
-    public function supprimerAction(Formation $formation)
+    public function supprimerAction(Request $request, Formation $formation)
     {
-        $em = $this->getDoctrine()->getManager();
+        $form = $this->createDeleteForm($formation->getId());
+        $form->handleRequest($request);
 
-        $em->remove($formation);
-        $em->flush();
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($formation);
+            $em->flush();
+            $this->addFlash('success', 'Formation supprimée');
+        }
 
         return $this->redirectToRoute('Mgate_formations_lister', []);
+    }
+
+    /**
+     * Function to create a form to remove a formation.
+     *
+     * @param $id
+     *
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(['id' => $id])
+            ->add('id', HiddenType::class)
+            ->getForm()
+            ;
     }
 }

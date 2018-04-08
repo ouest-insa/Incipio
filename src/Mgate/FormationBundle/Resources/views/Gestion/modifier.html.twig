@@ -17,3 +17,8 @@
 {% block content_bundle %}
     {% include "MgateFormationBundle:Gestion:formulaire.html.twig" %}
 {% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}
