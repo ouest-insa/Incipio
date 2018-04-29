@@ -22,7 +22,7 @@ services:
             - "traefik.frontend.rule=Host:REPLACE_WITH_YOUR_HOST"
 
     database:
-        image: mysql
+        image: mysql:5
         environment:
             MYSQL_ROOT_PASSWORD: changeme
             MYSQL_DATABASE: jeyser
