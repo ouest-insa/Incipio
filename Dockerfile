@@ -1,7 +1,7 @@
 FROM php:7.1-apache
 
 # PHP extensions
-ENV APCU_VERSION 5.1.5
+ENV APCU_VERSION 5.1.11
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN buildDeps=" \
         libicu-dev \
@@ -27,7 +27,7 @@ RUN pecl install \
         apcu
 
 # Apache config
-RUN a2enmod rewrite
+RUN a2enmod rewrite headers
 ADD docker/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 
 # PHP config
