@@ -27,7 +27,7 @@ RUN pecl install \
         apcu
 
 # Apache config
-RUN a2enmod rewrite
+RUN a2enmod rewrite headers
 ADD docker/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 
 # PHP config

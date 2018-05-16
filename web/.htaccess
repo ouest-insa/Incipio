@@ -9,3 +9,12 @@
     RewriteRule ^(.*)$ app.php [QSA,L]
     DirectoryIndex app.php
 </IfModule>
+
+# .htaccess is deprecated and will be removed in Jeyser 3.0 in favour of Apache configuration
+<IfModule mod_headers.c>
+  Header append X-FRAME-OPTIONS "SAMEORIGIN"
+  Header append X-XSS-Protection "1; mode=block"
+  Header append Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header append X-Content-Type-Options "nosniff"
+  Header append Referrer-Policy "same-origin"
+</IfModule>
