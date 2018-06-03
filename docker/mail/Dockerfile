@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 MAINTAINER Jeyser-CRM <dsi@n7consulting.fr>
 
