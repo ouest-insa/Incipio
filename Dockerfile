@@ -10,7 +10,7 @@ RUN buildDeps=" \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         $buildDeps \
-        libicu52 \
+        libicu57 \
         zlib1g \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install \
