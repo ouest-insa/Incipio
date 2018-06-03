@@ -60,7 +60,7 @@
       "php bin/console doctrine:fixtures:load -n --env=prod --ansi"
     ],
     "clear-cache-prod": [
-      "php bin/console cache:clear -e=prod --no-warmup",
+      "php bin/console cache:clear --env=prod --no-warmup",
       "php bin/console cache:warmup --env=prod",
       "php bin/console doctrine:cache:clear-query",
       "php bin/console doctrine:cache:clear-metadata"
