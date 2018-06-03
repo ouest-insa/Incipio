@@ -2,7 +2,7 @@ user:
   deconnexion: Déconnexion
   deja_connecter: Vous êtes déjà connecté  
   modifier: Modifier
-  modifier_utilisateur: Modifier un utilisateur
-  lister_utilisateurs: Liste des utilisateurs
+  utilisateur_modifier_un: Modifier un utilisateur
   utilisateur: Utilisateur
   utilisateurs: Utilisateurs
+  utilisateurs_lister: Liste des utilisateurs

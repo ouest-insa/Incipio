@@ -8,15 +8,15 @@
 {% endblock %}
 
 {% block title %}    
-    {{ 'user.lister_utilisateurs'|trans({}, 'user') }} - {{ parent() }}
+    {{ 'user.utilisateurs_lister'|trans({}, 'user') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'user.lister_utilisateurs'|trans({}, 'user') }}
+    {{ 'user.utilisateurs_lister'|trans({}, 'user') }}
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ 'user.lister_utilisateurs'|trans({}, 'user') }}
+    {{ 'user.utilisateurs_lister'|trans({}, 'user') }}
 {% endblock %}
 
 {% block content_bundle %}
@@ -24,9 +24,8 @@
     <table class="table table-bordered table-striped dataTable dt-responsive" id="listeUser" role="grid">
         <thead>
         <tr>
-            <!--<td>Id</td>-->
-            <th>Nom d'Utilisateur</th>
-            <th>Liée à</th>
+            <th>Nom d'utilisateur</th>
+            <th>Lié à</th>
             <th>Email du compte</th>
             <th>Droit</th>
             <th>Dernière connexion</th>
@@ -38,7 +37,6 @@
         <tbody>
         {% for user in users %}
             <tr>
-                <!--<td>{{ user.id }}</td>-->
                 <td>{{ user.username }}</td>
                 <td>{% if user.personne %}
                         {% if user.personne.membre %}

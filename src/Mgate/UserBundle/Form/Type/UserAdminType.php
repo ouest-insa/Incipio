@@ -53,8 +53,7 @@ class UserAdminType extends AbstractType
         $this->buildUserForm($builder, $options);
 
         $builder->add('current_password', PasswordType::class, [
-            'label' => 'form.current_password',
-            'translation_domain' => 'FOSUserBundle',
+            'label' => 'Mot de passe admin pour validation',
             'mapped' => false,
             'constraints' => new UserPassword(),
         ]);

@@ -1,15 +1,15 @@
 {% extends "MgateUserBundle::layout.html.twig" %}
 
 {% block title %}
-    {{ 'user.modifier_utilisateur'|trans({}, 'user') }} - {{ parent() }}
+    {{ 'user.utilisateur_modifier_un'|trans({}, 'user') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'user.modifier_utilisateur'|trans({}, 'user') }}
+    {{ 'user.utilisateur_modifier_un'|trans({}, 'user') }}
 {% endblock %}
 
 {% block breadcrumb_items %}
-    <li><a href="{{ path('Mgate_user_lister') }}">{{ 'user.lister_utilisateurs'|trans({}, 'user') }}</a></li>
+    <li><a href="{{ path('Mgate_user_lister') }}">{{ 'user.utilisateurs_lister'|trans({}, 'user') }}</a></li>
 {% endblock %}
 
 {% block breadcrumb_active %}
@@ -18,44 +18,80 @@
 
 {% block content_bundle %}
 
-    {{ form_start(form, {'attr': {'style': 'max-width: 600px'}}) }}
-    <table class="table table-bordered">
-        <tr>
-            <td>{{ form_label(form.username) }}</td>
-            <td>{{ form_widget(form.username) }}</td>
-        </tr>
-        <tr>
-            <td>{{ form_label(form.email) }}</td>
-            <td>{{ form_widget(form.email) }}</td>
-        </tr>
-        <tr>
-            <td>{{ form_label(form.enabled) }}</td>
-            <td>{{ form_widget(form.enabled) }}</td>
-        </tr>
-        <tr>
-            <td>{{ form_label(form.personne) }}</td>
-            <td>{{ form_widget(form.personne) }}</td>
-        </tr>
-        <tr>
-            <td>{{ form_label(form.roles) }}</td>
-            <td>{{ form_widget(form.roles, {'attr': {'class': 'select2', 'style': 'width: 100%'}}) }}</td>
-        </tr>
-    </table>
-
+    {{ form_start(form, {'attr': {'id': 'form', 'class': 'form-horizontal'}}) }}
+    <div class="form-group">
+        <div class="col-md-2 col-xs-12">
+            {{ form_label(form.username) }}
+        </div>
+        <div class="col-md-4 col-xs-12">
+            {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.username) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2 col-xs-12">
+            {{ form_label(form.email) }}
+        </div>
+        <div class="col-md-4 col-xs-12">
+            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.email) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2 col-xs-12">
+            {{ form_label(form.enabled) }}
+        </div>
+        <div class="col-md-4 col-xs-12">
+            {{ form_widget(form.enabled, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.enabled) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2 col-xs-12">
+            {{ form_label(form.personne) }}
+        </div>
+        <div class="col-md-4 col-xs-12">
+            {{ form_widget(form.personne, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.personne) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2 col-xs-12">
+            {{ form_label(form.roles) }}
+        </div>
+        <div class="col-md-4 col-xs-12">
+            {{ form_widget(form.roles, {'attr': {'class': 'form-control select2', 'style': 'width: 100%'}}) }}
+            {{ form_errors(form.roles) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2 col-xs-12">
+            {{ form_label(form.current_password) }}
+        </div>
+        <div class="col-md-4 col-xs-12">
+            {{ form_widget(form.current_password, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.current_password) }}
+        </div>
+    </div>
 
     {{ form_widget(form) }}
-    {{ form_rest(form) }}
-    <input class="btn btn-success" type="submit" value="Enregistrer l'Utilisateur"/>
-    {{ form_end(form) }}
-    <br>
+    <div class="row">
+        <div class="col-md-2 col-xs-4">
+            <input class="btn btn-success" type="submit" value="Enregistrer l'Utilisateur"/>
+            {{ form_end(form) }}
+        </div>
 
-    <form action="{{ path('Mgate_user_supprimer', { 'id': form.vars.value.id }) }}" method="post">
-        {{ form_widget(delete_form) }}
-        <button class="btn btn-danger bootbox-confirm"
-                data-content="Êtes-vous sûr de vouloir supprimer définitivement cet utilisateur ?">Supprimer
-            l'utilisateur
-        </button>
-    </form>
+        <div class="col-md-2 col-xs-4">
+
+            <form action="{{ path('Mgate_user_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+                {{ form_widget(delete_form) }}
+                <button class="btn btn-danger bootbox-confirm"
+                        data-content="Êtes-vous sûr de vouloir supprimer définitivement cet utilisateur ?">Supprimer
+                    l'utilisateur
+                </button>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}
 
