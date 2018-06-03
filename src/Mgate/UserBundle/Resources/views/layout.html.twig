@@ -1,61 +1,10 @@
 {% extends "::layout.html.twig" %}
 
-{% block title %}Identification requise{% endblock %}
-
-{% block stylesheets %}
-{{ parent() }}
-<style>
-    body {
-      background-color: #eee;
-    }
-
-    .form-signin {
-      max-width: 330px;
-      padding: 15px;
-      margin: 0 auto;
-    }
-    .form-signin .form-signin-heading,
-    .form-signin .checkbox {
-      margin-bottom: 10px;
-    }
-    .form-signin .checkbox {
-      font-weight: normal;
-    }
-    .form-signin .form-control {
-      position: relative;
-      height: auto;
-      -webkit-box-sizing: border-box;
-         -moz-box-sizing: border-box;
-              box-sizing: border-box;
-      padding: 10px;
-      font-size: 16px;
-    }
-    .form-signin .form-control:focus {
-      z-index: 2;
-    }
-    .form-signin input[type="email"] {
-      margin-bottom: -1px;
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-    .form-signin input[type="password"] {
-      margin-bottom: 10px;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-{# TODO : genrer les pages de changement de pseudo et de MDP mais ne pas afficher la page de login si déjà connecté. #}
-{% block fos_user_content %}{% endblock %}
-
-{% if app.user %}
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title">
                 {% block content_title %}
-                	{{ 'user.deja_connecter'|trans({}, 'user') }}
                 {% endblock %}
             </h3>
 
@@ -73,21 +22,10 @@
 
         </div>
         <div class="box-body">
-            {# On définit un nouveau block, que les vues du bundle pourront remplir #}
             {% block content_bundle %}
-            	<a class="btn btn-danger" href="{{ path('fos_user_security_logout') }}">{{ 'user.deconnexion'|trans({}, 'user') }}</a>
+                {% block fos_user_content %}{% endblock %}
             {% endblock %}
-
         </div>
         <div class="box-footer"></div>
     </div>
-{% else %}
-<div class="container">
-    {#% block fos_user_content %}{% endblock %#}
-    <p style="text-align: right;"></p>
-    <a href="{{ path('fos_user_registration_register') }}">Inscription</a>
-    <a href="{{ path('fos_user_resetting_request') }}">Mot de passe oublié</a>
-</div>
-{% endif %}
-
 {% endblock %}
