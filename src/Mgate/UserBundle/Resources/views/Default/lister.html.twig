@@ -7,13 +7,19 @@
     <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
 {% endblock %}
 
-{% block title %}
-    Lister les utilisateurs - {{ parent() }}
+{% block title %}    
+    {{ 'user.lister_utilisateurs'|trans({}, 'user') }} - {{ parent() }}
 {% endblock %}
 
-{% block content %}
+{% block content_title %}
+    {{ 'user.lister_utilisateurs'|trans({}, 'user') }}
+{% endblock %}
 
-    <h2>Liste des utilisateurs</h2>
+{% block breadcrumb_active %}
+    {{ 'user.lister_utilisateurs'|trans({}, 'user') }}
+{% endblock %}
+
+{% block content_bundle %}
 
     <table class="table table-bordered table-striped dataTable dt-responsive" id="listeUser" role="grid">
         <thead>
@@ -46,9 +52,9 @@
                 </td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.rolesDisplay }}</td>
-                <td>{{ user.lastLogin | date('Y/m/d H:i')}}</td>
+                <td>{{ user.lastLogin is empty ? "-" : user.lastLogin | date('Y/m/d H:i')}}</td>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <td><a href="{{ path('Mgate_user_modifier', {'id': user.id}) }}">modifier</a></td>
+                    <td><a href="{{ path('Mgate_user_modifier', {'id': user.id}) }}">{{ 'user.modifier'|trans({}, 'user') }}</a></td>
                 {% endif %}
             </tr>
         {% else %}

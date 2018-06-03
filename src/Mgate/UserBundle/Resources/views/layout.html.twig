@@ -46,17 +46,48 @@
 </style>
 {% endblock %}
 
-
 {% block content %}
-<div class="container">
-    {% block fos_user_content %}{% endblock %}
-</div>
-<p style="text-align: right;">
+{# TODO : genrer les pages de changement de pseudo et de MDP mais ne pas afficher la page de login si déjà connecté. #}
+{% block fos_user_content %}{% endblock %}
+
 {% if app.user %}
-    <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                {% block content_title %}
+                	{{ 'user.deja_connecter'|trans({}, 'user') }}
+                {% endblock %}
+            </h3>
+
+            {% block breadcrumb %}
+                <ul class="breadcrumb no-margin pull-right">
+                    <li>
+                        {{ 'user.utilisateurs'|trans({}, 'user') }}
+                    </li>
+                    {% block breadcrumb_items %}{% endblock %}
+                    <li class="active">
+                        {% block breadcrumb_active %}{% endblock %}
+                    </li>
+                </ul>
+            {% endblock %}
+
+        </div>
+        <div class="box-body">
+            {# On définit un nouveau block, que les vues du bundle pourront remplir #}
+            {% block content_bundle %}
+            	<a class="btn btn-danger" href="{{ path('fos_user_security_logout') }}">{{ 'user.deconnexion'|trans({}, 'user') }}</a>
+            {% endblock %}
+
+        </div>
+        <div class="box-footer"></div>
+    </div>
 {% else %}
+<div class="container">
+    {#% block fos_user_content %}{% endblock %#}
+    <p style="text-align: right;"></p>
     <a href="{{ path('fos_user_registration_register') }}">Inscription</a>
     <a href="{{ path('fos_user_resetting_request') }}">Mot de passe oublié</a>
+</div>
 {% endif %}
-</p>
+
 {% endblock %}

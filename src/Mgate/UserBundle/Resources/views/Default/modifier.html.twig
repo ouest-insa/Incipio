@@ -1,12 +1,22 @@
 {% extends "MgateUserBundle::layout.html.twig" %}
 
 {% block title %}
-    Modifier un utilisateur - {{ parent() }}
+    {{ 'user.modifier_utilisateur'|trans({}, 'user') }} - {{ parent() }}
 {% endblock %}
 
-{% block content %}
+{% block content_title %}
+    {{ 'user.modifier_utilisateur'|trans({}, 'user') }}
+{% endblock %}
 
-    <h2>Modifier l'utilisateur</h2>
+{% block breadcrumb_items %}
+    <li><a href="{{ path('Mgate_user_lister') }}">{{ 'user.lister_utilisateurs'|trans({}, 'user') }}</a></li>
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'user.modifier'|trans({}, 'user') }}
+{% endblock %}
+
+{% block content_bundle %}
 
     {{ form_start(form, {'attr': {'style': 'max-width: 600px'}}) }}
     <table class="table table-bordered">
