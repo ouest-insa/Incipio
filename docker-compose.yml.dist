@@ -38,7 +38,7 @@ services:
     traefik:
         image: traefik:tetedemoine
         command: |
-            -c /dev/null --web --docker --docker.domain=docker.localhost --logLevel=DEBUG
+            --web --docker --docker.domain=docker.localhost --logLevel=ERROR
             --defaultEntryPoints='http,https' --entryPoints='Name:http Address::80 Redirect.EntryPoint:https'
             --entryPoints='Name:https Address::443 TLS' --acme.entryPoint=https
             --acme.email='REPLACE_WITH_YOUR_EMAIL' --acme.storage=/acme.json --acme.onDemand=true
