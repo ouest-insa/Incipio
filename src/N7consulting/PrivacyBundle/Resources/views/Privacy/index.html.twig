@@ -51,8 +51,11 @@
     {{ parent() }}
     <script type="text/javascript">
         $('.select2').select2();
-
-        /** Create Confirm message */
+        /** Hide search on second dropdown **/
+		$('#action').select2({
+    		minimumResultsForSearch: -1
+		});
+        /** Create Confirm message **/
         $("#validate").click(function (e) {
             e.preventDefault();
             return bootbox.confirm({
