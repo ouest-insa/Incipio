@@ -122,6 +122,16 @@
 
 .breadcrumb{background-color: #f8f8f8;}
 
+.btn-group .dropdown-menu {  
+ float: right;
+ left: auto;
+ right: 0;  
+}
+
+.navbar-header .brand h4{
+    margin: 15px;
+}
+
 /* From Bootstrap 2.3.* removed in 3. @from Mgate.css* */
 .label-important,
 .badge-important {

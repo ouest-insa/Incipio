@@ -39,7 +39,7 @@
                 <td><a href="{{ path('MgatePersonne_prospect_voir', {'id': prospect.id}) }}"> {{ prospect.nom }} </a>
                 </td>
                 <td>{{ prospect.entiteToString }}</td>
-                <td>{{ prospect.adresse }}</td>
+                <td>{{ prospect.ville }}, {{ prospect.adresse }}</td>
                 <td>{{ prospect.employes | length }}</td>
             </tr>
         {% endfor %}

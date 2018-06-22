@@ -34,7 +34,7 @@
                         <div class="col-md-2 col-xs-4">
                             <form class="bootbox-confirm inline"
                                   data-content="{{ 'prospect.confirmation_supprimer_prospect'|trans({}, 'personne') }}"
-                                  action="{{ path('MgatePersonne_filiere_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+                                  action="{{ path('MgatePersonne_prospect_supprimer', { 'id': form.vars.value.id }) }}" method="post">
                                 {{ form_widget(delete_form) }}
                                 <button class="btn btn-danger">{{ 'prospect.supprimer_prospect'|trans({}, 'personne') }}</button>
                             </form>
