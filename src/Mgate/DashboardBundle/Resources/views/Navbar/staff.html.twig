@@ -274,7 +274,12 @@
 
     <!-- Signatures -->
     {% if is_granted('ROLE_SUIVEUR') %}
-        <li><a href="{{ path('OuestINSA_signature_homepage') }}"><span class="nav-label">{{ 'dashboard.signature'|trans({}, 'dashboard') }}</span></a></li>
+        <li>
+            <a href="{{ path('OuestINSA_signature_homepage') }}">
+                <i class="icon-mini fa fa-id-card-o"></i>
+                <span class="nav-label">{{ 'dashboard.signature'|trans({}, 'dashboard') }}</span>
+            </a>
+        </li>
     {% endif %}
 
 </ul>

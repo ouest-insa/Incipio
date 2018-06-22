@@ -26,7 +26,7 @@ class SignatureController extends Controller
 
 
     public function generateAction(){
-      return new Response("Work in progess");
+      return $this->render('OuestINSASignatureBundle:Signature:generate.html.twig');
     }
 
     public function signatureTempAction(){
