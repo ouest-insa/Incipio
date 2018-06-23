@@ -19,7 +19,8 @@
 
     {# itere sur chaque tag existant et affiche son unique champ : name #}
     <div class="row">
-        <div class="col-md-12 table-responsive" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}"">
+        <div class="col-md-12">
+        <div class="table-responsive" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}"">
             {# itere sur chaque tag existant et affiche son unique champ : name #}
 
             <table class="table table-striped" id="phases">
@@ -81,11 +82,13 @@
                     <td id="totalNbrJEH"></td>
                     <td id="totalPrixJEH"></td>
                     <td></td>
+                    <td></td>
                 </tr>
                 </tbody>
             </table>
             <br/>
             {{ form_rest(form) }}
+        </div>
         </div>
     </div>
     <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'suivi') }}" name="add" class="btn btn-info"/>

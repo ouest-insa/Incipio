@@ -1,12 +1,18 @@
 .skin-yellow .main-header .navbar {
     background-color: #f39c12;
 }
-.skin-yellow .main-header .navbar .nav>li>a {
+.skin-yellow .main-header .navbar .nav>li>a, .skin-yellow .main-header .navbar .nav>li>.loading {
     color: #fff;
 }
 .skin-yellow .main-header .navbar .nav>li>a:hover, .skin-yellow .main-header .navbar .nav>li>a:active, .skin-yellow .main-header .navbar .nav>li>a:focus, .skin-yellow .main-header .navbar .nav .open>a, .skin-yellow .main-header .navbar .nav .open>a:hover, .skin-yellow .main-header .navbar .nav .open>a:focus {
     background: rgba(0, 0, 0, 0.1);
     color: #f6f6f6;
+}
+.skin-yellow .main-header .navbar .nav>li>.loading {
+    padding: 10.5px;
+}
+.skin-yellow .main-header .navbar .nav>li>ul>.header {
+    padding-left: 10px;
 }
 .skin-yellow .main-header .navbar .sidebar-toggle {
     color: #fff;

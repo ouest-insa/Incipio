@@ -2,7 +2,7 @@
  # Input : prospect
  # use : {% include "MgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}
  #}
-<div class="btn-group" style="width: 100%; min-width: 220px;">
+<div class="btn-group" style="width: 100%; min-width: 220px; max-width:500px;">
     <a title="{{ prospect.nom }}" class="btn btn-warning" href="{{ path('MgatePersonne_prospect_voir', {'id': prospect.id}) }}" style="width : calc(100% - 26px); text-align: left; overflow: hidden;"><i class="icon-user icon-white"></i> {{ prospect.nom }}</a>
     <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
     <ul class="dropdown-menu">

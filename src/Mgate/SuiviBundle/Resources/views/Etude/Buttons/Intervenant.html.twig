@@ -5,10 +5,10 @@
  %}
  #}
 {% if mission.intervenant %}
-    <div class="btn-group" style="width: 220px;">
+    <div class="btn-group" style="width: 100%; min-width: 220px; max-width:500px;">
         <a class="btn btn-primary"
            href="{{ path('MgatePersonne_membre_voir', {'id': mission.intervenant.id|default('0')}) }}"
-           style="width : 60%; text-align: left; overflow: hidden;">
+           style="width : calc(100% - 26px); text-align: left; overflow: hidden;">
             <i class="icon-user icon-white"></i>
             {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}
         </a>

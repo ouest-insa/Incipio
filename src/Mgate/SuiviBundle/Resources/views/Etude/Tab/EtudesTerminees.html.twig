@@ -1,3 +1,4 @@
+<div class="table-responsive">
 <table class="table table-striped" id="myTable">
     <thead>
     <tr>
@@ -60,7 +61,6 @@
                 <ul>
                     {% for mission in etude.missions %}
                         <li>  {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</li>
-
                     {% endfor %}
                 </ul>
             </td>
@@ -72,3 +72,4 @@
     {% endfor %}
     </tbody>
 </table>
+</div>
