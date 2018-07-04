@@ -18,6 +18,8 @@ use Mgate\PersonneBundle\Entity\Prospect;
 use Mgate\SuiviBundle\Entity\Etude;
 
 /**
+ * A related document is a join table between a document and objects in the application.
+ *
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
@@ -37,7 +39,8 @@ class RelatedDocument
     private $document;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Membre", inversedBy="relatedDocuments", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Membre", inversedBy="relatedDocuments",
+     *                                                                   cascade={"persist"})
      * @ORM\JoinColumn(name="membre_id", referencedColumnName="id", nullable=true)
      */
     private $membre;
