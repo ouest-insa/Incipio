@@ -21,7 +21,7 @@
     "doctrine/doctrine-migrations-bundle": "^1.0",
     "doctrine/orm": "^2.5",
     "egulias/email-validator": "~1.2",
-    "friendsofsymfony/comment-bundle": "~2.0",
+    "friendsofsymfony/comment-bundle": "2.1.0",
     "friendsofsymfony/jsrouting-bundle": "~1.1",
     "friendsofsymfony/user-bundle": "^2.0",
     "gedmo/doctrine-extensions": "~2.3",
