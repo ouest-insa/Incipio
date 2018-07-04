@@ -131,7 +131,8 @@ class Membre implements AnonymizableInterface
     private $nationalite;
 
     /**
-     * @ORM\OneToMany(targetEntity="Mgate\PubliBundle\Entity\RelatedDocument", mappedBy="membre", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Mgate\PubliBundle\Entity\RelatedDocument", mappedBy="membre", cascade={"remove"},
+     *     orphanRemoval=true)
      */
     private $relatedDocuments;
 

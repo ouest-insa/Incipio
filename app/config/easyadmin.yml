@@ -13,6 +13,8 @@ easy_admin:
             class: Mgate\SuiviBundle\Entity\ClientContact
         Competence:
             class: N7consulting\RhBundle\Entity\Competence
+        Document:
+            class: Mgate\PubliBundle\Entity\Document
         Employe:
             class: Mgate\PersonneBundle\Entity\Employe
         Etude:
@@ -48,6 +50,8 @@ easy_admin:
             class: Mgate\PersonneBundle\Entity\Poste
         Prospect:
             class: Mgate\PersonneBundle\Entity\Prospect
+        RelatedDocument:
+            class: Mgate\PubliBundle\Entity\RelatedDocument
         Suivi:
             class: Mgate\SuiviBundle\Entity\Suivi
         User:

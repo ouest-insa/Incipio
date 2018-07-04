@@ -35,7 +35,7 @@ class Document
 
     /**
      * @ORM\OneToOne(targetEntity="RelatedDocument", inversedBy="document", cascade={"all"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $relation;
 
@@ -81,6 +81,11 @@ class Document
      * @Assert\File(maxSize="6000000")
      */
     private $file;
+
+    public function __toString()
+    {
+        return 'Document ' . $this->getId() . ' ' . $this->path;
+    }
 
     /**
      * @return null|string
