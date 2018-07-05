@@ -18,7 +18,7 @@ class Version20170421211323 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE membre ADD commentaire VARCHAR(500) DEFAULT NULL');
+        $this->addSql('ALTER TABLE Membre ADD commentaire VARCHAR(500) DEFAULT NULL');
     }
 
     /**

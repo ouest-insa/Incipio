@@ -10,8 +10,7 @@ script:
     # check prod env is working
     - docker-compose up -d
     - sleep 10 && docker-compose run --rm web php bin/console cache:clear -e prod --no-warmup
-    - docker-compose run --rm web php bin/console doctrine:schema:create
-    - docker-compose run --rm web php bin/console doctrine:fixtures:load -n
+    - docker-compose run --rm web composer install:first
     - docker-compose run --rm web php bin/console doctrine:schema:validate --ansi
     # Run tests on test env
     - sleep 10 && docker-compose run --rm web php bin/console cache:clear -e test --no-warmup

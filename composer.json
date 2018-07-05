@@ -56,7 +56,7 @@
     "test:behat": "./vendor/bin/behat ./features/ -f pretty",
     "test:db": "php bin/console doctrine:schema:validate --ansi",
     "install:first": [
-      "php bin/console doctrine:schema:create -n --env=prod --ansi",
+      "php bin/console doctrine:migration:migrate -n -v --env=prod --ansi",
       "php bin/console doctrine:fixtures:load -n --env=prod --ansi"
     ],
     "clear-cache-prod": [
@@ -66,9 +66,9 @@
       "php bin/console doctrine:cache:clear-metadata"
     ],
     "mysql-reload": [
-      "php bin/console doctrine:schema:drop --force",
-      "php bin/console doctrine:schema:update --force",
-      "php bin/console doctrine:fixtures:load -n"
+      "php bin/console doctrine:database:drop --force",
+      "php bin/console doctrine:database:create",
+      "@install:first"
     ],
     "symfony-scripts": [
       "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
