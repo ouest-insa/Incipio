@@ -22,7 +22,8 @@
                         ({{ etudesEnPause | length }})</a></li>
             {% endif %}
             <li><a href="#tab5" data-toggle="tab">{{ 'suivi.etudes_terminees'|trans({}, 'suivi') }}</a></li>
-            <li><a href="#tab6" data-toggle="tab">{{ 'suivi.etudes_avortees'|trans({}, 'suivi') }}</a></li>
+            <li><a href="#tab6" data-toggle="tab">{{ 'suivi.etudes_avortees'|trans({}, 'suivi') }} <div class="badge" title="{{ 'suivi.propales_non_abouties_texte'|trans({}, 'suivi') }}"
+                 data-toggle="tooltip">?</div></a></li>
         </ul>
     </div>
     <div class="tab-content">
@@ -41,10 +42,7 @@
             &nbsp;{% include "MgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesTermineesParMandat, 'key' : '1'} %}
         </div>
         <div class="tab-pane" id="tab6" style="min-height: 400px;">
-            <div class="badge" title="{{ 'suivi.propales_non_abouties_texte'|trans({}, 'suivi') }}"
-                 data-toggle="tooltip">?
-            </div>
-            {% include "MgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesAvorteesParMandat, 'key' : '2'} %}
+            &nbsp;{% include "MgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesAvorteesParMandat, 'key' : '2'} %}
         </div>
     </div>
 

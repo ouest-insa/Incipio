@@ -40,7 +40,7 @@
             </td>
             <td>{{ etude.prospect.nom }}
                 <br/><br/>
-                {{ etude.suiveur.prenomNom| default("Pas de suiveur!") }}</td>
+                {{ etude.suiveur.prenomNom| default("Pas de suiveur !") }}</td>
             <td>
                 {% if etude.dateLancement != NULL %}
                     <div>{{ etude.dateLancement|date("d/m/Y") }}</div>{% endif %}

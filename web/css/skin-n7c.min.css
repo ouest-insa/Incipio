@@ -125,7 +125,13 @@
 .sidebar-collapse .sidebar-menu > li > a > .icon-mini {
     display: inline;
 }
-
+.nav-tabs-custom > .nav-tabs > li > a >.badge{
+    display: none;
+}
+.nav-tabs-custom > .nav-tabs > li.active > a >.badge{
+    display: -moz-inline-box;
+    font-size: 11px;
+}
 .breadcrumb{background-color: #f8f8f8;}
 
 .btn-group .dropdown-menu {  
