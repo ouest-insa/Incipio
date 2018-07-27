@@ -34,7 +34,7 @@ class IndicateursController extends Controller
         $statsBrutes = ['Pas de données' => 'A venir'];
 
         return $this->render('MgateStatBundle:Indicateurs:index.html.twig', ['indicateurs' => $indicateurs,
-            'stats' => $statsBrutes,
+                                                                             'stats' => $statsBrutes,
         ]);
     }
 
@@ -111,12 +111,18 @@ class IndicateursController extends Controller
         foreach ($nombreJoursParMandat as $mandat => $datas) {
             if ($datas > 0) {
                 $categories[] = $mandat;
-                $data[] = ['y' => 100 * ($nombreJoursAvecAvenantParMandat[$mandat] - $datas) / $datas, 'nombreEtudes' => $datas, 'nombreEtudesAvecAv' => $nombreJoursAvecAvenantParMandat[$mandat] - $datas];
+                $data[] = ['y' => 100 * ($nombreJoursAvecAvenantParMandat[$mandat] - $datas) / $datas,
+                           'nombreEtudes' => $datas,
+                           'nombreEtudesAvecAv' => $nombreJoursAvecAvenantParMandat[$mandat] - $datas,
+                ];
             }
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
-        $series = [['name' => 'Nombre de jours de retard / nombre de jours travaillés', 'colorByPoint' => true, 'data' => $data]];
+        $series = [['name' => 'Nombre de jours de retard / nombre de jours travaillés', 'colorByPoint' => true,
+                    'data' => $data,
+                   ],
+        ];
         $ob = $chartFactory->newColumnChart($series, $categories);
 
         $ob->chart->renderTo(__FUNCTION__);
@@ -229,11 +235,16 @@ class IndicateursController extends Controller
         ksort($comptes);
         $data = [];
         foreach ($comptes as $compte => $montantHT) {
-            $data[] = ['name' => $compte, 'y' => (0 == $montantTotal) ? 0 : 100 * $montantHT / $montantTotal, 'montantHT' => $montantHT, 'montantTotal' => $montantTotal];
+            $data[] = ['name' => $compte, 'y' => (0 == $montantTotal) ? 0 : 100 * $montantHT / $montantTotal,
+                       'montantHT' => $montantHT, 'montantTotal' => $montantTotal,
+            ];
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
-        $series = [['type' => 'pie', 'name' => 'Répartition des dépenses HT', 'data' => $data, 'Dépenses totale' => $montantTotal]];
+        $series = [['type' => 'pie', 'name' => 'Répartition des dépenses HT', 'data' => $data,
+                    'Dépenses totale' => $montantTotal,
+                   ],
+        ];
         $ob = $chartFactory->newPieChart($series);
 
         $ob->chart->renderTo(__FUNCTION__);
@@ -301,11 +312,11 @@ class IndicateursController extends Controller
 
             foreach ($comptes as $libelle => $compte) {
                 $total += $compte;
-                $drilldownData[] = [$libelle, round((float) $compte, 2)];
+                $drilldownData[] = [$libelle, round((float)$compte, 2)];
             }
 
             $drilldownSeries[] = ['name' => 'Dépenses du mandat ' . $mandat, 'id' => $mandat, 'data' => $drilldownData];
-            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float) $total, 2), 'drilldown' => $mandat];
+            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float)$total, 2), 'drilldown' => $mandat];
         }
         $series = [['name' => 'Montant des dépenses', 'colorByPoint' => true, 'data' => $dataSeries]];
 
@@ -366,7 +377,10 @@ class IndicateursController extends Controller
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
-        $series = [['type' => 'pie', 'name' => 'Taux de fidélisation', 'data' => $data, 'Nombre de clients' => $nombreClient]];
+        $series = [['type' => 'pie', 'name' => 'Taux de fidélisation', 'data' => $data,
+                    'Nombre de clients' => $nombreClient,
+                   ],
+        ];
         $ob = $chartFactory->newPieChart($series);
 
         $ob->chart->renderTo(__FUNCTION__);
@@ -389,7 +403,7 @@ class IndicateursController extends Controller
         $em = $this->getDoctrine()->getManager();
         $formationsParMandat = $em->getRepository('MgateFormationBundle:Formation')->findAllByMandat();
 
-        $maxMandat = max(array_keys($formationsParMandat));
+        $maxMandat = $formationsParMandat !== [] ? max(array_keys($formationsParMandat)) : 0;
         $mandats = [];
 
         foreach ($formationsParMandat as $mandat => $formations) {
@@ -513,9 +527,10 @@ class IndicateursController extends Controller
             if ($datas > 0) {
                 $categories[] = $mandat;
                 $data[] = ['y' => 100 * $nombreEtudesAvecAvenantParMandat[$mandat] / $datas,
-                    'nombreEtudes' => $datas,
-                    'nombreEtudesAvecAv' => $nombreEtudesAvecAvenantParMandat[$mandat],
-                    'nombreAvs' => $nombreAvsParMandat[$mandat], ];
+                           'nombreEtudes' => $datas,
+                           'nombreEtudesAvecAv' => $nombreEtudesAvecAvenantParMandat[$mandat],
+                           'nombreAvs' => $nombreAvsParMandat[$mandat],
+                ];
             }
         }
 
@@ -566,7 +581,10 @@ class IndicateursController extends Controller
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
-        $series = [['type' => 'pie', 'name' => 'Provenance du CA selon le type de client (tous mandats)', 'data' => $data, 'CA Total' => $chiffreDAffairesTotal]];
+        $series = [['type' => 'pie', 'name' => 'Provenance du CA selon le type de client (tous mandats)',
+                    'data' => $data, 'CA Total' => $chiffreDAffairesTotal,
+                   ],
+        ];
         $ob = $chartFactory->newPieChart($series);
 
         $ob->chart->renderTo(__FUNCTION__);
@@ -609,7 +627,10 @@ class IndicateursController extends Controller
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
-        $series = [['type' => 'pie', 'name' => 'Provenance des études selon le type de client (tous mandats)', 'data' => $data, 'nombreClient' => $nombreClient]];
+        $series = [['type' => 'pie', 'name' => 'Provenance des études selon le type de client (tous mandats)',
+                    'data' => $data, 'nombreClient' => $nombreClient,
+                   ],
+        ];
         $ob = $chartFactory->newPieChart($series);
 
         $ob->chart->renderTo(__FUNCTION__);
@@ -665,13 +686,14 @@ class IndicateursController extends Controller
                 if (!array_key_exists($promo, $cumuls)) {
                     $cumuls[$promo] = [];
                 }
-                $cumuls[$promo][$d] = (array_key_exists($d, $cumuls[$promo]) ? $cumuls[$promo][$d] : (end($cumuls[$promo]) ? end($cumuls[$promo]) : 0));
+                $cumuls[$promo][$d] = (array_key_exists($d,
+                    $cumuls[$promo]) ? $cumuls[$promo][$d] : (end($cumuls[$promo]) ? end($cumuls[$promo]) : 0));
             }
             $cumuls[$p][$d] += $t;
         }
 
         $series = [];
-        $categories = array_keys($cumuls[$promos[0]]);
+        $categories = $cumuls != null ? array_keys($cumuls[$promos[0]]) : [];
         foreach (array_reverse($promos) as $promo) {
             $series[] = ['name' => 'P' . $promo, 'data' => array_values($cumuls[$promo])];
         }
@@ -822,7 +844,9 @@ class IndicateursController extends Controller
         foreach ($cumuls as $mandat => $datas) {
             if ($datas > 0) {
                 $categories[] = $mandat;
-                $data[] = ['y' => $datas, 'JEH' => $cumulsJEH[$mandat], 'moyJEH' => ($datas - $cumulsFraisDossier[$mandat]) / $cumulsJEH[$mandat]];
+                $data[] = ['y' => $datas, 'JEH' => $cumulsJEH[$mandat],
+                           'moyJEH' => ($datas - $cumulsFraisDossier[$mandat]) / $cumulsJEH[$mandat],
+                ];
             }
         }
 
@@ -840,7 +864,8 @@ class IndicateursController extends Controller
                         'color' => '#FFFFFF',
                         'fontSize' => '18px',
                         'fontFamily' => 'Verdana, sans-serif',
-                        'textShadow' => '0 0 2px black', ],
+                        'textShadow' => '0 0 2px black',
+                    ],
                     'y' => 1,
                 ],
             ],
@@ -869,8 +894,8 @@ class IndicateursController extends Controller
      */
     private function getCA()
     {
-        $etudeManager = $this->get('Mgate.etude_manager');
-        $ccs = $this->getDoctrine()->getManager()->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
+        $ccs = $this->getDoctrine()->getManager()->getRepository('MgateSuiviBundle:Cc')
+            ->findBy([], ['dateSignature' => 'asc']);
 
         if ($this->get('app.json_key_value_store')->exists('namingConvention')) {
             $namingConvention = $this->get('app.json_key_value_store')->get('namingConvention');
@@ -879,8 +904,6 @@ class IndicateursController extends Controller
         }
 
         $mandats = [];
-        $maxMandat = $etudeManager->getMaxMandatCc();
-
         $cumuls = [];
 
         foreach ($ccs as $cc) {
@@ -896,15 +919,15 @@ class IndicateursController extends Controller
                     $cumuls[$mandat] = $etude->getMontantHT();
                 }
 
-                $interval = new \DateInterval('P' . ($maxMandat - $mandat) . 'Y');
-                $dateDecale = clone $dateSignature;
-                $dateDecale->add($interval);
-
+                // normalize etudes by month (remove year)
                 $mandats[$mandat][]
-                    = ['x' => $dateDecale->getTimestamp() * 1000,
-                    'y' => $cumuls[$mandat], 'name' => $etude->getReference($namingConvention) . ' - ' . $etude->getNom(),
-                    'date' => $dateSignature->format('d/m/Y'),
-                    'prix' => $etude->getMontantHT(), ];
+                    // signaturemonth * number of seconds in a month + signature day * number of seconds in a day to a js  timestamp
+                    = ['x' => ($dateSignature->format('m') * 2678400 + $dateSignature->format('d') * 86400) * 1000,
+                       'y' => $cumuls[$mandat],
+                       'name' => $etude->getReference($namingConvention) . ' - ' . $etude->getNom(),
+                       'date' => $dateSignature->format('d/m/Y'),
+                       'prix' => $etude->getMontantHT(),
+                ];
             }
         }
 
@@ -940,7 +963,8 @@ class IndicateursController extends Controller
     private function getRh()
     {
         $etudeManager = $this->get('Mgate.etude_manager');
-        $missions = $this->getDoctrine()->getManager()->getRepository('MgateSuiviBundle:Mission')->findBy([], ['debutOm' => 'asc']);
+        $missions = $this->getDoctrine()->getManager()->getRepository('MgateSuiviBundle:Mission')
+            ->findBy([], ['debutOm' => 'asc']);
         if ($this->get('app.json_key_value_store')->exists('namingConvention')) {
             $namingConvention = $this->get('app.json_key_value_store')->get('namingConvention');
         } else {
@@ -984,16 +1008,20 @@ class IndicateursController extends Controller
                 if ($addDebut) {
                     $mandats[1][]
                         = ['x' => $dateDebutDecale->getTimestamp() * 1000,
-                        'y' => 0/* $cumuls[0] */, 'name' => $etude->getReference($namingConvention) . ' + ' . $etude->getNom(),
-                        'date' => $dateDebutDecale->format('d/m/Y'),
-                        'prix' => $etude->getMontantHT(), ];
+                           'y' => 0/* $cumuls[0] */,
+                           'name' => $etude->getReference($namingConvention) . ' + ' . $etude->getNom(),
+                           'date' => $dateDebutDecale->format('d/m/Y'),
+                           'prix' => $etude->getMontantHT(),
+                    ];
                 }
                 if ($addFin) {
                     $mandats[1][]
                         = ['x' => $dateFinDecale->getTimestamp() * 1000,
-                        'y' => 0/* $cumuls[0] */, 'name' => $etude->getReference($namingConvention) . ' - ' . $etude->getNom(),
-                        'date' => $dateDebutDecale->format('d/m/Y'),
-                        'prix' => $etude->getMontantHT(), ];
+                           'y' => 0/* $cumuls[0] */,
+                           'name' => $etude->getReference($namingConvention) . ' - ' . $etude->getNom(),
+                           'date' => $dateDebutDecale->format('d/m/Y'),
+                           'prix' => $etude->getMontantHT(),
+                    ];
                 }
             }
         }
@@ -1096,7 +1124,10 @@ class IndicateursController extends Controller
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
-        $series = [['type' => 'pie', 'name' => 'Provenance des études selon la source de prospection (tous mandats)', 'data' => $data, 'nombreClient' => $nombreClient]];
+        $series = [['type' => 'pie', 'name' => 'Provenance des études selon la source de prospection (tous mandats)',
+                    'data' => $data, 'nombreClient' => $nombreClient,
+                   ],
+        ];
         $ob = $chartFactory->newPieChart($series);
 
         $ob->chart->renderTo(__FUNCTION__);
@@ -1139,7 +1170,10 @@ class IndicateursController extends Controller
         }
 
         $chartFactory = $this->container->get('Mgate_stat.chart_factory');
-        $series = [['type' => 'pie', 'name' => 'Répartition du CA selon la source de prospection (tous mandats)', 'data' => $data, 'CA Total' => $chiffreDAffairesTotal]];
+        $series = [['type' => 'pie', 'name' => 'Répartition du CA selon la source de prospection (tous mandats)',
+                    'data' => $data, 'CA Total' => $chiffreDAffairesTotal,
+                   ],
+        ];
         $ob = $chartFactory->newPieChart($series);
 
         $ob->chart->renderTo(__FUNCTION__);
@@ -1169,7 +1203,8 @@ class IndicateursController extends Controller
         //how much each skill has make us earn.
         $series = [];
         $categories = [];
-        $used_mandats = array_fill(0, $MANDAT_MAX - $MANDAT_MIN + 1, 0); // an array to post-process results and remove mandats without data.
+        $used_mandats = array_fill(0, $MANDAT_MAX - $MANDAT_MIN + 1,
+            0); // an array to post-process results and remove mandats without data.
         //create array structure
         foreach ($res as $c) {
             $temp = [
