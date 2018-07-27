@@ -269,7 +269,6 @@ class IndicateursController extends Controller
         $bvsParMandat = $em->getRepository('MgateTresoBundle:BV')->findAllByMandat();
 
         $mandats = [];
-        $libelles = [];
         ksort($sortiesParMandat); // Tri selon les mandats
         foreach ($sortiesParMandat as $mandat => $nfs) { // Pour chaque Mandat
             $mandats[$mandat] = ['Honoraires BV' => 0, 'URSSAF' => 0];
@@ -278,7 +277,6 @@ class IndicateursController extends Controller
                     $compte = $detail->getCompte();
                     if (null !== $compte) {
                         $libelle = $compte->getLibelle();
-                        $libelles[] = $libelle;
                         if (array_key_exists($libelle, $mandats[$mandat])) {
                             $mandats[$mandat][$libelle] += $detail->getMontantHT();
                         } else {
@@ -302,21 +300,19 @@ class IndicateursController extends Controller
 
         ksort($mandats);
 
-        $categories = [];
         $dataSeries = [];
         $drilldownSeries = [];
         foreach ($mandats as $mandat => $comptes) {
             $total = 0;
-            $categories[] = $mandat;
             $drilldownData = [];
 
             foreach ($comptes as $libelle => $compte) {
                 $total += $compte;
-                $drilldownData[] = [$libelle, round((float)$compte, 2)];
+                $drilldownData[] = [$libelle, round((float) $compte, 2)];
             }
 
             $drilldownSeries[] = ['name' => 'Dépenses du mandat ' . $mandat, 'id' => $mandat, 'data' => $drilldownData];
-            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float)$total, 2), 'drilldown' => $mandat];
+            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float) $total, 2), 'drilldown' => $mandat];
         }
         $series = [['name' => 'Montant des dépenses', 'colorByPoint' => true, 'data' => $dataSeries]];
 
@@ -574,7 +570,7 @@ class IndicateursController extends Controller
 
         $data = [];
         foreach ($repartitions as $type => $CA) {
-            if (null == $type) {
+            if (null === $type) {
                 $type = 'Autre';
             }
             $data[] = ['name' => $type, 'y' => round($CA / $chiffreDAffairesTotal * 100, 2), 'CA' => $CA];
@@ -620,7 +616,7 @@ class IndicateursController extends Controller
 
         $data = [];
         foreach ($repartitions as $type => $nombre) {
-            if (null == $type) {
+            if (null === $type) {
                 $type = 'Autre';
             }
             $data[] = ['name' => $type, 'y' => round($nombre / $nombreClient * 100, 2), 'nombre' => $nombre];
@@ -693,7 +689,7 @@ class IndicateursController extends Controller
         }
 
         $series = [];
-        $categories = $cumuls != null ? array_keys($cumuls[$promos[0]]) : [];
+        $categories = null !== $cumuls ? array_keys($cumuls[$promos[0]]) : [];
         foreach (array_reverse($promos) as $promo) {
             $series[] = ['name' => 'P' . $promo, 'data' => array_values($cumuls[$promo])];
         }
@@ -1117,7 +1113,7 @@ class IndicateursController extends Controller
 
         $data = [];
         foreach ($repartitions as $type => $nombre) {
-            if (null == $type) {
+            if (null === $type) {
                 $type = 'Autre';
             }
             $data[] = ['name' => $type, 'y' => round($nombre / $nombreClient * 100, 2), 'nombre' => $nombre];
@@ -1163,7 +1159,7 @@ class IndicateursController extends Controller
 
         $data = [];
         foreach ($repartitions as $type => $CA) {
-            if (null == $type) {
+            if (null === $type) {
                 $type = 'Autre';
             }
             $data[] = ['name' => $type, 'y' => round($CA / $chiffreDAffairesTotal * 100, 2), 'CA' => $CA];
