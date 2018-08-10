@@ -1,0 +1,10 @@
+indicateur:
+  indicateurs: Indicateurs
+  indicateurs_vides: Pas de données
+  donnees_brutes: Données brutes
+  gestion_associative: Gestion associative
+  formations: Formations
+  gestion_etudes: Gestion d'études
+  tresorerie: Trésorerie
+  developpement_commercial: Développement Commercial
+

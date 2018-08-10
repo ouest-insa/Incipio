@@ -2,16 +2,15 @@
 {% extends "::layout.html.twig" %}
 
 {% block title %}
-    Indicateurs - {{ parent() }}
+    {{ 'indicateur.indicateurs'|trans({}, 'indicateur') }}
 {% endblock %}
 
 {% block content %}
-
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title">
                 {% block content_title %}
-                    Indicateurs
+                    {{ 'indicateur.indicateurs'|trans({}, 'indicateur') }}
                 {% endblock %}
             </h3>
         </div>
@@ -19,9 +18,7 @@
             {# On définit un nouveau block, que les vues du bundle pourront remplir #}
             {% block content_bundle %}
             {% endblock %}
-
         </div>
         <div class="box-footer"></div>
     </div>
-
 {% endblock %}

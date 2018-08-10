@@ -1,102 +1,89 @@
 {% extends "MgateStatBundle::layout.html.twig" %}
 
-
 {% block content_bundle %}
     <div class="nav-tabs-custom">
         <ul id="indicateursLink" class="nav nav-tabs">
-            <li class="active"><a href="#infos" data-toggle="tab" data-loaded="true">Données brutes</a></li>
-            <li class=""><a href="#gestion" data-toggle="tab" data-loaded="false">Gestion Associative</a></li>
-            <li class=""><a href="#rfp" data-toggle="tab" data-loaded="false">Recrutement Formation</a></li>
-            <li class=""><a href="#suivi" data-toggle="tab" data-loaded="false">Gestion d'études</a></li>
-            <li class=""><a href="#treso" data-toggle="tab" data-loaded="false">Trésorerie</a></li>
-            <li class=""><a href="#com" data-toggle="tab" data-loaded="false">Développement Commercial</a></li>
+            <li class="active"><a href="#infos" data-toggle="tab" data-loaded="true">
+                    {{ 'indicateur.donnees_brutes'|trans({}, 'indicateur') }}</a></li>
+            <li class=""><a href="#gestion" data-toggle="tab" data-loaded="false">
+                    {{ 'indicateur.gestion_associative'|trans({}, 'indicateur') }}</a></li>
+            <li class=""><a href="#rfp" data-toggle="tab" data-loaded="false">
+                    {{ 'indicateur.formations'|trans({}, 'indicateur') }}</a></li>
+            <li class=""><a href="#suivi" data-toggle="tab" data-loaded="false">
+                    {{ 'indicateur.gestion_etudes'|trans({}, 'indicateur') }}</a></li>
+            <li class=""><a href="#treso" data-toggle="tab" data-loaded="false">
+                    {{ 'indicateur.tresorerie'|trans({}, 'indicateur') }}</a></li>
+            <li class=""><a href="#com" data-toggle="tab" data-loaded="false">
+                    {{ 'indicateur.developpement_commercial'|trans({}, 'indicateur') }}</a></li>
         </ul>
     </div>
+
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane active in fade row" id="infos">
-            {% for title, stat in stats %}
-                {{ title }} : {{ stat }} <br>
-            {% endfor %}
+        <div class="tab-pane active row" id="infos">
+            <div class="col-md-12">
+                {% for title, stat in stats %}
+                    {{ title }} : {{ stat }}<br/>
+                {% endfor %}
+            </div>
         </div>
-        <div class="tab-pane fade row" id="gestion">
+
+        <div class="tab-pane row" id="gestion">
             {% for indicateur in indicateurs if indicateur.categorie == 'Gestion' %}
                 <div class="indicateur col-md-6" id="{{ indicateur.methode }}">
-                    <div>
-                        <div id="{{ indicateur.methode }}"
-                             style="min-width: 400px; margin: 0 auto; text-align: center;">
-                            <h3>{{ indicateur.titre }}</h3>
-                            <br/>
-                            <img src="{{ asset('img/loading.gif') }}"/>
-                        </div>
+                    <div id="{{ indicateur.methode }}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+                        <img src="{{ asset('img/loading.gif') }}"/>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <div class="tab-pane fade row" id="rfp">
+
+        <div class="tab-pane row" id="rfp">
             {% for indicateur in indicateurs if indicateur.categorie == 'Rfp' %}
                 <div class="indicateur col-md-6" id="{{ indicateur.methode }}">
-                    <div>
-                        <div id="{{ indicateur.methode }}"
-                             style="min-width: 400px; margin: 0 auto; text-align: center;">
-                            <h3>{{ indicateur.titre }}</h3>
-                            <br/>
-                            <img src="{{ asset('img/loading.gif') }}"/>
-                        </div>
+                    <div id="{{ indicateur.methode }}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+                        <img src="{{ asset('img/loading.gif') }}"/>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <div class="tab-pane fade row" id="suivi">
+
+        <div class="tab-pane row" id="suivi">
             {% for indicateur in indicateurs if indicateur.categorie == 'Suivi' %}
                 <div class="indicateur col-md-6" id="{{ indicateur.methode }}">
-                    <div>
-                        <div id="{{ indicateur.methode }}"
-                             style="min-width: 400px; margin: 0 auto; text-align: center;">
-                            <h3>{{ indicateur.titre }}</h3>
-                            <br/>
-                            <img src="{{ asset('img/loading.gif') }}"/>
-                        </div>
+                    <div id="{{ indicateur.methode }}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+                        <img src="{{ asset('img/loading.gif') }}"/>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <div class="tab-pane fade row" id="treso">
+
+        <div class="tab-pane row" id="treso">
             {% for indicateur in indicateurs if indicateur.categorie == 'Treso' %}
                 <div class="indicateur col-md-6" id="{{ indicateur.methode }}">
-                    <div>
-                        <div id="{{ indicateur.methode }}"
-                             style="min-width: 400px; margin: 0 auto; text-align: center;">
-                            <h3>{{ indicateur.titre }}</h3>
-                            <br/>
-                            <img src="{{ asset('img/loading.gif') }}"/>
-                        </div>
+                    <div id="{{ indicateur.methode }}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+                        <img src="{{ asset('img/loading.gif') }}"/>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <div class="tab-pane fade row" id="com">
+
+        <div class="tab-pane row" id="com">
             {% for indicateur in indicateurs if indicateur.categorie == 'Com' %}
                 <div class="indicateur col-md-6" id="{{ indicateur.methode }}">
-                    <div>
-                        <div id="{{ indicateur.methode }}"
-                             style="min-width: 400px; margin: 0 auto; text-align: center;">
-                            <h3>{{ indicateur.titre }}</h3>
-                            <br/>
-                            <img src="{{ asset('img/loading.gif') }}"/>
-                        </div>
+                    <div id="{{ indicateur.methode }}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+                        <img src="{{ asset('img/loading.gif') }}"/>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
-
 {% endblock %}
-
 
 {% block javascript %}
     {{ parent() }}
 
     <script src="{{ asset('js/highcharts.js') }}"></script>
+    <script src="{{ asset('js/modules/drilldown.js') }}"></script>
     <script src="{{ asset('js/highcharts-fr.js') }}"></script>
     <span id="jsChart"></span>
 
@@ -109,6 +96,7 @@
                     $('#jsChart').append(data);
                 });
         }
+
         $('#indicateursLink').children().each(
             function () {
                 $(this).click(
