@@ -1,12 +1,18 @@
 .skin-yellow .main-header .navbar {
     background-color: #f39c12;
 }
-.skin-yellow .main-header .navbar .nav>li>a {
+.skin-yellow .main-header .navbar .nav>li>a, .skin-yellow .main-header .navbar .nav>li>.loading {
     color: #fff;
 }
 .skin-yellow .main-header .navbar .nav>li>a:hover, .skin-yellow .main-header .navbar .nav>li>a:active, .skin-yellow .main-header .navbar .nav>li>a:focus, .skin-yellow .main-header .navbar .nav .open>a, .skin-yellow .main-header .navbar .nav .open>a:hover, .skin-yellow .main-header .navbar .nav .open>a:focus {
     background: rgba(0, 0, 0, 0.1);
     color: #f6f6f6;
+}
+.skin-yellow .main-header .navbar .nav>li>.loading {
+    padding: 10.5px;
+}
+.skin-yellow .main-header .navbar .nav>li>ul>.header {
+    padding-left: 10px;
 }
 .skin-yellow .main-header .navbar .sidebar-toggle {
     color: #fff;
@@ -119,8 +125,24 @@
 .sidebar-collapse .sidebar-menu > li > a > .icon-mini {
     display: inline;
 }
-
+.nav-tabs-custom > .nav-tabs > li > a >.badge{
+    display: none;
+}
+.nav-tabs-custom > .nav-tabs > li.active > a >.badge{
+    display: -moz-inline-box;
+    font-size: 11px;
+}
 .breadcrumb{background-color: #f8f8f8;}
+
+.btn-group .dropdown-menu {  
+ float: right;
+ left: auto;
+ right: 0;  
+}
+
+.navbar-header .brand h4{
+    margin: 15px;
+}
 
 /* From Bootstrap 2.3.* removed in 3. @from Mgate.css* */
 .label-important,

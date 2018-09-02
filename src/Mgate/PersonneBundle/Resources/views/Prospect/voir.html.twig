@@ -84,10 +84,38 @@
                 "aaSorting": [[0, 'asc']]
             });
         });
+
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             $($.fn.dataTable.tables(true)).DataTable()
                 .columns.adjust()
                 .responsive.recalc();
+        });
+
+        // keep tab opened through refresh
+        $(document).ready(function () {
+            // show active tab on reload
+            if (location.hash !== '') {
+                var tabSelect = $('a[href="' + location.hash + '"]');
+                var url = tabSelect.attr('data-url');
+                var div = $(location.hash);
+                if (div !== undefined) {
+                    div.load(url, function (result) {
+                        return result
+                    });
+                }
+                tabSelect.tab('show');
+            }
+
+            // remember the hash in the URL without jumping
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var url = $(this).attr("data-url");
+                var href = this.hash;
+                if (history.pushState) {
+                    history.pushState(null, null, '#' + $(e.target).attr('href').substr(1));
+                } else {
+                    location.hash = '#' + $(e.target).attr('href').substr(1);
+                }
+            });
         });
     </script>
 {% endblock %}

@@ -17,74 +17,77 @@
     <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'suivi') }}" name="add" class="btn btn-info"/>
         - <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'suivi') }}" class="btn btn-default"/></p>
 
-    {# itere sur chaque tag existant et affiche son unique champ : name #}
-    <div class="row table-responsive" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}">
-        {# itere sur chaque tag existant et affiche son unique champ : name #}
+    <div class="row">
+        <div class="col-md-12">
+        <div class="table-responsive" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}"">
 
-        <table class="table table-striped" id="phases">
-            <thead>
-            <tr>
-                <th></th>
-                <th>{{ 'suivi.groupe'|trans({}, 'suivi') }}</th>
-                <th>{{ 'suivi.details'|trans({}, 'suivi') }}</th>
-                <th>{{ 'suivi.titre'|trans({}, 'suivi') }}</th>
-                <th>{{ 'suivi.jeh_nombre'|trans({}, 'suivi') }}</th>
-                <th>{{ 'suivi.prix_jeh'|trans({}, 'suivi') }}</th>
-                <th>{{ 'suivi.date_debut'|trans({}, 'suivi') }}</th>
-                <th>{{ 'suivi.delai_jour'|trans({}, 'suivi') }}</th>
-            </tr>
-            </thead>
-            <tbody id="phases">
-            {% for phase in form.phases %}
-                <tr class="phase" id="phase-{{ loop.index }}">
-                    <td style="width: 120px">
-                        <div class="btn-group"></div>
-                        <span class="titrePhase"></span> {{ form_widget(phase.position) }}
-                    </td>
-                    <td>
-                        {{ form_widget(phase.groupe, {'attr': {'style': 'width: 100%'}}) }}<br>
-                        <div class="details-{{ loop.index }}" style="display: none">
-                            {{ form_widget(phase.objectif, {'attr': {'cols': '15', 'rows': '5', 'class': 'form-control'}}) }}<br>
-                            {{ form_widget(phase.methodo, {'attr': {'cols': '15', 'rows': '5', 'class': 'form-control'}}) }}
-                        </div>
-                    </td>
-                    <td>
-                        <button class="details-btn btn btn-sm btn-info" onclick="showDetails({{ loop.index }})"
-                                type="button">+
-                        </button>
-                    </td>
-                    <td style="width: 300px">
-                        {{ form_widget(phase.titre, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(phase.titre) }}
-                    </td>
-                    <td>
-                        {{ form_widget(phase.nbrJEH, {'attr': {'class': 'form-control nbrJEH'}}) }}
-                        {{ form_errors(phase.nbrJEH) }}
-                    </td>
-                    <td>
-                        {{ form_widget(phase.prixJEH, {'attr': {'class': 'form-control prixJEH'}}) }}
-                        {{ form_errors(phase.prixJEH) }}
-                    </td>
-                    <td>
-                        {{ form_widget(phase.dateDebut, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(phase.dateDebut) }}
-                    </td>
-                    <td>
-                        {{ form_widget(phase.delai, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(phase.delai) }}
-                    </td>
+            <table class="table table-striped" id="phases">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>{{ 'suivi.groupe'|trans({}, 'suivi') }}</th>
+                    <th>{{ 'suivi.details'|trans({}, 'suivi') }}</th>
+                    <th>{{ 'suivi.titre'|trans({}, 'suivi') }}</th>
+                    <th>{{ 'suivi.jeh_nombre'|trans({}, 'suivi') }}</th>
+                    <th>{{ 'suivi.prix_jeh'|trans({}, 'suivi') }}</th>
+                    <th>{{ 'suivi.date_debut'|trans({}, 'suivi') }}</th>
+                    <th>{{ 'suivi.delai_jour'|trans({}, 'suivi') }}</th>
                 </tr>
-            {% endfor %}
-            <tr>
-                <td colspan="4"></td>
-                <td id="totalNbrJEH"></td>
-                <td id="totalPrixJEH"></td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>
-        <br/>
-        {{ form_rest(form) }}
+                </thead>
+                <tbody id="phases">
+                {% for phase in form.phases %}
+                    <tr class="phase" id="phase-{{ loop.index }}">
+                        <td style="width: 120px">
+                            <div class="btn-group"></div>
+                            <span class="titrePhase"></span> {{ form_widget(phase.position) }}
+                        </td>
+                        <td>
+                            {{ form_widget(phase.groupe, {'attr': {'style': 'width: 100%'}}) }}<br>
+                            <div class="details-{{ loop.index }}" style="display: none">
+                                {{ form_widget(phase.objectif, {'attr': {'cols': '15', 'rows': '5', 'class': 'form-control'}}) }}<br>
+                                {{ form_widget(phase.methodo, {'attr': {'cols': '15', 'rows': '5', 'class': 'form-control'}}) }}
+                            </div>
+                        </td>
+                        <td>
+                            <button class="details-btn btn btn-sm btn-info" onclick="showDetails({{ loop.index }})"
+                                    type="button">+
+                            </button>
+                        </td>
+                        <td style="width: 300px">
+                            {{ form_widget(phase.titre, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(phase.titre) }}
+                        </td>
+                        <td>
+                            {{ form_widget(phase.nbrJEH, {'attr': {'class': 'form-control nbrJEH'}}) }}
+                            {{ form_errors(phase.nbrJEH) }}
+                        </td>
+                        <td>
+                            {{ form_widget(phase.prixJEH, {'attr': {'class': 'form-control prixJEH'}}) }}
+                            {{ form_errors(phase.prixJEH) }}
+                        </td>
+                        <td>
+                            {{ form_widget(phase.dateDebut, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(phase.dateDebut) }}
+                        </td>
+                        <td>
+                            {{ form_widget(phase.delai, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(phase.delai) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"></td>
+                    <td id="totalNbrJEH"></td>
+                    <td id="totalPrixJEH"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            <br/>
+            {{ form_rest(form) }}
+        </div>
+        </div>
     </div>
     <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'suivi') }}" name="add" class="btn btn-info"/>
         - <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'suivi') }}" class="btn btn-default"/></p>
