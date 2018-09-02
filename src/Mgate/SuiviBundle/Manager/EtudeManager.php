@@ -269,26 +269,10 @@ class EtudeManager
         $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
 
         if ($value) {
-            return $this->dateToMandat($value['dateSignature']);
+            return intval($value['dateSignature']->format('Y'));
         } else {
             return 0;
         }
-    }
-
-    /**
-     * Converti le numero de mandat en année.
-     *
-     * @param \DateTime $date
-     *
-     * @return int
-     */
-    public function dateToMandat(\DateTime $date)
-    {
-        $interval = new \DateInterval('P2M20D');
-        $date2 = clone $date;
-        $date2->sub($interval);
-
-        return intval($date2->format('Y')) - $this->anneeCreation;
     }
 
     /**
