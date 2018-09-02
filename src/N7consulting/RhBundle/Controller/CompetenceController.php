@@ -120,11 +120,14 @@ class CompetenceController extends Controller
         $competences = $em->getRepository('N7consulting\RhBundle\Entity\Competence')->getCompetencesTree();
         $membres = $em->getRepository('MgatePersonneBundle:Membre')->getByCompetencesNonNul();
 
-        return $this->render('N7consultingRhBundle:Competence:visualiser.html.twig', [
+        $response = $this->render('N7consultingRhBundle:Competence:visualiser.html.twig', [
             'total_liens' => 0,
             'competences' => $competences,
             'membres' => $membres,
         ]);
+        $response->headers->set('Content-Type', 'application/javascript');
+
+        return $response;
     }
 
     /**
