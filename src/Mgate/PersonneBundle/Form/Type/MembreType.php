@@ -13,6 +13,7 @@ namespace Mgate\PersonneBundle\Form\Type;
 
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType as GenemuDateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2CountryType;
+use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -47,6 +48,12 @@ class MembreType extends AbstractType
                     'allow_delete' => true,
                     'prototype' => true,
                     'by_reference' => false, //indispensable cf doc
+                ])
+                ->add('competences', Select2EntityType::class, [
+                    'class' => 'N7consulting\RhBundle\Entity\Competence',
+                    'by_reference' => false,
+                    'multiple' => true,
+                    'required' => false,
                 ])
                 ->add('dateConventionEleve', GenemuDateType::class, ['label' => 'Date de Signature de la Convention Elève', 'format' => 'dd/MM/yyyy', 'required' => false, 'widget' => 'single_text'])
                 ->add('photo', FileType::class, [

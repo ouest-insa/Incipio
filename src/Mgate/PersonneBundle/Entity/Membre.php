@@ -623,13 +623,14 @@ class Membre implements AnonymizableInterface
     /**
      * Add missions.
      *
-     * @param Competence $competences
+     * @param Competence $competence
      *
      * @return Membre
      */
-    public function addCompetence(Competence $competences)
+    public function addCompetence(Competence $competence)
     {
-        $this->competences[] = $competences;
+        $this->competences[] = $competence;
+        $competence->addMembre($this);
 
         return $this;
     }
@@ -637,11 +638,12 @@ class Membre implements AnonymizableInterface
     /**
      * Remove missions.
      *
-     * @param Competence $competences
+     * @param Competence $competence
      */
-    public function removeCompetence(Competence $competences)
+    public function removeCompetence(Competence $competence)
     {
-        $this->competences->removeElement($competences);
+        $this->competences->removeElement($competence);
+        $competence->removeMembre($this);
     }
 
     /**
