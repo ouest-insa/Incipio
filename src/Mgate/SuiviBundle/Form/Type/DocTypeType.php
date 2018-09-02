@@ -73,7 +73,7 @@ class DocTypeType extends AbstractType
                 'required' => false,
                 'format' => 'dd/MM/yyyy',
                 'widget' => 'single_text',
-                'attr' => ['autocomplete' => 'off']]);
+                'attr' => ['autocomplete' => 'off'], ]);
     }
 
     public function getBlockPrefix()

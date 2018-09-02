@@ -899,6 +899,9 @@ class IndicateursController extends Controller
             $namingConvention = 'id';
         }
 
+        $etudeManager = $this->get('Mgate.etude_manager');
+        $maxMandat = $etudeManager->getMaxMandatCc();
+
         $mandats = [];
         $cumuls = [];
 
@@ -906,24 +909,18 @@ class IndicateursController extends Controller
             $etude = $cc->getEtude();
             $dateSignature = $cc->getDateSignature();
             $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID();
-            $mandat = $etude->getMandat();
 
             if ($dateSignature && $signee) {
-                if (array_key_exists($mandat, $cumuls)) {
-                    $cumuls[$mandat] += $etude->getMontantHT();
-                } else {
-                    $cumuls[$mandat] = $etude->getMontantHT();
-                }
-
-                // normalize etudes by month (remove year)
-                $mandats[$mandat][]
-                    // signaturemonth * number of seconds in a month + signature day * number of seconds in a day to a js  timestamp
-                    = ['x' => ($dateSignature->format('m') * 2678400 + $dateSignature->format('d') * 86400) * 1000,
-                       'y' => $cumuls[$mandat],
-                       'name' => $etude->getReference($namingConvention) . ' - ' . $etude->getNom(),
-                       'date' => $dateSignature->format('d/m/Y'),
-                       'prix' => $etude->getMontantHT(),
-                ];
+                $idMandat = $etude->getMandat();
+                $cumuls[$idMandat] += $etude->getMontantHT();
+                $interval = new \DateInterval('P' . ($maxMandat - $idMandat) . 'Y');
+                $dateDecale = clone $dateSignature;
+                $dateDecale->add($interval);
+                $mandats[$idMandat][]
+                    = ['x' => $dateDecale->getTimestamp() * 1000,
+                       'y' => $cumuls[$idMandat], 'name' => $etude->getReference($namingConvention) . ' - ' . $etude->getNom(),
+                       'date' => $dateDecale->format('d/m/Y'),
+                       'prix' => $etude->getMontantHT(), ];
             }
         }
 
@@ -983,8 +980,6 @@ class IndicateursController extends Controller
             $dateFin = $mission->getfinOm();
 
             if ($dateDebut && $dateFin) {
-                $idMandat = $etudeManager->dateToMandat($dateDebut);
-
                 ++$cumuls[0];
 
                 $dateDebutDecale = clone $dateDebut;
