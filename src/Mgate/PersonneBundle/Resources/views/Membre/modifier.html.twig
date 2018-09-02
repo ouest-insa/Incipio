@@ -242,6 +242,17 @@
         <div class="col-md-8 col-xs-12">
             <div class="box box-info box-solid">
                 <div class="box-header with-border">
+                    <h3 class="box-title">{{ 'membre.competences'|trans({}, 'personne') }}</h3>
+                </div>
+                <div class="box-body">
+                    {{ form_label(form.competences) }}
+                    {{ form_widget(form.competences, {'attr': {'class': 'select2-multiple', 'style': 'width: 100%'}}) }}
+                    {{ form_errors(form.competences) }}
+                </div>
+            </div>
+
+            <div class="box box-info box-solid">
+                <div class="box-header with-border">
                     <h3 class="box-title">{{ 'membre.mandats'|trans({}, 'personne') }}</h3>
                 </div>
                 <div class="box-body">

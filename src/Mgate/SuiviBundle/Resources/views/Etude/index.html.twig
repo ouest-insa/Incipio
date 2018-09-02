@@ -22,8 +22,11 @@
                         ({{ etudesEnPause | length }})</a></li>
             {% endif %}
             <li><a href="#tab5" data-toggle="tab">{{ 'suivi.etudes_terminees'|trans({}, 'suivi') }}</a></li>
-            <li><a href="#tab6" data-toggle="tab">{{ 'suivi.etudes_avortees'|trans({}, 'suivi') }} <div class="badge" title="{{ 'suivi.propales_non_abouties_texte'|trans({}, 'suivi') }}"
-                 data-toggle="tooltip">?</div></a></li>
+            <li><a href="#tab6" data-toggle="tab">{{ 'suivi.etudes_avortees'|trans({}, 'suivi') }}
+                    <span class="badge badge-default" title="{{ 'suivi.propales_non_abouties_texte'|trans({}, 'suivi') }}"
+                 data-toggle="tooltip">?</span>
+                </a>
+            </li>
         </ul>
     </div>
     <div class="tab-content">
