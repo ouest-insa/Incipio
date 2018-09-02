@@ -18,6 +18,16 @@ class Version20171011071219 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        /**
+         * Jeyser got migrations quite late in the project.
+         * This check is to keep thing working smoothly on every install: migration is not performed is its result
+         * is already there.
+         * fetch() equals to an array if the column exist, and false otherwise.
+         */
+        $this->skipIf(is_array($this->connection->executeQuery('SELECT * FROM information_schema.COLUMNS
+                    WHERE TABLE_SCHEMA = "jeyser" AND TABLE_NAME = "FactureDetail" AND COLUMN_NAME = "factureADeduire_id"')->fetch()),
+            'FactureDetail.factureADeduire_id column already available');
+
         // Ondelete set null for montantADeduire
         $this->addSql('ALTER TABLE Facture DROP FOREIGN KEY FK_313B5D8CD4F76809');
         $this->addSql('ALTER TABLE Facture ADD CONSTRAINT FK_313B5D8CD4F76809 FOREIGN KEY (montantADeduire_id) REFERENCES FactureDetail (id) ON DELETE SET NULL');

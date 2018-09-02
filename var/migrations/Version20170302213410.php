@@ -32,7 +32,7 @@ class Version20170302213410 extends AbstractMigration
          */
         try {
             $this->connection->executeQuery('SELECT 1 FROM fos_user LIMIT 1;')->execute();
-            return;
+            $this->skipIf(true,'Table fos_user already available');
         } catch (TableNotFoundException $e) {
             // table not available, do nothing, just keep on and create the tables.
         }
