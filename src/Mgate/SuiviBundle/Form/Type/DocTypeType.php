@@ -72,7 +72,8 @@ class DocTypeType extends AbstractType
             ['label' => 'Date de Signature du document',
                 'required' => false,
                 'format' => 'dd/MM/yyyy',
-                'widget' => 'single_text', ]);
+                'widget' => 'single_text',
+                'attr' => ['autocomplete' => 'off']]);
     }
 
     public function getBlockPrefix()
