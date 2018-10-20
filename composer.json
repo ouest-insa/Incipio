@@ -16,6 +16,7 @@
   },
   "require": {
     "php": ">=7.1",
+    "ext-apcu": "*",
     "doctrine/doctrine-bundle": "~1.4",
     "doctrine/doctrine-fixtures-bundle": "~2.3",
     "doctrine/doctrine-migrations-bundle": "^1.0",
