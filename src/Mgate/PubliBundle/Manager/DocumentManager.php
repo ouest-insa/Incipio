@@ -27,7 +27,7 @@ use Mgate\PubliBundle\Entity\Document;
 use Mgate\PubliBundle\Entity\RelatedDocument;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class DocumentManager extends BaseManager
@@ -49,7 +49,7 @@ class DocumentManager extends BaseManager
      * @param TokenStorage $tokenStorage
      * @param Kernel       $kernel
      */
-    public function __construct(EntityManager $em, $junior_id, $authorizedStorageSize, TokenStorage $tokenStorage, Kernel $kernel)
+    public function __construct(EntityManager $em, $junior_id, $authorizedStorageSize, TokenStorage $tokenStorage, KernelInterface $kernel)
     {
         $this->em = $em;
         $this->junior_id = $junior_id;
