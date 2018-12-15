@@ -1,4 +1,4 @@
-FROM php:7.1-apache
+FROM php:7.3-apache
 
 # PHP extensions
 ENV APCU_VERSION 5.1.11
@@ -6,20 +6,32 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN buildDeps=" \
         libicu-dev \
         zlib1g-dev \
+        libzip-dev \
+        bzip2 \
+        wget\
     " \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         $buildDeps \
         libicu57 \
         zlib1g \
+        libzip4 \
+        git \
+        fontconfig \
+        unzip \
+    && wget https://raw.githubusercontent.com/n7consulting/phantomjs-build/master/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+    && tar xvjf phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+    && mv phantomjs-2.1.1-linux-x86_64 /usr/local/bin \
+    && ln -sf /usr/local/bin/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin \
+    && phantomjs --version \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install \
         intl \
         mbstring \
         pdo_mysql \
         zip \
-    && apt-get purge -y --auto-remove $buildDeps
-RUN pecl install \
+    && apt-get purge -y --auto-remove $buildDeps \
+    && pecl install \
         apcu-$APCU_VERSION \
     && docker-php-ext-enable --ini-name 05-opcache.ini \
         opcache \
@@ -28,22 +40,16 @@ RUN pecl install \
 
 # Apache config
 RUN a2enmod rewrite headers
-ADD docker/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
-
-# PHP config
-ADD docker/php/php.ini /usr/local/etc/php/php.ini
-
-# Install Git
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        git
+ADD docker/web/vhost.conf /etc/apache2/sites-available/000-default.conf
+ADD docker/web/php.ini /usr/local/etc/php/php.ini
+ADD docker/web/composer.sh /usr/bin/composer.sh
 
 # Add the application
 ADD . /app
 WORKDIR /app
 
 # Install composer
-RUN ./docker/composer.sh \
+RUN ./docker/web/composer.sh \
     && mv composer.phar /usr/bin/composer \
     && composer global require "hirak/prestissimo:^0.3"
 
@@ -57,14 +63,4 @@ RUN \
     # Fixes permissions issues in non-dev mode
     && chown -R www-data . var/cache var/logs var/sessions
 
-#Install phantomjs
-RUN apt-get install -y  bzip2 fontconfig wget \
-    && wget https://raw.github.com/n7consulting/phantomjs-build/master/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
-    && tar xvjf phantomjs-2.1.1-linux-x86_64.tar.bz2 \
-    && mv phantomjs-2.1.1-linux-x86_64 /usr/local/bin \
-    && ln -sf /usr/local/bin/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin \
-    && phantomjs --version \
-    && apt-get -y autoremove wget bzip2 \
-    && rm -rf /var/lib/apt/lists/*
-
-CMD ["/app/docker/start.sh"]
+CMD ["/app/docker/web/start.sh"]

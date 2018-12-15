@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\UserBundle\Controller;
+namespace App\Controller;
 
-use Mgate\PersonneBundle\Entity\Personne;
-use Mgate\UserBundle\Entity\User;
-use Mgate\UserBundle\Form\Type\UserAdminType;
+use App\Entity\Personne;
+use App\Entity\User;
+use App\Form\Type\UserAdminType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;

@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\DashboardBundle\Controller;
+namespace App\Controller\Dashboard;
 
-use Mgate\SuiviBundle\Controller\EtudeController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\EtudeController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
 
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     public const EXPIRATION = 3600; // cache on dashboard is updated every hour
 

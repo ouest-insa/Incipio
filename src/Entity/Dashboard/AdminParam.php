@@ -6,7 +6,7 @@
  * Time: 10:35.
  */
 
-namespace Mgate\DashboardBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;

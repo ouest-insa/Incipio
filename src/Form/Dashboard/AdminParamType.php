@@ -6,10 +6,10 @@
  * Time: 10:33.
  */
 
-namespace Mgate\DashboardBundle\Form\Type;
+namespace App\Form\Dashboard;
 
 use Doctrine\ORM\EntityManager;
-use Mgate\DashboardBundle\Entity\AdminParam;
+use App\Entity\AdminParam;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
