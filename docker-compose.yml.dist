@@ -3,7 +3,9 @@ version: "2"
 services:
 
     web:
-        build: .
+        build:
+            context: .
+            dockerfile: ./docker/web/Dockerfile
         environment:
             # That parameter is set to prod by the auto-install script.
             # Don't forget to set it manually to prod if you don't use the auto-install script

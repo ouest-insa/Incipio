@@ -1,7 +1,0 @@
-parameters:
-#    Mgate_treso.example.class: Mgate\TresoBundle\Example
-
-services:
-#    Mgate_treso.example:
-#        class: %Mgate_treso.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
