@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Antoine
- * Date: 29/01/2017
- * Time: 10:33.
- */
 
 namespace App\Form\Dashboard;
 
-use Doctrine\ORM\EntityManager;
-use App\Entity\AdminParam;
+use App\Entity\Dashboard\AdminParam;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -21,28 +15,28 @@ class AdminParamType extends AbstractType
 {
     private $em;
 
-    public function __construct(EntityManager $em)
+    public function __construct(ObjectManager $em)
     {
         $this->em = $em;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $fields = $this->em->getRepository('MgateDashboardBundle:AdminParam')->findAll([], ['priority' => 'desc']);
+        $fields = $this->em->getRepository(AdminParam::class)->findAll([], ['priority' => 'desc']);
 
         foreach ($fields as $field) {
             /* @var $field AdminParam */
             $builder->add($field->getName(), $this->chooseType($field->getParamType()),
                 ['required' => $field->getRequired(),
-                    'label' => $field->getParamLabel(),
-                    'attr' => ['tooltip' => $field->getParamDescription()],
+                 'label' => $field->getParamLabel(),
+                 'attr' => ['tooltip' => $field->getParamDescription()],
                 ]);
         }
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_dashboardbundle_adminparam';
+        return 'dashboard_adminparam';
     }
 
     /**

@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Entity;
+namespace App\Entity\Personne;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\CommentBundle\Entity\Thread;
+use App\Entity\Thread;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 

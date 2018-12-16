@@ -3,7 +3,7 @@
 namespace Application\Migrations;
 
 use Doctrine\DBAL\Exception\TableNotFoundException;
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**

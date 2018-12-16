@@ -9,22 +9,23 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Controller;
+namespace App\Controller\Project;
 
-use Mgate\SuiviBundle\Entity\ClientContact;
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Form\Type\ClientContactHandler;
-use Mgate\SuiviBundle\Form\Type\ClientContactType;
+use App\Entity\Project\ClientContact;
+use App\Entity\Project\Etude;
+use App\Form\Project\ClientContactHandler;
+use App\Form\Project\ClientContactType;
+use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class ClientContactController extends Controller
+class ClientContactController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
@@ -36,25 +37,26 @@ class ClientContactController extends Controller
 
         $entities = $em->getRepository('MgateSuiviBundle:ClientContact')->findBy([], ['date' => 'ASC']);
 
-        return $this->render('MgateSuiviBundle:ClientContact:index.html.twig', [
+        return $this->render('Project/ClientContact/index.html.twig', [
             'contactsClient' => $entities,
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_clientcontact_ajouter", path="/suivi/clientcontact/ajouter/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Request $request
-     * @param Etude   $etude
+     * @param Request                $request
+     * @param Etude                  $etude
+     * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateSuivi_clientcontact_ajouter", path="/suivi/clientcontact/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
-    public function addAction(Request $request, Etude $etude)
+    public function addAction(Request $request, Etude $etude,EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -67,7 +69,7 @@ class ClientContactController extends Controller
             return $this->redirectToRoute('MgateSuivi_clientcontact_voir', ['id' => $clientcontact->getId()]);
         }
 
-        return $this->render('MgateSuiviBundle:ClientContact:ajouter.html.twig', [
+        return $this->render('Project/ClientContact/ajouter.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
         ]);
@@ -84,17 +86,18 @@ class ClientContactController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_clientcontact_voir", path="/suivi/clientcontact/voir/{id}", methods={"GET","HEAD"})
      *
-     * @param ClientContact $clientContact
+     * @param ClientContact          $clientContact
+     * @param EtudePermissionChecker $permChecker
      *
      * @return Response
-     * @Route(name="MgateSuivi_clientcontact_voir", path="/suivi/clientcontact/voir/{id}", methods={"GET","HEAD"}, requirements={"id": "\d+"})
      */
-    public function voirAction(ClientContact $clientContact)
+    public function voirAction(ClientContact $clientContact,EtudePermissionChecker $permChecker)
     {
         $etude = $clientContact->getEtude();
 
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -102,7 +105,7 @@ class ClientContactController extends Controller
         $contactsClient = $etude->getClientContacts()->toArray();
         usort($contactsClient, [$this, 'compareDate']);
 
-        return $this->render('MgateSuiviBundle:ClientContact:voir.html.twig', [
+        return $this->render('Project/ClientContact/voir.html.twig', [
             'contactsClient' => $contactsClient,
             'selectedContactClient' => $clientContact,
             'etude' => $etude,
@@ -111,20 +114,21 @@ class ClientContactController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_clientcontact_modifier", path="/suivi/clientcontact/modifier/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Request       $request
-     * @param ClientContact $clientContact
+     * @param Request                $request
+     * @param ClientContact          $clientContact
+     * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateSuivi_clientcontact_modifier", path="/suivi/clientcontact/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
-    public function modifierAction(Request $request, ClientContact $clientContact)
+    public function modifierAction(Request $request, ClientContact $clientContact, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
         $etude = $clientContact->getEtude();
 
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -143,7 +147,7 @@ class ClientContactController extends Controller
         }
         $deleteForm = $this->createDeleteForm($clientContact);
 
-        return $this->render('MgateSuiviBundle:ClientContact:modifier.html.twig', [
+        return $this->render('Project/ClientContact/modifier.html.twig', [
             'form' => $form->createView(),
             'delete_form' => $deleteForm->createView(),
             'clientcontact' => $clientContact,
@@ -153,14 +157,15 @@ class ClientContactController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_clientcontact_delete", path="/suivi/clientcontact/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param ClientContact $contact
-     * @param Request       $request
+     * @param ClientContact          $contact
+     * @param Request                $request
+     * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse
-     * @Route(name="MgateSuivi_clientcontact_delete", path="/suivi/clientcontact/supprimer/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
-    public function deleteAction(ClientContact $contact, Request $request)
+    public function deleteAction(ClientContact $contact, Request $request,EtudePermissionChecker $permChecker)
     {
         $form = $this->createDeleteForm($contact);
 
@@ -169,7 +174,7 @@ class ClientContactController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
-            if ($this->get('Mgate.etude_manager')->confidentielRefus($contact->getEtude(), $this->getUser())) {
+            if ($permChecker->confidentielRefus($contact->getEtude(), $this->getUser())) {
                 throw new AccessDeniedException('Cette étude est confidentielle');
             }
 

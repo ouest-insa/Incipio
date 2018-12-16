@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
-use Mgate\SuiviBundle\Entity\Av;
+use App\Entity\Project\Av;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -31,7 +31,8 @@ class AvType extends DocTypeType
                 'label' => 'Exposer les causes de l’Avenant',
                 'required' => true,
                 'attr' => ['data-help' => 'Ne pas hésiter à détailler l\'historique des relations avec le client 
-            et du travail sur l\'étude qui ont conduit à l\'Avenant'],
+            et du travail sur l\'étude qui ont conduit à l\'Avenant',
+                ],
             ])
             ->add('clauses', ChoiceType::class, [
                 'label' => 'Type d\'avenant',
@@ -59,13 +60,13 @@ class AvType extends DocTypeType
 
     public function getName()
     {
-        return 'Mgate_suivibundle_avtype';
+        return 'project_avtype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\Av',
+            'data_class' => Av::class,
             'prospect' => '',
         ]);
     }

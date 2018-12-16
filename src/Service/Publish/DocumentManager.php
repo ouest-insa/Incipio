@@ -10,21 +10,21 @@
  */
 
 /**
- * @brief Document Manager
+ * @brief         Document Manager
  *
- * @author Florian Lefèvre
- * @date 21 avril 2014
+ * @author        Florian Lefèvre
+ * @date          21 avril 2014
  *
  * @copyright (c) 2014, Florian Lefèvre
  *
  * Manager pour l'upload de Documents (Aucun document ne doit être persisté sans utiliser ces méthodes)
  */
 
-namespace Mgate\PubliBundle\Manager;
+namespace App\Service\Publish;
 
+use App\Entity\Publish\Document;
+use App\Entity\Publish\RelatedDocument;
 use Doctrine\ORM\EntityManager;
-use Mgate\PubliBundle\Entity\Document;
-use Mgate\PubliBundle\Entity\RelatedDocument;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -43,13 +43,14 @@ class DocumentManager extends BaseManager
     protected $junior_id;
 
     /**
-     * @param \Doctrine\ORM\EntityManager $em
-     * @param $junior_id
-     * @param $authorizedStorageSize
-     * @param TokenStorage $tokenStorage
-     * @param Kernel       $kernel
+     * @param EntityManager               $em
+     * @param                             $junior_id
+     * @param                             $authorizedStorageSize
+     * @param TokenStorage                $tokenStorage
+     * @param KernelInterface             $kernel
      */
-    public function __construct(EntityManager $em, $junior_id, $authorizedStorageSize, TokenStorage $tokenStorage, KernelInterface $kernel)
+    public function __construct(EntityManager $em, $junior_id, $authorizedStorageSize, TokenStorage $tokenStorage,
+                                KernelInterface $kernel)
     {
         $this->em = $em;
         $this->junior_id = $junior_id;
@@ -65,13 +66,14 @@ class DocumentManager extends BaseManager
      * @param array  $authorizedMIMEType
      * @param string $name
      * @param string $relatedDocument
-     * @param string $deleteIfExist
+     * @param bool   $deleteIfExist
      *
-     * @return \Mgate\PubliBundle\Entity\Document
+     * @return Document
      *
      * @throws \Exception
      */
-    public function uploadDocumentFromUrl($url, array $authorizedMIMEType, $name, $relatedDocument = null, $deleteIfExist = false)
+    public function uploadDocumentFromUrl($url, array $authorizedMIMEType, $name, $relatedDocument = null,
+                                          $deleteIfExist = false)
     {
         $tempStorage = 'tmp/' . sha1(uniqid(mt_rand(), true));
 
@@ -98,14 +100,15 @@ class DocumentManager extends BaseManager
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
      * @param array                                               $authorizedMIMEType
      * @param string                                              $name
-     * @param \Mgate\PubliBundle\Entity\RelatedDocument           $relatedDocument
+     * @param RelatedDocument                                     $relatedDocument
      * @param bool                                                $deleteIfExist
      *
-     * @return \Mgate\PubliBundle\Entity\Document
+     * @return Document
      *
      * @throws \Exception
      */
-    public function uploadDocumentFromFile(UploadedFile $file, array $authorizedMIMEType, $name, RelatedDocument $relatedDocument = null, $deleteIfExist = false)
+    public function uploadDocumentFromFile(UploadedFile $file, array $authorizedMIMEType, $name,
+                                           RelatedDocument $relatedDocument = null, $deleteIfExist = false)
     {
         $document = new Document();
 
@@ -129,11 +132,11 @@ class DocumentManager extends BaseManager
     /**
      * uploadDocument has to be the only one fonction used to persist Document.
      *
-     * @param \Mgate\PubliBundle\Entity\Document        $document
-     * @param \Mgate\PubliBundle\Entity\RelatedDocument $relatedDocument
-     * @param bool                                      $deleteIfExist
+     * @param Document        $document
+     * @param RelatedDocument $relatedDocument
+     * @param bool            $deleteIfExist
      *
-     * @return \Mgate\PubliBundle\Entity\Document
+     * @return Document
      *
      * @throws \Exception
      * @throws UploadException
@@ -174,13 +177,5 @@ class DocumentManager extends BaseManager
         $this->persistAndFlush($document);
 
         return $document;
-    }
-
-    /**
-     * @return \Mgate\PubliBundle\Entity\DocumentRepository
-     */
-    public function getRepository()
-    {
-        return $this->em->getRepository('MgatePubliBundle:Document');
     }
 }

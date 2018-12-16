@@ -9,28 +9,34 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Controller;
+namespace App\Controller\Personne;
 
-use Mgate\PersonneBundle\Entity\Employe;
-use Mgate\PersonneBundle\Form\Type\EmployeType;
+
+use App\Entity\Personne\Employe;
+use App\Entity\Personne\Prospect;
+use App\Form\Personne\EmployeType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-class EmployeController extends Controller
+class EmployeController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_employe_ajouter", path="/employe/add/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @param Request  $request
+     * @param Prospect $prospect
+     *
+     * @return RedirectResponse|Response
      */
-    public function ajouterAction(Request $request, $prospect_id, $format)
+    public function ajouterAction(Request $request, Prospect $prospect)
     {
         $em = $this->getDoctrine()->getManager();
-
-        // On vérifie que le prospect existe bien
-        if (!$prospect = $em->getRepository('Mgate\PersonneBundle\Entity\Prospect')->find($prospect_id)) {
-            throw $this->createNotFoundException('Ce prospect n\'existe pas');
-        }
 
         $employe = new Employe();
         $employe->setProspect($prospect);
@@ -51,15 +57,20 @@ class EmployeController extends Controller
             }
         }
 
-        return $this->render('MgatePersonneBundle:Employe:ajouter.html.twig', [
+        return $this->render('Personne/Employe/ajouter.html.twig', [
             'form' => $form->createView(),
             'prospect' => $prospect,
-            'format' => $format,
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_employe_modifier", path="/employe/modifier/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @param Request $request
+     * @param Employe $employe
+     *
+     * @return RedirectResponse|Response
      */
     public function modifierAction(Request $request, Employe $employe)
     {
@@ -83,7 +94,7 @@ class EmployeController extends Controller
         //to avoid asynchronous request at display time
         $prospect = $em->getRepository('MgatePersonneBundle:Prospect')->findOneById($employe->getProspect()->getId());
 
-        return $this->render('MgatePersonneBundle:Employe:modifier.html.twig', [
+        return $this->render('Personne/Employe/modifier.html.twig', [
             'form' => $form->createView(),
             'delete_form' => $deleteForm->createView(),
             'employe' => $employe,
@@ -93,11 +104,12 @@ class EmployeController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_employe_supprimer", path="/employe/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Employe $employe the employee to delete
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function deleteAction(Employe $employe, Request $request)
     {

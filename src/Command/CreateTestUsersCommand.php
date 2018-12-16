@@ -1,9 +1,9 @@
 <?php
 
-namespace Mgate\DashboardBundle\Command;
+namespace App\Command;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Mgate\UserBundle\Entity\User;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

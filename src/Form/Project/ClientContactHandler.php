@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\ClientContact;
 use Doctrine\ORM\EntityManager;
-use Mgate\SuiviBundle\Entity\ClientContact;
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class ClientContactHandler
@@ -24,7 +24,7 @@ class ClientContactHandler
 
     protected $em;
 
-    public function __construct(Form $form, Request $request, EntityManager $em)
+    public function __construct(FormInterface $form, Request $request, EntityManager $em)
     {
         $this->form = $form;
         $this->request = $request;

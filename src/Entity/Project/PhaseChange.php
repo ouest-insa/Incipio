@@ -1,6 +1,6 @@
 <?php
 
-namespace Mgate\SuiviBundle\Entity;
+namespace App\Entity\Project;
 
 class PhaseChange
 {

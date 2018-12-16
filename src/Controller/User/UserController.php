@@ -9,19 +9,24 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Controller;
+namespace App\Controller\User;
 
-use App\Entity\Personne;
-use App\Entity\User;
-use App\Form\Type\UserAdminType;
+
+use App\Entity\Personne\Personne;
+use App\Entity\User\User;
+use App\Form\User\UserAdminType;
+use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class DefaultController extends Controller
+class UserController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_ADMIN')")
@@ -33,19 +38,20 @@ class DefaultController extends Controller
 
         $entities = $em->getRepository('MgateUserBundle:User')->findAll();
 
-        return $this->render('MgateUserBundle:Default:lister.html.twig', ['users' => $entities]);
+        return $this->render('User/Default/lister.html.twig', ['users' => $entities]);
     }
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     *
-     * @param Request $request
-     * @param User    $user
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @Route(name="Mgate_user_modifier", path="/user/modifier/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @param Request              $request
+     * @param User                 $user
+     * @param UserManagerInterface $userManager
+     *
+     * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, User $user)
+    public function modifierAction(Request $request, User $user, UserManagerInterface $userManager)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -54,7 +60,8 @@ class DefaultController extends Controller
         }
 
         $form = $this->createForm(UserAdminType::class, $user, [
-            'user_class' => 'Mgate\UserBundle\Entity\User', 'roles' => $this->getParameter('security.role_hierarchy.roles'),
+            'user_class' => 'Mgate\UserBundle\Entity\User',
+            'roles' => $this->getParameter('security.role_hierarchy.roles'),
         ]);
         $deleteForm = $this->createDeleteForm($user->getId());
         if ('POST' == $request->getMethod()) {
@@ -64,7 +71,6 @@ class DefaultController extends Controller
                 $em->persist($user);
                 $em->flush();
 
-                $userManager = $this->container->get('fos_user.user_manager');
                 $userManager->reloadUser($user);
                 $this->addFlash('success', 'Utilisateur modifié');
 
@@ -72,7 +78,7 @@ class DefaultController extends Controller
             }
         }
 
-        return $this->render('MgateUserBundle:Default:modifier.html.twig', [
+        return $this->render('User/Default/modifier.html.twig', [
             'form' => $form->createView(),
             'delete_form' => $deleteForm->createView(),
         ]);
@@ -80,16 +86,16 @@ class DefaultController extends Controller
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="Mgate_user_supprimer", path="/user/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param User    $user    the user to be deleted
+     * @param User    $user the user to be deleted
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      *
      * @internal param $id
-     * @Route(name="Mgate_user_supprimer", path="/user/supprimer/{id}", methods={"GET","HEAD","POST"})
      */
-    public function deleteAction(User $user, Request $request)
+    public function deleteAction(Request $request, User $user)
     {
         $form = $this->createDeleteForm($user->getId());
 
@@ -123,15 +129,18 @@ class DefaultController extends Controller
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     *
-     * @param Personne $personne the personne whom a user should be added
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @throws \Exception
      * @Route(name="Mgate_user_addFromPersonne", path="/user/addFromPersonne/{id}", methods={"POST"})
+     *
+     * @param Request              $request
+     * @param Personne             $personne the personne whom a user should be added
+     * @param UserManagerInterface $userManager
+     * @param MailerInterface      $mailer
+     *
+     * @return RedirectResponse
+     * @throws \Exception
      */
-    public function addUserFromPersonneAction(Request $request, Personne $personne)
+    public function addUserFromPersonneAction(Request $request, Personne $personne, UserManagerInterface $userManager,
+                                              MailerInterface $mailer)
     {
         $create_user_form = $this->createFormBuilder(['id' => $personne->getId()])
             ->add('id', HiddenType::class)
@@ -152,8 +161,6 @@ class DefaultController extends Controller
                 $token = sha1(uniqid(mt_rand(), true));
 
                 /* Génération de l'user */
-                $userManager = $this->get('fos_user.user_manager');
-
                 $user = $userManager->createUser();
                 $user->setPersonne($personne);
                 $user->setEmail($personne->getEmail());
@@ -166,7 +173,6 @@ class DefaultController extends Controller
                 $userManager->updateUser($user); // Pas besoin de faire un flush (ça le fait tout seul)
 
                 /* Envoie d'un email de confirmation */
-                $mailer = $this->container->get('fos_user.mailer');
                 $mailer->sendConfirmationEmailMessage($user);
                 $this->addFlash('success', 'Compte utilisateur créé');
             }

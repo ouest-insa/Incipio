@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\Cc;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,13 +25,13 @@ class SubCcType extends DocTypeType
 
     public function getName()
     {
-        return 'Mgate_suivibundle_subcctype';
+        return 'project_subcctype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\Cc',
+            'data_class' => Cc::class,
             'prospect' => '',
         ]);
     }

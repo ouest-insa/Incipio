@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\RepartitionJEH;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,18 +22,18 @@ class RepartitionJEHType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('nbrJEH', IntegerType::class, ['required' => true])
-                ->add('prixJEH', IntegerType::class, ['required' => true, 'attr' => ['min' => 80]]);
+            ->add('prixJEH', IntegerType::class, ['required' => true, 'attr' => ['min' => 80]]);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_RepartitionJEHType';
+        return 'project_RepartitionJEHType';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\RepartitionJEH',
+            'data_class' => RepartitionJEH::class,
             'type' => '',
             'prospect' => '',
             'phases' => '',

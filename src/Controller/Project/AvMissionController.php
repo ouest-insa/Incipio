@@ -9,36 +9,39 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Controller;
+namespace App\Controller\Project;
 
-use Mgate\SuiviBundle\Entity\AvMission;
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Form\Type\AvMissionType;
+use App\Entity\Project\AvMission;
+use App\Entity\Project\Etude;
+use App\Form\Project\AvMissionType;
+use App\Service\Project\EtudeManager;
+use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class AvMissionController extends Controller
+class AvMissionController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_avmission_ajouter", path="/suivi/avmission/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
-     * @param Request $request
-     * @param Etude   $etude
+     * @param Request                $request
+     * @param Etude                  $etude
+     * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateSuivi_avmission_ajouter", path="/suivi/avmission/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
-    public function addAction(Request $request, Etude $etude)
+    public function addAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -58,7 +61,7 @@ class AvMissionController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateSuiviBundle:AvMission:ajouter.html.twig', [
+        return $this->render('Project/AvMission/ajouter.html.twig', [
             'etude' => $etude,
             'form' => $form->createView(),
         ]);
@@ -66,20 +69,21 @@ class AvMissionController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_avmission_modifier", path="/suivi/avmission/modifier/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Request   $request
-     * @param AvMission $avmission
+     * @param Request                $request
+     * @param AvMission              $avmission
+     * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateSuivi_avmission_modifier", path="/suivi/avmission/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
-    public function modifierAction(Request $request, AvMission $avmission)
+    public function modifierAction(Request $request, AvMission $avmission, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
         $etude = $avmission->getEtude();
 
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -96,7 +100,7 @@ class AvMissionController extends Controller
         }
         $deleteForm = $this->createDeleteForm($avmission);
 
-        return $this->render('MgateSuiviBundle:AvMission:modifier.html.twig', [
+        return $this->render('Project/AvMission/modifier.html.twig', [
             'etude' => $etude,
             'delete_form' => $deleteForm->createView(),
             'form' => $form->createView(),
@@ -106,14 +110,15 @@ class AvMissionController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_avmission_delete", path="/suivi/avmission/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param AvMission $av
-     * @param Request   $request
+     * @param AvMission              $av
+     * @param Request                $request
+     * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse
-     * @Route(name="MgateSuivi_avmission_delete", path="/suivi/avmission/supprimer/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
-    public function deleteAction(AvMission $av, Request $request)
+    public function deleteAction(AvMission $av, Request $request, EtudePermissionChecker $permChecker)
     {
         $form = $this->createDeleteForm($av);
 
@@ -122,7 +127,7 @@ class AvMissionController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
-            if ($this->get('Mgate.etude_manager')->confidentielRefus($av->getEtude(), $this->getUser())) {
+            if ($permChecker->confidentielRefus($av->getEtude(), $this->getUser())) {
                 throw new AccessDeniedException('Cette étude est confidentielle');
             }
 

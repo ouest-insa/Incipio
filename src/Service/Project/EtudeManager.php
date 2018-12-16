@@ -9,19 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Manager;
+namespace App\Service\Project;
 
-use Doctrine\ORM\EntityManager;
-use Mgate\SuiviBundle\Entity\Etude as Etude;
-use Mgate\UserBundle\Entity\User;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use App\Entity\Project\Etude;
+use Doctrine\Common\Persistence\ObjectManager;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class EtudeManager
 {
     protected $em;
-
-    protected $authorizationChecker;
 
     protected $tva;
 
@@ -33,10 +29,9 @@ class EtudeManager
 
     protected $defaultPourcentageAcompte;
 
-    public function __construct(EntityManager $em, KeyValueStore $keyValueStore, AuthorizationChecker $authorizationChecker)
+    public function __construct(ObjectManager $em, KeyValueStore $keyValueStore)
     {
         $this->em = $em;
-        $this->authorizationChecker = $authorizationChecker;
         if ($keyValueStore->exists('tva')) {
             $this->tva = $keyValueStore->get('tva');
         } else {
@@ -66,29 +61,6 @@ class EtudeManager
         } else {
             throw new \LogicException('Parameter Pourcentage Acompte Defaut is undefined.');
         }
-    }
-
-    /**
-     * @param Etude $etude
-     * @param User  $user
-     *
-     * @return bool
-     *              Comme l'authorizationChecker n'est pas dispo coté twig, on utilisera cette méthode uniquement dans les controllers.
-     *              Pour twig, utiliser confidentielRefusTwig(Etude, User, is_granted('ROLE_SOUHAITE'))
-     */
-    public function confidentielRefus(Etude $etude, User $user)
-    {
-        try {
-            if ($etude->getConfidentiel() && !$this->authorizationChecker->isGranted('ROLE_CA')) {
-                if ($etude->getSuiveur() && $user->getPersonne()->getId() != $etude->getSuiveur()->getId()) {
-                    return true;
-                }
-            }
-        } catch (\Exception $e) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

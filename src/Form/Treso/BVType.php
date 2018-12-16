@@ -9,11 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Form\Type;
+namespace App\Form\Treso;
 
+use App\Entity\Project\Mission;
+use App\Entity\Treso\BV;
+use App\Repository\Project\MissionRepository;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
-use Mgate\SuiviBundle\Entity\MissionRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -30,12 +32,14 @@ class BVType extends AbstractType
             ->add('numero', IntegerType::class)
             ->add('nombreJEH', IntegerType::class)
             ->add('remunerationBruteParJEH', MoneyType::class)
-            ->add('dateDeVersement', DateType::class, ['label' => 'Date de versement', 'required' => true, 'widget' => 'single_text'])
-            ->add('dateDemission', DateType::class, ['label' => 'Date d\'émission', 'required' => true, 'widget' => 'single_text'])
+            ->add('dateDeVersement', DateType::class,
+                ['label' => 'Date de versement', 'required' => true, 'widget' => 'single_text'])
+            ->add('dateDemission', DateType::class,
+                ['label' => 'Date d\'émission', 'required' => true, 'widget' => 'single_text'])
             ->add('typeDeTravail', TextType::class)
             ->add('mission', Select2EntityType::class, [
                 'label' => 'Mission',
-                'class' => 'Mgate\\SuiviBundle\\Entity\\Mission',
+                'class' => Mission::class,
                 'choice_label' => 'reference',
                 'required' => true,
                 'query_builder' => function (MissionRepository $mr) {
@@ -47,13 +51,13 @@ class BVType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'Mgate_tresobundle_bvtype';
+        return 'treso_bvtype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\TresoBundle\Entity\BV',
+            'data_class' => BV::class,
         ]);
     }
 }

@@ -9,19 +9,29 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Controller;
+namespace App\Controller\Personne;
 
-use Mgate\PersonneBundle\Entity\Filiere;
-use Mgate\PersonneBundle\Form\Type\FiliereType;
+
+use App\Entity\Personne\Filiere;
+use App\Entity\Personne\Membre;
+use App\Form\Personne\FiliereType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-class FiliereController extends Controller
+class FiliereController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="MgatePersonne_filiere_ajouter", path="/filiere/add", methods={"GET","HEAD","POST"})
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     public function ajouterAction(Request $request)
     {
@@ -43,18 +53,19 @@ class FiliereController extends Controller
             }
         }
 
-        return $this->render('MgatePersonneBundle:Filiere:ajouter.html.twig', [
+        return $this->render('Personne/Filiere/ajouter.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="MgatePersonne_filiere_modifier", path="/filiere/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param Filiere $filiere
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function modifierAction(Request $request, Filiere $filiere)
     {
@@ -75,7 +86,7 @@ class FiliereController extends Controller
             }
         }
 
-        return $this->render('MgatePersonneBundle:Filiere:modifier.html.twig', [
+        return $this->render('Personne/Filiere/modifier.html.twig', [
             'form' => $form->createView(),
             'delete_form' => $deleteForm->createView(),
         ]);
@@ -83,11 +94,12 @@ class FiliereController extends Controller
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="MgatePersonne_filiere_supprimer", path="/filiere/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param Filiere $filiere
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function deleteAction(Request $request, Filiere $filiere)
     {
@@ -97,19 +109,17 @@ class FiliereController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
-            if (0 == count($em->getRepository('MgatePersonneBundle:Membre')->findByFiliere($filiere))) { //no members uses that filiere
+            if (0 == count($em->getRepository(Membre::class)->findByFiliere($filiere))) { //no members uses that filiere
                 $em->remove($filiere);
                 $em->flush();
                 $this->addFlash('success', 'Filière supprimée avec succès');
 
                 return $this->redirectToRoute('MgatePersonne_poste_homepage');
-            } else {
-                $this->addFlash('danger', 'Impossible de supprimer une filiere ayant des membres.');
-
-                return $this->redirectToRoute('MgatePersonne_poste_homepage');
             }
+            $this->addFlash('danger', 'Impossible de supprimer une filiere ayant des membres.');
+        } else {
+            $this->addFlash('danger', 'Formulaire invalide');
         }
-        $this->addFlash('danger', 'formulaire invalide');
 
         return $this->redirectToRoute('MgatePersonne_poste_homepage');
     }
@@ -118,7 +128,6 @@ class FiliereController extends Controller
     {
         return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)
-            ->getForm()
-            ;
+            ->getForm();
     }
 }

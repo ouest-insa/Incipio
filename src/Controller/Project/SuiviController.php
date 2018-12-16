@@ -9,17 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Controller;
+namespace App\Controller\Project;
 
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Entity\Suivi;
-use Mgate\SuiviBundle\Form\Type\SuiviType;
+
+use App\Entity\Project\Etude;
+use App\Entity\Project\Suivi;
+use App\Form\Project\SuiviType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class SuiviController extends Controller
+class SuiviController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_CA')")
@@ -39,19 +42,19 @@ class SuiviController extends Controller
             ->addOrderBy('s.date', 'DESC')
             ->getQuery()->getResult();
 
-        return $this->render('MgateSuiviBundle:Suivi:index.html.twig', [
+        return $this->render('Project/Suivi/index.html.twig', [
             'suivis' => $entities,
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="MgateSuivi_suivi_ajouter", path="/suivi/suivi/ajouter/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param Etude   $etude
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @Route(name="MgateSuivi_suivi_ajouter", path="/suivi/suivi/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @return RedirectResponse|Response
      */
     public function addAction(Request $request, Etude $etude)
     {
@@ -75,7 +78,7 @@ class SuiviController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateSuiviBundle:Suivi:ajouter.html.twig', [
+        return $this->render('Project/Suivi/ajouter.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
         ]);
@@ -92,11 +95,11 @@ class SuiviController extends Controller
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="MgateSuivi_suivi_voir", path="/suivi/suivi/voir/{id}", methods={"GET","HEAD"})
      *
      * @param Suivi $suivi
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Route(name="MgateSuivi_suivi_voir", path="/suivi/suivi/voir/{id}", methods={"GET","HEAD"}, requirements={"id": "\d+"})
+     * @return Response
      */
     public function voirAction(Suivi $suivi)
     {
@@ -104,7 +107,7 @@ class SuiviController extends Controller
         $suivis = $etude->getSuivis()->toArray();
         usort($suivis, [$this, 'compareDate']);
 
-        return $this->render('MgateSuiviBundle:Suivi:voir.html.twig', [
+        return $this->render('Project/Suivi/voir.html.twig', [
             'suivis' => $suivis,
             'selectedSuivi' => $suivi,
             'etude' => $etude,
@@ -113,7 +116,12 @@ class SuiviController extends Controller
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="MgateSuivi_suivi_modifier", path="/suivi/suivi/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="MgateSuivi_suivi_modifier", path="/suivi/suivi/modifier/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @param Request $request
+     * @param Suivi   $suivi
+     *
+     * @return RedirectResponse|Response
      */
     public function modifierAction(Request $request, Suivi $suivi)
     {
@@ -133,7 +141,7 @@ class SuiviController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateSuiviBundle:Suivi:modifier.html.twig', [
+        return $this->render('Project/Suivi/modifier.html.twig', [
             'form' => $form->createView(),
             'clientcontact' => $suivi,
             'etude' => $suivi->getEtude(),

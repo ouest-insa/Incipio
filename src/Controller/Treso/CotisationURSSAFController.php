@@ -9,16 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Controller;
+namespace App\Controller\Treso;
 
-use Mgate\TresoBundle\Entity\CotisationURSSAF;
-use Mgate\TresoBundle\Form\Type\CotisationURSSAFType;
+use App\Entity\Treso\CotisationURSSAF;
+use App\Form\Treso\CotisationURSSAFType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class CotisationURSSAFController extends Controller
+class CotisationURSSAFController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
@@ -29,13 +31,18 @@ class CotisationURSSAFController extends Controller
         $em = $this->getDoctrine()->getManager();
         $cotisations = $em->getRepository('MgateTresoBundle:CotisationURSSAF')->findAll();
 
-        return $this->render('MgateTresoBundle:CotisationURSSAF:index.html.twig', ['cotisations' => $cotisations]);
+        return $this->render('Treso/CotisationURSSAF/index.html.twig', ['cotisations' => $cotisations]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
      * @Route(name="MgateTreso_CotisationURSSAF_ajouter", path="/Tresorerie/CotisationURSSAF/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
-     * @Route(name="MgateTreso_CotisationURSSAF_modifier", path="/Tresorerie/CotisationURSSAF/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="MgateTreso_CotisationURSSAF_modifier", path="/Tresorerie/CotisationURSSAF/Modifier/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @param Request $request
+     * @param         $id
+     *
+     * @return RedirectResponse|Response
      */
     public function modifierAction(Request $request, $id)
     {
@@ -57,7 +64,7 @@ class CotisationURSSAFController extends Controller
             }
         }
 
-        return $this->render('MgateTresoBundle:CotisationURSSAF:modifier.html.twig', [
+        return $this->render('Treso/CotisationURSSAF/modifier.html.twig', [
                     'form' => $form->createView(),
                     'cotisation' => $cotisation,
                 ]);
@@ -65,14 +72,15 @@ class CotisationURSSAFController extends Controller
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="MgateTreso_CotisationURSSAF_supprimer", path="/Tresorerie/CotisationURSSAF/Supprimer/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @param CotisationURSSAF $cotisation
+     *
+     * @return RedirectResponse
      */
-    public function supprimerAction($id)
+    public function supprimerAction(CotisationURSSAF $cotisation)
     {
         $em = $this->getDoctrine()->getManager();
-
-        if (!$cotisation = $em->getRepository('MgateTresoBundle:CotisationURSSAF')->find($id)) {
-            throw $this->createNotFoundException('La Cotisation URSSAF n\'existe pas !');
-        }
 
         $em->remove($cotisation);
         $em->flush();

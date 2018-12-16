@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\UserBundle\Form\EventListener;
+namespace App\Form\EventSubscriber;
 
+use App\Repository\Personne\PersonneRepository;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
-use Mgate\PersonneBundle\Entity\PersonneRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -38,13 +38,14 @@ class AddMembreFieldSubscriber implements EventSubscriberInterface
         // over the null condition.
 
         $user = $data;
-        $form->add('personne', Select2EntityType::class, ['label' => "Associer ce compte d'utilisateur à un Membre existant",
-                       'class' => 'Mgate\PersonneBundle\Entity\Personne',
-                       'choice_label' => 'prenomNom',
-                       'required' => false,
-                       'query_builder' => function (PersonneRepository $pr) use ($user) {
-                           return $pr->getMembreNotUser($user);
-                       },
-                        ]);
+        $form->add('personne', Select2EntityType::class,
+            ['label' => "Associer ce compte d'utilisateur à un membre existant",
+             'class' => 'App\Entity\Personne\Personne',
+             'choice_label' => 'prenomNom',
+             'required' => false,
+             'query_builder' => function (PersonneRepository $pr) use ($user) {
+                 return $pr->getMembreNotUser($user);
+             },
+            ]);
     }
 }

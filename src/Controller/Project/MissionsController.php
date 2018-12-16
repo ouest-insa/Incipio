@@ -9,37 +9,39 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Controller;
+namespace App\Controller\Project;
 
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Entity\Mission;
-use Mgate\SuiviBundle\Entity\RepartitionJEH;
-use Mgate\SuiviBundle\Form\Type\MissionsType;
+
+use App\Entity\Project\Etude;
+use App\Entity\Project\Mission;
+use App\Entity\Project\RepartitionJEH;
+use App\Form\Project\MissionsType;
+use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class MissionsController extends Controller
+class MissionsController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_missions_modifier", path="/suivi/missions/modifier/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Request $request
-     * @param Etude   $etude
+     * @param Request                $request
+     * @param Etude                  $etude
+     * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateSuivi_missions_modifier", path="/suivi/missions/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
-    public function modifierAction(Request $request, Etude $etude)
+    public function modifierAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser(),
-            $this->get('security.authorization_checker'))) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -56,7 +58,7 @@ class MissionsController extends Controller
                         /* @var RepartitionJEH $r */
                         $r->setMission($m);
                     }
-                    /* @var Mission $m  */
+                    /* @var Mission $m */
                     $m->setEtude($etude);
                 }
 
@@ -69,7 +71,7 @@ class MissionsController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateSuiviBundle:Mission:missions.html.twig', [
+        return $this->render('Project/Mission/missions.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
         ]);

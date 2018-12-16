@@ -9,31 +9,35 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Controller;
+namespace App\Controller\Personne;
 
-use Mgate\PersonneBundle\Entity\Prospect;
-use Mgate\PersonneBundle\Form\Type\ProspectType;
+
+use App\Entity\Personne\Employe;
+use App\Entity\Personne\Prospect;
+use App\Form\Personne\ProspectType;
+use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ProspectController extends Controller
+class ProspectController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_prospect_ajouter", path="/prospect/add/", methods={"GET","HEAD","POST"})
      *
-     * @param Request $request
-     * @param         $format
+     * @param Request       $request
+     * @param ObjectManager $em
      *
      * @return RedirectResponse|Response
      */
-    public function ajouterAction(Request $request, $format)
+    public function ajouterAction(Request $request, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
         $prospect = new Prospect();
 
         $form = $this->createForm(ProspectType::class, $prospect);
@@ -51,14 +55,16 @@ class ProspectController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgatePersonneBundle:Prospect:ajouter.html.twig', [
+        return $this->render('Personne/Prospect/ajouter.html.twig', [
             'form' => $form->createView(),
-            'format' => $format,
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_prospect_homepage", path="/prospect/", methods={"GET","HEAD"})
+     *
+     * @return Response
      */
     public function indexAction()
     {
@@ -66,22 +72,22 @@ class ProspectController extends Controller
 
         $entities = $em->getRepository('MgatePersonneBundle:Prospect')->getAllProspect();
 
-        return $this->render('MgatePersonneBundle:Prospect:index.html.twig', [
+        return $this->render('Personne/Prospect/index.html.twig', [
             'prospects' => $entities,
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_prospect_voir", path="/prospect/voir/{id}", methods={"GET","HEAD"})
      *
-     * @param Prospect $prospect
+     * @param Prospect      $prospect
+     * @param ObjectManager $em
      *
      * @return Response
      */
-    public function voirAction(Prospect $prospect)
+    public function voirAction(Prospect $prospect, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
-
         //récupération des employés
         $mailing = '';
         $employes = [];
@@ -100,7 +106,7 @@ class ProspectController extends Controller
         //récupération des études faites avec ce prospect
         $etudes = $em->getRepository('MgateSuiviBundle:Etude')->findByProspect($prospect);
 
-        return $this->render('MgatePersonneBundle:Prospect:voir.html.twig', [
+        return $this->render('Personne/Prospect/voir.html.twig', [
             'prospect' => $prospect,
             'mailing' => $mailing,
             'etudes' => $etudes,
@@ -109,17 +115,16 @@ class ProspectController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_prospect_modifier", path="/prospect/modifier/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Request  $request
-     * @param Prospect $prospect
+     * @param Request       $request
+     * @param Prospect      $prospect
+     * @param ObjectManager $em
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Prospect $prospect)
+    public function modifierAction(Request $request, Prospect $prospect, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        // On passe l'$article récupéré au formulaire
         $form = $this->createForm(ProspectType::class, $prospect);
         $deleteForm = $this->createDeleteForm($prospect->getId());
         if ('POST' == $request->getMethod()) {
@@ -135,7 +140,7 @@ class ProspectController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgatePersonneBundle:Prospect:modifier.html.twig', [
+        return $this->render('Personne/Prospect/modifier.html.twig', [
             'form' => $form->createView(),
             'delete_form' => $deleteForm->createView(),
             'prospect' => $prospect,
@@ -144,20 +149,20 @@ class ProspectController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_prospect_supprimer", path="/prospect/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Prospect $prospect the prospect to delete
-     * @param Request  $request
+     * @param Prospect      $prospect the prospect to delete
+     * @param Request       $request
+     * @param ObjectManager $em
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
-    public function deleteAction(Prospect $prospect, Request $request)
+    public function deleteAction(Prospect $prospect, Request $request, ObjectManager $em)
     {
         $form = $this->createDeleteForm($prospect->getId());
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
             $related_projects = $em->getRepository('MgateSuiviBundle:Etude')->findByProspect($prospect);
 
             if (count($related_projects) > 0) {
@@ -191,16 +196,16 @@ class ProspectController extends Controller
      * Point d'entré ajax retournant un json des prospect dont le nom contient une partie de $_GET['term'].
      *
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_ajax_prospect", path="/ajax/ajax_prospect/", methods={"GET","HEAD"})
      *
-     * @param Request $request
+     * @param Request       $request
+     * @param ObjectManager $em
      *
      * @return Response
      */
-    public function ajaxProspectAction(Request $request)
+    public function ajaxProspectAction(Request $request, ObjectManager $em)
     {
         $value = $request->get('term');
-
-        $em = $this->getDoctrine()->getManager();
         $members = $em->getRepository('MgatePersonneBundle:Prospect')->ajaxSearch($value);
 
         $json = [];
@@ -221,6 +226,7 @@ class ProspectController extends Controller
      * Point d'entrée ajax retournant un Json avec la liste des employés d'un prospect donné.
      *
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_ajax_employes_de_prospect", path="/ajax/employes_de_prospect/{id}", methods={"GET","HEAD"})
      *
      * @param Prospect $prospect
      *
@@ -231,6 +237,7 @@ class ProspectController extends Controller
         $em = $this->getDoctrine()->getManager();
         $employes = $em->getRepository('MgatePersonneBundle:Employe')->findByProspect($prospect);
         $json = [];
+        /** @var Employe $employe */
         foreach ($employes as $employe) {
             array_push($json, ['label' => $employe->__toString(), 'value' => $employe->getId()]);
         }

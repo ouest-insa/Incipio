@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Manager;
+namespace App\Service\Project;
 
-use Doctrine\ORM\EntityManager;
-use Mgate\PubliBundle\Entity\Document;
-use Mgate\SuiviBundle\Entity\ClientContact;
-use Mgate\SuiviBundle\Entity\Etude as Etude;
-use Mgate\SuiviBundle\Entity\Phase;
-use Monolog\Logger;
+use App\Entity\Project\ClientContact;
+use App\Entity\Project\Etude;
+use App\Entity\Project\Phase;
+use App\Entity\Publish\Document;
+use Doctrine\Common\Persistence\ObjectManager;
 use Ob\HighchartsBundle\Highcharts\Highchart;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
 use Zend\Json\Expr;
@@ -36,7 +36,7 @@ class ChartManager /*extends \Twig_Extension*/
 
     private const SIX_MONTHS = 15724800;
 
-    public function __construct(EntityManager $em, EtudeManager $etudeManager, Logger $logger,
+    public function __construct(ObjectManager $em, EtudeManager $etudeManager, LoggerInterface $logger,
                                 KeyValueStore $keyValueStore, KernelInterface $kernel)
     {
         $this->em = $em;

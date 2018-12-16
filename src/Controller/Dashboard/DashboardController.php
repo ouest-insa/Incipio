@@ -11,36 +11,47 @@
 
 namespace App\Controller\Dashboard;
 
-use App\Controller\EtudeController;
+use App\Controller\Project\EtudeController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
 
-class DefaultController extends AbstractController
+class DashboardController extends AbstractController
 {
     public const EXPIRATION = 3600; // cache on dashboard is updated every hour
+    public $statsStore;
 
-    /**
-     * @Route(name="Mgate_dashboard_homepage", path="/", methods={"GET","HEAD"})
-     */
-    public function indexAction()
+
+    public function __construct(KeyValueStore $statsStore)
     {
-        $statsStore = $this->get('app.json_stats');
-        if (!$statsStore->exists('expiration') ||
-            ($statsStore->exists('expiration') &&
-                intval($statsStore->get('expiration')) + self::EXPIRATION < time()
-            )
-        ) {
-            $this->updateDashboardStats($statsStore);
-        }
-        $stats = $statsStore->getMultiple(['ca_negociation', 'ca_encours', 'ca_cloture', 'ca_facture', 'ca_paye', 'expiration']);
-
-        return $this->render('MgateDashboardBundle:Default:index.html.twig', ['stats' => (isset($stats) ? $stats : [])]);
+        $this->statsStore = $statsStore;
     }
 
     /**
-     * @Route(name="Mgate_dashboard_search", path="/search", methods={"GET","HEAD"})
+     * @Route(name="dashboard_homepage", path="/", methods={"GET","HEAD"})
+     */
+    public function indexAction()
+    {
+        if (!$this->statsStore->exists('expiration') ||
+            ($this->statsStore->exists('expiration') &&
+                intval($this->statsStore->get('expiration')) + self::EXPIRATION < time()
+            )
+        ) {
+            $this->updateDashboardStats($this->statsStore);
+        }
+        $stats = $this->statsStore->getMultiple(['ca_negociation', 'ca_encours', 'ca_cloture', 'ca_facture', 'ca_paye', 'expiration']);
+
+        return $this->render('Dashboard/Default/index.html.twig', ['stats' => (isset($stats) ? $stats : [])]);
+    }
+
+    /**
+     * @Route(name="dashboard_search", path="/search", methods={"GET","HEAD"})
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function searchAction(Request $request)
     {
@@ -53,7 +64,7 @@ class DefaultController extends AbstractController
         $prospects = $em->getRepository('MgatePersonneBundle:Prospect')->searchByNom($search);
         $people = $em->getRepository('MgatePersonneBundle:Personne')->searchByNom($search);
 
-        return $this->render('MgateDashboardBundle:Default:search.html.twig', [
+        return $this->render('Dashboard/Default/search.html.twig', [
             'search' => $search,
             'projects' => $projects,
             'prospects' => $prospects,

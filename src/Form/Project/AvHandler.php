@@ -11,10 +11,10 @@
 
 // src/Sdz/BlogBundle/Form/ArticleHandler.php
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\Av;
 use Doctrine\ORM\EntityManager;
-use Mgate\SuiviBundle\Entity\Av;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Entity;
+namespace App\Entity\Treso;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\PersonneBundle\Entity\Personne;
+use App\Entity\Personne;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 

@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\ProcesVerbal;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,7 +22,8 @@ class ProcesVerbalSubType extends DocTypeType
     {
         $phaseNum = $options['phases'];
         if ('pvi' == $options['type']) {
-            $builder->add('phaseID', IntegerType::class, ['label' => 'Phases concernées', 'required' => false, 'attr' => ['min' => '1', 'max' => $phaseNum]]);
+            $builder->add('phaseID', IntegerType::class,
+                ['label' => 'Phases concernées', 'required' => false, 'attr' => ['min' => '1', 'max' => $phaseNum]]);
         }
 
         DocTypeType::buildForm($builder, $options);
@@ -29,13 +31,13 @@ class ProcesVerbalSubType extends DocTypeType
 
     public function getName()
     {
-        return 'Mgate_suivibundle_procesverbalsubtype';
+        return 'project_procesverbalsubtype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\ProcesVerbal',
+            'data_class' => ProcesVerbal::class,
             'type' => null,
             'prospect' => null,
             'phases' => null,

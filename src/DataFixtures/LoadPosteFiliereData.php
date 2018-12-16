@@ -5,12 +5,12 @@
     Importé depuis Emagine/incipio
  */
 
-namespace Mgate\PersonneBundle\DataFixtures\ORM;
+namespace App\DataFixtures;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Mgate\PersonneBundle\Entity\Filiere;
-use Mgate\PersonneBundle\Entity\Poste;
+use App\Entity\Filiere;
+use App\Entity\Poste;
 
 class LoadPosteFiliereData implements FixtureInterface
 {

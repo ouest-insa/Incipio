@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\FormationBundle\Entity;
+namespace App\Entity\Formation;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\PersonneBundle\Entity\Personne;
+use App\Entity\Personne;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

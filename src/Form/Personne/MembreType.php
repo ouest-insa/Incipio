@@ -9,8 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Form\Type;
+namespace App\Form\Personne;
 
+use App\Entity\Hr\Competence;
+use App\Entity\Personne\Filiere;
+use App\Entity\Personne\Membre;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType as GenemuDateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2CountryType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
@@ -30,55 +33,66 @@ class MembreType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('personne', PersonneType::class, ['label' => ' ', 'user' => true])
-                ->add('identifiant', TextType::class,
-                    ['label' => 'Identifiant',
-                        'required' => false,
-                        'attr' => ['readonly' => true],
-                    ]
-                )
-                ->add('emailEMSE', TextType::class, ['label' => 'Email Ecole', 'required' => false])
-                ->add('promotion', IntegerType::class, ['label' => 'Promotion', 'required' => false])
-                ->add('dateDeNaissance', GenemuDateType::class, ['label' => 'Date de naissance (jj/mm/aaaa)', 'widget' => 'single_text', 'format' => 'dd/MM/yyyy', 'required' => false])
-                ->add('lieuDeNaissance', TextType::class, ['label' => 'Lieu de naissance', 'required' => false])
-                ->add('nationalite', Select2CountryType::class, ['label' => 'Nationalité', 'required' => true, 'preferred_choices' => ['FR']])
-                ->add('mandats', CollectionType::class, [
-                    'entry_type' => MandatType::class,
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'prototype' => true,
-                    'by_reference' => false, //indispensable cf doc
+            ->add('personne', PersonneType::class, ['label' => ' ', 'user' => true])
+            ->add('identifiant', TextType::class,
+                ['label' => 'Identifiant',
+                 'required' => false,
+                 'attr' => ['readonly' => true],
+                ]
+            )
+            ->add('emailEMSE', TextType::class, ['label' => 'Email Ecole', 'required' => false])
+            ->add('promotion', IntegerType::class, ['label' => 'Promotion', 'required' => false])
+            ->add('dateDeNaissance', GenemuDateType::class,
+                ['label' => 'Date de naissance (jj/mm/aaaa)', 'widget' => 'single_text', 'format' => 'dd/MM/yyyy',
+                 'required' => false,
                 ])
-                ->add('competences', Select2EntityType::class, [
-                    'class' => 'N7consulting\RhBundle\Entity\Competence',
-                    'by_reference' => false,
-                    'multiple' => true,
-                    'required' => false,
+            ->add('lieuDeNaissance', TextType::class, ['label' => 'Lieu de naissance', 'required' => false])
+            ->add('nationalite', Select2CountryType::class,
+                ['label' => 'Nationalité', 'required' => true, 'preferred_choices' => ['FR']])
+            ->add('mandats', CollectionType::class, [
+                'entry_type' => MandatType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false, //indispensable cf doc
+            ])
+            ->add('competences', Select2EntityType::class, [
+                'class' => Competence::class,
+                'by_reference' => false,
+                'multiple' => true,
+                'required' => false,
+            ])
+            ->add('dateConventionEleve', GenemuDateType::class,
+                ['label' => 'Date de Signature de la Convention Elève', 'format' => 'dd/MM/yyyy', 'required' => false,
+                 'widget' => 'single_text',
                 ])
-                ->add('dateConventionEleve', GenemuDateType::class, ['label' => 'Date de Signature de la Convention Elève', 'format' => 'dd/MM/yyyy', 'required' => false, 'widget' => 'single_text'])
-                ->add('photo', FileType::class, [
-                    'mapped' => false,
-                    'required' => false,
-                    'label' => 'Modifier la photo de profil du membre',
+            ->add('photo', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Modifier la photo de profil du membre',
+            ])
+            ->add('formatPaiement', ChoiceType::class,
+                ['choices' => ['aucun' => 'aucun', 'cheque' => 'Chèque', 'especes' => 'Espèces'], 'required' => true])
+            ->add('filiere', EntityType::class,
+                ['label' => 'Filiere',
+                 'class' => Filiere::class,
+                 'required' => true,
                 ])
-                ->add('formatPaiement', ChoiceType::class, ['choices' => ['aucun' => 'aucun', 'cheque' => 'Chèque', 'especes' => 'Espèces'], 'required' => true])
-                ->add('filiere', EntityType::class,
-                    ['label' => 'Filiere',
-                        'class' => 'Mgate\\PersonneBundle\\Entity\\Filiere',
-                        'required' => true, ])
-                ->add('securiteSociale', TextType::class, ['required' => false, 'label' => 'Numéro de sécurité sociale'])
-                ->add('commentaire', TextareaType::class, ['required' => false, 'label' => 'Commentaire libre']);
+            ->add('securiteSociale', TextType::class,
+                ['required' => false, 'label' => 'Numéro de sécurité sociale'])
+            ->add('commentaire', TextareaType::class,
+                ['required' => false, 'label' => 'Commentaire libre']);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_personnebundle_membretype';
+        return 'personne_membretype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\PersonneBundle\Entity\Membre',
+            'data_class' => Membre::class,
         ]);
     }
 }

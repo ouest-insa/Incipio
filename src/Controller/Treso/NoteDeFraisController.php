@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Controller;
+namespace App\Controller\Treso;
 
-use Mgate\TresoBundle\Entity\NoteDeFrais as NoteDeFrais;
-use Mgate\TresoBundle\Form\Type\NoteDeFraisType as NoteDeFraisType;
+use App\Entity\Treso\NoteDeFrais;
+use App\Form\Treso\NoteDeFraisType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-class NoteDeFraisController extends Controller
+class NoteDeFraisController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
@@ -31,31 +31,31 @@ class NoteDeFraisController extends Controller
         $em = $this->getDoctrine()->getManager();
         $nfs = $em->getRepository('MgateTresoBundle:NoteDeFrais')->findAll();
 
-        return $this->render('MgateTresoBundle:NoteDeFrais:index.html.twig', ['nfs' => $nfs]);
+        return $this->render('Treso/NoteDeFrais/index.html.twig', ['nfs' => $nfs]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="MgateTreso_NoteDeFrais_voir", path="/Tresorerie/NoteDeFrais/{id}", methods={"GET","HEAD"})
      *
      * @param NoteDeFrais $nf
      *
      * @return Response
-     * @Route(name="MgateTreso_NoteDeFrais_voir", path="/Tresorerie/NoteDeFrais/{id}", methods={"GET","HEAD"}, requirements={"id": "\d+"})
      */
     public function voirAction(NoteDeFrais $nf)
     {
-        return $this->render('MgateTresoBundle:NoteDeFrais:voir.html.twig', ['nf' => $nf]);
+        return $this->render('Treso/NoteDeFrais/voir.html.twig', ['nf' => $nf]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="MgateTreso_NoteDeFrais_ajouter", path="/Tresorerie/NoteDeFrais/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
+     * @Route(name="MgateTreso_NoteDeFrais_modifier", path="/Tresorerie/NoteDeFrais/Modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param $id
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateTreso_NoteDeFrais_ajouter", path="/Tresorerie/NoteDeFrais/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
-     * @Route(name="MgateTreso_NoteDeFrais_modifier", path="/Tresorerie/NoteDeFrais/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
     public function modifierAction(Request $request, $id)
     {
@@ -85,18 +85,18 @@ class NoteDeFraisController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateTresoBundle:NoteDeFrais:modifier.html.twig', [
+        return $this->render('Treso/NoteDeFrais/modifier.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="MgateTreso_NoteDeFrais_supprimer", path="/Tresorerie/NoteDeFrais/Supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param NoteDeFrais $nf
      *
      * @return RedirectResponse
-     * @Route(name="MgateTreso_NoteDeFrais_supprimer", path="/Tresorerie/NoteDeFrais/Supprimer/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
     public function supprimerAction(NoteDeFrais $nf)
     {

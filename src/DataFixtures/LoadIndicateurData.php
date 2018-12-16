@@ -1,10 +1,10 @@
 <?php
 
-namespace Mgate\PersonneBundle\DataFixtures\ORM;
+namespace App\DataFixtures;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Mgate\StatBundle\Entity\Indicateur;
+use App\Entity\Indicateur;
 
 class LoadIndicateurData implements FixtureInterface
 {

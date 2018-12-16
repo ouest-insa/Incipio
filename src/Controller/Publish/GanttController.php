@@ -1,33 +1,37 @@
 <?php
 
-namespace Mgate\PubliBundle\Controller;
+namespace App\Controller\Publish;
 
-use Mgate\SuiviBundle\Entity\Etude;
+use App\Entity\Project\Etude;
+use App\Service\Project\ChartManager;
+use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class GetGanttController.
  */
-class GanttController extends Controller
+class GanttController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="Mgate_publi_getgantt", path="/Documents/GetGantt/{id}/{width}", methods={"GET","HEAD"}, requirements={"width": "\d+"}, defaults={"width": "960"})
      * Génère le Gantt Chart de l'étude passée en paramètre.
      *
-     * @param Etude $etude project whom gantt chart should be exported
-     * @param int   $width width of exported gantt
-     * @param bool  $debug
+     * @param Etude                  $etude project whom gantt chart should be exported
+     * @param int                    $width width of exported gantt
+     * @param bool                   $debug
+     * @param EtudePermissionChecker $permChecker
+     * @param ChartManager           $chartManager
      *
      * @return Response a png of project gantt chart
-     * @Route(name="Mgate_publi_getgantt", path="/Documents/GetGantt/{id}/{width}", methods={"GET","HEAD"}, requirements={"id": "\d+", "width": "\d+"}, defaults={"width": "960"})
      */
-    public function getGanttAction(Etude $etude, $width = 960, $debug = false)
+    public function getGanttAction(Etude $etude, $width = 960, $debug = false, EtudePermissionChecker $permChecker, ChartManager $chartManager)
     {
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -43,7 +47,6 @@ class GanttController extends Controller
         }
 
         //Gantt
-        $chartManager = $this->get('Mgate.chart_manager');
         $ob = $chartManager->getGantt($etude, 'gantt');
         $chartManager->exportGantt($ob, 'gantt' . $name, $width);
 

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PubliBundle\Manager;
+namespace App\Service\Publish;
 
 abstract class BaseManager
 {

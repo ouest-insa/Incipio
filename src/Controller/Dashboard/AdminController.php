@@ -9,34 +9,42 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\DashboardBundle\Controller;
+namespace App\Controller\Dashboard;
 
-use Mgate\DashboardBundle\Form\Type\AdminParamType;
+use App\Form\Dashboard\AdminParamType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Webmozart\KeyValueStore\Api\KeyValueStore;
 
-class AdminController extends Controller
+class AdminController extends AbstractController
 {
+    public $keyValueStore;
+
+
+    public function __construct(KeyValueStore $keyValueStore)
+    {
+        $this->keyValueStore = $keyValueStore;
+    }
+
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="dashboard_parameters_admin", path="/parameters/admin", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Route(name="Mgate_dashboard_parameters_admin", path="/parameters/admin", methods={"GET","HEAD","POST"})
+     * @return Response
      */
     public function indexAction(Request $request)
     {
         $form = $this->createForm(AdminParamType::class);
 
-        $json_key_value_store = $this->get('app.json_key_value_store');
-
-        $keys = $json_key_value_store->keys();
+        $keys = $this->keyValueStore->keys();
 
         foreach ($keys as $key) {
-            $form->get($key)->setData($json_key_value_store->get($key));
+            $form->get($key)->setData($this->keyValueStore->get($key));
         }
 
         if ('POST' == $request->getMethod()) {
@@ -45,15 +53,15 @@ class AdminController extends Controller
             if ($form->isValid()) {
                 $form_fields = $form->getData();
                 foreach ($form_fields as $key => $value) {
-                    $json_key_value_store->set($key, $value);
+                    $this->keyValueStore->set($key, $value);
                 }
                 $this->addFlash('success', 'Paramètres mis à jour');
             }
 
-            return $this->redirectToRoute('Mgate_dashboard_parameters_admin');
+            return $this->redirectToRoute('dashboard_parameters_admin');
         }
 
-        return $this->render('MgateDashboardBundle:Admin:index.html.twig',
+        return $this->render('Dashboard/Admin/index.html.twig',
             ['form' => $form->createView()]
         );
     }

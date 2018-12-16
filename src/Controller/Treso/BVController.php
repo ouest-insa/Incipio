@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Controller;
+namespace App\Controller\Treso;
 
-use Mgate\TresoBundle\Entity\BV;
-use Mgate\TresoBundle\Form\Type\BVType;
+use App\Entity\Treso\BV;
+use App\Form\Treso\BVType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-class BVController extends Controller
+class BVController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
@@ -31,31 +31,31 @@ class BVController extends Controller
         $em = $this->getDoctrine()->getManager();
         $bvs = $em->getRepository('MgateTresoBundle:BV')->findAll();
 
-        return $this->render('MgateTresoBundle:BV:index.html.twig', ['bvs' => $bvs]);
+        return $this->render('Treso/BV/index.html.twig', ['bvs' => $bvs]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="MgateTreso_BV_voir", path="/Tresorerie/BV/Voir/{id}", methods={"GET","HEAD"})
      *
      * @param BV $bv
      *
      * @return Response
-     * @Route(name="MgateTreso_BV_voir", path="/Tresorerie/BV/Voir/{id}", methods={"GET","HEAD"}, requirements={"id": "\d+"})
      */
     public function voirAction(BV $bv)
     {
-        return $this->render('MgateTresoBundle:BV:voir.html.twig', ['bv' => $bv]);
+        return $this->render('Treso/BV/voir.html.twig', ['bv' => $bv]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO', 'ROLE_SUIVEUR')")
+     * @Route(name="MgateTreso_BV_ajouter", path="/Tresorerie/BV/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
+     * @Route(name="MgateTreso_BV_modifier", path="/Tresorerie/BV/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request $request
      * @param $id
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateTreso_BV_ajouter", path="/Tresorerie/BV/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
-     * @Route(name="MgateTreso_BV_modifier", path="/Tresorerie/BV/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
     public function modifierAction(Request $request, $id)
     {
@@ -103,7 +103,7 @@ class BVController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateTresoBundle:BV:modifier.html.twig', [
+        return $this->render('Treso/BV/modifier.html.twig', [
             'form' => $form->createView(),
             'bv' => $bv,
         ]);
@@ -111,12 +111,11 @@ class BVController extends Controller
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="MgateTreso_BV_supprimer", path="/Tresorerie/BV/Supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param BV $bv
      *
      * @return RedirectResponse
-     * @Route(name="MgateTreso_BV_supprimer", path="/Tresorerie/BV/Supprimer/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
-     * @Route(name="MgateTreso_CotisationURSSAF_supprimer", path="/Tresorerie/CotisationURSSAF/Supprimer/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
     public function supprimerAction(BV $bv)
     {

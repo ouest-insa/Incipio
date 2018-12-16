@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\DashboardBundle\DQL;
+namespace App\DQL;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;

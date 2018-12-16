@@ -1,16 +1,5 @@
 {% extends "MgatePersonneBundle::layout.html.twig" %}
 
-{#
-{% if format=='mini' %}
-    {% block menu %}
-    {% endblock %}
-    {% block submenu %}
-    {% endblock %}
-{% else %}
-
-{% endif %}
-    #}
-
 {% block title %}
     {{ 'employe.ajouter_employe'|trans({}, 'personne') }} {{ parent() }}
 {% endblock %}
@@ -31,7 +20,7 @@
     <div class="table-responsive content">
         {{ form_start(form) }}
         <table class="table table-bordered table-striped">
-            {% include "MgatePersonneBundle:Employe:formulaire.html.twig" %}
+            {% include "Personne/Employe/formulaire.html.twig" %}
             <tr>
                 <td colspan="6">
                     <div class="row">

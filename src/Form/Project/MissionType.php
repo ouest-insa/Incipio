@@ -9,12 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Personne\Membre;
+use App\Entity\Project\Etude;
+use App\Entity\Project\Mission;
+use App\Entity\Project\Phase;
+use App\Entity\Project\RepartitionJEH;
+use App\Repository\Project\PhaseRepository;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Entity\PhaseRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
@@ -34,25 +38,30 @@ class MissionType extends DocTypeType
 
         $builder
             ->add('intervenant', Select2EntityType::class, [
-                'class' => 'Mgate\\PersonneBundle\\Entity\\Membre',
+                'class' => Membre::class,
                 'choice_label' => 'personne.prenomNom',
                 'label' => 'Intervenant',
                 //'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                 'required' => true,
             ])
-            ->add('debutOm', Datetype::class, ['label' => 'Début du Récapitulatif de Mission',
-                'required' => true, 'widget' => 'single_text', 'format' => 'dd/MM/yyyy', ])
-            ->add('finOm', DateType::class, ['label' => 'Fin du Récapitulatif de Mission',
-                'required' => true, 'widget' => 'single_text', 'format' => 'dd/MM/yyyy', ])
-            ->add('pourcentageJunior', PercentType::class, ['label' => 'Pourcentage junior', 'required' => true, 'scale' => 2])
+            ->add('debutOm', Datetype::class,
+                ['label' => 'Début du Récapitulatif de Mission',
+                 'required' => true, 'widget' => 'single_text', 'format' => 'dd/MM/yyyy',
+                ])
+            ->add('finOm', DateType::class,
+                ['label' => 'Fin du Récapitulatif de Mission',
+                 'required' => true, 'widget' => 'single_text', 'format' => 'dd/MM/yyyy',
+                ])
+            ->add('pourcentageJunior', PercentType::class,
+                ['label' => 'Pourcentage junior', 'required' => true, 'scale' => 2])
             ->add('referentTechnique', Select2EntityType::class, [
-                'class' => 'Mgate\\PersonneBundle\\Entity\\Membre',
+                'class' => Membre::class,
                 'choice_label' => 'personne.prenomNom',
                 'label' => 'Référent Technique',
                 'required' => false,
             ])
             ->add('phases', EntityType::class, [
-                'class' => 'Mgate\SuiviBundle\Entity\Phase',
+                'class' => Phase::class,
                 'query_builder' => function (PhaseRepository $pr) {
                     return $pr->getByEtudeQuery($this->etude);
                 },
@@ -64,7 +73,7 @@ class MissionType extends DocTypeType
             ->add('repartitionsJEH', CollectionType::class, [
                 'entry_type' => RepartitionJEHType::class,
                 'entry_options' => [
-                    'data_class' => 'Mgate\SuiviBundle\Entity\RepartitionJEH',
+                    'data_class' => RepartitionJEH::class,
                 ],
                 'allow_add' => true,
                 'allow_delete' => true,
@@ -83,15 +92,15 @@ class MissionType extends DocTypeType
 
     public function getName()
     {
-        return 'Mgate_suivibundle_mssiontype';
+        return 'project_missiontype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\Mission',
+            'data_class' => Mission::class,
         ]);
         $resolver->setRequired(['etude']);
-        $resolver->addAllowedTypes('etude', 'Mgate\SuiviBundle\Entity\Etude');
+        $resolver->addAllowedTypes('etude', Etude::class);
     }
 }

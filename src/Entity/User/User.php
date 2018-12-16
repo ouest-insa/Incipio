@@ -11,11 +11,11 @@
 
 // src/Mgate/UserBundle/Entity/User.php
 
-namespace Mgate\UserBundle\Entity;
+namespace App\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use Mgate\PersonneBundle\Entity\Personne;
+use App\Entity\Personne;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**

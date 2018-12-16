@@ -1,31 +1,31 @@
 <?php
 
-namespace Mgate\DashboardBundle\Command;
+namespace App\Command;
 
+use App\Entity\Hr\Competence;
+use App\Entity\Personne\Employe;
+use App\Entity\Personne\Filiere;
+use App\Entity\Personne\Mandat;
+use App\Entity\Personne\Membre;
+use App\Entity\Personne\Personne;
+use App\Entity\Personne\Prospect;
+use App\Entity\Project\Ap;
+use App\Entity\Project\Cc;
+use App\Entity\Project\Etude;
+use App\Entity\Project\GroupePhases;
+use App\Entity\Project\Mission;
+use App\Entity\Project\Phase;
+use App\Entity\Project\ProcesVerbal;
+use App\Entity\Treso\Facture;
+use App\Entity\Treso\FactureDetail;
 use Doctrine\Common\Persistence\ObjectManager;
-use Mgate\PersonneBundle\Entity\Employe;
-use Mgate\PersonneBundle\Entity\Filiere;
-use Mgate\PersonneBundle\Entity\Mandat;
-use Mgate\PersonneBundle\Entity\Membre;
-use Mgate\PersonneBundle\Entity\Personne;
-use Mgate\PersonneBundle\Entity\Prospect;
-use Mgate\SuiviBundle\Entity\Ap;
-use Mgate\SuiviBundle\Entity\Cc;
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Entity\GroupePhases;
-use Mgate\SuiviBundle\Entity\Mission;
-use Mgate\SuiviBundle\Entity\Phase;
-use Mgate\SuiviBundle\Entity\ProcesVerbal;
-use Mgate\TresoBundle\Entity\Facture;
-use Mgate\TresoBundle\Entity\FactureDetail;
-use N7consulting\RhBundle\Entity\Competence;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class CreateDemoDataCommand extends ContainerAwareCommand
+class CreateDemoDataCommand extends Command
 {
     const NOM = ['Henry', 'Martinez', 'Durand', 'Duval', 'Leroux', 'Robert', 'Morel', 'Bourgeois', 'Dupont', 'Dumont', 'Bernard', 'Francois', 'Dupond', 'Dubois', 'Blanc', 'Paul', 'Petit'];
 
@@ -179,6 +179,13 @@ class CreateDemoDataCommand extends ContainerAwareCommand
     /** @var Competence[] */
     private $competences = [];
 
+    public function __construct(ObjectManager $em, ValidatorInterface $validator)
+    {
+        parent::__construct();
+        $this->em = $em;
+        $this->validator = $validator;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -195,8 +202,6 @@ class CreateDemoDataCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $this->validator = $this->getContainer()->get('validator');
         $this->competences = $this->em->getRepository('N7consultingRhBundle:Competence')->findAll();
 
         $this->createFilieres($output);

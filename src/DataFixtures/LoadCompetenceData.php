@@ -1,10 +1,10 @@
 <?php
 
-namespace N7consulting\RhBundle\DataFixtures\ORM;
+namespace App\DataFixtures;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use N7consulting\RhBundle\Entity\Competence;
+use App\Entity\Competence;
 
 class LoadCompetenceData implements FixtureInterface
 {

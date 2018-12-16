@@ -9,8 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PubliBundle\Form\Type;
+namespace App\Form\Publish;
 
+use App\Entity\Formation\Formation;
+use App\Entity\Personne\Membre;
+use App\Entity\Personne\Prospect;
+use App\Entity\Project\Etude;
+use App\Entity\Publish\RelatedDocument;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,7 +27,7 @@ class RelatedDocumentType extends AbstractType
     {
         if ($options['etude']) {
             $builder->add('etude', Select2EntityType::class, [
-                'class' => 'Mgate\SuiviBundle\Entity\Etude',
+                'class' => Etude::class,
                 'choice_label' => 'nom',
                 'required' => false,
                 'label' => 'Document lié à l\'étude',
@@ -33,7 +38,7 @@ class RelatedDocumentType extends AbstractType
         }
         if ($options['prospect']) {
             $builder->add('prospect', Select2EntityType::class, [
-                'class' => 'Mgate\PersonneBundle\Entity\Prospect',
+                'class' => Prospect::class,
                 'choice_label' => 'nom',
                 'required' => false,
                 'label' => 'Document lié au prospect',
@@ -43,7 +48,7 @@ class RelatedDocumentType extends AbstractType
         }
         if ($options['formation']) {
             $builder->add('formation', Select2EntityType::class, [
-                'class' => 'Mgate\FormationBundle\Entity\Formation',
+                'class' => Formation::class,
                 'choice_label' => 'titre',
                 'required' => false,
                 'label' => 'Document lié à la formation',
@@ -54,7 +59,7 @@ class RelatedDocumentType extends AbstractType
         if ($options['etudiant'] || $options['etude']) {
             $builder->add('membre', Select2EntityType::class, [
                 'label' => 'Document lié à l\'étudiant (optionnel)',
-                'class' => 'Mgate\\PersonneBundle\\Entity\\Membre',
+                'class' => Membre::class,
                 'choice_label' => 'personne.prenomNom',
                 'required' => false,
                 'attr' => ['style' => 'min-width: 300px'],
@@ -64,13 +69,13 @@ class RelatedDocumentType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_categoriedocumenttype';
+        return 'suivi_categoriedocumenttype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\PubliBundle\Entity\RelatedDocument',
+            'data_class' => RelatedDocument::class,
             'etude' => null,
             'etudiant' => null,
             'prospect' => null,

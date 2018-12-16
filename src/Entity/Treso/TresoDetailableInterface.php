@@ -1,6 +1,6 @@
 <?php
 
-namespace Mgate\TresoBundle\Entity;
+namespace App\Entity\Treso;
 
 /**
  * Common interface for Facture and NoteDeFrais which shares one model:

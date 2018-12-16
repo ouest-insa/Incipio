@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\CommentBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FOS\CommentBundle\Entity\Thread as BaseThread;
+//use FOS\CommentBundle\Entity\Thread as BaseThread;
 
 /**
  * @ORM\Entity
  * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
  */
-class Thread extends BaseThread
+class Thread// extends BaseThread
 {
     /**
      * @var int

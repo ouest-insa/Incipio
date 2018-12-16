@@ -9,33 +9,35 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Controller;
+namespace App\Controller\Project;
 
-use Mgate\SuiviBundle\Entity\Av;
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Form\Type\AvType;
+use App\Entity\Project\Av;
+use App\Entity\Project\Etude;
+use App\Form\Project\AvType;
+use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class AvController extends Controller
+class AvController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_av_ajouter", path="/suivi/av/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
-     * @param Request $request
-     * @param Etude   $etude
+     * @param Request      $request
+     * @param Etude        $etude
+     * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateSuivi_av_ajouter", path="/suivi/av/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
-    public function addAction(Request $request, Etude $etude)
+    public function addAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
         $em = $this->getDoctrine()->getManager();
@@ -59,7 +61,7 @@ class AvController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateSuiviBundle:Av:ajouter.html.twig', [
+        return $this->render('Project/Av/ajouter.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
             'av' => $av,
@@ -68,20 +70,21 @@ class AvController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_av_modifier", path="/suivi/av/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
-     * @param Request $request
-     * @param Av      $av
+     * @param Request      $request
+     * @param Av           $av
+     * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateSuivi_av_modifier", path="/suivi/av/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
-    public function modifierAction(Request $request, Av $av)
+    public function modifierAction(Request $request, Av $av, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
         $etude = $av->getEtude();
 
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -100,7 +103,7 @@ class AvController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateSuiviBundle:Av:modifier.html.twig', [
+        return $this->render('Project/Av/modifier.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
             'av' => $av,

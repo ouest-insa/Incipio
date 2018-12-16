@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
-use Mgate\SuiviBundle\Entity\Etude;
+use App\Entity\Project\Etude;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,26 +29,26 @@ class MissionsType extends AbstractType
         $this->etude = $options['etude'];
 
         $builder->add('missions', CollectionType::class, [
-                'entry_type' => MissionType::class,
-                'entry_options' => ['etude' => $this->etude],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,
-                'by_reference' => false, //indispensable cf doc
-                ]);
+            'entry_type' => MissionType::class,
+            'entry_options' => ['etude' => $this->etude],
+            'allow_add' => true,
+            'allow_delete' => true,
+            'prototype' => true,
+            'by_reference' => false, //indispensable cf doc
+        ]);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_missionstype';
+        return 'project_missionstype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\Etude',
+            'data_class' => Etude::class,
         ]);
         $resolver->setRequired(['etude']);
-        $resolver->addAllowedTypes('etude', 'Mgate\SuiviBundle\Entity\Etude');
+        $resolver->addAllowedTypes('etude', Etude::class);
     }
 }

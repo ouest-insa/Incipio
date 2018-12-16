@@ -9,20 +9,27 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Controller;
+namespace App\Controller\Project;
 
-use Mgate\SuiviBundle\Entity\DomaineCompetence;
-use Mgate\SuiviBundle\Form\Type\DomaineCompetenceType;
+
+use App\Entity\Project\DomaineCompetence;
+use App\Form\Project\DomaineCompetenceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class DomaineCompetenceController extends Controller
+class DomaineCompetenceController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_CA')")
      * @Route(name="MgateSuivi_domaine_index", path="/suivi/DomainesDeCompetence", methods={"GET","HEAD","POST"})
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     public function indexAction(Request $request)
     {
@@ -44,7 +51,7 @@ class DomaineCompetenceController extends Controller
             }
         }
 
-        return $this->render('MgateSuiviBundle:DomaineCompetence:index.html.twig', [
+        return $this->render('Project/DomaineCompetence/index.html.twig', [
             'domaines' => $entities,
             'form' => $form->createView(),
         ]);
@@ -52,15 +59,15 @@ class DomaineCompetenceController extends Controller
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="MgateSuivi_domaine_delete", path="/suivi/DomainesDeCompetence/Supprimer/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="MgateSuivi_domaine_delete", path="/suivi/DomainesDeCompetence/Supprimer/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @param DomaineCompetence $domaine
+     *
+     * @return RedirectResponse
      */
-    public function deleteAction($id)
+    public function deleteAction(DomaineCompetence $domaine)
     {
         $em = $this->getDoctrine()->getManager();
-
-        if (!$domaine = $em->getRepository('Mgate\SuiviBundle\Entity\DomaineCompetence')->find($id)) {
-            throw $this->createNotFoundException('Ce domaine de competence n\'existe pas !');
-        }
 
         $em->remove($domaine);
         $em->flush();

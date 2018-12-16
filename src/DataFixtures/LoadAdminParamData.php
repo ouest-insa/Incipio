@@ -6,11 +6,11 @@
  * Time: 10:36.
  */
 
-namespace Mgate\DashboardBundle\DataFixtures\ORM;
+namespace App\DataFixtures;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Mgate\DashboardBundle\Entity\AdminParam;
+use App\Entity\AdminParam;
 
 /**
  * Loads the parameters modifiable through the admin form.

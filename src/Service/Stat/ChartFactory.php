@@ -1,6 +1,6 @@
 <?php
 
-namespace Mgate\StatBundle\Manager;
+namespace App\Service\Stat;
 
 use Ob\HighchartsBundle\Highcharts\Highchart;
 

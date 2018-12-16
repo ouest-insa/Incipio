@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\UserBundle\DataFixtures\ORM;
+namespace App\DataFixtures;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Mgate\UserBundle\Entity\User;
+use App\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

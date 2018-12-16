@@ -9,33 +9,38 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Controller;
+namespace App\Controller\Project;
 
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Entity\Phase;
-use Mgate\SuiviBundle\Form\Type\PhasesType;
+
+use App\Entity\Project\Etude;
+use App\Entity\Project\Phase;
+use App\Form\Project\PhasesType;
+use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class PhasesController extends Controller
+class PhasesController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_phases_modifier", path="/suivi/phases/modifier/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Request $request
-     * @param Etude   $etude
+     * @param Request                $request
+     * @param Etude                  $etude
+     * @param EtudePermissionChecker $permChecker
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @Route(name="MgateSuivi_phases_modifier", path="/suivi/phases/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Etude $etude)
+    public function modifierAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -61,7 +66,7 @@ class PhasesController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateSuiviBundle:Phase:phases.html.twig', [
+        return $this->render('Project/Phase/phases.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
         ]);

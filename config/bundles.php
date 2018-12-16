@@ -13,4 +13,5 @@ return [
     Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle::class => ['all' => true],
     Genemu\Bundle\FormBundle\GenemuFormBundle::class => ['all' => true],
     FOS\UserBundle\FOSUserBundle::class => ['all' => true],
+    Ob\HighchartsBundle\ObHighchartsBundle::class => ['all' => true],
 ];

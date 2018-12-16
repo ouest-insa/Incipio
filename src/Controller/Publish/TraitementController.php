@@ -9,109 +9,105 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PubliBundle\Controller;
+namespace App\Controller\Publish;
 
-use Mgate\PubliBundle\Entity\Document;
-use Mgate\PubliBundle\Form\Type\DocTypeType;
+use App\Entity\Publish\Document;
+use App\Form\Publish\DocTypeType;
+use App\Service\Project\ChartManager;
+use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Templating\EngineInterface;
+use Webmozart\KeyValueStore\Api\KeyValueStore;
 
-class TraitementController extends Controller
+class TraitementController extends AbstractController
 {
     const DOCTYPE_SUIVI_ETUDE = 'FSE';
-
     const DOCTYPE_DEVIS = 'DEVIS';
-
     const DOCTYPE_AVANT_PROJET = 'AP';
-
     const DOCTYPE_CONVENTION_CLIENT = 'CC';
-
     const DOCTYPE_FACTURE_ACOMTE = 'FA';
-
     const DOCTYPE_FACTURE_INTERMEDIAIRE = 'FI';
-
     const DOCTYPE_FACTURE_SOLDE = 'FS';
-
     const DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE = 'PVI';
-
     const DOCTYPE_PROCES_VERBAL_FINAL = 'PVR';
-
     const DOCTYPE_RECAPITULATIF_MISSION = 'RM';
-
     const DOCTYPE_DESCRIPTIF_MISSION = 'DM';
-
     const DOCTYPE_CONVENTION_ETUDIANT = 'CE';
-
     const DOCTYPE_BULLETIN_ADHESION = 'BA';
-
     const DOCTYPE_ACCORD_CONFIDENTIALITE = 'AC';
-
     const DOCTYPE_DECLARATION_ETUDIANT_ETR = 'DEE';
-
     const DOCTYPE_NOTE_DE_FRAIS = 'NF';
-
     const DOCTYPE_BULLETIN_DE_VERSEMENT = 'BV';
 
     const ROOTNAME_ETUDE = 'etude';
-
     const ROOTNAME_PROCES_VERBAL = 'pvr';
-
     const ROOTNAME_ETUDIANT = 'etudiant';
-
     const ROOTNAME_MISSION = 'mission';
-
     const ROOTNAME_NOTE_DE_FRAIS = 'nf';
-
     const ROOTNAME_FACTURE = 'facture';
-
     const ROOTNAME_BULLETIN_DE_VERSEMENT = 'bv';
 
     // On considère que les TAG ont déjà été nettoyé du XML
     const REG_REPEAT_LINE = "#(<w:tr(?:(?!w:tr\s).)*?)(\{\%\s*TRfor[^\%]*\%\})(.*?)(\{\%\s*endforTR\s*\%\})(.*?</w:tr>)#";
-
     const REG_REPEAT_PARAGRAPH = "#(<w:p(?:(?!<w:p\s).)*?)(\{\%\s*Pfor[^\%]*\%\})(.*?)(\{\%\s*endforP\s*\%\})(.*?</w:p>)#";
 
     // Champs
     const REG_CHECK_FIELDS = "#\{[^\}%]*?[\{%][^\}%]+?[\}%][^\}%]*?\}#";
-
     const REG_XML_NODE_IDENTIFICATOR = '#<.*?>#';
 
     // Images
     const REG_IMAGE_DOC = '#<w:drawing.*?/w:drawing>#';
-
     const REG_IMAGE_DOC_FIELD = '#wp:extent cx="(\\d+)" cy="(\\d+)".*wp:docPr.*descr="(.*?)".*a:blip r:embed="(rId\\d+)#';
-
     const REG_IMAGE_REL = '#Id="(rId\\d+)" Type="\\S*" Target="media\\/(image\\d+.(jpeg|jpg|png))"#';
-
     const IMAGE_FIX = '#imageFIX#';
-
     const IMAGE_VAR = '#imageVAR#';
 
     // Autres
     const REG_SPECIAL_CHAR = '{}()[]|><?=;!+*-/';
-
     const REG_FILE_EXT = "#\.(jpg|png|jpeg)#i";
 
     private $idDocx;
 
     private $refDocx;
+    private $chartManager;
+    private $permChecker;
+    private $twig;
+    private $keyValueStore;
+    private $kernel;
+
+    public function __construct(ChartManager $chartManager, EtudePermissionChecker $permChecker,
+                                EngineInterface $twig, KeyValueStore $keyValueStore, KernelInterface $kernel)
+    {
+        $this->chartManager = $chartManager;
+        $this->permChecker = $permChecker;
+        $this->twig = $twig;
+        $this->keyValueStore = $keyValueStore;
+        $this->kernel = $kernel;
+    }
+
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="Mgate_publi_publiposter", path="/Documents/Publiposter/{templateName}/{rootName}/{rootObject_id}", methods={"GET","HEAD","POST"}, requirements={"rootObject_id": "\d+", "rootName": "\w+", "templateName": "\w+"})
+     *
+     * @param                        $templateName
+     * @param                        $rootName
+     * @param                        $rootObject_id
+     *
+     * @return RedirectResponse|Response
      */
     public function publiposterAction($templateName, $rootName, $rootObject_id)
     {
         $this->publipostage($templateName, $rootName, $rootObject_id);
 
-        /**
-         * @Route(name="Mgate_publi_telecharger", path="/publi/publiposter/telecharger", methods={"GET","HEAD","POST"})
-         */
         return $this->telechargerAction();
     }
 
@@ -127,7 +123,7 @@ class TraitementController extends Controller
                 if (!$rootObject = $em->getRepository('Mgate\SuiviBundle\Entity\Etude')->find($rootObject_id)) {
                     throw $errorRootObjectNotFound;
                 }
-                if ($this->get('Mgate.etude_manager')->confidentielRefus($rootObject, $this->getUser())) {
+                if ($this->permChecker->confidentielRefus($rootObject, $this->getUser())) {
                     throw $errorEtudeConfidentielle;
                 }
                 break;
@@ -146,7 +142,8 @@ class TraitementController extends Controller
                     throw $errorRootObjectNotFound;
                 }
                 if ($rootObject->getEtude() &&
-                    $this->get('Mgate.etude_manager')->confidentielRefus($rootObject->getEtude(), $this->getUser())) {
+                    $this->permChecker->confidentielRefus($rootObject->getEtude(), $this->getUser())
+                ) {
                     throw $errorEtudeConfidentielle;
                 }
                 break;
@@ -160,7 +157,8 @@ class TraitementController extends Controller
                     throw $errorRootObjectNotFound;
                 }
                 if ($rootObject->getMission() && $rootObject->getMission()->getEtude() &&
-                    $this->get('Mgate.etude_manager')->confidentielRefus($rootObject->getMission()->getEtude(), $this->getUser())) {
+                    $this->permChecker->confidentielRefus($rootObject->getMission()->getEtude(), $this->getUser())
+                ) {
                     throw $errorEtudeConfidentielle;
                 }
                 break;
@@ -169,7 +167,8 @@ class TraitementController extends Controller
                     throw $errorRootObjectNotFound;
                 }
                 if ($rootObject->getEtude() &&
-                    $this->get('Mgate.etude_manager')->confidentielRefus($rootObject->getEtude(), $this->getUser())) {
+                    $this->permChecker->confidentielRefus($rootObject->getEtude(), $this->getUser())
+                ) {
                     throw $errorEtudeConfidentielle;
                 }
                 break;
@@ -189,8 +188,8 @@ class TraitementController extends Controller
         }
 
         if ('etude' == $rootName && $rootObject->getReference()) {
-            if ($this->get('app.json_key_value_store')->exists('namingConvention')) {
-                $namingConvention = $this->get('app.json_key_value_store')->get('namingConvention');
+            if ($this->keyValueStore->exists('namingConvention')) {
+                $namingConvention = $this->keyValueStore->get('namingConvention');
             } else {
                 $namingConvention = 'id';
             }
@@ -210,8 +209,8 @@ class TraitementController extends Controller
         if (isset($isDM) && $isDM) {
             $refDocx = preg_replace('#RM#', 'DM', $refDocx);
         }
-        $repertoire = $this->get('kernel')->getRootDir() . '' . Document::DOCUMENT_TMP_FOLDER; // tmp folder in web directory
-        $idDocx = $refDocx . '-' . ((int) strtotime('now') + rand());
+        $repertoire = $this->kernel->getRootDir() . '' . Document::DOCUMENT_TMP_FOLDER; // tmp folder in web directory
+        $idDocx = $refDocx . '-' . ((int)strtotime('now') + rand());
         copy($chemin, $repertoire . '/' . $idDocx);
         $zip = new \ZipArchive();
         $zip->open($repertoire . '/' . $idDocx);
@@ -222,9 +221,8 @@ class TraitementController extends Controller
         $images = [];
         //Gantt
         if ('AP' == $templateName || (isset($isDM) && $isDM)) {
-            $chartManager = $this->get('Mgate.chart_manager');
-            $ob = $chartManager->getGantt($rootObject, $templateName);
-            if ($chartManager->exportGantt($ob, $idDocx)) {
+            $ob = $this->chartManager->getGantt($rootObject, $templateName);
+            if ($this->chartManager->exportGantt($ob, $idDocx)) {
                 $image = [];
                 $image['fileLocation'] = "$repertoire/$idDocx.png";
                 $info = getimagesize("$repertoire/$idDocx.png");
@@ -260,6 +258,7 @@ class TraitementController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="Mgate_publi_telecharger", path="/publi/publiposter/telecharger", methods={"GET","HEAD","POST"})
      */
     public function telechargerAction()
     {
@@ -268,10 +267,11 @@ class TraitementController extends Controller
             $idDocx = $this->idDocx;
             $refDocx = $this->refDocx;
 
-            $templateName =  $this->get('kernel')->getRootDir() . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $idDocx;
+            $templateName = $this->kernel->getRootDir() . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $idDocx;
 
             $response = new Response();
-            $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            $response->headers->set('Content-Type',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
             $response->headers->set('Content-Length', filesize($templateName));
             $response->headers->set('Content-disposition', 'attachment; filename="' . $refDocx . '.docx"');
             $response->headers->set('Pragma', 'no-cache');
@@ -305,7 +305,7 @@ class TraitementController extends Controller
         if (!$documenttype = $em->getRepository('Mgate\PubliBundle\Entity\Document')->findOneBy(['name' => $doc])) {
             throw $this->createNotFoundException('Le doctype ' . $doc . ' n\'existe pas... C\'est bien balo');
         } else {
-            $chemin = $this->get('kernel')->getRootDir() . '' . Document::DOCUMENT_STORAGE_ROOT . '/' . $documenttype->getPath();
+            $chemin = $this->kernel->getRootDir() . '' . Document::DOCUMENT_STORAGE_ROOT . '/' . $documenttype->getPath();
         }
 
         return $chemin;
@@ -319,7 +319,9 @@ class TraitementController extends Controller
         if (true === $zip->open($docxFullPath)) {
             for ($i = 0; $i < $zip->numFiles; ++$i) {
                 $name = $zip->getNameIndex($i);
-                if ((strstr($name, 'document') || strstr($name, 'header') || strstr($name, 'footer')) && !strstr($name, 'rels')) {
+                if ((strstr($name, 'document') || strstr($name, 'header') || strstr($name, 'footer')) && !strstr($name,
+                        'rels')
+                ) {
                     $this->arrayPushAssoc($templateXML, str_replace('word/', '', $name), $zip->getFromIndex($i));
                 }
             }
@@ -353,7 +355,7 @@ class TraitementController extends Controller
         $templatesXMLTraite = [];
 
         foreach ($templatesXML as $templateName => $templateXML) {
-            $templateXML = $this->get('twig')->render($templateXML, [$rootName => $rootObject]);
+            $templateXML = $this->twig->render($templateXML, [$rootName => $rootObject]);
             $this->arrayPushAssoc($templatesXMLTraite, $templateName, $templateXML);
         }
 
@@ -376,10 +378,12 @@ class TraitementController extends Controller
                         $cy = round($cy);
 
                         $replacement = [];
-                        preg_match("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#", $templateXML, $replacement);
+                        preg_match("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#",
+                            $templateXML, $replacement);
                         $replacement = $replacement[0];
                         $replacement = preg_replace("#cy=\"$splited[4]\"#", "cy=\"$cy\"", $replacement);
-                        $templatesXML[$key] = preg_replace("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#", $replacement, $templateXML);
+                        $templatesXML[$key] = preg_replace("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#",
+                            $replacement, $templateXML);
                     }
                 }
                 array_push($allmatches, $splited);
@@ -422,7 +426,8 @@ class TraitementController extends Controller
             if ($field == strtoupper($field)) {
                 $field = strtolower($field);
             }
-            $templateXML = preg_replace('#' . addcslashes(addslashes($originalField), self::REG_SPECIAL_CHAR) . '#', html_entity_decode($field), $templateXML);
+            $templateXML = preg_replace('#' . addcslashes(addslashes($originalField), self::REG_SPECIAL_CHAR) . '#',
+                html_entity_decode($field), $templateXML);
         }
 
         return $templateXML;
@@ -447,10 +452,12 @@ class TraitementController extends Controller
             $forEnd = $data[4];
 
             $body = preg_replace([
-               '#' . addcslashes(addslashes($forStart), self::REG_SPECIAL_CHAR) . '#',
-               '#' . addcslashes(addslashes($forEnd), self::REG_SPECIAL_CHAR) . '#', ], '', $data[0]);
+                '#' . addcslashes(addslashes($forStart), self::REG_SPECIAL_CHAR) . '#',
+                '#' . addcslashes(addslashes($forEnd), self::REG_SPECIAL_CHAR) . '#',
+            ], '', $data[0]);
 
-            $templateXML = preg_replace('#' . addcslashes(addslashes($data[0]), self::REG_SPECIAL_CHAR) . '#', preg_replace('#TRfor#', 'for', $forStart) . $body . '{% endfor %}', $templateXML);
+            $templateXML = preg_replace('#' . addcslashes(addslashes($data[0]), self::REG_SPECIAL_CHAR) . '#',
+                preg_replace('#TRfor#', 'for', $forStart) . $body . '{% endfor %}', $templateXML);
         }
 
         return $templateXML;
@@ -475,10 +482,12 @@ class TraitementController extends Controller
             $forEnd = $data[4];
 
             $body = preg_replace([
-               '#' . addcslashes(addslashes($forStart), self::REG_SPECIAL_CHAR) . '#',
-               '#' . addcslashes(addslashes($forEnd), self::REG_SPECIAL_CHAR) . '#', ], '', $data[0]);
+                '#' . addcslashes(addslashes($forStart), self::REG_SPECIAL_CHAR) . '#',
+                '#' . addcslashes(addslashes($forEnd), self::REG_SPECIAL_CHAR) . '#',
+            ], '', $data[0]);
 
-            $templateXML = preg_replace('#' . addcslashes(addslashes($data[0]), self::REG_SPECIAL_CHAR) . '#', preg_replace('#Pfor#', 'for', $forStart) . $body . '{% endfor %}', $templateXML);
+            $templateXML = preg_replace('#' . addcslashes(addslashes($data[0]), self::REG_SPECIAL_CHAR) . '#',
+                preg_replace('#Pfor#', 'for', $forStart) . $body . '{% endfor %}', $templateXML);
         }
 
         return $templateXML;
@@ -518,6 +527,10 @@ class TraitementController extends Controller
     /**
      * @Security("has_role('ROLE_ADMIN')")
      * @Route(name="Mgate_publi_documenttype_upload", path="/DocumentsType/Upload", methods={"GET","HEAD","POST"})
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     public function uploadNewDoctypeAction(Request $request)
     {
@@ -568,10 +581,11 @@ class TraitementController extends Controller
                 }
                 // Vérification du template (document étude)
                 if ($etude && (self::DOCTYPE_AVANT_PROJET == $data['name'] ||
-                    self::DOCTYPE_CONVENTION_CLIENT == $data['name'] ||
-                    self::DOCTYPE_SUIVI_ETUDE == $data['name']) &&
-                    $data['verification'] && $this->publipostage($docxFullPath, self::ROOTNAME_ETUDE, $etude->getId(), true)
-                    ) {
+                        self::DOCTYPE_CONVENTION_CLIENT == $data['name'] ||
+                        self::DOCTYPE_SUIVI_ETUDE == $data['name']) &&
+                    $data['verification'] && $this->publipostage($docxFullPath, self::ROOTNAME_ETUDE, $etude->getId(),
+                        true)
+                ) {
                     $session->getFlashBag()->add('success', 'Le template a été vérifié, il ne contient pas d\'erreur');
                 }
 
@@ -584,9 +598,10 @@ class TraitementController extends Controller
                 $etudiant = $data['etudiant'];
                 // Vérification du template (document étudiant)
                 if ($etudiant && (self::DOCTYPE_CONVENTION_ETUDIANT == $data['name'] ||
-                    self::DOCTYPE_DECLARATION_ETUDIANT_ETR == $data['name']) &&
-                    $data['verification'] && $this->publipostage($docxFullPath, self::ROOTNAME_ETUDIANT, $etudiant->getId(), true)
-                    ) {
+                        self::DOCTYPE_DECLARATION_ETUDIANT_ETR == $data['name']) &&
+                    $data['verification'] && $this->publipostage($docxFullPath, self::ROOTNAME_ETUDIANT,
+                        $etudiant->getId(), true)
+                ) {
                     $session->getFlashBag()->add('success', 'Le template a été vérifié, il ne contient pas d\'erreur');
                 }
 
@@ -600,12 +615,11 @@ class TraitementController extends Controller
                 $doc->setAuthor($personne)
                     ->setName($data['name'])
                     ->setFile($file);
-                $kernel = $this->get('kernel');
-                $doc->setRootDir($kernel->getRootDir());
+                $doc->setRootDir($this->kernel->getRootDir());
                 $em->persist($doc);
                 $docs = $em->getRepository('MgatePubliBundle:Document')->findBy(['name' => $doc->getName()]);
                 foreach ($docs as $doc) {
-                    $doc->setRootDir($kernel->getRootDir());
+                    $doc->setRootDir($this->kernel->getRootDir());
                     $em->remove($doc);
                 }
                 $em->flush();
@@ -616,8 +630,8 @@ class TraitementController extends Controller
             }
         }
 
-        return $this->render('MgatePubliBundle:DocType:upload.html.twig',
-                            ['form' => $form->createView()]
-                );
+        return $this->render('Publish/DocType/upload.html.twig',
+            ['form' => $form->createView()]
+        );
     }
 }

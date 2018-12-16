@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\CommentBundle\Form\Type;
+namespace App\Form\Comment;
 
+use App\Entity\Thread;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -32,12 +33,12 @@ class ThreadType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\CommentBundle\Entity\Thread',
+            'data_class' => Thread::class,
         ]);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_commentbundle_threadtype';
+        return 'comment_threadtype';
     }
 }

@@ -9,75 +9,76 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\FormationBundle\Controller;
+namespace App\Controller\Formation;
 
-use Mgate\FormationBundle\Entity\Formation;
-use Mgate\FormationBundle\Form\Type\FormationType;
+use App\Entity\Formation\Formation;
+use App\Form\Formation\FormationType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-class FormationController extends Controller
+class FormationController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="Mgate_formations_index_admin", path="/formations/admin", methods={"GET","HEAD"})
+     *
      * Display a list of all training given order by date desc
-     * @Route(name="Mgate_formations_index_admin", path="//formations/admin", methods={"GET","HEAD"})
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $formations = $em->getRepository('MgateFormationBundle:Formation')->getAllFormations([], ['dateDebut' => 'DESC']);
+        $formations = $em->getRepository('MgateFormationBundle:Formation')
+            ->getAllFormations([], ['dateDebut' => 'DESC']);
 
-        return $this->render('MgateFormationBundle:Gestion:index.html.twig', [
+        return $this->render('Formation/Gestion/index.html.twig', [
             'formations' => $formations,
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="Mgate_formations_lister", path="/formations", methods={"GET","HEAD"})
+     *
      * Display a list of all training group by term.
-     * @Route(name="Mgate_formations_lister", path="//formations", methods={"GET","HEAD"})
      */
     public function listerAction()
     {
         $em = $this->getDoctrine()->getManager();
         $formationsParMandat = $em->getRepository('MgateFormationBundle:Formation')->findAllByMandat();
 
-        return $this->render('MgateFormationBundle:Formations:lister.html.twig', [
+        return $this->render('Formation/Formations/lister.html.twig', [
             'formationsParMandat' => $formationsParMandat,
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="Mgate_formation_voir", path="/formations/{id}", methods={"GET","HEAD"}, requirements={"id": "\d+"})
      *
      * @param Formation $formation The training to display
      *
      * @return Response
-     *                  Display a training
-     * @Route(name="Mgate_formation_voir", path="//formations/{id}", methods={"GET","HEAD"}, requirements={"id": "\d+"})
      */
     public function voirAction(Formation $formation)
     {
-        return $this->render('MgateFormationBundle:Formations:voir.html.twig', [
+        return $this->render('Formation/Formations/voir.html.twig', [
             'formation' => $formation,
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="Mgate_formation_ajouter", path="/formations/admin/ajouter", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      *
      * @return Response
-     *                  Manage creation of a training
-     * @Route(name="Mgate_formation_ajouter", path="//formations/admin/ajouter", methods={"GET","HEAD","POST"})
      */
     public function ajouterAction(Request $request)
     {
@@ -98,19 +99,19 @@ class FormationController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateFormationBundle:Gestion:ajouter.html.twig', ['form' => $form->createView(),
-            'formation' => $formation,
+        return $this->render('Formation/Gestion/ajouter.html.twig', ['form' => $form->createView(),
+                                                                                'formation' => $formation,
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="Mgate_formation_modifier", path="/formations/admin/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request   $request
      * @param Formation $formation The training to modify
      *
-     * @return Response Manage creation and update of a training
-     * @Route(name="Mgate_formation_modifier", path="//formations/admin/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @return Response
      */
     public function modifierAction(Request $request, Formation $formation)
     {
@@ -131,7 +132,7 @@ class FormationController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateFormationBundle:Gestion:modifier.html.twig', [
+        return $this->render('Formation/Gestion/modifier.html.twig', [
             'delete_form' => $deleteForm->createView(),
             'form' => $form->createView(),
             'formation' => $formation,
@@ -140,12 +141,11 @@ class FormationController extends Controller
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="Mgate_formation_participation", path="/formations/admin/participation/{mandat}", methods={"GET","HEAD"}, defaults={"mandat": ""})
      *
      * @param $mandat string The mandat during which trainings were given
      *
-     * @return Response
-     *                  Manage participant present to a training
-     * @Route(name="Mgate_formation_participation", path="//formations/admin/participation/{mandat}", methods={"GET","HEAD"}, defaults={"mandat": ""})
+     * @return Response Manage participant present to a training
      */
     public function participationAction($mandat = null)
     {
@@ -188,7 +188,7 @@ class FormationController extends Controller
             }
         }
 
-        return $this->render('MgateFormationBundle:Gestion:participation.html.twig', [
+        return $this->render('Formation/Gestion/participation.html.twig', [
             'form' => $form->createView(),
             'formations' => $formations,
             'presents' => $presents,
@@ -198,12 +198,12 @@ class FormationController extends Controller
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="Mgate_formation_supprimer", path="/formations/admin/supprimer/{id}", methods={"HEAD","POST"})
      *
      * @param Request   $request
      * @param Formation $formation The training to delete (paramconverter from id)
      *
      * @return RedirectResponse Delete a training
-     * @Route(name="Mgate_formation_supprimer", path="//formations/admin/supprimer/{id}", methods={"POST"}, requirements={"id": "\d+"})
      */
     public function supprimerAction(Request $request, Formation $formation)
     {
@@ -231,7 +231,6 @@ class FormationController extends Controller
     {
         return $this->createFormBuilder(['id' => $id])
             ->add('id', HiddenType::class)
-            ->getForm()
-            ;
+            ->getForm();
     }
 }

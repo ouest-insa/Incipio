@@ -9,25 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Controller;
+namespace App\Controller\Project;
 
-use Mgate\SuiviBundle\Entity\Mission;
+use App\Entity\Project\Mission;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-class MissionController extends Controller
+class MissionController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_mission_avancement", path="/suivi/missions/avancement/{id}", methods={"PUT"})
      *
      * @param Mission $mission
      * @param Request $request
      *
      * @return Response
-     * @Route(name="MgateSuivi_mission_avancement", path="/suivi/missions/avancement/{id}", methods={"PUT"})
      */
     public function avancementAction(Mission $mission, Request $request)
     {

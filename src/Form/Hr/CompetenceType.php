@@ -1,6 +1,6 @@
 <?php
 
-namespace N7consulting\RhBundle\Form\Type;
+namespace App\Form\Hr;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,7 +28,7 @@ class CompetenceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'N7consulting\RhBundle\Entity\Competence',
+            'data_class' => 'App\Entity\Hr\Competence',
         ]);
     }
 

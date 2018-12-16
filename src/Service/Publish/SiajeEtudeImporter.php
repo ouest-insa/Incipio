@@ -1,18 +1,18 @@
 <?php
 
-namespace Mgate\PubliBundle\Manager;
+namespace App\Service\Publish;
 
+use App\Entity\Personne\Employe;
+use App\Entity\Personne\Membre;
+use App\Entity\Personne\Personne;
+use App\Entity\Personne\Prospect;
+use App\Entity\Project\Ap;
+use App\Entity\Project\Cc;
+use App\Entity\Project\Etude;
+use App\Entity\Project\GroupePhases;
+use App\Entity\Project\Phase;
+use App\Entity\Project\ProcesVerbal;
 use Doctrine\ORM\EntityManager;
-use Mgate\PersonneBundle\Entity\Employe;
-use Mgate\PersonneBundle\Entity\Membre;
-use Mgate\PersonneBundle\Entity\Personne;
-use Mgate\PersonneBundle\Entity\Prospect;
-use Mgate\SuiviBundle\Entity\Ap;
-use Mgate\SuiviBundle\Entity\Cc;
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Entity\GroupePhases;
-use Mgate\SuiviBundle\Entity\Phase;
-use Mgate\SuiviBundle\Entity\ProcesVerbal;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**

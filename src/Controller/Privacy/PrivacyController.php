@@ -1,23 +1,18 @@
 <?php
 
-namespace N7consulting\PrivacyBundle\Controller;
+namespace App\Controller\Privacy;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use App\Entity\Personne\Personne;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use Mgate\PersonneBundle\Entity\Personne;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class PrivacyController extends Controller
+class PrivacyController extends AbstractController
 {
     /** GDPR actions */
     public const GDPR_ACCESS_ACTION = 'access';
@@ -40,7 +35,7 @@ class PrivacyController extends Controller
         $firms = $this->getDoctrine()->getManager()->getRepository('MgatePersonneBundle:Prospect')
             ->findAll();
 
-        return $this->render('N7consultingPrivacyBundle:Privacy:index.html.twig', [
+        return $this->render('Privacy/Privacy/index.html.twig', [
             'firms' => $firms,
             'personnes' => $personnes,
         ]);
@@ -52,12 +47,13 @@ class PrivacyController extends Controller
      * @Security("has_role('ROLE_RGPD')")
      * @Route("/action/{id}", name="privacy_action", methods={"POST"})
      *
-     * @param Request  $request
-     * @param Personne $personne
+     * @param Request             $request
+     * @param Personne            $personne
+     * @param SerializerInterface $serializer
      *
      * @return RedirectResponse
      */
-    public function actionAction(Request $request, Personne $personne)
+    public function actionAction(Request $request, Personne $personne, SerializerInterface $serializer)
     {
         if (!$request->request->has('token') ||
             $this->isCsrfTokenValid($request->request->get('token'), 'rgpd')
@@ -88,7 +84,7 @@ class PrivacyController extends Controller
         }
 
         if (self::GDPR_EXPORT_ACTION === $action) {
-            return $this->export($personne);
+            return $this->export($personne, $serializer);
         }
 
         $this->addFlash('danger', 'Action invalide');
@@ -98,7 +94,7 @@ class PrivacyController extends Controller
 
     private function access(Personne $personne)
     {
-        return $this->render('@N7consultingPrivacy/Privacy/access.html.twig', ['personne' => $personne]);
+        return $this->render('Privacy/Privacy/access.html.twig', ['personne' => $personne]);
     }
 
     private function delete(Personne $personne)
@@ -134,13 +130,9 @@ class PrivacyController extends Controller
         return $this->redirectToRoute('privacy_homepage');
     }
 
-    private function export(Personne $personne)
+    private function export(Personne $personne, SerializerInterface $serializer)
     {
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-
-        $serializer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer($classMetadataFactory)]);
-
-        $data = $serializer->normalize($personne, null, ['groups' => ['gdpr']]);
+        $data = $serializer->serialize($personne, null, ['groups' => ['gdpr']]);
 
         $response = new JsonResponse($data);
         $response->headers->set('Cache-Control', 'private');

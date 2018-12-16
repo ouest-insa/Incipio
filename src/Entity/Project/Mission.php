@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Entity;
+namespace App\Entity\Project;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\PersonneBundle\Entity\Membre;
+use App\Entity\Membre;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 

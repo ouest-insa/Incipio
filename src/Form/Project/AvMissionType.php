@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\AvMission;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,20 +20,20 @@ class AvMissionType extends DocTypeType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('nouveauPourcentage', null, ['label' => 'Nouveau pourcentage'])
-        ->add('differentielDelai', null, ['label' => 'Différentiel délai']);
+            ->add('differentielDelai', null, ['label' => 'Différentiel délai']);
 
         DocTypeType::buildForm($builder, $options);
     }
 
     public function getName()
     {
-        return 'Mgate_suivibundle_avmissiontype';
+        return 'project_avmissiontype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\AvMission',
+            'data_class' => AvMission::class,
         ]);
     }
 }

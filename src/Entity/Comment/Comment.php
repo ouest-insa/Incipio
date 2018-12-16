@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\CommentBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FOS\CommentBundle\Entity\Comment as BaseComment;
-use FOS\CommentBundle\Model\SignedCommentInterface;
-use Mgate\UserBundle\Entity\User;
+//use FOS\CommentBundle\Entity\Comment as BaseComment;
+//use FOS\CommentBundle\Model\SignedCommentInterface;
+use App\Entity\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity
  * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
  */
-class Comment extends BaseComment implements SignedCommentInterface
+class Comment //extends BaseComment implements SignedCommentInterface
 {
     /**
      * @ORM\Id

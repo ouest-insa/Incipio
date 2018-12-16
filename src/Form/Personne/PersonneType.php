@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Form\Type;
+namespace App\Form\Personne;
 
+use App\Entity\Personne\Personne;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -32,13 +33,13 @@ class PersonneType extends AbstractType
         }
 
         $builder
-                ->add('prenom')
-                ->add('nom')
-                ->add('sexe', SexeType::class, ['required' => true])
-                ->add('mobile', TextType::class, ['required' => false, 'attr' => $helpMobile])
-                ->add('email', EmailType::class, ['required' => false, 'attr' => $helpEmail])
-                ->add('estAbonneNewsletter', CheckboxType::class, ['label' => 'Abonné Newsletter ?', 'required' => false])
-                ->add('emailEstValide', CheckboxType::class, ['label' => 'Email Valide ?', 'required' => false]);
+            ->add('prenom')
+            ->add('nom')
+            ->add('sexe', SexeType::class, ['required' => true])
+            ->add('mobile', TextType::class, ['required' => false, 'attr' => $helpMobile])
+            ->add('email', EmailType::class, ['required' => false, 'attr' => $helpEmail])
+            ->add('estAbonneNewsletter', CheckboxType::class, ['label' => 'Abonné Newsletter ?', 'required' => false])
+            ->add('emailEstValide', CheckboxType::class, ['label' => 'Email Valide ?', 'required' => false]);
 
         if (!$options['mini'] && !$options['user']) {
             $builder->add('fix', TextType::class, ['required' => false]);
@@ -53,13 +54,13 @@ class PersonneType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'Mgate_personnebundle_personnetype';
+        return 'personne_personnetype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\PersonneBundle\Entity\Personne',
+            'data_class' => Personne::class,
             'mini' => false,
             'user' => false,
             'signataire' => false,

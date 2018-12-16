@@ -9,21 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Entity;
+namespace App\Entity\Personne;
 
+use App\Entity\Hr\Competence;
+use App\Entity\Project\Mission;
+use App\Entity\Publish\Document;
+use App\Entity\Publish\RelatedDocument;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\PubliBundle\Entity\Document;
-use Mgate\PubliBundle\Entity\RelatedDocument;
-use Mgate\SuiviBundle\Entity\Mission;
-use N7consulting\RhBundle\Entity\Competence;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\PersonneBundle\Entity\MembreRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Personne\MembreRepository")
  * @UniqueEntity("identifiant")
  */
 class Membre implements AnonymizableInterface

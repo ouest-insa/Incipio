@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\CommentBundle\Manager;
+namespace App\Service\Comment;
 
+use App\Entity\Project\Etude;
 use Doctrine\ORM\EntityManager;
-use FOS\CommentBundle\Acl\AclThreadManager as FOSthread;
-use Mgate\SuiviBundle\Entity\Etude;
+//use FOS\CommentBundle\Acl\AclThreadManager as FOSthread;
 
 class ThreadManager
 {
@@ -21,14 +21,14 @@ class ThreadManager
 
     protected $em;
 
-    public function __construct(FOSthread $threadManager, EntityManager $entitymanager)
+    public function __construct(/*FOSthread $threadManager, */EntityManager $entitymanager)
     {
-        $this->tm = $threadManager;
+//        $this->tm = $threadManager;
         $this->em = $entitymanager;
     }
 
     /**
-     * @param $name
+     * @param $namead
      * @param $permaLink
      * @param Etude $entity
      *                      Used  only in Mgate\CommentBundle\Controller\DefaultController for undocumented purpose (maintenance ??)

@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\Etude;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
@@ -28,13 +29,13 @@ class CcType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_cctype';
+        return 'project_cctype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\Etude',
+            'data_class' => Etude::class,
             'prospect' => '',
         ]);
     }

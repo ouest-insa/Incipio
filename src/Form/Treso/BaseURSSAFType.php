@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Form\Type;
+namespace App\Form\Treso;
 
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Symfony\Component\Form\AbstractType;
@@ -29,13 +29,13 @@ class BaseURSSAFType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'Mgate_tresobundle_baseurssaftype';
+        return 'treso_baseurssaftype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\TresoBundle\Entity\BaseURSSAF',
+            'data_class' => BaseURSSAF::class,
         ]);
     }
 }

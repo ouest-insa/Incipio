@@ -6,7 +6,7 @@
  * Time: 15:53.
  */
 
-namespace Mgate\PersonneBundle\Entity;
+namespace App\Entity\Personne;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PubliBundle\Entity;
+namespace App\Entity\Publish;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

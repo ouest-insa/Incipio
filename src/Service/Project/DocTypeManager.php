@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Manager;
+namespace App\Service\Project;
 
+use App\Entity\Project\DocType;
 use Doctrine\ORM\EntityManager;
-use Mgate\SuiviBundle\Entity\DocType;
 
 class DocTypeManager /*extends \Twig_Extension*/
 {

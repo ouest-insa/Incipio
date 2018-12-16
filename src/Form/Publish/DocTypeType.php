@@ -9,10 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PubliBundle\Form\Type;
+namespace App\Form\Publish;
 
+use App\Controller\Publish\TraitementController;
+use App\Entity\Personne\Membre;
+use App\Entity\Project\Etude;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
-use Mgate\PubliBundle\Controller\TraitementController;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -54,7 +56,7 @@ class DocTypeType extends AbstractType
             ],
         ])
             ->add('etudiant', Select2EntityType::class, [
-                'class' => 'Mgate\\PersonneBundle\\Entity\\Membre',
+                'class' => Membre::class,
                 'choice_label' => 'identifiant',
                 'label' => 'Intervenant pour vérifier le template',
                 'required' => false,
@@ -62,7 +64,7 @@ class DocTypeType extends AbstractType
             ->add('template', FileType::class, ['required' => true])
             ->add('etude', Select2EntityType::class, [
                 'label' => 'Etude pour vérifier le template',
-                'class' => 'Mgate\\SuiviBundle\\Entity\\Etude',
+                'class' => Etude::class,
                 'choice_label' => 'nom',
                 'required' => false, ])
             ->add('verification', CheckboxType::class, ['label' => 'Activer la vérification', 'required' => false]);
@@ -70,7 +72,7 @@ class DocTypeType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_doctypetype';
+        return 'suivi_doctypetype';
     }
 
     public function configureOptions(OptionsResolver $resolver)

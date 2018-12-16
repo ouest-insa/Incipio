@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Antoine
- * Date: 29/01/2017
- * Time: 12:32.
- */
 
-namespace Mgate\DashboardBundle\Extension;
+namespace App\Twig;
 
 use Webmozart\KeyValueStore\Api\KeyValueStore;
 

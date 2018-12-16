@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\ClientContact;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -24,26 +25,29 @@ class ClientContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('faitPar', Select2EntityType::class, ['label' => 'Fait par',
-                       'class' => 'Mgate\\PersonneBundle\\Entity\\Personne',
-                       'choice_label' => 'prenomNom',
-                       'required' => true, ])
-           ->add('date', DateType::class, ['label' => 'Date du contact',  'required' => true, 'widget' => 'single_text'])
-           ->add('objet', TextType::class, ['label' => 'Objet'])
-           ->add('contenu', TextareaType::class, ['label' => 'Résumé du contact', 'attr' => ['cols' => '100%', 'rows' => 5]])
-           ->add('moyenContact', MoyenContactType::class, ['label' => 'Contact effectué par'])
-           ;
+            ->add('faitPar', Select2EntityType::class,
+                ['label' => 'Fait par',
+                 'class' => Personne::class,
+                 'choice_label' => 'prenomNom',
+                 'required' => true,
+                ])
+            ->add('date', DateType::class,
+                ['label' => 'Date du contact', 'required' => true, 'widget' => 'single_text'])
+            ->add('objet', TextType::class, ['label' => 'Objet'])
+            ->add('contenu', TextareaType::class,
+                ['label' => 'Résumé du contact', 'attr' => ['cols' => '100%', 'rows' => 5]])
+            ->add('moyenContact', MoyenContactType::class, ['label' => 'Contact effectué par']);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_clientcontacttype';
+        return 'project_clientcontacttype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-                'data_class' => 'Mgate\SuiviBundle\Entity\ClientContact',
-            ]);
+            'data_class' => ClientContact::class,
+        ]);
     }
 }

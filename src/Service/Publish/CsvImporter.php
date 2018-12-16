@@ -6,7 +6,7 @@
  * Time: 14:51.
  */
 
-namespace Mgate\PubliBundle\Manager;
+namespace App\Service\Publish;
 
 /**
  * Class BaseImporter.

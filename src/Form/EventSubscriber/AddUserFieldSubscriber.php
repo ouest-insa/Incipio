@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Form\EventListener;
+namespace App\Form\EventSubscriber;
 
-use Mgate\UserBundle\Entity\UserRepository;
+use App\Entity\User\User;
+use App\Repository\User\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -44,12 +45,12 @@ class AddUserFieldSubscriber implements EventSubscriberInterface
         $personne = $data;
         $form->add('user', 'entity',
             ['label' => "Séléctionner un compte d'utilisateur associé s'il existe déjà",
-                'class' => 'Mgate\\UserBundle\\Entity\\User',
-                'property' => 'username',
-                'required' => false,
-                'query_builder' => function (UserRepository $ur) use ($personne) {
-                    return $ur->getNotPersonne($personne);
-                },
+             'class' => User::class,
+             'property' => 'username',
+             'required' => false,
+             'query_builder' => function (UserRepository $ur) use ($personne) {
+                 return $ur->getNotPersonne($personne);
+             },
             ]);
     }
 }

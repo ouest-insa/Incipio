@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Form\Type;
+namespace App\Form\Personne;
 
+use App\Entity\Personne\Poste;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,20 +22,19 @@ class PosteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('intitule', TextType::class, ['required' => true])
-                ->add('description', TextType::class, ['required' => true])
-        ;
+            ->add('intitule', TextType::class, ['required' => true])
+            ->add('description', TextType::class, ['required' => true]);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_personnebundle_posteetype';
+        return 'personne_posteetype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\PersonneBundle\Entity\Poste',
+            'data_class' => Poste::class,
         ]);
     }
 }

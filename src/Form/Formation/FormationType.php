@@ -9,12 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\FormationBundle\Form\Type;
+namespace App\Form\Formation;
 
+use App\Entity\Formation\Formation;
+use App\Entity\Personne\Personne;
+use App\Repository\Personne\PersonneRepository;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2ChoiceType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
-use Mgate\FormationBundle\Entity\Formation;
-use Mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -64,7 +65,7 @@ class FormationType extends AbstractType
                 'translation_domain' => 'formation',
                 'entry_type' => Select2EntityType::class,
                 'entry_options' => ['label' => 'Suiveur de projet',
-                    'class' => 'Mgate\\PersonneBundle\\Entity\\Personne',
+                    'class' => Personne::class,
                     'choice_label' => 'prenomNom',
                     'query_builder' => function (PersonneRepository $pr) {
                         return $pr->getMembreOnly();
@@ -78,7 +79,7 @@ class FormationType extends AbstractType
                 'translation_domain' => 'formation',
                 'entry_type' => Select2EntityType::class,
                 'entry_options' => ['label' => 'Suiveur de projet',
-                    'class' => 'Mgate\\PersonneBundle\\Entity\\Personne',
+                    'class' => Personne::class,
                     'choice_label' => 'prenomNom',
                     'query_builder' => function (PersonneRepository $pr) {
                         return $pr->getMembreOnly();
@@ -95,13 +96,13 @@ class FormationType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_formulairetype';
+        return 'suivi_formulairetype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\FormationBundle\Entity\Formation',
+            'data_class' => 'App\Entity\Formation\Formation',
         ]);
     }
 }

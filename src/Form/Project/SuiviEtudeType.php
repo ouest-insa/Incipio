@@ -9,10 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\Ap;
+use App\Entity\Project\Cc;
+use App\Entity\Project\Etude;
+use App\Entity\Project\ProcesVerbal;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType as GenemuDateType;
-use Mgate\SuiviBundle\Entity\Etude;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -24,15 +27,21 @@ class SuiviEtudeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('stateID', ChoiceType::class, ['choices' => array_flip(Etude::getStateIDChoice()), 'label' => 'Etat de l\'Étude',
-            'required' => true, ])
-                ->add('auditDate', GenemuDateType::class, ['label' => 'Audité le', 'format' => 'd/MM/y', 'required' => false, 'widget' => 'single_text'])
-                ->add('auditType', AuditType::class, ['label' => 'Type d\'audit', 'required' => false, 'choice_label' => function ($var) {
+        $builder->add('stateID', ChoiceType::class,
+            ['choices' => array_flip(Etude::getStateIDChoice()), 'label' => 'Etat de l\'Étude',
+             'required' => true,
+            ])
+            ->add('auditDate', GenemuDateType::class,
+                ['label' => 'Audité le', 'format' => 'd/MM/y', 'required' => false, 'widget' => 'single_text'])
+            ->add('auditType', AuditType::class,
+                ['label' => 'Type d\'audit', 'required' => false, 'choice_label' => function ($var) {
                     return $var;
-                }])
-                ->add('stateDescription', TextareaType::class, ['label' => 'Problèmes', 'required' => false, 'attr' => ['cols' => '100%', 'rows' => 5]])
-                ->add('ap', DocTypeSuiviType::class, ['label' => 'Avant-Projet', 'data_class' => 'Mgate\SuiviBundle\Entity\Ap'])
-                ->add('cc', DocTypeSuiviType::class, ['label' => 'Convention Client', 'data_class' => 'Mgate\SuiviBundle\Entity\Cc']);
+                },
+                ])
+            ->add('stateDescription', TextareaType::class,
+                ['label' => 'Problèmes', 'required' => false, 'attr' => ['cols' => '100%', 'rows' => 5]])
+            ->add('ap', DocTypeSuiviType::class, ['label' => 'Avant-Projet', 'data_class' => Ap::class])
+            ->add('cc', DocTypeSuiviType::class, ['label' => 'Convention Client', 'data_class' => Cc::class]);
 
         $builder->add('missions', CollectionType::class, [
             'entry_type' => DocTypeSuiviType::class,
@@ -57,18 +66,18 @@ class SuiviEtudeType extends AbstractType
                 'by_reference' => false, //indispensable cf doc
             ]
         );
-        $builder->add('pvr', DocTypeSuiviType::class, ['label' => 'PVR', 'data_class' => 'Mgate\SuiviBundle\Entity\ProcesVerbal']);
+        $builder->add('pvr', DocTypeSuiviType::class, ['label' => 'PVR', 'data_class' => ProcesVerbal::class]);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_suivietudetype';
+        return 'project_suivietudetype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\Etude',
+            'data_class' => Etude::class,
         ]);
     }
 }

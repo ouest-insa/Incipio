@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\Suivi;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -22,19 +23,21 @@ class SuiviType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('date', DateType::class, ['label' => 'Date du suivi'])
-                ->add('etat', TextareaType::class, ['label' => 'Etat de l\'étude', 'attr' => ['cols' => '100%', 'rows' => 5]])
-                ->add('todo', TextareaType::class, ['label' => 'Taches à faire', 'attr' => ['cols' => '100%', 'rows' => 5]]);
+            ->add('etat', TextareaType::class,
+                ['label' => 'Etat de l\'étude', 'attr' => ['cols' => '100%', 'rows' => 5]])
+            ->add('todo', TextareaType::class,
+                ['label' => 'Taches à faire', 'attr' => ['cols' => '100%', 'rows' => 5]]);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_clientcontacttype';
+        return 'project_clientcontacttype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-                'data_class' => 'Mgate\SuiviBundle\Entity\Suivi',
-            ]);
+            'data_class' => Suivi::class,
+        ]);
     }
 }

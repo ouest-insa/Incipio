@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Entity;
+namespace App\Entity\Treso;
 
+use App\Controller\Publish\TraitementController;
+use App\Entity\Personne\Prospect;
+use App\Entity\Project\Etude;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\PersonneBundle\Entity\Prospect;
-use Mgate\PubliBundle\Controller\TraitementController;
-use Mgate\SuiviBundle\Entity\Etude;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\TresoBundle\Entity\FactureRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Treso\FactureRepository")
  */
 class Facture implements TresoDetailableInterface
 {

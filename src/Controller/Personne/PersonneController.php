@@ -9,35 +9,45 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Controller;
+namespace App\Controller\Personne;
 
+use App\Entity\Personne\Personne;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-class PersonneController extends Controller
+class PersonneController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="MgatePersonne_annuaire", path="/annuaire", methods={"GET","HEAD"})
+     *
+     * @return Response
      */
     public function annuaireAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('MgatePersonneBundle:Personne')->findAll();
+        $entities = $em->getRepository(Personne::class)->findAll();
 
-        return $this->render('MgatePersonneBundle:Personne:annuaire.html.twig', [
+        return $this->render('Personne/Personne/annuaire.html.twig', [
             'personnes' => $entities,
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="MgatePersonne_listeDiffusion", path="/listediffusion", methods={"GET","HEAD"})
+     *
+     * @return Response
      */
     public function listeMailAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('MgatePersonneBundle:Personne')->getAllPersonne();
+        $entities = $em->getRepository(Personne::class)->getAllPersonne();
 
         $cotisants = [];
         $cotisantsEtu = [];
@@ -54,7 +64,7 @@ class PersonneController extends Controller
             $listCotisantsEtu .= "$nom <$mail>; ";
         }
 
-        return $this->render('MgatePersonneBundle:Personne:listeDiffusion.html.twig', [
+        return $this->render('Personne/Personne/listeDiffusion.html.twig', [
             'personnes' => $entities,
             'cotisants' => $listCotisants,
             'cotisantsEtu' => $listCotisantsEtu,
@@ -65,16 +75,17 @@ class PersonneController extends Controller
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="MgatePersonne_personne_supprimer", path="/personne/supprimer/{id}", methods={"HEAD","POST"})
+     *
+     * @param Personne $personne
+     *
+     * @return RedirectResponse
      */
-    public function deleteAction($id)
+    public function deleteAction(Personne $personne)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$entity = $em->getRepository('Mgate\PersonneBundle\Entity\Personne')->find($id)) {
-            throw $this->createNotFoundException('La personne demandée n\'existe pas !');
-        }
-
-        $em->remove($entity);
+        $em->remove($personne);
         $em->flush();
 
         return $this->redirectToRoute('MgatePersonne_annuaire');

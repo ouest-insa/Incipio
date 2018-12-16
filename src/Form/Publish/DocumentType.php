@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PubliBundle\Form\Type;
+namespace App\Form\Publish;
 
+use App\Entity\Publish\Document;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -35,13 +36,13 @@ class DocumentType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_documenttype';
+        return 'suivi_documenttype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\PubliBundle\Entity\Document',
+            'data_class' => Document::class,
             'etude' => null,
             'etudiant' => null,
             'prospect' => null,

@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Form\Type;
+namespace App\Form\Personne;
 
+use App\Entity\Personne\Mandat;
+use App\Entity\Personne\Poste;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType as GenemuDateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -22,23 +24,27 @@ class MandatType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('debutMandat', GenemuDateType::class, ['label' => 'Date de début', 'format' => 'dd/MM/yyyy', 'required' => false, 'widget' => 'single_text'])
-                ->add('finMandat', GenemuDateType::class, ['label' => 'Date de Fin', 'format' => 'dd/MM/yyyy', 'required' => false, 'widget' => 'single_text'])
-                ->add('poste', EntityType::class, ['label' => 'Intitulé',
-                    'class' => 'Mgate\\PersonneBundle\\Entity\\Poste',
-                    'choice_label' => 'intitule',
-                    'required' => true, ]); //ajout de la condition "requis" pour éviter la corruption de la liste des membres par manque d'intitulé.
+            ->add('debutMandat', GenemuDateType::class,
+                ['label' => 'Date de début', 'format' => 'dd/MM/yyyy', 'required' => false, 'widget' => 'single_text'])
+            ->add('finMandat', GenemuDateType::class,
+                ['label' => 'Date de Fin', 'format' => 'dd/MM/yyyy', 'required' => false, 'widget' => 'single_text'])
+            ->add('poste', EntityType::class,
+                ['label' => 'Intitulé',
+                 'class' => Poste::class,
+                 'choice_label' => 'intitule',
+                 'required' => true,
+                ]); //ajout de la condition "requis" pour éviter la corruption de la liste des membres par manque d'intitulé.
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_personnebundle_mandatetype';
+        return 'personne_mandatetype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\PersonneBundle\Entity\Mandat',
+            'data_class' => Mandat::class,
         ]);
     }
 }

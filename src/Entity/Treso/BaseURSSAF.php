@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Entity;
+namespace App\Entity\Treso;
 
 use Doctrine\ORM\Mapping as ORM;
 

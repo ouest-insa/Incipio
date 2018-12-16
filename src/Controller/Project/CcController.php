@@ -9,33 +9,39 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Controller;
+namespace App\Controller\Project;
 
-use Mgate\SuiviBundle\Entity\Cc;
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Form\Type\CcType;
+use App\Entity\Project\Cc;
+use App\Entity\Project\Etude;
+use App\Form\Project\CcType;
+use App\Service\Project\DocTypeManager;
+use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class CcController extends Controller
+class CcController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgateSuivi_cc_rediger", path="/suivi/cc/rediger/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Request $request
-     * @param Etude   $etude   etude which CC should belong to
+     * @param Request                $request
+     * @param Etude                  $etude etude which CC should belong to
+     * @param EtudePermissionChecker $permChecker
+     * @param DocTypeManager         $docTypeManager
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @Route(name="MgateSuivi_cc_rediger", path="/suivi/cc/rediger/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @return RedirectResponse|Response
      */
-    public function redigerAction(Request $request, Etude $etude)
+    public function redigerAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker, DocTypeManager $docTypeManager)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -50,14 +56,14 @@ class CcController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                $this->get('Mgate.doctype_manager')->checkSaveNewEmploye($etude->getCc());
+                $docTypeManager->checkSaveNewEmploye($etude->getCc());
                 $em->flush();
 
                 return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
             }
         }
 
-        return $this->render('MgateSuiviBundle:Cc:rediger.html.twig', [
+        return $this->render('Project/Cc/rediger.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
         ]);

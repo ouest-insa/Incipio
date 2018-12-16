@@ -1,8 +1,8 @@
 <?php
 
-namespace Mgate\SuiviBundle\Manager;
+namespace App\Service\Project;
 
-use Mgate\PersonneBundle\Entity\Membre;
+use App\Entity\Personne\Membre;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class EmailEtuManager
@@ -19,6 +19,8 @@ class EmailEtuManager
 
     /**
      * Get Adresse Mail Etu.
+     *
+     * @param Membre $membre
      *
      * @return string format@etu.emse.fr
      */

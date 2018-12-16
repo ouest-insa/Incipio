@@ -9,12 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Personne\Personne;
+use App\Entity\Personne\Prospect;
+use App\Entity\Project\DomaineCompetence;
+use App\Entity\Project\Etude;
+use App\Form\Personne\ProspectType;
+use App\Repository\Personne\PersonneRepository;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
-use Mgate\PersonneBundle\Entity\PersonneRepository;
-use Mgate\PersonneBundle\Form\Type\ProspectType;
-use Mgate\SuiviBundle\Entity\Etude;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -34,7 +37,7 @@ class EtudeType extends AbstractType
             'required' => false,
         ])
             ->add('prospect', Select2EntityType::class, [
-                'class' => 'Mgate\PersonneBundle\Entity\Prospect',
+                'class' => Prospect::class,
                 'choice_label' => 'nom',
                 'label' => 'suivi.etude_form.prospect_existant',
                 'translation_domain' => 'suivi',
@@ -73,7 +76,7 @@ class EtudeType extends AbstractType
             ->add('suiveur', Select2EntityType::class, [
                 'label' => 'suivi.etude_form.suiveur_projet',
                 'translation_domain' => 'suivi',
-                'class' => 'Mgate\\PersonneBundle\\Entity\\Personne',
+                'class' => Personne::class,
                 'choice_label' => 'prenomNom',
                 'query_builder' => function (PersonneRepository $pr) {
                     return $pr->getMembreOnly();
@@ -83,7 +86,7 @@ class EtudeType extends AbstractType
             ->add('suiveurQualite', Select2EntityType::class, [
                 'label' => 'suivi.etude_form.suiveur_qualite',
                 'translation_domain' => 'suivi',
-                'class' => 'Mgate\\PersonneBundle\\Entity\\Personne',
+                'class' => Personne::class,
                 'choice_label' => 'prenomNom',
                 'query_builder' => function (PersonneRepository $pr) {
                     return $pr->getMembreOnly();
@@ -91,7 +94,7 @@ class EtudeType extends AbstractType
                 'required' => false,
             ])
             ->add('domaineCompetence', Select2EntityType::class, [
-                'class' => 'Mgate\SuiviBundle\Entity\DomaineCompetence',
+                'class' => DomaineCompetence::class,
                 'choice_label' => 'nom',
                 'label' => 'suivi.etude_form.domaine_competence',
                 'translation_domain' => 'suivi',
@@ -107,13 +110,13 @@ class EtudeType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_etudetype';
+        return 'project_etudetype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\Etude',
+            'data_class' => Etude::class,
         ]);
     }
 }

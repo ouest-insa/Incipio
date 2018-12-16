@@ -9,17 +9,27 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Controller;
+namespace App\Controller\Treso;
 
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class UrssafController extends Controller
+class UrssafController extends AbstractController
 {
     /**
+     * @Security("has_role('ROLE_TRESO')")
      * @Route(name="Mgate_treso_urssaf", path="/Tresorerie/urssaf/{year}/{month}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": ""})
+     *
+     * @param Request $request
+     * @param null    $year
+     * @param null    $month
+     *
+     * @return RedirectResponse|Response
      */
     public function indexAction(Request $request, $year = null, $month = null)
     {
@@ -50,6 +60,6 @@ class UrssafController extends Controller
 
         $RMs = $em->getRepository('MgateSuiviBundle:Mission')->getMissionsBeginBeforeDate($date);
 
-        return $this->render('MgateTresoBundle:Urssaf:index.html.twig', ['form' => $form->createView(), 'RMs' => $RMs]);
+        return $this->render('Treso/Urssaf/index.html.twig', ['form' => $form->createView(), 'RMs' => $RMs]);
     }
 }

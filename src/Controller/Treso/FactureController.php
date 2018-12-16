@@ -9,24 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Controller;
+namespace App\Controller\Treso;
 
+use App\Entity\Project\Etude;
+use App\Entity\Project\Phase;
+use App\Entity\Treso\Facture;
+use App\Entity\Treso\FactureDetail;
+use App\Form\Treso\FactureType;
+use App\Service\Publish\ConversionLettreFormatter;
 use Doctrine\Common\Persistence\ObjectManager;
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Entity\Phase;
-use Mgate\TresoBundle\Entity\Facture as Facture;
-use Mgate\TresoBundle\Entity\FactureDetail as FactureDetail;
-use Mgate\TresoBundle\Form\Type\FactureType as FactureType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-class FactureController extends Controller
+class FactureController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
@@ -37,40 +38,41 @@ class FactureController extends Controller
         $em = $this->getDoctrine()->getManager();
         $factures = $em->getRepository('MgateTresoBundle:Facture')->getFactures();
 
-        return $this->render('MgateTresoBundle:Facture:index.html.twig', ['factures' => $factures]);
+        return $this->render('Treso/Facture/index.html.twig', ['factures' => $factures]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="MgateTreso_Facture_voir", path="/Tresorerie/Facture/{id}", methods={"GET","HEAD"})
      *
      * @param Facture $facture
      *
      * @return Response
-     * @Route(name="MgateTreso_Facture_voir", path="/Tresorerie/Facture/{id}", methods={"GET","HEAD"}, requirements={"id": "\d+"})
      */
     public function voirAction(Facture $facture)
     {
         $deleteForm = $this->createDeleteForm($facture);
 
-        return $this->render('MgateTresoBundle:Facture:voir.html.twig', ['facture' => $facture,
-            'delete_form' => $deleteForm->createView(),
+        return $this->render('Treso/Facture/voir.html.twig', ['facture' => $facture,
+                                                              'delete_form' => $deleteForm->createView(),
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="MgateTreso_Facture_ajouter", path="/Tresorerie/Facture/Ajouter/{id}", methods={"GET","HEAD","POST"}, defaults={"id": ""})
      *
-     * @param Request $request Http request
-     * @param Etude   $etude   Etude to which the Facture will be added
+     * @param Request                   $request Http request
+     * @param Etude                     $etude   Etude to which the Facture will be added
+     * @param ConversionLettreFormatter $formatter
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateTreso_Facture_ajouter", path="/Tresorerie/Facture/Ajouter/{id}", methods={"GET","HEAD","POST"}, defaults={"id": ""})
      */
-    public function ajouterAction(Request $request, ?Etude $etude)
+    public function ajouterAction(Request $request, ?Etude $etude, ConversionLettreFormatter $formatter)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $facture = $this->createFacture($em, $etude);
+        $facture = $this->createFacture($em, $etude, $formatter);
         $form = $this->createForm(FactureType::class, $facture);
 
         if ('POST' == $request->getMethod()) {
@@ -81,7 +83,9 @@ class FactureController extends Controller
                     $factured->setFacture($facture);
                 }
 
-                if ($facture->getType() <= Facture::TYPE_VENTE_ACCOMPTE || null === $facture->getMontantADeduire() || 0 == $facture->getMontantADeduire()->getMontantHT()) {
+                if ($facture->getType() <= Facture::TYPE_VENTE_ACCOMPTE || null === $facture->getMontantADeduire() || 0 == $facture->getMontantADeduire()
+                        ->getMontantHT()
+                ) {
                     $facture->setMontantADeduire(null);
                 } else {
                     $facture->getMontantADeduire()->setFactureADeduire($facture);
@@ -96,19 +100,19 @@ class FactureController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateTresoBundle:Facture:modifier.html.twig', [
+        return $this->render('Treso/Facture/modifier.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="MgateTreso_Facture_modifier", path="/Tresorerie/Facture/Modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param Facture $facture
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateTreso_Facture_modifier", path="/Tresorerie/Facture/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      */
     public function modifierAction(Request $request, Facture $facture)
     {
@@ -139,7 +143,7 @@ class FactureController extends Controller
         }
         $deleteForm = $this->createDeleteForm($facture);
 
-        return $this->render('MgateTresoBundle:Facture:modifier.html.twig', [
+        return $this->render('Treso/Facture/modifier.html.twig', [
             'facture' => $facture,
             'form' => $form->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -148,12 +152,12 @@ class FactureController extends Controller
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
+     * @Route(name="MgateTreso_Facture_supprimer", path="/Tresorerie/Facture/Supprimer/{id}", methods={"DELETE"})
      *
      * @param Facture $facture
      * @param Request $request
      *
      * @return RedirectResponse
-     * @Route(name="MgateTreso_Facture_supprimer", path="/Tresorerie/Facture/Supprimer/{id}", methods={"DELETE"}, requirements={"id": "\d+"})
      */
     public function supprimerAction(Facture $facture, Request $request)
     {
@@ -192,12 +196,13 @@ class FactureController extends Controller
     /**
      * Returns a well formatted facture, according to current Etude state.
      *
-     * @param ObjectManager $em
-     * @param Etude         $etude
+     * @param ObjectManager             $em
+     * @param Etude                     $etude
+     * @param ConversionLettreFormatter $formatter
      *
      * @return Facture
      */
-    private function createFacture(ObjectManager $em, ?Etude $etude)
+    private function createFacture(ObjectManager $em, ?Etude $etude, ConversionLettreFormatter $formatter)
     {
         $keyValueStore = $this->get('app.json_key_value_store');
         if (!$keyValueStore->exists('tva')) {
@@ -216,8 +221,6 @@ class FactureController extends Controller
         $now = new \DateTime('now');
         $facture->setDateEmission($now);
 
-        $formater = $this->container->get('Mgate.conversionlettre');
-
         if ($etude) {
             $facture->setEtude($etude);
             $facture->setBeneficiaire($etude->getProspect());
@@ -225,12 +228,14 @@ class FactureController extends Controller
 
         if ($etude && !count($etude->getFactures()) && $etude->getAcompte()) {
             $facture->setType(Facture::TYPE_VENTE_ACCOMPTE);
-            $facture->setObjet('Facture d\'acompte sur l\'étude ' . $etude->getReference($namingConvention) . ', correspondant au règlement de ' . $formater->moneyFormat(($etude->getPourcentageAcompte() * 100)) . ' % de l’étude.');
+            $facture->setObjet('Facture d\'acompte sur l\'étude ' . $etude->getReference($namingConvention) . ', correspondant au règlement de ' .
+                $formatter->moneyFormat(($etude->getPourcentageAcompte() * 100)) . ' % de l’étude.');
             $detail = new FactureDetail();
             $detail->setCompte($em->getRepository('MgateTresoBundle:Compte')->findOneBy(['numero' => $compteAcompte]));
             $detail->setFacture($facture);
             $facture->addDetail($detail);
-            $detail->setDescription('Acompte de ' . $formater->moneyFormat(($etude->getPourcentageAcompte() * 100)) . ' % sur l\'étude ' . $etude->getReference());
+            $detail->setDescription('Acompte de ' . $formatter->moneyFormat(($etude->getPourcentageAcompte() * 100)) . ' % sur l\'étude ' .
+                $etude->getReference());
             $detail->setMontantHT($etude->getPourcentageAcompte() * $etude->getMontantHT());
             $detail->setTauxTVA($tauxTVA);
         } else {
@@ -238,7 +243,7 @@ class FactureController extends Controller
             if ($etude && $etude->getAcompte() && $etude->getFa()) {
                 $montantADeduire = new FactureDetail();
                 $montantADeduire->setDescription('Facture d\'acompte sur l\'étude ' . $etude->getReference($namingConvention) .
-                    ', correspondant au règlement de ' . $formater->moneyFormat(($etude->getPourcentageAcompte() * 100)) .
+                    ', correspondant au règlement de ' . $formatter->moneyFormat(($etude->getPourcentageAcompte() * 100)) .
                     ' % de l’étude.')
                     ->setFactureADeduire($facture);
                 $facture->setMontantADeduire($montantADeduire);
@@ -248,11 +253,12 @@ class FactureController extends Controller
                 /** @var Phase $phase */
                 foreach ($etude->getPhases() as $phase) {
                     $detail = new FactureDetail();
-                    $detail->setCompte($em->getRepository('MgateTresoBundle:Compte')->findOneBy(['numero' => $compteEtude]));
+                    $detail->setCompte($em->getRepository('MgateTresoBundle:Compte')
+                        ->findOneBy(['numero' => $compteEtude]));
                     $detail->setFacture($facture);
                     $facture->addDetail($detail);
                     $detail->setDescription('Phase ' . ($phase->getPosition() + 1) . ' : ' . $phase->getTitre() . ' : ' .
-                        $phase->getNbrJEH() . ' JEH * ' . $formater->moneyFormat($phase->getPrixJEH()) . ' €');
+                        $phase->getNbrJEH() . ' JEH * ' . $formatter->moneyFormat($phase->getPrixJEH()) . ' €');
                     $detail->setMontantHT($phase->getPrixJEH() * $phase->getNbrJEH());
                     $detail->setTauxTVA($tauxTVA);
                 }

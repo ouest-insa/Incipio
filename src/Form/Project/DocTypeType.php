@@ -9,12 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Personne\Personne;
+use App\Entity\Project\Av;
+use App\Entity\Project\AvMission;
+use App\Entity\Project\DocType;
+use App\Entity\Project\Mission;
+use App\Form\Personne\EmployeType;
+use App\Repository\Personne\PersonneRepository;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
-use Mgate\PersonneBundle\Entity\PersonneRepository;
-use Mgate\PersonneBundle\Form\Type\EmployeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -30,20 +35,22 @@ class DocTypeType extends AbstractType
 
         $builder->add('signataire1', Select2EntityType::class,
             ['label' => 'Signataire Junior',
-                'class' => 'Mgate\\PersonneBundle\\Entity\\Personne',
-                'choice_label' => 'prenomNom',
-                'query_builder' => function (PersonneRepository $pr) {
-                    return $pr->getMembresByPoste('president%');
-                },
-                'required' => true, ]);
+             'class' => Personne::class,
+             'choice_label' => 'prenomNom',
+             'query_builder' => function (PersonneRepository $pr) {
+                 return $pr->getMembresByPoste('president%');
+             },
+             'required' => true,
+            ]);
 
         // Si le document n'est ni une FactureVente ni un RM
-        if ('Mgate\SuiviBundle\Entity\Mission' != $options['data_class'] &&
-            'Mgate\SuiviBundle\Entity\AvMission' != $options['data_class']) {
+        if (Mission::class != $options['data_class'] &&
+            AvMission::class != $options['data_class']
+        ) {
             // le signataire 2 est l'intervenant
 
             $pro = $options['prospect'];
-            if ('Mgate\SuiviBundle\Entity\Av' != $options['data_class']) {
+            if (Av::class != $options['data_class']) {
                 $builder->add('knownSignataire2', CheckboxType::class,
                     [
                         'required' => false,
@@ -51,14 +58,15 @@ class DocTypeType extends AbstractType
                     ])
                     ->add('newSignataire2', EmployeType::class,
                         ['label' => 'Nouveau signataire ' . $pro->getNom(),
-                            'required' => false,
-                            'signataire' => true,
-                            'mini' => true, ]
+                         'required' => false,
+                         'signataire' => true,
+                         'mini' => true,
+                        ]
                     );
             }
 
             $builder->add('signataire2', Select2EntityType::class, [
-                'class' => 'Mgate\\PersonneBundle\\Entity\\Personne',
+                'class' => Personne::class,
                 'choice_label' => 'prenomNom',
                 'label' => 'Signataire ' . $pro->getNom(),
                 'query_builder' => function (PersonneRepository $pr) use ($pro) {
@@ -70,21 +78,22 @@ class DocTypeType extends AbstractType
 
         $builder->add('dateSignature', DateType::class,
             ['label' => 'Date de Signature du document',
-                'required' => false,
-                'format' => 'dd/MM/yyyy',
-                'widget' => 'single_text',
-                'attr' => ['autocomplete' => 'off'], ]);
+             'required' => false,
+             'format' => 'dd/MM/yyyy',
+             'widget' => 'single_text',
+             'attr' => ['autocomplete' => 'off'],
+            ]);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_doctypetype';
+        return 'project_doctypetype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\DocType',
+            'data_class' => DocType::class,
             'prospect' => '',
         ]);
     }

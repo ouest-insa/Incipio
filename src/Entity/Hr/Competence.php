@@ -1,17 +1,17 @@
 <?php
 
-namespace N7consulting\RhBundle\Entity;
+namespace App\Entity\Hr;
 
+use App\Entity\Personne\Membre;
+use App\Entity\Project\Etude;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\PersonneBundle\Entity\Membre;
-use Mgate\SuiviBundle\Entity\Etude;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Competence : objet pouvant être attaché à un intervenant ou a une étude pour caractériser ce dont il a besoin.
  *
- * @ORM\Entity(repositoryClass="N7consulting\RhBundle\Entity\CompetenceRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Hr\CompetenceRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="NameConstraintes", columns={"nom"})})
  */
 class Competence

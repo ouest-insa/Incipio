@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\UserBundle\Form\Type;
+namespace App\Form\User;
 
-use Mgate\UserBundle\Form\EventListener\AddMembreFieldSubscriber;
+use App\Entity\User\User;
+use App\Form\EventSubscriber\AddMembreFieldSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -28,7 +29,7 @@ use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
  */
 class UserAdminType extends AbstractType
 {
-    protected $class = 'Mgate\UserBundle\Entity\User';
+    protected $class = User::class;
 
     protected $roles;
 
@@ -89,7 +90,7 @@ class UserAdminType extends AbstractType
 
     public function getName()
     {
-        return 'Mgate_user_useradmin';
+        return 'user_useradmin';
     }
 
     private function refactorRoles($originRoles)

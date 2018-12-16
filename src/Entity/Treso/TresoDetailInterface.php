@@ -1,6 +1,6 @@
 <?php
 
-namespace Mgate\TresoBundle\Entity;
+namespace App\Entity\Treso;
 
 /**
  * Common interface between NoteDeFraisDetail & FactureDetail.

@@ -9,34 +9,41 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Controller;
+namespace App\Controller\Project;
 
-use Mgate\SuiviBundle\Entity\Ap;
-use Mgate\SuiviBundle\Entity\Etude;
-use Mgate\SuiviBundle\Form\Type\ApType;
-use Mgate\SuiviBundle\Form\Type\DocTypeSuiviType;
+use App\Entity\Project\Ap;
+use App\Entity\Project\Etude;
+use App\Form\Project\ApType;
+use App\Form\Project\DocTypeSuiviType;
+use App\Service\Project\DocTypeManager;
+use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class ApController extends Controller
+class ApController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     *
-     * @param Request $request
-     * @param Etude   $etude   etude which Ap should be edited
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @Route(name="MgateSuivi_ap_rediger", path="/suivi/ap/rediger/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     *
+     * @param Request        $request
+     * @param Etude          $etude etude which Ap should be edited
+     * @param EtudePermissionChecker   $permChecker
+     * @param DocTypeManager $docTypeManager
+     *
+     * @return RedirectResponse|Response
+     *
      */
-    public function redigerAction(Request $request, Etude $etude)
+    public function redigerAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker, DocTypeManager $docTypeManager)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -51,7 +58,7 @@ class ApController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                $this->get('Mgate.doctype_manager')->checkSaveNewEmploye($etude->getAp());
+                $docTypeManager->checkSaveNewEmploye($etude->getAp());
                 $em->flush();
 
                 $this->addFlash('success', 'Avant-Projet modifié');
@@ -64,7 +71,7 @@ class ApController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgateSuiviBundle:Ap:rediger.html.twig', [
+        return $this->render('Project/Ap/rediger.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
         ]);
@@ -72,16 +79,17 @@ class ApController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     *
-     * @param Request $request
-     * @param Etude   $etude
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @Route(name="MgateSuivi_ap_suivi", path="/suivi/ap/suivi/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     *
+     * @param Request      $request
+     * @param Etude        $etude
+     * @param EtudePermissionChecker $permChecker
+     *
+     * @return RedirectResponse|Response
      */
-    public function suiviAction(Request $request, Etude $etude)
+    public function suiviAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
-        if ($this->get('Mgate.etude_manager')->confidentielRefus($etude, $this->getUser())) {
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
@@ -99,7 +107,7 @@ class ApController extends Controller
             }
         }
 
-        return $this->render('MgateSuiviBundle:Ap:rediger.html.twig', [
+        return $this->render('Project/Ap/rediger.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
         ]);

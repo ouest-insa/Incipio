@@ -9,13 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PubliBundle\Entity;
+namespace App\Entity\Publish;
 
+use App\Entity\Formation\Formation;
+use App\Entity\Personne\Membre;
+use App\Entity\Personne\Prospect;
+use App\Entity\Project\Etude;
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\FormationBundle\Entity\Formation;
-use Mgate\PersonneBundle\Entity\Membre;
-use Mgate\PersonneBundle\Entity\Prospect;
-use Mgate\SuiviBundle\Entity\Etude;
+
 
 /**
  * A related document is a join table between a document and objects in the application.

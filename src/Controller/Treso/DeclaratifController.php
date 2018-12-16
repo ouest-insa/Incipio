@@ -9,22 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Controller;
+namespace App\Controller\Treso;
 
+use App\Entity\Treso\BV;
+use App\Entity\Treso\Facture;
+use App\Entity\Treso\TresoDetailableInterface;
+use App\Entity\Treso\TresoDetailInterface;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType as GenemuDateType;
-use Mgate\TresoBundle\Entity\BV;
-use Mgate\TresoBundle\Entity\Facture;
-use Mgate\TresoBundle\Entity\TresoDetailableInterface;
-use Mgate\TresoBundle\Entity\TresoDetailInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-class DeclaratifController extends Controller
+class DeclaratifController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
@@ -35,11 +35,12 @@ class DeclaratifController extends Controller
         $em = $this->getDoctrine()->getManager();
         $bvs = $em->getRepository('MgateTresoBundle:BV')->findAll();
 
-        return $this->render('MgateTresoBundle:BV:index.html.twig', ['bvs' => $bvs]);
+        return $this->render('Treso/BV/index.html.twig', ['bvs' => $bvs]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="MgateTreso_Declaratif_TVA", path="/Tresorerie/Declaratifs/TVA/{year}/{month}/{trimestriel}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": "", "trimestriel": ""})
      *
      * @param Request $request
      * @param int     $year
@@ -47,7 +48,6 @@ class DeclaratifController extends Controller
      * @param bool    $trimestriel
      *
      * @return Response
-     * @Route(name="MgateTreso_Declaratif_TVA", path="/Tresorerie/Declaratifs/TVA/{year}/{month}/{trimestriel}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": "", "trimestriel": ""})
      */
     public function tvaAction(Request $request, $year, $month, bool $trimestriel)
     {
@@ -208,7 +208,7 @@ class DeclaratifController extends Controller
         }
         sort($tvas);
 
-        return $this->render('MgateTresoBundle:Declaratif:TVA.html.twig',
+        return $this->render('Treso/Declaratif/TVA.html.twig',
             ['form' => $form->createView(),
                 'tvas' => $tvas,
                 'tvaDeductible' => $tvaDeductible,
@@ -222,13 +222,13 @@ class DeclaratifController extends Controller
 
     /**
      * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="MgateTreso_Declaratif_BRC", path="/Tresorerie/Declaratifs/BRC/{year}/{month}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": ""})
      *
      * @param Request $request
      * @param null    $year
      * @param null    $month
      *
      * @return RedirectResponse|Response
-     * @Route(name="MgateTreso_Declaratif_BRC", path="/Tresorerie/Declaratifs/BRC/{year}/{month}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": ""})
      */
     public function brcAction(Request $request, $year, $month)
     {
@@ -269,7 +269,7 @@ class DeclaratifController extends Controller
             $salarieRemunere[$id] = 1;
         }
 
-        return $this->render('MgateTresoBundle:Declaratif:BRC.html.twig',
+        return $this->render('Treso/Declaratif/BRC.html.twig',
             ['form' => $form->createView(), 'bvs' => $bvs, 'nbSalarieRemunere' => count($salarieRemunere)]
         );
     }

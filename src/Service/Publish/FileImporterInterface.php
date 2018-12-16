@@ -1,6 +1,6 @@
 <?php
 
-namespace Mgate\PubliBundle\Manager;
+namespace App\Service\Publish;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

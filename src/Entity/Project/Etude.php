@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Entity;
+namespace App\Entity\Project;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\CommentBundle\Entity\Thread;
-use Mgate\PersonneBundle\Entity\Personne;
-use Mgate\PersonneBundle\Entity\Prospect;
-use Mgate\PubliBundle\Entity\RelatedDocument;
-use Mgate\TresoBundle\Entity\Facture;
-use N7consulting\RhBundle\Entity\Competence;
+use App\Entity\Thread;
+use App\Entity\Personne;
+use App\Entity\Prospect;
+use App\Entity\RelatedDocument;
+use App\Entity\Facture;
+use App\Entity\Competence;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;

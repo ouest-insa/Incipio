@@ -1,10 +1,10 @@
 <?php
 
-namespace Mgate\PubliBundle\DataFixtures\ORM;
+namespace App\DataFixtures;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Mgate\PubliBundle\Entity\Document;
+use App\Entity\Document;
 
 /**
  * Class LoadDocTypeData.

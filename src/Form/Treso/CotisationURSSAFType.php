@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\TresoBundle\Form\Type;
+namespace App\Form\Treso;
 
+use App\Entity\Treso\CotisationURSSAF;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -25,23 +26,26 @@ class CotisationURSSAFType extends AbstractType
     {
         $builder
             ->add('libelle', TextType::class, ['label' => 'Libelle'])
-            ->add('dateDebut', DateType::class, ['label' => 'Applicable du', 'required' => true, 'widget' => 'single_text'])
-            ->add('dateFin', DateType::class, ['label' => 'Applicable au', 'required' => true, 'widget' => 'single_text'])
+            ->add('dateDebut', DateType::class,
+                ['label' => 'Applicable du', 'required' => true, 'widget' => 'single_text'])
+            ->add('dateFin', DateType::class,
+                ['label' => 'Applicable au', 'required' => true, 'widget' => 'single_text'])
             ->add('tauxPartJE', PercentType::class, ['label' => 'Taux Part Junior', 'required' => false, 'scale' => 3])
             ->add('tauxPartEtu', PercentType::class, ['label' => 'Taux Part Etu', 'required' => false, 'scale' => 3])
-            ->add('surBaseURSSAF', CheckboxType::class, ['label' => 'Est indexé sur la base URSSAF ?', 'required' => false])
+            ->add('surBaseURSSAF', CheckboxType::class,
+                ['label' => 'Est indexé sur la base URSSAF ?', 'required' => false])
             ->add('deductible', CheckboxType::class, ['label' => 'Est déductible ?', 'required' => false]);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_tresobundle_cotisationurssaftype';
+        return 'treso_cotisationurssaftype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\TresoBundle\Entity\CotisationURSSAF',
+            'data_class' => CotisationURSSAF::class,
         ]);
     }
 }

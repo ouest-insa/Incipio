@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Entity;
+namespace App\Entity\Project;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\PersonneBundle\Entity\Personne;
+use App\Entity\Personne;
 
 /**
  * Mgate\SuiviBundle\Entity\Ap.

@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\SuiviBundle\Form\Type;
+namespace App\Form\Project;
 
+use App\Entity\Project\DomaineCompetence;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,13 +26,13 @@ class DomaineCompetenceType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'Mgate_suivibundle_domainecompetencetype';
+        return 'project_domainecompetencetype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\SuiviBundle\Entity\DomaineCompetence',
+            'data_class' => DomaineCompetence::class,
         ]);
     }
 }

@@ -9,19 +9,28 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Controller;
+namespace App\Controller\Personne;
 
-use Mgate\PersonneBundle\Entity\Poste;
-use Mgate\PersonneBundle\Form\Type\PosteType;
+use App\Entity\Personne\Poste;
+use App\Form\Personne\PosteType;
+use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-class PosteController extends Controller
+class PosteController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_poste_ajouter", path="/poste/add", methods={"GET","HEAD","POST"})
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     public function ajouterAction(Request $request)
     {
@@ -44,13 +53,16 @@ class PosteController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgatePersonneBundle:Poste:ajouter.html.twig', [
+        return $this->render('Personne/Poste/ajouter.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_poste_ajouter", path="/poste/add", methods={"GET","HEAD","POST"})
+     *
+     * @return Response
      */
     public function indexAction()
     {
@@ -59,7 +71,7 @@ class PosteController extends Controller
         $postes = $em->getRepository('MgatePersonneBundle:Poste')->findAll();
         $filieres = $em->getRepository('MgatePersonneBundle:Filiere')->findAll();
 
-        return $this->render('MgatePersonneBundle:Poste:index.html.twig', [
+        return $this->render('Personne/Poste/index.html.twig', [
             'postes' => $postes,
             'filieres' => $filieres,
         ]);
@@ -67,23 +79,22 @@ class PosteController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_poste_modifier", path="/poste/modifier/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Request $request
-     * @param $id
+     * @param Request       $request
+     * @param Poste         $poste
+     * @param ObjectManager $em
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
+     * @internal param $id
+     *
      */
-    public function modifierAction(Request $request, $id)
+    public function modifierAction(Request $request, Poste $poste, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        if (!$poste = $em->getRepository('Mgate\PersonneBundle\Entity\Poste')->find($id)) {
-            throw $this->createNotFoundException('Le poste demandé n\'existe pas !');
-        }
 
         // On passe l'$article récupéré au formulaire
         $form = $this->createForm(PosteType::class, $poste);
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($poste->getId());
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
 
@@ -97,7 +108,7 @@ class PosteController extends Controller
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('MgatePersonneBundle:Poste:modifier.html.twig', [
+        return $this->render('Personne/Poste/modifier.html.twig', [
             'form' => $form->createView(),
             'delete_form' => $deleteForm->createView(),
         ]);
@@ -105,15 +116,20 @@ class PosteController extends Controller
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="MgatePersonne_poste_supprimer", path="/poste/supprimer/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @param Request       $request
+     * @param Poste         $poste
+     * @param ObjectManager $em
+     *
+     * @return RedirectResponse
      */
-    public function deleteAction(Request $request, Poste $poste)
+    public function deleteAction(Request $request, Poste $poste, ObjectManager $em)
     {
         $form = $this->createDeleteForm($poste->getId());
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
             if (0 == $poste->getMandats()->count()) { //collection contains no mandats
                 foreach ($poste->getMandats() as $membre) {
                     $membre->setPoste(null);
@@ -123,12 +139,10 @@ class PosteController extends Controller
                 $this->addFlash('success', 'Poste supprimé');
 
                 return $this->redirectToRoute('MgatePersonne_poste_homepage');
-            } else {
-                $this->addFlash('danger', 'Impossible de supprimer un poste ayant des membres.');
-
-                return $this->redirectToRoute('MgatePersonne_poste_modifier', ['id' => $poste->getId()]);
             }
-        }
+                $this->addFlash('danger', 'Impossible de supprimer un poste ayant des membres.');
+            }
+        return $this->redirectToRoute('MgatePersonne_poste_modifier', ['id' => $poste->getId()]);
     }
 
     private function createDeleteForm($id)

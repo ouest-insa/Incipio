@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Entity;
+namespace App\Entity\Personne;
 
+use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\UserBundle\Entity\User;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Mgate\PersonneBundle\Entity\Personne.
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\PersonneBundle\Entity\PersonneRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Personne\PersonneRepository")
  */
 class Personne extends Adressable implements AnonymizableInterface
 {

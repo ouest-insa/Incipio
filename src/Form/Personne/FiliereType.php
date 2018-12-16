@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Mgate\PersonneBundle\Form\Type;
+namespace App\Form\Personne;
 
+use App\Entity\Personne\Filiere;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,20 +22,19 @@ class FiliereType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('nom', TextType::class, ['required' => true])
-                ->add('description', TextType::class, ['required' => false])
-        ;
+            ->add('nom', TextType::class, ['required' => true])
+            ->add('description', TextType::class, ['required' => false]);
     }
 
     public function getBlockPrefix()
     {
-        return 'Mgate_personnebundle_filieretype';
+        return 'personne_filieretype';
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mgate\PersonneBundle\Entity\Filiere',
+            'data_class' => Filiere::class,
         ]);
     }
 }
