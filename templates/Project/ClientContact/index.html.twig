@@ -1,4 +1,4 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -8,23 +8,23 @@
 {% endblock %}
 
 {% block title %}
-    {{ 'suivi.contacts_clients_affichage'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.contacts_clients_affichage'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.contacts_clients_affichage'|trans({}, 'suivi') }}
+    {{ 'suivi.contacts_clients_affichage'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
     <table class="table table-bordered table-striped dataTable dt-responsive" id="contactsClients" role="grid">
         <thead>
         <tr>
-            <th>{{ 'suivi.contacts'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.date'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.fait_par'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.etude.etude'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.objet'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.contenu'|trans({}, 'suivi') }}</th>
+            <th>{{ 'suivi.contacts'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.date'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.fait_par'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.etude.etude'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.objet'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.contenu'|trans({}, 'project') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -43,7 +43,7 @@
                     <b>{{ contact.etude.nom }}</b>
                 </td>
                 <td>
-                    <a href="{{ path('MgateSuivi_clientcontact_voir', {'id': contact.id}) }}">
+                    <a href="{{ path('project_clientcontact_voir', {'id': contact.id}) }}">
                         {% if contact.moyenContact == 'telephone' %}
                             <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom }}"
                                class="fa fa-headphones"></i>

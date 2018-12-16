@@ -1,17 +1,17 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.cc_modifier'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.cc_modifier'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.cc_rediger'|trans({}, 'suivi') }}
+    {{ 'suivi.cc_rediger'|trans({}, 'project') }}
 {% endblock %}
 
 
 {% block content_bundle %}
 
-    {% include "MgateSuiviBundle:Cc:formulaire.html.twig" %}
+    {% include "Project/Cc/formulaire.html.twig" %}
 
 {% endblock %}
 
@@ -19,5 +19,5 @@
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
-    {% include "MgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.cc.knownSignataire2, knowned: form.cc.signataire2, newed: form.cc.newSignataire2 } %}
+    {% include "Project/DocType/selectOrNew.html.twig" with { known: form.cc.knownSignataire2, knowned: form.cc.signataire2, newed: form.cc.newSignataire2 } %}
 {% endblock %}

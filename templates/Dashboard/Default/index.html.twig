@@ -1,6 +1,6 @@
-{# layout d'accueil pour les études  #}
+{# Page d'accueil de Jeyser  #}
 
-{% extends "MgateDashboardBundle::layout.html.twig" %}
+{% extends "Dashboard/layout.html.twig" %}
 {% block content_bundle %}
     <div class="container-fluid">
         <div class="row">
@@ -111,7 +111,7 @@
                     {% if is_granted('ROLE_ADMIN') %}
                         <tr>
                             <td colspan="2">
-                                Jeyser <span id="version">2.7.2</span>
+                                Jeyser <span id="version">3.0.0</span>
                             </td>
                         </tr>
                         <tr>

@@ -29,7 +29,7 @@ class ApController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_ap_rediger", path="/suivi/ap/rediger/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="project_ap_rediger", path="/suivi/ap/rediger/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request                $request
      * @param Etude                  $etude          etude which Ap should be edited
@@ -38,7 +38,8 @@ class ApController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function redigerAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker, DocTypeManager $docTypeManager)
+    public function rediger(Request $request, Etude $etude, EtudePermissionChecker $permChecker,
+                            DocTypeManager $docTypeManager)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -62,10 +63,10 @@ class ApController extends AbstractController
 
                 $this->addFlash('success', 'Avant-Projet modifié');
                 if ($request->get('phases')) {
-                    return $this->redirectToRoute('MgateSuivi_phases_modifier', ['id' => $etude->getId()]);
-                } else {
-                    return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                    return $this->redirectToRoute('project_phases_modifier', ['id' => $etude->getId()]);
                 }
+
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -78,7 +79,7 @@ class ApController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_ap_suivi", path="/suivi/ap/suivi/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="project_ap_suivi", path="/suivi/ap/suivi/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -86,7 +87,7 @@ class ApController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function suiviAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function suivi(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
@@ -102,7 +103,7 @@ class ApController extends AbstractController
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
 
-                return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             }
         }
 

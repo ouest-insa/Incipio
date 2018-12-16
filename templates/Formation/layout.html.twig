@@ -1,5 +1,5 @@
-{# layout père du formation bundle #}
-{% extends "::layout.html.twig" %}
+{# Layout principal pour le formation bundle #}
+{% extends "base.html.twig" %}
 
 {% block title %}
     {{ 'formation.formations'|trans({}, 'formation') }} - {{ parent() }}
@@ -17,7 +17,7 @@
             {% block breadcrumb %}
                 <ul class="breadcrumb no-margin pull-right">
                     <li>
-                        <a href="{{ path('Mgate_formations_lister') }}">
+                        <a href="{{ path('formations_lister') }}">
                             {{ 'formation.formations'|trans({}, 'formation') }}
                         </a>
                     </li>
@@ -30,7 +30,6 @@
         </div>
 
         <div class="box-body">
-            {# On définit un nouveau block, que les vues du bundle pourront remplir #}
             {% block content_bundle %}
             {% endblock %}
         </div>

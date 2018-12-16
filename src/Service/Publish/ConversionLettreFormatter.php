@@ -205,8 +205,6 @@ class ConversionLettreFormatter
         }
         if ('' != $TabUnit[$byUnit]) {
             $NumDizaine = $NumDizaine . $strLiaison . $TabUnit[$byUnit];
-        } else {
-            $NumDizaine = $NumDizaine;
         }
 
         return $NumDizaine;

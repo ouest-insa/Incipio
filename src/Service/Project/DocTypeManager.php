@@ -12,6 +12,7 @@
 namespace App\Service\Project;
 
 use App\Entity\Project\DocType;
+use App\Entity\Project\Etude;
 use Doctrine\ORM\EntityManager;
 
 class DocTypeManager /*extends \Twig_Extension*/
@@ -26,7 +27,7 @@ class DocTypeManager /*extends \Twig_Extension*/
     // Pour utiliser les fonctions depuis twig
     public function getName()
     {
-        return 'Mgate_DocTypeManager';
+        return 'Project_DocTypeManager';
     }
 
     // Pour utiliser les fonctions depuis twig
@@ -37,7 +38,7 @@ class DocTypeManager /*extends \Twig_Extension*/
 
     public function getRepository()
     {
-        return $this->em->getRepository('MgateSuiviBundle:Etude');
+        return $this->em->getRepository(Etude::class);
     }
 
     public function checkSaveNewEmploye(DocType $doc)

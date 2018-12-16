@@ -22,11 +22,11 @@ class PersonneController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="MgatePersonne_annuaire", path="/annuaire", methods={"GET","HEAD"})
+     * @Route(name="personne_annuaire", path="/annuaire", methods={"GET","HEAD"})
      *
      * @return Response
      */
-    public function annuaireAction()
+    public function annuaire()
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -39,11 +39,11 @@ class PersonneController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="MgatePersonne_listeDiffusion", path="/listediffusion", methods={"GET","HEAD"})
+     * @Route(name="personne_listeDiffusion", path="/listediffusion", methods={"GET","HEAD"})
      *
      * @return Response
      */
-    public function listeMailAction()
+    public function listeMail()
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -75,19 +75,19 @@ class PersonneController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="MgatePersonne_personne_supprimer", path="/personne/supprimer/{id}", methods={"HEAD","POST"})
+     * @Route(name="personne_personne_supprimer", path="/personne/supprimer/{id}", methods={"HEAD","POST"})
      *
      * @param Personne $personne
      *
      * @return RedirectResponse
      */
-    public function deleteAction(Personne $personne)
+    public function delete(Personne $personne)
     {
         $em = $this->getDoctrine()->getManager();
 
         $em->remove($personne);
         $em->flush();
 
-        return $this->redirectToRoute('MgatePersonne_annuaire');
+        return $this->redirectToRoute('personne_annuaire');
     }
 }

@@ -11,7 +11,16 @@
 
 namespace App\Controller\Stat;
 
+use App\Entity\Formation\Formation;
+use App\Entity\Hr\Competence;
+use App\Entity\Personne\Mandat;
+use App\Entity\Personne\Membre;
+use App\Entity\Project\Cc;
+use App\Entity\Project\Etude;
+use App\Entity\Project\Mission;
 use App\Entity\Stat\Indicateur;
+use App\Entity\Treso\BV;
+use App\Entity\Treso\NoteDeFrais;
 use App\Service\Project\EtudeManager;
 use App\Service\Stat\ChartFactory;
 use Ob\HighchartsBundle\Highcharts\Highchart;
@@ -39,12 +48,12 @@ class IndicateursController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="Mgate_indicateurs_index", path="/admin/indicateurs", methods={"GET","HEAD"})
+     * @Route(name="stat_index", path="/admin/indicateurs", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
-        $indicateurs = $em->getRepository('MgateStatBundle:Indicateur')->findAll();
+        $indicateurs = $em->getRepository(Indicateur::class)->findAll();
         $statsBrutes = ['Pas de données' => 'A venir'];
 
         return $this->render('Stat/Indicateurs/index.html.twig', ['indicateurs' => $indicateurs,
@@ -54,9 +63,9 @@ class IndicateursController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="Mgate_indicateurs_debug", path="/admin/indicateurs/{get}", methods={"GET","HEAD"})
+     * @Route(name="stat_debug", path="/admin/indicateurs/{get}", methods={"GET","HEAD"})
      */
-    public function debugAction($get)
+    public function debug($get)
     {
         $indicateur = new Indicateur();
         $indicateur->setTitre($get)
@@ -68,18 +77,18 @@ class IndicateursController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="Mgate_indicateurs_ajax_suivi", path="/admin/indicateurs/etudes", methods={"GET","HEAD"})
+     * @Route(name="stat_ajax_suivi", path="/admin/indicateurs/etudes", methods={"GET","HEAD"})
      *
      * @param Request $request
      *
      * @return Response
      */
-    public function ajaxAction(Request $request)
+    public function ajax(Request $request)
     {
         if ('GET' == $request->getMethod()) {
             $chartMethode = $request->query->get('chartMethode');
             $em = $this->getDoctrine()->getManager();
-            $indicateur = $em->getRepository('MgateStatBundle:Indicateur')->findOneByMethode($chartMethode);
+            $indicateur = $em->getRepository(Indicateur::class)->findOneByMethode($chartMethode);
 
             if (null !== $indicateur) {
                 $method = $indicateur->getMethode();
@@ -100,7 +109,7 @@ class IndicateursController extends AbstractController
     private function getRetardParMandat()
     {
         $em = $this->getDoctrine()->getManager();
-        $ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
+        $ccs = $em->getRepository(Cc::class)->findBy([], ['dateSignature' => 'asc']);
 
         $nombreJoursParMandat = [];
         $nombreJoursAvecAvenantParMandat = [];
@@ -161,7 +170,7 @@ class IndicateursController extends AbstractController
     private function getNombreEtudes()
     {
         $em = $this->getDoctrine()->getManager();
-        $ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
+        $ccs = $em->getRepository(Cc::class)->findBy([], ['dateSignature' => 'asc']);
 
         $nombreEtudesParMandat = [];
 
@@ -216,8 +225,8 @@ class IndicateursController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $mandat = $this->etudeManager->getMaxMandatCc();
 
-        $nfs = $em->getRepository('MgateTresoBundle:NoteDeFrais')->findBy(['mandat' => $mandat]);
-        $bvs = $em->getRepository('MgateTresoBundle:BV')->findBy(['mandat' => $mandat]);
+        $nfs = $em->getRepository(NoteDeFrais::class)->findBy(['mandat' => $mandat]);
+        $bvs = $em->getRepository(BV::class)->findBy(['mandat' => $mandat]);
 
         /* Initialisation */
         $comptes = [];
@@ -278,8 +287,8 @@ class IndicateursController extends AbstractController
     private function getSortie()
     {
         $em = $this->getDoctrine()->getManager();
-        $sortiesParMandat = $em->getRepository('MgateTresoBundle:NoteDeFrais')->findAllByMandat();
-        $bvsParMandat = $em->getRepository('MgateTresoBundle:BV')->findAllByMandat();
+        $sortiesParMandat = $em->getRepository(NoteDeFrais::class)->findAllByMandat();
+        $bvsParMandat = $em->getRepository(BV::class)->findAllByMandat();
 
         $mandats = [];
         ksort($sortiesParMandat); // Tri selon les mandats
@@ -352,7 +361,7 @@ class IndicateursController extends AbstractController
     private function getPartClientFidel()
     {
         $em = $this->getDoctrine()->getManager();
-        $etudes = $em->getRepository('MgateSuiviBundle:Etude')->findAll();
+        $etudes = $em->getRepository(Etude::class)->findAll();
 
         $clients = [];
         foreach ($etudes as $etude) {
@@ -408,7 +417,7 @@ class IndicateursController extends AbstractController
     private function getNombreDePresentFormationsTimed()
     {
         $em = $this->getDoctrine()->getManager();
-        $formationsParMandat = $em->getRepository('MgateFormationBundle:Formation')->findAllByMandat();
+        $formationsParMandat = $em->getRepository(Formation::class)->findAllByMandat();
 
         $maxMandat = $formationsParMandat !== [] ? max(array_keys($formationsParMandat)) : 0;
         $mandats = [];
@@ -462,7 +471,7 @@ class IndicateursController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $formationsParMandat = $em->getRepository('MgateFormationBundle:Formation')->findAllByMandat();
+        $formationsParMandat = $em->getRepository(Formation::class)->findAllByMandat();
 
         $data = [];
         $categories = [];
@@ -498,7 +507,7 @@ class IndicateursController extends AbstractController
     private function getTauxDAvenantsParMandat()
     {
         $em = $this->getDoctrine()->getManager();
-        $ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
+        $ccs = $em->getRepository(Cc::class)->findBy([], ['dateSignature' => 'asc']);
 
         $nombreEtudesParMandat = [];
         $nombreEtudesAvecAvenantParMandat = [];
@@ -563,7 +572,7 @@ class IndicateursController extends AbstractController
     private function getRepartitionClientSelonChiffreAffaire()
     {
         $em = $this->getDoctrine()->getManager();
-        $etudes = $em->getRepository('MgateSuiviBundle:Etude')->findAll();
+        $etudes = $em->getRepository(Etude::class)->findAll();
 
         $chiffreDAffairesTotal = 0;
         $repartitions = [];
@@ -608,7 +617,7 @@ class IndicateursController extends AbstractController
     private function getRepartitionClientParNombreDEtude()
     {
         $em = $this->getDoctrine()->getManager();
-        $etudes = $em->getRepository('MgateSuiviBundle:Etude')->findAll();
+        $etudes = $em->getRepository(Etude::class)->findAll();
 
         $nombreClient = 0;
         $repartitions = [];
@@ -662,7 +671,7 @@ class IndicateursController extends AbstractController
     private function getNombreMembres()
     {
         $em = $this->getDoctrine()->getManager();
-        $mandats = $em->getRepository('MgatePersonneBundle:Mandat')->getCotisantMandats();
+        $mandats = $em->getRepository(Mandat::class)->getCotisantMandats();
 
         $promos = [];
         $cumuls = [];
@@ -731,7 +740,7 @@ class IndicateursController extends AbstractController
     private function getMembresParPromo()
     {
         $em = $this->getDoctrine()->getManager();
-        $membres = $em->getRepository('MgatePersonneBundle:Membre')->findAll();
+        $membres = $em->getRepository(Membre::class)->findAll();
 
         $promos = [];
         foreach ($membres as $membre) {
@@ -773,7 +782,7 @@ class IndicateursController extends AbstractController
     private function getIntervenantsParPromo()
     {
         $em = $this->getDoctrine()->getManager();
-        $intervenants = $em->getRepository('MgatePersonneBundle:Membre')->getIntervenantsParPromo();
+        $intervenants = $em->getRepository(Membre::class)->getIntervenantsParPromo();
 
         $promos = [];
         foreach ($intervenants as $intervenant) {
@@ -814,7 +823,7 @@ class IndicateursController extends AbstractController
     private function getCAM()
     {
         $em = $this->getDoctrine()->getManager();
-        $ccs = $em->getRepository('MgateSuiviBundle:Cc')->findBy([], ['dateSignature' => 'asc']);
+        $ccs = $em->getRepository(Cc::class)->findBy([], ['dateSignature' => 'asc']);
 
         $cumuls = [];
         $cumulsJEH = [];
@@ -892,7 +901,7 @@ class IndicateursController extends AbstractController
      */
     private function getCA()
     {
-        $ccs = $this->getDoctrine()->getManager()->getRepository('MgateSuiviBundle:Cc')
+        $ccs = $this->getDoctrine()->getManager()->getRepository(Cc::class)
             ->findBy([], ['dateSignature' => 'asc']);
 
         if ($this->get('app.json_key_value_store')->exists('namingConvention')) {
@@ -959,7 +968,7 @@ class IndicateursController extends AbstractController
     private function getRh()
     {
         $etudeManager = $this->etudeManager;
-        $missions = $this->getDoctrine()->getManager()->getRepository('MgateSuiviBundle:Mission')
+        $missions = $this->getDoctrine()->getManager()->getRepository(Mission::class)
             ->findBy([], ['debutOm' => 'asc']);
         if ($this->get('app.json_key_value_store')->exists('namingConvention')) {
             $namingConvention = $this->get('app.json_key_value_store')->get('namingConvention');
@@ -1097,7 +1106,7 @@ class IndicateursController extends AbstractController
     private function getSourceProspectionParNombreDEtude()
     {
         $em = $this->getDoctrine()->getManager();
-        $etudes = $em->getRepository('MgateSuiviBundle:Etude')->findAll();
+        $etudes = $em->getRepository(Etude::class)->findAll();
 
         $nombreClient = 0;
         $repartitions = [];
@@ -1141,7 +1150,7 @@ class IndicateursController extends AbstractController
     private function getSourceProspectionSelonChiffreAffaire()
     {
         $em = $this->getDoctrine()->getManager();
-        $etudes = $em->getRepository('MgateSuiviBundle:Etude')->findAll();
+        $etudes = $em->getRepository(Etude::class)->findAll();
 
         $chiffreDAffairesTotal = 0;
         $repartitions = [];
@@ -1190,7 +1199,7 @@ class IndicateursController extends AbstractController
         $MANDAT_MIN = $etudeManager->getMinMandat();
 
         $em = $this->getDoctrine()->getManager();
-        $res = $em->getRepository('N7consultingRhBundle:Competence')->getAllEtudesByCompetences();
+        $res = $em->getRepository(Competence::class)->getAllEtudesByCompetences();
 
         //how much each skill has make us earn.
         $series = [];

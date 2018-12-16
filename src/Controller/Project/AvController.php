@@ -27,7 +27,7 @@ class AvController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_av_ajouter", path="/suivi/av/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="project_av_ajouter", path="/suivi/av/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -35,7 +35,7 @@ class AvController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function add(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
@@ -56,7 +56,7 @@ class AvController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Avenant enregistré');
 
-                return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -70,7 +70,7 @@ class AvController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_av_modifier", path="/suivi/av/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="project_av_modifier", path="/suivi/av/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request                $request
      * @param Av                     $av
@@ -78,7 +78,7 @@ class AvController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Av $av, EtudePermissionChecker $permChecker)
+    public function modifier(Request $request, Av $av, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -98,7 +98,7 @@ class AvController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Avenant enregistré');
 
-                return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }

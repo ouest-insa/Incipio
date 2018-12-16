@@ -29,13 +29,13 @@ class ClientContactController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_clientcontact_index", path="/suivi/clientcontact/", methods={"GET","HEAD"})
+     * @Route(name="project_clientcontact_index", path="/suivi/clientcontact/", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('MgateSuiviBundle:ClientContact')->findBy([], ['date' => 'ASC']);
+        $entities = $em->getRepository(ClientContact::class)->findBy([], ['date' => 'ASC']);
 
         return $this->render('Project/ClientContact/index.html.twig', [
             'contactsClient' => $entities,
@@ -44,7 +44,7 @@ class ClientContactController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_clientcontact_ajouter", path="/suivi/clientcontact/ajouter/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_clientcontact_ajouter", path="/suivi/clientcontact/ajouter/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -52,7 +52,7 @@ class ClientContactController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function add(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -66,7 +66,7 @@ class ClientContactController extends AbstractController
         $formHandler = new ClientContactHandler($form, $request, $em);
 
         if ($formHandler->process()) {
-            return $this->redirectToRoute('MgateSuivi_clientcontact_voir', ['id' => $clientcontact->getId()]);
+            return $this->redirectToRoute('project_clientcontact_voir', ['id' => $clientcontact->getId()]);
         }
 
         return $this->render('Project/ClientContact/ajouter.html.twig', [
@@ -86,14 +86,14 @@ class ClientContactController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_clientcontact_voir", path="/suivi/clientcontact/voir/{id}", methods={"GET","HEAD"})
+     * @Route(name="project_clientcontact_voir", path="/suivi/clientcontact/voir/{id}", methods={"GET","HEAD"})
      *
      * @param ClientContact          $clientContact
      * @param EtudePermissionChecker $permChecker
      *
      * @return Response
      */
-    public function voirAction(ClientContact $clientContact, EtudePermissionChecker $permChecker)
+    public function voir(ClientContact $clientContact, EtudePermissionChecker $permChecker)
     {
         $etude = $clientContact->getEtude();
 
@@ -114,7 +114,7 @@ class ClientContactController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_clientcontact_modifier", path="/suivi/clientcontact/modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_clientcontact_modifier", path="/suivi/clientcontact/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param ClientContact          $clientContact
@@ -122,7 +122,7 @@ class ClientContactController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, ClientContact $clientContact, EtudePermissionChecker $permChecker)
+    public function modifier(Request $request, ClientContact $clientContact, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -141,7 +141,7 @@ class ClientContactController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Contact client modifié');
 
-                return $this->redirectToRoute('MgateSuivi_clientcontact_voir', ['id' => $clientContact->getId()]);
+                return $this->redirectToRoute('project_clientcontact_voir', ['id' => $clientContact->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -157,7 +157,7 @@ class ClientContactController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_clientcontact_delete", path="/suivi/clientcontact/supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_clientcontact_delete", path="/suivi/clientcontact/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param ClientContact          $contact
      * @param Request                $request
@@ -165,7 +165,7 @@ class ClientContactController extends AbstractController
      *
      * @return RedirectResponse
      */
-    public function deleteAction(ClientContact $contact, Request $request, EtudePermissionChecker $permChecker)
+    public function delete(ClientContact $contact, Request $request, EtudePermissionChecker $permChecker)
     {
         $form = $this->createDeleteForm($contact);
 
@@ -183,7 +183,7 @@ class ClientContactController extends AbstractController
             $this->addFlash('success', 'Contact client supprimé');
         }
 
-        return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $contact->getEtude()->getNom()]);
+        return $this->redirectToRoute('project_etude_voir', ['nom' => $contact->getEtude()->getNom()]);
     }
 
     private function createDeleteForm(ClientContact $contact)

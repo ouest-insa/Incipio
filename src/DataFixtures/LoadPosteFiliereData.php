@@ -7,12 +7,12 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Filiere;
-use App\Entity\Poste;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use App\Entity\Personne\Filiere;
+use App\Entity\Personne\Poste;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadPosteFiliereData implements FixtureInterface
+class LoadPosteFiliereData extends Fixture
 {
     /**
      * {@inheritdoc}

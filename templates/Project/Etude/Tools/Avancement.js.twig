@@ -1,10 +1,10 @@
 $('body').click(function(e){
     var Elem = e.target;
     if (Elem.classList.contains('avancement')){
-        bootbox.prompt("{{ 'suivi.avancement_developpeur'|trans({}, 'suivi') }} (%) ?", function(result) {
+        bootbox.prompt("{{ 'suivi.avancement_developpeur'|trans({}, 'project') }} (%) ?", function(result) {
         if (result !== null) {
             $.ajax({
-                url: "{{ path('MgateSuivi_mission_avancement', {'id':0}) }}"+$(Elem).data("mission"), {# hack the routing system #}
+                url: "{{ path('project_mission_avancement', {'id':0}) }}"+$(Elem).data("mission"), {# hack the routing system #}
                 type: "PUT",
                 data: "avancement=" + result,
                 success: function(data){

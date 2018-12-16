@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block title %}
     {{ 'treso.tva_declaration'|trans({}, 'treso') }} - {{ parent() }}
@@ -11,7 +11,7 @@
 {% block content_bundle %}
     {{ form_start(form, {'attr': {'class': 'form-inline row'}}) }}
 
-    {% form_theme form 'MgateSuiviBundle:Form:fields.html.twig' %}
+    {% form_theme form 'Project/Form/fields.html.twig' %}
     <div class="col-md-3 col-xs-12">
         {{ form_label(form.date) }} {{ form_widget(form.date) }}
     </div>

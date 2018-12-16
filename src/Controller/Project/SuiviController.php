@@ -25,13 +25,13 @@ class SuiviController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="MgateSuivi_suivi_index", path="/suivi/suivi", methods={"GET","HEAD"})
+     * @Route(name="project_suivi_index", path="/suivi/suivi", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('MgateSuiviBundle:Suivi')
+        $entities = $em->getRepository(Suivi::class)
             ->createQueryBuilder('s')
             ->innerJoin('s.etude', 'e')
             ->where('e.stateID < 5')
@@ -48,14 +48,14 @@ class SuiviController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="MgateSuivi_suivi_ajouter", path="/suivi/suivi/ajouter/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_suivi_ajouter", path="/suivi/suivi/ajouter/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param Etude   $etude
      *
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, Etude $etude)
+    public function add(Request $request, Etude $etude)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -72,7 +72,7 @@ class SuiviController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Note de suivi ajoutée');
 
-                return $this->redirectToRoute('MgateSuivi_suivi_voir', ['id' => $suivi->getId()]);
+                return $this->redirectToRoute('project_suivi_voir', ['id' => $suivi->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -94,13 +94,13 @@ class SuiviController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="MgateSuivi_suivi_voir", path="/suivi/suivi/voir/{id}", methods={"GET","HEAD"})
+     * @Route(name="project_suivi_voir", path="/suivi/suivi/voir/{id}", methods={"GET","HEAD"})
      *
      * @param Suivi $suivi
      *
      * @return Response
      */
-    public function voirAction(Suivi $suivi)
+    public function voir(Suivi $suivi)
     {
         $etude = $suivi->getEtude();
         $suivis = $etude->getSuivis()->toArray();
@@ -115,14 +115,14 @@ class SuiviController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="MgateSuivi_suivi_modifier", path="/suivi/suivi/modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_suivi_modifier", path="/suivi/suivi/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param Suivi   $suivi
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Suivi $suivi)
+    public function modifier(Request $request, Suivi $suivi)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -135,7 +135,7 @@ class SuiviController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Note de suivi modifiée');
 
-                return $this->redirectToRoute('MgateSuivi_suivi_voir', ['id' => $suivi->getId()]);
+                return $this->redirectToRoute('project_suivi_voir', ['id' => $suivi->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }

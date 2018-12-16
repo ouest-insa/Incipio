@@ -1,4 +1,4 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
     Modifier les missions
@@ -16,21 +16,21 @@
 
     <p>
         <button type="button" class="btn btn-primary"
-                id="add-another-mission">{{ 'suivi.mission_ajouter'|trans({}, 'suivi') }}</button>
+                id="add-another-mission">{{ 'suivi.mission_ajouter'|trans({}, 'project') }}</button>
 
-        <button type="submit" class="btn btn-success">{{ 'suivi.missions_enregistrer'|trans({}, 'suivi') }}</button>
+        <button type="submit" class="btn btn-success">{{ 'suivi.missions_enregistrer'|trans({}, 'project') }}</button>
     </p>
 
     <div id="missions-fields-list" data-prototype="
-            {% include 'MgateSuiviBundle:Mission:formulaire.prototype.html.twig'
+            {% include 'Project/Mission/formulaire.prototype.html.twig'
     with {'form': form.missions.vars.prototype} |e %}">
         {% for mission in form.missions %}
-            {% include 'MgateSuiviBundle:Mission:formulaire.html.twig' with {'form': mission} %}
+            {% include 'Project/Mission/formulaire.html.twig' with {'form': mission} %}
         {% endfor %}
     </div>
 
     <p>
-        <button type="submit" class="btn btn-success">{{ 'suivi.missions_enregistrer'|trans({}, 'suivi') }}</button>
+        <button type="submit" class="btn btn-success">{{ 'suivi.missions_enregistrer'|trans({}, 'project') }}</button>
     </p>
     {{ form_widget(form._token) }}
     <div class="hidden">

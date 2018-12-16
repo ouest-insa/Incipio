@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block title %}
     {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.mandat }}-NF{{ nf.numero }}-{{ nf.demandeur.membre.identifiant }}- {{ parent() }}
@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block breadcrumb_items %}
-    <li><a href="{{ path('MgateTreso_NoteDeFrais_index') }}">{{ 'treso.note_frais_liste'|trans({}, 'treso') }}</a></li>
+    <li><a href="{{ path('treso_NoteDeFrais_index') }}">{{ 'treso.note_frais_liste'|trans({}, 'treso') }}</a></li>
 {% endblock %}
 
 {% block breadcrumb_active %}
@@ -94,16 +94,16 @@
     </table>
     <div class="row">
         <div class="col-md-3 col-xs-4">
-            <a href="{{ path('MgateTreso_NoteDeFrais_modifier', {'id': nf.id}) }}" class="btn btn-primary">
+            <a href="{{ path('treso_NoteDeFrais_modifier', {'id': nf.id}) }}" class="btn btn-primary">
                 {{ 'treso.note_frais_modifier'|trans({}, 'treso') }}</a>
         </div>
         <div class="col-md-3 col-xs-4">
             <a type="button" class="btn btn-success"
-               href="{{ path('Mgate_publi_publiposter', { 'templateName' : constant('\\Mgate\\PubliBundle\\Controller\\TraitementController::DOCTYPE_NOTE_DE_FRAIS') , 'rootName' : constant('\\Mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_NOTE_DE_FRAIS'), 'rootObject_id' : nf.id}) }}">
+               href="{{ path('publish_publiposter', { 'templateName' : constant('\\App\\Controller\\Publish\\TraitementController::DOCTYPE_NOTE_DE_FRAIS') , 'rootName' : constant('\\App\\Controller\\Publish\\TraitementController::ROOTNAME_NOTE_DE_FRAIS'), 'rootObject_id' : nf.id}) }}">
                 {{ 'treso.note_frais_generer'|trans({}, 'treso') }}</a>
         </div>
         <div class="col-md-3 col-xs-4">
-            <a href="{{ path('MgateTreso_NoteDeFrais_supprimer', {'id': nf.id}) }}" class="btn btn-danger">
+            <a href="{{ path('treso_NoteDeFrais_supprimer', {'id': nf.id}) }}" class="btn btn-danger">
                 {{ 'treso.note_frais_supprimer'|trans({}, 'treso') }}
             </a>
         </div>

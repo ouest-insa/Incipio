@@ -24,31 +24,31 @@ class BaseURSSAFController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_BaseURSSAF_index", path="/Tresorerie/BasesURSSAF", methods={"GET","HEAD"})
+     * @Route(name="treso_BaseURSSAF_index", path="/Tresorerie/BasesURSSAF", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
-        $bases = $em->getRepository('MgateTresoBundle:BaseURSSAF')->findAll();
+        $bases = $em->getRepository(BaseURSSAF::class)->findAll();
 
         return $this->render('Treso/BaseURSSAF/index.html.twig', ['bases' => $bases]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_BaseURSSAF_ajouter", path="/Tresorerie/BaseURSSAF/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
-     * @Route(name="MgateTreso_BaseURSSAF_modifier", path="/Tresorerie/BaseURSSAF/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="treso_BaseURSSAF_ajouter", path="/Tresorerie/BaseURSSAF/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
+     * @Route(name="treso_BaseURSSAF_modifier", path="/Tresorerie/BaseURSSAF/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request $request
      * @param         $id
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, $id)
+    public function modifier(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$base = $em->getRepository('MgateTresoBundle:BaseURSSAF')->find($id)) {
+        if (!$base = $em->getRepository(BaseURSSAF::class)->find($id)) {
             $base = new BaseURSSAF();
         }
 
@@ -60,7 +60,7 @@ class BaseURSSAFController extends AbstractController
                 $em->persist($base);
                 $em->flush();
 
-                return $this->redirectToRoute('MgateTreso_BaseURSSAF_index', []);
+                return $this->redirectToRoute('treso_BaseURSSAF_index', []);
             }
         }
 
@@ -72,19 +72,19 @@ class BaseURSSAFController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="MgateTreso_BaseURSSAF_supprimer", path="/Tresorerie/BaseURSSAF/Supprimer/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="treso_BaseURSSAF_supprimer", path="/Tresorerie/BaseURSSAF/Supprimer/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param BaseURSSAF $base
      *
      * @return RedirectResponse
      */
-    public function supprimerAction(BaseURSSAF $base)
+    public function supprimer(BaseURSSAF $base)
     {
         $em = $this->getDoctrine()->getManager();
 
         $em->remove($base);
         $em->flush();
 
-        return $this->redirectToRoute('MgateTreso_BaseURSSAF_index', []);
+        return $this->redirectToRoute('treso_BaseURSSAF_index', []);
     }
 }

@@ -11,12 +11,12 @@
 
 namespace App\Entity\Project;
 
-use App\Entity\Competence;
-use App\Entity\Facture;
-use App\Entity\Personne;
-use App\Entity\Prospect;
-use App\Entity\RelatedDocument;
-use App\Entity\Thread;
+use App\Entity\Comment\Thread;
+use App\Entity\Hr\Competence;
+use App\Entity\Personne\Personne;
+use App\Entity\Personne\Prospect;
+use App\Entity\Publish\RelatedDocument;
+use App\Entity\Treso\Facture;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\SuiviBundle\Entity\EtudeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Project\EtudeRepository")
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("num")
  * @UniqueEntity("nom")
@@ -129,8 +129,7 @@ class Etude
     private $confidentiel;
 
     /**
-     * @ORM\ManyToMany(targetEntity="N7consulting\RhBundle\Entity\Competence", mappedBy="etudes",
-     *                                                                         cascade={"persist","merge"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Hr\Competence", mappedBy="etudes", cascade={"persist","merge"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $competences;
@@ -156,31 +155,31 @@ class Etude
      ************************/
 
     /**
-     * @ORM\OneToMany(targetEntity="Mgate\PubliBundle\Entity\RelatedDocument", mappedBy="etude", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Publish\RelatedDocument", mappedBy="etude", cascade={"remove"})
      */
     private $relatedDocuments;
 
     /**
      * @Assert\Valid()
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Prospect", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Prospect", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $prospect;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Personne")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne")
      * @ORM\JoinColumn(nullable=true)
      */
     protected $suiveur;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Personne")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne")
      * @ORM\JoinColumn(nullable=true)
      */
     protected $suiveurQualite;
 
     /**
-     * @ORM\OneToOne(targetEntity="\Mgate\CommentBundle\Entity\Thread", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Comment\Thread", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $thread;
@@ -212,11 +211,13 @@ class Etude
     private $cc;
 
     /**
-     * @ORM\OneToMany(targetEntity="Mgate\TresoBundle\Entity\Facture", mappedBy="etude", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Treso\Facture", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $factures;
 
     /**
+     * @var ProcesVerbal[]
+     *
      * @ORM\OneToMany(targetEntity="ProcesVerbal", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $procesVerbaux;
@@ -336,7 +337,7 @@ class Etude
     public function createThread(LifecycleEventArgs $args)
     {
         if (null === $this->getThread()) {
-            $em = $args->getEntityManager();
+            $em = $args->getObjectManager();
             $t = new Thread();
             $this->setThread($t);
             $this->getThread()->setId('etude_' . $this->getId());
@@ -351,6 +352,8 @@ class Etude
      */
 
     /**
+     * @param string $namingConvention
+     *
      * @return string
      *
      * @internal Should not be used in controllers, hardly in doctypes
@@ -511,6 +514,13 @@ class Etude
 
     /**
      * @deprecated since 0 0
+     *
+     * @param     $doc
+     * @param int $key
+     *
+     * @return mixed|null
+     *
+     * @throws \Exception
      */
     public function getDoc($doc, $key = -1)
     {
@@ -1217,7 +1227,7 @@ class Etude
     /**
      * Remove pvis.
      *
-     * @param \Mgate\SuiviBundle\Entity\ProcesVerbal $pvis
+     * @param ProcesVerbal $pvis
      */
     public function removePvi(ProcesVerbal $pvis)
     {
@@ -1227,7 +1237,9 @@ class Etude
     /**
      * Get pvis.
      *
-     * @return mixed(array, ProcesVerbal)
+     * @param int $key
+     *
+     * @return mixed
      */
     public function getPvis($key = -1)
     {
@@ -1334,8 +1346,6 @@ class Etude
 
         foreach ($this->procesVerbaux as $pv) {
             if ('pvr' === $pv->getType()) {
-                $pv = $pvr;
-
                 return $this;
             }
         }
@@ -1491,7 +1501,7 @@ class Etude
     /**
      * Remove groupes.
      *
-     * @param GroupePhases $groupes
+     * @param GroupePhases $groupe
      */
     public function removeGroupe(GroupePhases $groupe)
     {

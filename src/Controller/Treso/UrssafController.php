@@ -11,6 +11,7 @@
 
 namespace App\Controller\Treso;
 
+use App\Entity\Project\Mission;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +24,7 @@ class UrssafController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="Mgate_treso_urssaf", path="/Tresorerie/urssaf/{year}/{month}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": ""})
+     * @Route(name="treso_urssaf", path="/Tresorerie/urssaf/{year}/{month}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": ""})
      *
      * @param Request $request
      * @param null    $year
@@ -31,7 +32,7 @@ class UrssafController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function indexAction(Request $request, $year = null, $month = null)
+    public function index(Request $request, $year = null, $month = null)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -45,7 +46,7 @@ class UrssafController extends AbstractController
             if ($form->isValid()) {
                 $data = $form->getData();
 
-                return $this->redirectToRoute('Mgate_treso_urssaf', ['year' => $data['date']->format('Y'),
+                return $this->redirectToRoute('treso_urssaf', ['year' => $data['date']->format('Y'),
                     'month' => $data['date']->format('m'),
                 ]);
             }
@@ -58,7 +59,7 @@ class UrssafController extends AbstractController
             $date->setDate($year, $month, 01);
         }
 
-        $RMs = $em->getRepository('MgateSuiviBundle:Mission')->getMissionsBeginBeforeDate($date);
+        $RMs = $em->getRepository(Mission::class)->getMissionsBeginBeforeDate($date);
 
         return $this->render('Treso/Urssaf/index.html.twig', ['form' => $form->createView(), 'RMs' => $RMs]);
     }

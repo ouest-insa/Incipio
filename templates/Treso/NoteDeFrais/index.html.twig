@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block title %}
     {{ 'treso.note_frais_gestion'|trans({}, 'treso') }} - {{ parent() }}
@@ -23,7 +23,7 @@
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li>
-                <a href="{{ path('MgateTreso_NoteDeFrais_ajouter') }}"> <span
+                <a href="{{ path('treso_NoteDeFrais_ajouter') }}"> <span
                             class="fa fa-plus"></span> {{ 'treso.note_frais_ajouter'|trans({}, 'treso') }}</a>
             </li>
             <li class="active">
@@ -47,7 +47,7 @@
             <tr>
                 <td>{{ nf.date | date('d/m/Y') }}</td>
                 <td>
-                    <a href="{{ path('MgateTreso_NoteDeFrais_voir', {'id': nf.id}) }}">{{ nf.mandat }}
+                    <a href="{{ path('treso_NoteDeFrais_voir', {'id': nf.id}) }}">{{ nf.mandat }}
                         -NF{{ "%2d" | format(nf.numero) }}-{{ nf.demandeur.membre.identifiant }}</a>
                 </td>
                 <td>{{ nf.demandeur.prenomNom }}</td>

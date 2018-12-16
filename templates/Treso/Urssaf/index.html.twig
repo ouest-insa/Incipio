@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -17,7 +17,7 @@
 {% block content_bundle %}
 
     {{ form_start(form) }}
-        {% form_theme form 'MgateSuiviBundle:Form:fields.html.twig' %}
+        {% form_theme form 'Project/Form/fields.html.twig' %}
         {{ form_label(form.date) }} {{ form_widget(form.date) }}
         {{ form_widget(form) }}
         <input type="submit" value="{{ 'treso.chercher'|trans({}, 'treso') }}" class="btn btn-primary"/>
@@ -56,7 +56,7 @@
             <tr>
                 <td>
                     <div>
-                        <a href="{{ path('MgateSuivi_etude_voir', {'nom': rm.etude.nom}) }}"> {{ rm.etude.reference(param('namingConvention')) }}</a>
+                        <a href="{{ path('project_etude_voir', {'nom': rm.etude.nom}) }}"> {{ rm.etude.reference(param('namingConvention')) }}</a>
                     </div>
                 </td>
                 <td>{{ rm.etude.prospect.nom }}

@@ -11,6 +11,7 @@
 
 namespace App\Repository\Treso;
 
+use App\Entity\Treso\Facture;
 use Doctrine\ORM\EntityRepository;
 
 class FactureRepository extends EntityRepository
@@ -31,7 +32,7 @@ class FactureRepository extends EntityRepository
         $date = (1 == $type ? 'dateEmission' : 'dateVersement');
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('f')
-            ->from('MgateTresoBundle:Facture', 'f')
+            ->from(Facture::class, 'f')
             ->where('f.type ' . (Facture::TYPE_ACHAT == $type ? '=' : '>') . ' ' . Facture::TYPE_ACHAT);
         if ($trimestriel) {
             $query->andWhere('MONTH(f.' . $date . ') >= :month')
@@ -63,7 +64,7 @@ class FactureRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('sum(fd.montantHT) as montant')
-            ->from('MgateTresoBundle:Facture', 'facture')
+            ->from(Facture::class, 'facture')
             ->leftJoin('facture.details', 'fd')
             ->where('facture.type  in (:type)')
             ->setParameter('type', [Facture::TYPE_VENTE_ACCOMPTE, Facture::TYPE_VENTE_INTERMEDIAIRE, Facture::TYPE_VENTE_SOLDE])
@@ -78,7 +79,7 @@ class FactureRepository extends EntityRepository
 
         $qb = $this->_em->createQueryBuilder();
         $qb->select('sum(montantADeduire.montantHT) as montant')
-            ->from('MgateTresoBundle:Facture', 'facture')
+            ->from(Facture::class, 'facture')
             ->leftJoin('facture.montantADeduire', 'montantADeduire')
             ->where('facture.type  in (:type)')
             ->setParameter('type', [Facture::TYPE_VENTE_ACCOMPTE, Facture::TYPE_VENTE_INTERMEDIAIRE, Facture::TYPE_VENTE_SOLDE])
@@ -105,7 +106,7 @@ class FactureRepository extends EntityRepository
 
         $query = $qb
             ->select('f')
-            ->from('MgateTresoBundle:Facture', 'f')
+            ->from(Facture::class, 'f')
             ->leftJoin('f.details', 'details')
             ->addSelect('details')
             ->leftJoin('f.montantADeduire', 'montantADeduire')

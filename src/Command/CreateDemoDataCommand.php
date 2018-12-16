@@ -8,6 +8,7 @@ use App\Entity\Personne\Filiere;
 use App\Entity\Personne\Mandat;
 use App\Entity\Personne\Membre;
 use App\Entity\Personne\Personne;
+use App\Entity\Personne\Poste;
 use App\Entity\Personne\Prospect;
 use App\Entity\Project\Ap;
 use App\Entity\Project\Cc;
@@ -16,6 +17,7 @@ use App\Entity\Project\GroupePhases;
 use App\Entity\Project\Mission;
 use App\Entity\Project\Phase;
 use App\Entity\Project\ProcesVerbal;
+use App\Entity\Treso\Compte;
 use App\Entity\Treso\Facture;
 use App\Entity\Treso\FactureDetail;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -202,7 +204,7 @@ class CreateDemoDataCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->competences = $this->em->getRepository('N7consultingRhBundle:Competence')->findAll();
+        $this->competences = $this->em->getRepository(Competence::class)->findAll();
 
         $this->createFilieres($output);
         $this->createMembres($output);
@@ -241,7 +243,7 @@ class CreateDemoDataCommand extends Command
         $m1->setDebutMandat(new \DateTime(($mandat - 2) . '-03-16'));
         $m1->setFinMandat(new \DateTime(($mandat - 1) . '-03-16'));
         $m1->setMembre($vp);
-        $m1->setPoste($this->em->getRepository('MgatePersonneBundle:Poste')->findOneByIntitule('Vice-président'));
+        $m1->setPoste($this->em->getRepository(Poste::class)->findOneByIntitule('Vice-président'));
         $this->validateObject('Mandat VP', $m1);
         $this->em->persist($m1);
         $this->em->persist($vp);
@@ -254,7 +256,7 @@ class CreateDemoDataCommand extends Command
         $m2->setDebutMandat(new \DateTime(($mandat - 2) . '-03-16'));
         $m2->setFinMandat(new \DateTime(($mandat - 1) . '-03-16'));
         $m2->setMembre($president);
-        $m2->setPoste($this->em->getRepository('MgatePersonneBundle:Poste')->findOneByIntitule('Président'));
+        $m2->setPoste($this->em->getRepository(Poste::class)->findOneByIntitule('Président'));
         $this->em->persist($president);
         $this->em->persist($m2);
         $this->president = $president;
@@ -430,7 +432,7 @@ class CreateDemoDataCommand extends Command
                     $fa->setDateEmission($endDate->modify('+1 month'));
 
                     $detail = new FactureDetail();
-                    $detail->setCompte($this->em->getRepository('MgateTresoBundle:Compte')->findOneBy(['numero' => $compteAcompte]));
+                    $detail->setCompte($this->em->getRepository(Compte::class)->findOneBy(['numero' => $compteAcompte]));
                     $detail->setFacture($fa);
                     $fa->addDetail($detail);
                     $detail->setDescription('Acompte de ' . ($etude->getPourcentageAcompte() * 100) . ' % sur l\'étude ' . $etude->getReference());

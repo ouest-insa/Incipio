@@ -4,7 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: 'en'
+    locale: 'fr'
     app.json_key_value_store.path:  "%kernel.root_dir%/../var/key_value_store/config.json"
     app.json_stats.path:  "%kernel.root_dir%/../var/key_value_store/stats.json"
 
@@ -33,6 +33,9 @@ services:
     App\Controller\Dashboard\AdminController:
         arguments:
            $keyValueStore: "@app.json_key_value_store"
+    App\Controller\Project\EtudeController:
+        arguments:
+           $keyValueStore: "@app.json_key_value_store"
     App\Controller\Publish\TraitementController:
         arguments:
             $keyValueStore: "@app.json_key_value_store"
@@ -42,10 +45,17 @@ services:
     App\Service\Project\EtudeManager:
         arguments:
             $keyValueStore: "@app.json_key_value_store"
+    App\Service\Project\EmailEtuManager:
+        arguments:
+            $keyValueStore: "@app.json_key_value_store"
+    App\Service\Publish\DocumentManager:
+        arguments:
+            $juniorId: "%env(JUNIOR_ID)%"
+            $authorizedStorageSize: "%env(AUTHORIZED_STORAGE_SIZE)%"
 
 
-# Services definition
-
+# Services definition & alias
+    FOS\UserBundle\Mailer\MailerInterface: "@fos_user.mailer.twig_swift"
     app.json_key_value_store:
         class:        Webmozart\KeyValueStore\JsonFileStore
         arguments:    ["%app.json_key_value_store.path%"]

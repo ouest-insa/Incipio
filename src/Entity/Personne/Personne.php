@@ -17,8 +17,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Mgate\PersonneBundle\Entity\Personne.
- *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="App\Repository\Personne\PersonneRepository")
  */
@@ -114,7 +112,7 @@ class Personne extends Adressable implements AnonymizableInterface
      *
      * @Groups({"gdpr"})
      *
-     * @ORM\OneToOne(targetEntity="Mgate\PersonneBundle\Entity\Employe", mappedBy="personne", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Personne\Employe", mappedBy="personne", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true,onDelete="CASCADE" )
      */
     private $employe;
@@ -124,7 +122,7 @@ class Personne extends Adressable implements AnonymizableInterface
      *
      * @Groups({"gdpr"})
      *
-     * @ORM\OneToOne(targetEntity="Mgate\UserBundle\Entity\User", mappedBy="personne", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\User\User", mappedBy="personne", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $user;
@@ -134,7 +132,7 @@ class Personne extends Adressable implements AnonymizableInterface
      *
      * @Groups({"gdpr"})
      *
-     * @ORM\OneToOne(targetEntity="Mgate\PersonneBundle\Entity\Membre", mappedBy="personne", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Personne\Membre", mappedBy="personne", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $membre;

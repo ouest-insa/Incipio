@@ -17,8 +17,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Mgate\PersonneBundle\Entity\Poste.
- *
  * @ORM\Table()
  * @ORM\Entity
  * @UniqueEntity("intitule")
@@ -42,7 +40,7 @@ class Poste
     private $intitule;
 
     /**
-     * @ORM\OneToMany(targetEntity="Mgate\PersonneBundle\Entity\Mandat", mappedBy="poste")
+     * @ORM\OneToMany(targetEntity="App\Entity\Personne\Mandat", mappedBy="poste")
      * @ORM\JoinColumn(nullable=true)
      */
     private $mandats;

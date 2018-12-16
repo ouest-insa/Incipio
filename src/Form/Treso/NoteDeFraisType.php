@@ -11,6 +11,7 @@
 
 namespace App\Form\Treso;
 
+use App\Entity\Personne\Personne;
 use App\Entity\Treso\NoteDeFrais;
 use App\Repository\Personne\PersonneRepository;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;

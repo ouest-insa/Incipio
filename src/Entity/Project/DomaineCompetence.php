@@ -15,8 +15,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Mgate\SuiviBundle\Entity\DomaineCompetence.
- *
  * @ORM\Table()
  * @ORM\Entity
  */

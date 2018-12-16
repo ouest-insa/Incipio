@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block title %}
     {{ 'treso.comptes_gestion'|trans({}, 'treso') }} - {{ parent() }}
@@ -30,7 +30,7 @@
 
 
     {% if compte.numero is not null and is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('MgateTreso_Compte_supprimer', {'id': compte.id}) }}" class="btn btn-danger">
+        <a href="{{ path('treso_Compte_supprimer', {'id': compte.id}) }}" class="btn btn-danger">
             {{ 'treso.compte_supprimer'|trans({}, 'treso') }}
         </a>
     {% endif %}

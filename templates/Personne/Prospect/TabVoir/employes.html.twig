@@ -15,7 +15,7 @@
         {% for employe in prospect.employes %}
             <tr>
                 <td>
-                    <a href="{{ path('MgatePersonne_employe_modifier', {'id': employe.id}) }}">
+                    <a href="{{ path('personne_employe_modifier', {'id': employe.id}) }}">
                         {{ employe.personne.nom | title }} {{ employe.personne.prenom }}
                     </a>
                 </td>
@@ -35,12 +35,12 @@
 
 <div class="row">
     <div class="col-md-4 col-xs-6">
-        <a href="{{ path('MgatePersonne_employe_ajouter', {'prospect_id': prospect.id}) }}" class="btn btn-primary">
+        <a href="{{ path('personne_employe_ajouter', {'prospect_id': prospect.id}) }}" class="btn btn-primary">
             {{ 'employe.ajouter_employe'|trans({}, 'personne') }}
         </a>
     </div>
     <div class="col-md-4 col-xs-6">
-        <a href="{{ path('MgatePersonne_prospect_modifier', {'id': prospect.id}) }}" class="btn btn-warning">
+        <a href="{{ path('personne_prospect_modifier', {'id': prospect.id}) }}" class="btn btn-warning">
             {{ 'prospect.modifier_prospect'|trans({}, 'personne') }}
         </a>
     </div>

@@ -11,6 +11,7 @@
 
 namespace App\Repository\Formation;
 
+use App\Entity\Formation\Formation;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -27,7 +28,7 @@ class FormationRepository extends EntityRepository
     public function findAllByMandat()
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('f')->from('MgateFormationBundle:Formation', 'f')
+        $query = $qb->select('f')->from(Formation::class, 'f')
             ->orderBy('f.mandat', 'desc')
             ->orderBy('f.dateDebut', 'asc')
             ->leftJoin('f.formateurs', 'formateurs')
@@ -36,6 +37,7 @@ class FormationRepository extends EntityRepository
         $entities = $query->getQuery()->getResult();
 
         $formationsParMandat = [];
+        /** @var Formation $formation */
         foreach ($entities as $formation) {
             $mandat = $formation->getMandat();
             if (array_key_exists($mandat, $formationsParMandat)) {
@@ -54,7 +56,7 @@ class FormationRepository extends EntityRepository
     public function getAllFormations()
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('f')->from('MgateFormationBundle:Formation', 'f')
+        $query = $qb->select('f')->from(Formation::class, 'f')
             ->leftJoin('f.formateurs', 'formateurs')
             ->addSelect('formateurs')
             ->leftJoin('f.membresPresents', 'membresPresents')

@@ -1,5 +1,5 @@
-{# layout père du rh bundle #}
-{% extends "::layout.html.twig" %}
+{# Layout de base du module RH #}
+{% extends "base.html.twig" %}
 
 {% block title %}
     RH - {{ parent() }}
@@ -17,7 +17,7 @@
             {% block breadcrumb %}
                 <ul class="breadcrumb no-margin pull-right">
                     <li>
-                        <a href="{{ path('N7consultingRh_competence_homepage') }}">
+                        <a href="{{ path('hr_competence_homepage') }}">
                             {{ 'dashboard.rh_competences'|trans({}, 'dashboard') }}
                         </a>
                     </li>

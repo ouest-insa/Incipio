@@ -36,7 +36,7 @@ class AdminController extends AbstractController
      *
      * @return Response
      */
-    public function indexAction(Request $request)
+    public function index(Request $request)
     {
         $form = $this->createForm(AdminParamType::class);
 

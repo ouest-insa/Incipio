@@ -3,6 +3,7 @@
 namespace App\Controller\Privacy;
 
 use App\Entity\Personne\Personne;
+use App\Entity\Personne\Prospect;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * @Route("/privacy")
+ */
 class PrivacyController extends AbstractController
 {
     /** GDPR actions */
@@ -27,12 +31,12 @@ class PrivacyController extends AbstractController
      * @Security("has_role('ROLE_RGPD')")
      * @Route("/", name="privacy_homepage", methods={"GET"})
      */
-    public function indexAction()
+    public function index()
     {
         $personnes = $this->getDoctrine()->getManager()
-            ->getRepository('MgatePersonneBundle:Personne')
+            ->getRepository(Personne::class)
             ->getAllPersonne(true);
-        $firms = $this->getDoctrine()->getManager()->getRepository('MgatePersonneBundle:Prospect')
+        $firms = $this->getDoctrine()->getManager()->getRepository(Prospect::class)
             ->findAll();
 
         return $this->render('Privacy/Privacy/index.html.twig', [
@@ -53,7 +57,7 @@ class PrivacyController extends AbstractController
      *
      * @return RedirectResponse
      */
-    public function actionAction(Request $request, Personne $personne, SerializerInterface $serializer)
+    public function action(Request $request, Personne $personne, SerializerInterface $serializer)
     {
         if (!$request->request->has('token') ||
             $this->isCsrfTokenValid($request->request->get('token'), 'rgpd')
@@ -119,10 +123,10 @@ class PrivacyController extends AbstractController
     private function modify(Personne $personne)
     {
         if (null !== $personne->getMembre()) {
-            return $this->redirectToRoute('MgatePersonne_membre_modifier', ['id' => $personne->getMembre()->getId()]);
+            return $this->redirectToRoute('personne_membre_modifier', ['id' => $personne->getMembre()->getId()]);
         }
         if (null !== $personne->getEmploye()) {
-            return $this->redirectToRoute('MgatePersonne_employe_modifier', ['id' => $personne->getEmploye()->getId()]);
+            return $this->redirectToRoute('personne_employe_modifier', ['id' => $personne->getEmploye()->getId()]);
         }
 
         $this->addFlash('danger', 'Cette personne n\'est ni un membre ni un ouvrier');

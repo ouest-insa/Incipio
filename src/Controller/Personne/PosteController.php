@@ -11,6 +11,7 @@
 
 namespace App\Controller\Personne;
 
+use App\Entity\Personne\Filiere;
 use App\Entity\Personne\Poste;
 use App\Form\Personne\PosteType;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -26,13 +27,13 @@ class PosteController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_poste_ajouter", path="/poste/add", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_poste_ajouter", path="/poste/add", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      *
      * @return RedirectResponse|Response
      */
-    public function ajouterAction(Request $request)
+    public function ajouter(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -48,7 +49,7 @@ class PosteController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Poste ajouté');
 
-                return $this->redirectToRoute('MgatePersonne_poste_homepage');
+                return $this->redirectToRoute('personne_poste_homepage');
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -60,16 +61,16 @@ class PosteController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_poste_ajouter", path="/poste/add", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_poste_homepage", path="/poste", methods={"GET","HEAD","POST"})
      *
      * @return Response
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $postes = $em->getRepository('MgatePersonneBundle:Poste')->findAll();
-        $filieres = $em->getRepository('MgatePersonneBundle:Filiere')->findAll();
+        $postes = $em->getRepository(Poste::class)->findAll();
+        $filieres = $em->getRepository(Filiere::class)->findAll();
 
         return $this->render('Personne/Poste/index.html.twig', [
             'postes' => $postes,
@@ -79,7 +80,7 @@ class PosteController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_poste_modifier", path="/poste/modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_poste_modifier", path="/poste/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request       $request
      * @param Poste         $poste
@@ -89,7 +90,7 @@ class PosteController extends AbstractController
      *
      * @internal param $id
      */
-    public function modifierAction(Request $request, Poste $poste, ObjectManager $em)
+    public function modifier(Request $request, Poste $poste, ObjectManager $em)
     {
         // On passe l'$article récupéré au formulaire
         $form = $this->createForm(PosteType::class, $poste);
@@ -102,7 +103,7 @@ class PosteController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Poste modifié');
 
-                return $this->redirectToRoute('MgatePersonne_poste_homepage');
+                return $this->redirectToRoute('personne_poste_homepage');
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -115,7 +116,7 @@ class PosteController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_poste_supprimer", path="/poste/supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_poste_supprimer", path="/poste/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request       $request
      * @param Poste         $poste
@@ -123,7 +124,7 @@ class PosteController extends AbstractController
      *
      * @return RedirectResponse
      */
-    public function deleteAction(Request $request, Poste $poste, ObjectManager $em)
+    public function delete(Request $request, Poste $poste, ObjectManager $em)
     {
         $form = $this->createDeleteForm($poste->getId());
         $form->handleRequest($request);
@@ -137,12 +138,12 @@ class PosteController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Poste supprimé');
 
-                return $this->redirectToRoute('MgatePersonne_poste_homepage');
+                return $this->redirectToRoute('personne_poste_homepage');
             }
             $this->addFlash('danger', 'Impossible de supprimer un poste ayant des membres.');
         }
 
-        return $this->redirectToRoute('MgatePersonne_poste_modifier', ['id' => $poste->getId()]);
+        return $this->redirectToRoute('personne_poste_modifier', ['id' => $poste->getId()]);
     }
 
     private function createDeleteForm($id)

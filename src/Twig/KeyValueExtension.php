@@ -15,7 +15,7 @@ class KeyValueExtension extends \Twig_Extension
 
     public function getName()
     {
-        return 'mgate_dashboardbundle_json_key_value_store_extension';
+        return 'dashboard_json_key_value_store_extension';
     }
 
     public function getFunctions()

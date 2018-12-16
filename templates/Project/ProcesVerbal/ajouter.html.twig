@@ -1,20 +1,20 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.proces_verbal_rediger'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.proces_verbal_rediger'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.proces_verbal_ajouter'|trans({}, 'suivi') }}
+    {{ 'suivi.proces_verbal_ajouter'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
 
     {{ form_start(form) }}
 
-    {% include 'MgateSuiviBundle:ProcesVerbal:formulaire.html.twig' %}
+    {% include 'Project/ProcesVerbal/formulaire.html.twig' %}
 
-        <input type="submit" value="{{ 'suivi.proces_verbal_enregistrer'|trans({}, 'suivi') }}"
+        <input type="submit" value="{{ 'suivi.proces_verbal_enregistrer'|trans({}, 'project') }}"
                class="btn btn-success"/>
     {{ form_end(form) }}
 {% endblock %}
@@ -23,5 +23,5 @@
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
-    {% include "MgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 } %}
+    {% include "Project/DocType/selectOrNew.html.twig" with { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 } %}
 {% endblock %}

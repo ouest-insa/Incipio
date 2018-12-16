@@ -33,12 +33,12 @@ class Competence
     private $nom;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Mgate\PersonneBundle\Entity\Membre", inversedBy="competences")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Personne\Membre", inversedBy="competences")
      */
     private $membres;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Mgate\SuiviBundle\Entity\Etude", inversedBy="competences")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Project\Etude", inversedBy="competences")
      */
     private $etudes;
 

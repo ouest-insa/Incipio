@@ -11,7 +11,10 @@
 
 namespace App\Repository\Project;
 
-use App\Repository\Competence;
+use App\Entity\Hr\Competence;
+use App\Entity\Project\Cc;
+use App\Entity\Project\Etude;
+use App\Entity\Project\Phase;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -35,7 +38,7 @@ class EtudeRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('e')
-            ->from('MgateSuiviBundle:Etude', 'e')
+            ->from(Etude::class, 'e')
             ->where('e.nom = :nom')
             ->setParameter('nom', $nom);
 
@@ -47,7 +50,7 @@ class EtudeRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
 
         $query = $qb->select('e')
-            ->from('MgateSuiviBundle:Cc', 'cc')
+            ->from(Cc::class, 'cc')
             ->leftJoin('cc.etude', 'e');
         //->addSelect('e')
         //->where('e.cc IS NOT NULL')
@@ -61,10 +64,12 @@ class EtudeRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
 
         $query = $qb->select('e')
-            ->from('MgateSuiviBundle:Etude', 'e')
+            ->from(Etude::class, 'e')
             ->leftJoin('e.competences', 'c')
             ->addSelect('c')
-            ->leftJoin('e.phases', 'p')->addSelect('p')//cette requete n'est utilisée que sur la page RH du bundle N7Consulting. Comme elle affiche le nombre de JEH, ajout d'une jointure sur les phases pour éviter de faire une requete sur les phases a chaque étude.
+            ->leftJoin('e.phases', 'p')->addSelect('p')//cette requete n'est utilisée que sur la page RH
+            // du bundle N7Consulting. Comme elle affiche le nombre de JEH, ajout d'une jointure sur les phases pour
+            // éviter de faire une requete sur les phases a chaque étude.
             ->leftJoin('e.cc', 'cc')->addSelect('cc')
             ->leftJoin('e.ap', 'ap')->addSelect('ap')
             ->where(':competence MEMBER OF e.competences')
@@ -89,7 +94,7 @@ class EtudeRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('e')
-            ->from('MgateSuiviBundle:Etude', 'e')
+            ->from(Etude::class, 'e')
             ->where('e.stateID = :stateId')
             ->setParameter('stateId', $etat[key($etat)]);
 
@@ -142,7 +147,7 @@ class EtudeRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('e')
-            ->from('MgateSuiviBundle:Etude', 'e')
+            ->from(Etude::class, 'e')
             ->where('e.stateID = :stateNegociate or e.stateID= :stateCurrent')
             ->setParameter('stateNegociate', $states[0])
             ->setParameter('stateCurrent', $states[1]);
@@ -166,7 +171,7 @@ class EtudeRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('e')
-            ->from('MgateSuiviBundle:Etude', 'e')
+            ->from(Etude::class, 'e')
             ->where('e.nom LIKE :nom')
             ->setParameter('nom', '%' . $search . '%')
             ->setMaxResults($limit);
@@ -187,7 +192,7 @@ class EtudeRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('sum(p.nbrJEH * p.prixJEH + e.fraisDossier) as montant')
-            ->from('MgateSuiviBundle:Phase', 'p')
+            ->from(Phase::class, 'p')
             ->leftJoin('p.etude', 'e')
             ->where('e.stateID = :stateId')
             ->setParameter('stateId', $state);

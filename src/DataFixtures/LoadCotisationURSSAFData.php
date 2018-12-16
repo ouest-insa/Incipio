@@ -11,11 +11,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\CotisationURSSAF;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use App\Entity\Treso\CotisationURSSAF;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadCotisationURSSAFData implements FixtureInterface
+class LoadCotisationURSSAFData extends Fixture
 {
     /**
      * {@inheritdoc}
@@ -284,7 +284,7 @@ class LoadCotisationURSSAFData implements FixtureInterface
                 ->setTauxPartEtu($cotisation['tauxEtu'])
                 ->setTauxPartJE($cotisation['tauxJE']);
 
-            if (!$manager->getRepository('MgateTresoBundle:CotisationURSSAF')->findBy([
+            if (!$manager->getRepository(CotisationURSSAF::class)->findBy([
                 'dateDebut' => $cotisationURSSAF->getDateDebut(),
                 'dateFin' => $cotisationURSSAF->getDateFin(),
                 'libelle' => $cotisationURSSAF->getLibelle(),

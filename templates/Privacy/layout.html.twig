@@ -1,4 +1,4 @@
-{% extends "::layout.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block title %}
     {{ 'dashboard.vie_privee'|trans({}, 'dashboard') }} {{ parent() }}
@@ -28,7 +28,6 @@
             {% endblock %}
         </div>
         <div class="box-body">
-            {# On définit un nouveau block, que les vues du bundle pourront remplir #}
             {% block content_bundle %}
             {% endblock %}
 

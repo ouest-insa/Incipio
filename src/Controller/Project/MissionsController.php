@@ -28,7 +28,7 @@ class MissionsController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_missions_modifier", path="/suivi/missions/modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_missions_modifier", path="/suivi/missions/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -36,7 +36,7 @@ class MissionsController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function modifier(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -65,7 +65,7 @@ class MissionsController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Mission enregistrée');
 
-                return $this->redirectToRoute('MgateSuivi_missions_modifier', ['id' => $etude->getId()]);
+                return $this->redirectToRoute('project_missions_modifier', ['id' => $etude->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }

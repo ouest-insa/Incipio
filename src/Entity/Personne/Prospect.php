@@ -11,7 +11,7 @@
 
 namespace App\Entity\Personne;
 
-use App\Entity\Thread;
+use App\Entity\Comment\Thread;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,11 +19,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Mgate\PersonneBundle\Entity\Prospect.
- *
  * @ORM\Table()
  * @ORM\HasLifecycleCallbacks
- * @ORM\Entity(repositoryClass="Mgate\PersonneBundle\Entity\ProspectRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Personne\ProspectRepository")
  */
 class Prospect extends Adressable
 {
@@ -42,7 +40,7 @@ class Prospect extends Adressable
     private $employes;
 
     /**
-     * @ORM\OneToOne(targetEntity="\Mgate\CommentBundle\Entity\Thread", cascade={"persist","remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Comment\Thread", cascade={"persist","remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $thread;
@@ -82,7 +80,7 @@ class Prospect extends Adressable
     public function createThread(LifecycleEventArgs $args)
     {
         if (null === $this->getThread()) {
-            $em = $args->getEntityManager();
+            $em = $args->getObjectManager();
             $t = new Thread();
             $t->setId('prospect_' . $this->getId());
             $this->setThread($t);

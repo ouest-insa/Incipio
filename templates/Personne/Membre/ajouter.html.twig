@@ -1,0 +1,120 @@
+{% extends "Personne/layout.html.twig" %}
+
+{% block title %}
+    {{ 'membre.ajout_membre'|trans({}, 'personne') }} {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'membre.ajout_membre'|trans({}, 'personne') }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <ul class="breadcrumb no-margin pull-right">
+        <li><a href="{{ path('personne_membre_homepage') }}">{{ 'membre.liste_membre'|trans({}, 'personne') }}</a></li>
+        {% if form.vars.value.personne is not none %}
+            <li>
+                <a href="{{ path('personne_membre_voir', {'id': form.vars.value.id}) }}">
+                    {{ form.vars.value.personne.prenomNom }}
+                </a>
+            </li>
+            <li class="active">{{ 'membre.modifier'|trans({}, 'personne') }}</li>
+        {% else %}
+            <li class="active">{{ 'membre.ajout_membre'|trans({}, 'personne') }}</li>
+        {% endif %}
+    </ul>
+{% endblock %}
+
+{% block content_bundle %}
+    {{ form_start(form, {'attr': {'id': 'form', 'class': 'form-horizontal'}}) }}
+
+    {% include "Personne/Membre/formulaire.html.twig" %}
+
+    <div class="row">
+        <div class="col-md-2 col-xs-4">
+            <button type="submit" class="btn btn-success">{{ 'generique.enregistrer'|trans({}, 'personne') }}</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+
+    <script type="text/javascript">
+        var isDirty = false;
+        var mandatsCount = {{ form.mandats |length }};
+
+        jQuery(document).ready(function() {
+            jQuery('#add-another-mandat').click(function(e) {
+                e.preventDefault();
+
+                var mandatList = jQuery('#mandats-fields-list');
+
+                // grab the prototype template
+                var newWidget = mandatList.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your emails
+                // end name attribute looks like name="contact[emails][2]"
+                newWidget = newWidget.replace(/__name__/g, mandatsCount);
+                mandatsCount++;
+
+                // create a new list element and add it to the list
+                var newLi = jQuery('<tr></tr>').html(newWidget);
+                newLi.appendTo(mandatList);
+                $('.select2').select2();
+                addPhaseBouton(newLi);
+                $('.js-datepicker').datepicker({
+                    format: 'dd-mm-yyyy',
+                    language: 'fr'
+                });
+            });
+        });
+
+        jQuery(document).ready(function () {
+
+            //Verification avant de quitter
+            $(':input').change(function () {
+                if (!isDirty) {
+                    isDirty = true;
+                }
+            });
+            $(window).bind('beforeunload', function () {
+                if (isDirty)
+                    return "Do you really want to leave now?";
+            });
+            $('form').submit(function () {
+                isDirty = false;
+                return true;
+            });
+
+            //Rajout des boutons (X, up, down) pour les phases
+            $('.mandats').each(function () {
+                addPhaseBouton($(this));
+            });
+
+        });
+
+        function addPhaseBouton(phaseDiv) {
+            var deleteButton = $(' <button class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button>');
+            phaseDiv.children().first().append(deleteButton);
+
+            deleteButton.on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                //CONFIRM confirmation suppression
+                var message = "Êtes vous sûr de vouloir supprimer ce mandat ?";
+                bootbox.confirm(message, function (result) {
+                    if (result) {
+                        phaseDiv.remove();
+                    }
+                });
+            });
+        }
+
+        $('.select2').select2();
+
+    </script>
+{% endblock %}
+

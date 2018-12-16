@@ -1,6 +1,6 @@
 {# layout d'accueil pour les Prospect  #}
 
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
     {{ 'prospect.liste_prospect'|trans({}, 'personne') }} {{ parent() }}
@@ -36,7 +36,7 @@
         <tbody>
         {% for prospect in prospects %}
             <tr>
-                <td><a href="{{ path('MgatePersonne_prospect_voir', {'id': prospect.id}) }}"> {{ prospect.nom }} </a>
+                <td><a href="{{ path('personne_prospect_voir', {'id': prospect.id}) }}"> {{ prospect.nom }} </a>
                 </td>
                 <td>{{ prospect.entiteToString }}</td>
                 <td>{{ prospect.ville }}, {{ prospect.adresse }}</td>

@@ -1,6 +1,6 @@
 {# Page de liste des intervenants : les personnes ayant déjà réalisé une mission.#}
 
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -45,10 +45,10 @@
                     <span class="label label-default">{{ membre.promotion ? "P" ~ membre.promotion }}</span>
                 </td>
                 <td>
-                    <a href="{{ path('MgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.prenom }}</a>
+                    <a href="{{ path('personne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.prenom }}</a>
                 </td>
                 <td>
-                    <a href="{{ path('MgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.nom }}</a>
+                    <a href="{{ path('personne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.nom }}</a>
                 </td>
                 <td class="text-center">
                     <span class="label label-info">{{ membre.identifiant }}</span>
@@ -69,7 +69,7 @@
                     {% for mission in membre.missions %}
                         <span class="label label-{{ membre.dateConventionEleve ? ( membre.dateConventionEleve <= mission.debutOm |date_modify("-7 day") ? "success" : "warning" ) : "danger" }}">{{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }}
                             <span class="fa fa-arrow-right"></span> {{ mission.finOm ? mission.finOm | date("d/m/Y") : "?" }}</span>
-                        | <a href="{{ path("MgateSuivi_etude_voir", {'nom' : mission.etude.nom}) }}">{{ mission.etude.reference(param('namingConvention')) }}</a>
+                        | <a href="{{ path("project_etude_voir", {'nom' : mission.etude.nom}) }}">{{ mission.etude.reference(param('namingConvention')) }}</a>
                         <br/>
                     {% endfor %}
                 </td>

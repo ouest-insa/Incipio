@@ -11,6 +11,7 @@
 
 namespace App\Repository\User;
 
+use App\Entity\User\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -24,7 +25,7 @@ class UserRepository extends EntityRepository
     public function getNotPersonne($personne)
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('u')->from('MgateUserBundle:User', 'u')
+        $query = $qb->select('u')->from(User::class, 'u')
           ->leftJoin('u.personne', 'p')
           //->addSelect('m')
           ->where('u.personne IS NULL')

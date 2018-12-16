@@ -2,7 +2,7 @@
 
 <h2>{{ 'filiere.liste_filiere'|trans({}, 'personne') }}</h2>
 
-<a href="{{ path('MgatePersonne_filiere_ajouter') }}" class="btn btn-info">
+<a href="{{ path('personne_filiere_ajouter') }}" class="btn btn-info">
     {{ 'dashboard.filiere_ajouter'|trans({}, 'dashboard') }}
 </a>
 
@@ -18,7 +18,7 @@
             <tr>
         {% endif %}
         <td>
-            <a href="{{ path('MgatePersonne_filiere_modifier', {'id': filiere.id}) }}">
+            <a href="{{ path('personne_filiere_modifier', {'id': filiere.id}) }}">
                 <i class="fa fa-pencil"></i>
                 {{ filiere.nom }}
             </a>

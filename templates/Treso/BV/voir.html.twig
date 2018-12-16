@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block breadcrumb_items %}
-    <li><a href="{{ path('MgateTreso_BV_index') }}">{{ 'treso.bv_list'|trans({}, 'treso') }}</a></li>
+    <li><a href="{{ path('treso_BV_index') }}">{{ 'treso.bv_list'|trans({}, 'treso') }}</a></li>
 {% endblock %}
 
 
@@ -147,13 +147,13 @@
     <div class="row hidden-print">
         <div class="col-md-3 col-xs-6">
             <a type="button" class="btn btn-success"
-               href="{{ path('Mgate_publi_publiposter', { 'templateName' : constant('\\Mgate\\PubliBundle\\Controller\\TraitementController::DOCTYPE_BULLETIN_DE_VERSEMENT') , 'rootName' : constant('\\Mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_BULLETIN_DE_VERSEMENT'), 'rootObject_id' : bv.id}) }}">
+               href="{{ path('publish_publiposter', { 'templateName' : constant('\\App\\Controller\\Publish\\TraitementController::DOCTYPE_BULLETIN_DE_VERSEMENT') , 'rootName' : constant('\\App\\Controller\\Publish\\TraitementController::ROOTNAME_BULLETIN_DE_VERSEMENT'), 'rootObject_id' : bv.id}) }}">
                 Générer le BV
             </a>
         </div>
         {% if is_granted('ROLE_TRESO') %}
             <div class="col-md-3 col-xs-6">
-                <a class="btn btn-primary" href="{{ path('MgateTreso_BV_modifier', {'id' : bv.id }) }}">
+                <a class="btn btn-primary" href="{{ path('treso_BV_modifier', {'id' : bv.id }) }}">
                     {{ 'treso.bv_modifier'|trans({}, 'treso') }}
                 </a>
             </div>
@@ -161,7 +161,7 @@
 
         {% if is_granted('ROLE_ADMIN') %}
             <div class="col-md-3 col-xs-6">
-                <a href="{{ path('MgateTreso_BV_supprimer', {'id': bv.id}) }}" class="btn btn-danger">
+                <a href="{{ path('treso_BV_supprimer', {'id': bv.id}) }}" class="btn btn-danger">
                     {{ 'treso.bv_supprimer'|trans({}, 'treso') }}
                 </a>
             </div>

@@ -1,15 +1,15 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.proces_verbal_rediger'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.proces_verbal_rediger'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.proces_verbal_rediger'|trans({}, 'suivi') }}
+    {{ 'suivi.proces_verbal_rediger'|trans({}, 'project') }}
     {% if type=="pvi" %}
-        {{ 'suivi.intermediaire'|trans({}, 'suivi') }}
+        {{ 'suivi.intermediaire'|trans({}, 'project') }}
     {% elseif type=="pvr" %}
-        {{ 'suivi.de_recette'|trans({}, 'suivi') }}
+        {{ 'suivi.de_recette'|trans({}, 'project') }}
     {% endif %}
 {% endblock %}
 
@@ -26,7 +26,7 @@
     </tr>
     <tr>
         <th id="{{ form[type].newSignataire2.vars.id }}_block" colspan="2" class="success">
-            {{ 'suivi.signataire_client_ajouter'|trans({}, 'suivi') }}
+            {{ 'suivi.signataire_client_ajouter'|trans({}, 'project') }}
         </th>
     </tr>
     <tr>
@@ -87,7 +87,7 @@
     </tr>
     <tr>
         <th id="{{ form[type].newSignataire2.vars.id }}_block" colspan="2" class="success">
-            {{ 'suivi.proces_verbal_rediger'|trans({}, 'suivi') }}
+            {{ 'suivi.proces_verbal_rediger'|trans({}, 'project') }}
         </th>
     </tr>
     <tr>
@@ -115,7 +115,7 @@
 
     {{ form_widget(form) }}
     <button type="submit" class="btn btn-success">
-        {{ 'suivi.enregistrer'|trans({}, 'suivi') }}
+        {{ 'suivi.enregistrer'|trans({}, 'project') }}
     </button>
     {{ form_end(form) }}
 {% endblock %}
@@ -124,10 +124,10 @@
     {{ parent() }}
     {{ form_javascript(form) }}
     {% if type=="pvi" %}
-        {% include "MgateSuiviBundle:DocType:selectOrNew.html.twig" with
+        {% include "Project/DocType/selectOrNew.html.twig" with
         { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 } %}
     {% elseif type=="pvr" %}
-        {% include "MgateSuiviBundle:DocType:selectOrNew.html.twig" with
+        {% include "Project/DocType/selectOrNew.html.twig" with
         { known: form.pvr.knownSignataire2, knowned: form.pvr.signataire2, newed: form.pvr.newSignataire2 } %}
     {% endif %}
 {% endblock %}

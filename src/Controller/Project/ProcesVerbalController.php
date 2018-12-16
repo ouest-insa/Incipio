@@ -30,7 +30,7 @@ class ProcesVerbalController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_procesverbal_ajouter", path="/suivi/procesverbal/ajouter/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_procesverbal_ajouter", path="/suivi/procesverbal/ajouter/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -39,7 +39,7 @@ class ProcesVerbalController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker,
+    public function add(Request $request, Etude $etude, EtudePermissionChecker $permChecker,
                               DocTypeManager $docTypeManager)
     {
         $em = $this->getDoctrine()->getManager();
@@ -63,7 +63,7 @@ class ProcesVerbalController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'PV ajouté');
 
-                return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             }
         }
 
@@ -75,7 +75,7 @@ class ProcesVerbalController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_procesverbal_modifier", path="/suivi/procesverbal/modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_procesverbal_modifier", path="/suivi/procesverbal/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param ProcesVerbal           $procesverbal
@@ -84,7 +84,7 @@ class ProcesVerbalController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, ProcesVerbal $procesverbal, EtudePermissionChecker $permChecker,
+    public function modifier(Request $request, ProcesVerbal $procesverbal, EtudePermissionChecker $permChecker,
                                    DocTypeManager $docTypeManager)
     {
         $em = $this->getDoctrine()->getManager();
@@ -109,7 +109,7 @@ class ProcesVerbalController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'PV modifié');
 
-                return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             }
         }
 
@@ -124,7 +124,7 @@ class ProcesVerbalController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_procesverbal_rediger", path="/suivi/procesverbal/rediger/{id}/{type}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_procesverbal_rediger", path="/suivi/procesverbal/rediger/{id}/{type}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -133,7 +133,7 @@ class ProcesVerbalController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function redigerAction(Request $request, Etude $etude, $type, EtudePermissionChecker $permChecker)
+    public function rediger(Request $request, Etude $etude, $type, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -160,7 +160,7 @@ class ProcesVerbalController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'PV rédigé');
 
-                return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             }
         }
 
@@ -171,7 +171,7 @@ class ProcesVerbalController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_procesverbal_supprimer", path="/suivi/procesverbal/supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_procesverbal_supprimer", path="/suivi/procesverbal/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param ProcesVerbal           $procesVerbal
@@ -179,7 +179,7 @@ class ProcesVerbalController extends AbstractController
      *
      * @return RedirectResponse
      */
-    public function deleteAction(Request $request, ProcesVerbal $procesVerbal, EtudePermissionChecker $permChecker)
+    public function delete(Request $request, ProcesVerbal $procesVerbal, EtudePermissionChecker $permChecker)
     {
         $form = $this->createDeleteForm($procesVerbal->getId());
         $form->handleRequest($request);
@@ -199,7 +199,7 @@ class ProcesVerbalController extends AbstractController
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+        return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
     }
 
     private function createDeleteForm($id_pv)

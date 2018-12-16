@@ -1,20 +1,20 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.avenant_mission_modifier'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.avenant_mission_modifier'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.avenant_mission_modifier'|trans({}, 'suivi') }}
+    {{ 'suivi.avenant_mission_modifier'|trans({}, 'project') }}
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ 'suivi.avenant_mission_modifier'|trans({}, 'suivi') }}
+    {{ 'suivi.avenant_mission_modifier'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
 
-    {% include "MgateSuiviBundle:AvMission:formulaire.html.twig" %}
+    {% include "Project/AvMission/formulaire.html.twig" %}
 
 {% endblock %}
 

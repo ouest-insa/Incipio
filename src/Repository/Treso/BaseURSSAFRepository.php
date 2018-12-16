@@ -11,6 +11,7 @@
 
 namespace App\Repository\Treso;
 
+use App\Entity\Treso\BaseURSSAF;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -34,7 +35,7 @@ class BaseURSSAFRepository extends EntityRepository
         $date = $date->format('Y-m-d');
 
         $query = $qb->select('b')
-                     ->from('MgateTresoBundle:BaseURSSAF', 'b')
+                     ->from(BaseURSSAF::class, 'b')
                      ->where("'$date' >= b.dateDebut")
                      ->andWhere("'$date' <= b.dateFin");
 

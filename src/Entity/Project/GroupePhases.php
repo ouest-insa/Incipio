@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\SuiviBundle\Entity\GroupePhasesRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Project\GroupePhasesRepository")
  */
 class GroupePhases
 {
@@ -31,8 +31,6 @@ class GroupePhases
     private $id;
 
     /**
-     * Gedmo\SortableGroup.
-     *
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="groupes", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */

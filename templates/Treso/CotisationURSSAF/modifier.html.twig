@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block title %}
     {{ 'treso.cotisations_urssaf_gestion'|trans({}, 'treso') }} - {{ parent() }}
@@ -36,7 +36,7 @@
 
 
     {% if cotisation.libelle %}
-        <a href="{{ path('MgateTreso_CotisationURSSAF_supprimer', {'id': cotisation.id}) }}" class="btn btn-danger">
+        <a href="{{ path('treso_CotisationURSSAF_supprimer', {'id': cotisation.id}) }}" class="btn btn-danger">
             {{ 'treso.cotisation_urssaf_supprimer'|trans({}, 'treso') }}
         </a>
     {% endif %}

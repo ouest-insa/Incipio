@@ -3,6 +3,8 @@
 namespace App\Controller\Hr;
 
 use App\Entity\Hr\Competence;
+use App\Entity\Personne\Membre;
+use App\Entity\Project\Etude;
 use App\Form\Hr\CompetenceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,13 +18,13 @@ class CompetenceController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="N7consultingRh_competence_ajouter", path="/rh/competence/add", methods={"GET","HEAD","POST"})
+     * @Route(name="hr_competence_ajouter", path="/rh/competence/add", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      *
      * @return RedirectResponse|Response
      */
-    public function ajouterAction(Request $request)
+    public function ajouter(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -37,7 +39,7 @@ class CompetenceController extends AbstractController
                 $em->persist($competence);
                 $em->flush();
 
-                return $this->redirectToRoute('N7consultingRh_competence_voir', ['id' => $competence->getId()]);
+                return $this->redirectToRoute('hr_competence_voir', ['id' => $competence->getId()]);
             }
         }
 
@@ -48,11 +50,11 @@ class CompetenceController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="N7consultingRh_competence_homepage", path="/rh/", methods={"GET","HEAD"}, requirements={"page": "\d*"}, defaults={"page": "1"})
+     * @Route(name="hr_competence_homepage", path="/rh/", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
-        $entities = $this->getDoctrine()->getManager()->getRepository('N7consultingRhBundle:Competence')->findBy([], ['nom' => 'asc']);
+        $entities = $this->getDoctrine()->getManager()->getRepository(Competence::class)->findBy([], ['nom' => 'asc']);
 
         return $this->render('Hr/Competence/index.html.twig', [
             'competences' => $entities,
@@ -61,19 +63,19 @@ class CompetenceController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="N7consultingRh_competence_voir", path="/rh/competence/{id}", methods={"GET","HEAD"}, requirements={"id": "\d+"})
+     * @Route(name="hr_competence_voir", path="/rh/competence/{id}", methods={"GET","HEAD"})
      *
      * @param Competence $skill
      *
      * @return Response
      */
-    public function voirAction(Competence $skill)
+    public function voir(Competence $skill)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $devs = $em->getRepository('MgatePersonneBundle:Membre')->findByCompetence($skill);
+        $devs = $em->getRepository(Membre::class)->findByCompetence($skill);
 
-        $etudes = $em->getRepository('MgateSuiviBundle:Etude')->findByCompetence($skill);
+        $etudes = $em->getRepository(Etude::class)->findByCompetence($skill);
 
         return $this->render('Hr/Competence/voir.html.twig', [
             'competence' => $skill,
@@ -84,14 +86,14 @@ class CompetenceController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="N7consultingRh_competence_modifier", path="/rh/competence/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="hr_competence_modifier", path="/rh/competence/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request    $request
      * @param Competence $competence
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Competence $competence)
+    public function modifier(Request $request, Competence $competence)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -105,7 +107,7 @@ class CompetenceController extends AbstractController
                 $em->persist($competence);
                 $em->flush();
 
-                return $this->redirectToRoute('N7consultingRh_competence_voir', ['id' => $competence->getId()]);
+                return $this->redirectToRoute('hr_competence_voir', ['id' => $competence->getId()]);
             }
         }
 
@@ -118,15 +120,15 @@ class CompetenceController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="N7consultingRh_competence_visualiser", path="/rh/visualiser/competences", methods={"GET","HEAD"})
+     * @Route(name="hr_competence_visualiser", path="/rh/visualiser/competences", methods={"GET","HEAD"})
      *
      * Par souci de simplicité, on fait 2 requetes (une sur les competences, une sur les intervenants), alors que seule la requete sur les competences suffirait.
      */
-    public function visualiserAction()
+    public function visualiser()
     {
         $em = $this->getDoctrine()->getManager();
-        $competences = $em->getRepository('N7consulting\RhBundle\Entity\Competence')->getCompetencesTree();
-        $membres = $em->getRepository('MgatePersonneBundle:Membre')->getByCompetencesNonNul();
+        $competences = $em->getRepository(Competence::class)->getCompetencesTree();
+        $membres = $em->getRepository(Membre::class)->getByCompetencesNonNul();
 
         $response = $this->render('Hr/Competence/visualiser.html.twig', [
             'total_liens' => 0,
@@ -140,14 +142,14 @@ class CompetenceController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="N7consultingRh_competence_supprimer", path="/rh/competence/supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="hr_competence_supprimer", path="/rh/competence/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request    $request
      * @param Competence $competence param converter on id
      *
      * @return RedirectResponse
      */
-    public function deleteAction(Request $request, Competence $competence)
+    public function delete(Request $request, Competence $competence)
     {
         $form = $this->createDeleteForm($competence->getId());
         $form->handleRequest($request);
@@ -158,7 +160,7 @@ class CompetenceController extends AbstractController
             $em->flush();
         }
 
-        return $this->redirectToRoute('N7consultingRh_competence_homepage');
+        return $this->redirectToRoute('hr_competence_homepage');
     }
 
     private function createDeleteForm($id)

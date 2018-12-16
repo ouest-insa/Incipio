@@ -28,7 +28,7 @@ class CcController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_cc_rediger", path="/suivi/cc/rediger/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_cc_rediger", path="/suivi/cc/rediger/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude          etude which CC should belong to
@@ -37,7 +37,7 @@ class CcController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function redigerAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker, DocTypeManager $docTypeManager)
+    public function rediger(Request $request, Etude $etude, EtudePermissionChecker $permChecker, DocTypeManager $docTypeManager)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -59,7 +59,7 @@ class CcController extends AbstractController
                 $docTypeManager->checkSaveNewEmploye($etude->getCc());
                 $em->flush();
 
-                return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             }
         }
 

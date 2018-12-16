@@ -1,4 +1,4 @@
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
     {{ 'prospect.ajouter_prospect'|trans({}, 'personne') }}
@@ -10,7 +10,7 @@
 
 {% block breadcrumb %}
     <ul class="breadcrumb no-margin pull-right">
-        <li><a href="{{ path('MgatePersonne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
+        <li><a href="{{ path('personne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
         <li class="active">{{ 'prospect.ajouter_prospect'|trans({}, 'personne') }}</li>
     </ul>
 {% endblock %}
@@ -19,7 +19,7 @@
     <div class="table-responsive content">
         {{ form_start(form) }}
         <table class="table table-bordered table-striped">
-            {% include "MgatePersonneBundle:Prospect:formulaire.html.twig" %}
+            {% include "Personne/Prospect/formulaire.html.twig" %}
             <tr>
                 <td colspan="2">
                     <div class="row">

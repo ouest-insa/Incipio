@@ -11,6 +11,8 @@
 
 namespace App\Repository\Project;
 
+use App\Entity\Project\Etude;
+use App\Entity\Project\GroupePhases;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -26,7 +28,7 @@ class GroupePhasesRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $query = $qb
                 ->select('g')
-                ->from('MgateSuiviBundle:GroupePhases', 'g')
+                ->from(GroupePhases::class, 'g')
                 ->innerJoin('g.etude', 'e')
                 ->where('e.id = :etudeID')
                 ->orderBy('g.numero', 'ASC')

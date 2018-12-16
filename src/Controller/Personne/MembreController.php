@@ -29,11 +29,11 @@ class MembreController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_membre_homepage", path="/membres", methods={"GET","HEAD"})
+     * @Route(name="personne_membre_homepage", path="/membres", methods={"GET","HEAD"})
      *
      * @return Response
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -46,11 +46,11 @@ class MembreController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_intervenants_homepage", path="/intervenants", methods={"GET","HEAD"})
+     * @Route(name="personne_intervenants_homepage", path="/intervenants", methods={"GET","HEAD"})
      *
      * @return Response
      */
-    public function listIntervenantsAction()
+    public function listIntervenants()
     {
         $em = $this->getDoctrine()->getManager();
         $intervenants = $em->getRepository(Membre::class)->getByMissionsNonNul();
@@ -62,21 +62,23 @@ class MembreController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_membres_homepage", path="/membres-actifs", methods={"GET","HEAD"})
+     * @Route(name="personne_membres_homepage", path="/membres-actifs", methods={"GET","HEAD"})
      *
      * @param ObjectManager $em
      *
      * @return Response
      */
-    public function statistiqueAction(ObjectManager $em)
+    public function statistique(ObjectManager $em)
     {
-        $entities = $em->getRepository('MgatePersonneBundle:Membre')->findAll();
+        $entities = $em->getRepository(Membre::class)->findAll();
 
         $membresActifs = [];
         /** @var Membre $membre */
         foreach ($entities as $membre) {
             foreach ($membre->getMandats() as $mandat) {
-                if ('Membre' == $mandat->getPoste()->getIntitule() && $mandat->getDebutMandat() < new \DateTime('now') && $mandat->getFinMandat() > new \DateTime('now')) {
+                if ('Membre' == $mandat->getPoste()
+                        ->getIntitule() && $mandat->getDebutMandat() < new \DateTime('now') && $mandat->getFinMandat() > new \DateTime('now')
+                ) {
                     $membresActifs[] = $membre;
                 }
             }
@@ -89,23 +91,24 @@ class MembreController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ELEVE')")
-     * @Route(name="MgatePersonne_membre_voir", path="/membres/{id}", methods={"GET","HEAD"})
+     * @Route(name="personne_membre_voir", path="/membres/voir/{id}", methods={"GET","HEAD"})
      *
      * @param Membre        $membre
      * @param ObjectManager $em
      *
      * @return Response
      */
-    public function voirAction(Membre $membre, ObjectManager $em)
+    public function voir(Membre $membre, ObjectManager $em)
     {
         /** @var Membre $membre */
         $membre = $em->getRepository(Membre::class)->getMembreCompetences($membre->getId());
 
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') &&
-            $membre->getPersonne() && !$membre->getPersonne()->getUser()) {
+            $membre->getPersonne() && !$membre->getPersonne()->getUser()
+        ) {
             $create_user_form = $this->createFormBuilder(['id' => $membre->getPersonne()->getId()])
                 ->add('id', HiddenType::class)
-                ->setAction($this->generateUrl('Mgate_user_addFromPersonne', ['id' => $membre->getPersonne()->getId()]))
+                ->setAction($this->generateUrl('user_addFromPersonne', ['id' => $membre->getPersonne()->getId()]))
                 ->setMethod('POST')
                 ->getForm();
         }
@@ -118,7 +121,7 @@ class MembreController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_membre_ajouter", path="/membres/add", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_membre_ajouter", path="/membres/add", methods={"GET","HEAD","POST"})
      *
      * @param Request         $request
      * @param DocumentManager $documentManager
@@ -126,7 +129,7 @@ class MembreController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function ajouterAction(Request $request, DocumentManager $documentManager, EmailEtuManager $emailEtuManager)
+    public function ajouter(Request $request, DocumentManager $documentManager, EmailEtuManager $emailEtuManager)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -163,15 +166,18 @@ class MembreController extends AbstractController
                     $name = 'Photo - ' . $membre->getIdentifiant() . ' - ' . $membre->getPersonne()->getPrenomNom();
 
                     if ($photoUpload) {
-                        $document = $documentManager->uploadDocumentFromFile($photoUpload, $authorizedMIMEType, $name, $photoInformation, true);
-                        $membre->setPhotoURI($this->get('router')->generate('Mgate_publi_document_voir', ['id' => $document->getId()]));
+                        $document = $documentManager->uploadDocumentFromFile($photoUpload, $authorizedMIMEType, $name,
+                            $photoInformation, true);
+                        $membre->setPhotoURI($this->get('router')
+                            ->generate('publish_document_voir', ['id' => $document->getId()]));
                     }
                 }
 
                 if (!$membre->getIdentifiant()) {
-                    $initial = substr($membre->getPersonne()->getPrenom(), 0, 1) . substr($membre->getPersonne()->getNom(), 0, 1);
-                    $ident = count($em->getRepository('Mgate\PersonneBundle\Entity\Membre')->findBy(['identifiant' => $initial])) + 1;
-                    while ($em->getRepository('Mgate\PersonneBundle\Entity\Membre')->findOneBy(['identifiant' => $initial . $ident])) {
+                    $initial = substr($membre->getPersonne()->getPrenom(), 0, 1) . substr($membre->getPersonne()
+                            ->getNom(), 0, 1);
+                    $ident = count($em->getRepository(Membre::class)->findBy(['identifiant' => $initial])) + 1;
+                    while ($em->getRepository(Membre::class)->findOneBy(['identifiant' => $initial . $ident])) {
                         ++$ident;
                     }
                     $membre->setIdentifiant(strtoupper($initial . $ident));
@@ -181,13 +187,13 @@ class MembreController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Membre enregistré');
 
-                return $this->redirectToRoute('MgatePersonne_membre_voir', ['id' => $membre->getId()]);
+                return $this->redirectToRoute('personne_membre_voir', ['id' => $membre->getId()]);
             }
             //form invalid
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->render('Personne/Membre/modifier.html.twig', [
+        return $this->render('Personne/Membre/ajouter.html.twig', [
             'form' => $form->createView(),
             'photoURI' => $membre->getPhotoURI(),
         ]);
@@ -195,7 +201,7 @@ class MembreController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_membre_ajouter", path="/membres/add", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_membre_modifier", path="/membres/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request         $request
      * @param Membre          $membre
@@ -205,7 +211,7 @@ class MembreController extends AbstractController
      *
      * @internal param $id
      */
-    public function modifierAction(Request $request, Membre $membre, DocumentManager $documentManager)
+    public function modifier(Request $request, Membre $membre, DocumentManager $documentManager)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -228,8 +234,10 @@ class MembreController extends AbstractController
                     $name = 'Photo - ' . $membre->getIdentifiant() . ' - ' . $membre->getPersonne()->getPrenomNom();
 
                     if ($photoUpload) {
-                        $document = $documentManager->uploadDocumentFromFile($photoUpload, $authorizedMIMEType, $name, $photoInformation, true);
-                        $membre->setPhotoURI($this->get('router')->generate('Mgate_publi_document_voir', ['id' => $document->getId()]));
+                        $document = $documentManager->uploadDocumentFromFile($photoUpload, $authorizedMIMEType, $name,
+                            $photoInformation, true);
+                        $membre->setPhotoURI($this->get('router')
+                            ->generate('publish_document_voir', ['id' => $document->getId()]));
                     }
                 }
 
@@ -237,7 +245,7 @@ class MembreController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Membre enregistré');
 
-                return $this->redirectToRoute('MgatePersonne_membre_voir', ['id' => $membre->getId()]);
+                return $this->redirectToRoute('personne_membre_voir', ['id' => $membre->getId()]);
             }
             //form invalid
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
@@ -252,7 +260,7 @@ class MembreController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_membre_supprimer", path="/membres/supprimer/{id}", methods={"HEAD","POST"})
+     * @Route(name="personne_membre_supprimer", path="/membres/supprimer/{id}", methods={"HEAD","POST"})
      *
      * @param Request       $request
      * @param Membre        $membre
@@ -260,7 +268,7 @@ class MembreController extends AbstractController
      *
      * @return RedirectResponse
      */
-    public function deleteAction(Request $request, Membre $membre, ObjectManager $em)
+    public function delete(Request $request, Membre $membre, ObjectManager $em)
     {
         $form = $this->createDeleteForm($membre->getId());
         $form->handleRequest($request);
@@ -282,7 +290,7 @@ class MembreController extends AbstractController
             $this->addFlash('success', 'Membre supprimé');
         }
 
-        return $this->redirectToRoute('MgatePersonne_membre_homepage');
+        return $this->redirectToRoute('personne_membre_homepage');
     }
 
     private function createDeleteForm($id)
@@ -294,11 +302,11 @@ class MembreController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_membre_impayes", path="/membres/impayes", methods={"GET","HEAD"})
+     * @Route(name="personne_membre_impayes", path="/membres/impayes", methods={"GET","HEAD"})
      *
      * @return Response
      */
-    public function impayesAction()
+    public function impayes()
     {
         $em = $this->getDoctrine()->getManager();
 

@@ -15,10 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Mgate\SuiviBundle\Entity\Phase.
- *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\SuiviBundle\Entity\PhaseRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Project\PhaseRepository")
  */
 class Phase
 {
@@ -32,8 +30,6 @@ class Phase
     private $id;
 
     /**
-     * Gedmo\SortableGroup.
-     *
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="phases", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -114,7 +110,7 @@ class Phase
     private $etatSurAvenant;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\SuiviBundle\Entity\Mission", inversedBy="phases", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project\Mission", inversedBy="phases", cascade={"remove"})
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $mission;

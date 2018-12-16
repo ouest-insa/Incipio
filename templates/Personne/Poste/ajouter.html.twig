@@ -1,4 +1,4 @@
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
     {{ 'poste.ajouter_poste'|trans({}, 'personne') }} {{ parent() }}
@@ -10,7 +10,7 @@
 
 {% block breadcrumb %}
     <ul class="breadcrumb no-margin pull-right">
-        <li><a href="{{ path('MgatePersonne_poste_homepage') }}">{{ 'dashboard.postes_filieres'|trans({}, 'dashboard') }}</a></li>
+        <li><a href="{{ path('personne_poste_homepage') }}">{{ 'dashboard.postes_filieres'|trans({}, 'dashboard') }}</a></li>
         <li class="active">{{ 'poste.ajouter_poste'|trans({}, 'personne') }}</li>
     </ul>
 {% endblock %}

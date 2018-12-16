@@ -1,4 +1,4 @@
-{% extends "MgateFormationBundle::layout.html.twig" %}
+{% extends "Formation/layout.html.twig" %}
 
 {% block content_title %}
     {{ 'formation.formation_modifier'|trans({}, 'formation') }}
@@ -6,7 +6,7 @@
 
 {% block breadcrumb_items %}
     <li>
-        <a href="{{ path('Mgate_formation_voir', {'id': formation.id}) }}">{{ formation.titre }}</a>
+        <a href="{{ path('formation_voir', {'id': formation.id}) }}">{{ formation.titre }}</a>
     </li>
 {% endblock %}
 
@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content_bundle %}
-    {% include "MgateFormationBundle:Gestion:formulaire.html.twig" %}
+    {% include "Formation/Gestion/formulaire.html.twig" %}
 {% endblock %}
 
 {% block javascript %}

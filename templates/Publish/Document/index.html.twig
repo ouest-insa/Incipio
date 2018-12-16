@@ -1,4 +1,4 @@
-{% extends "MgatePubliBundle::layout.html.twig" %}
+{% extends "Publish/layout.html.twig" %}
 
 {% block title %}
     Liste des Documents - {{ parent() }}
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="col-md-2 col-xs-2">
-            <a href="{{ path('Mgate_publi_documenttype_upload') }}" class="pull-right btn btn-info">{{ 'dashboard.doctype_ajouter'|trans({}, 'dashboard') }}</a>
+            <a href="{{ path('publish_documenttype_upload') }}" class="pull-right btn btn-info">{{ 'dashboard.doctype_ajouter'|trans({}, 'dashboard') }}</a>
         </div>
     </div>
 
@@ -40,10 +40,10 @@
                 <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s') }}</td>
                 <td>{{ doc.author ? doc.author.prenomNom }}</td>
                 <td>
-                    <a href="{{ path('Mgate_publi_document_voir', {'id': doc.id}) }}">{{ doc.name }}</a>
+                    <a href="{{ path('publish_document_voir', {'id': doc.id}) }}">{{ doc.name }}</a>
                 </td>
                 <td>{{ (doc.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
-                <td><a href="{{ path('Mgate_publi_document_delete', {'id' : doc.id }) }}"><i
+                <td><a href="{{ path('publish_document_delete', {'id' : doc.id }) }}"><i
                                 class="fa fa-times"></i></a></td>
             </tr>
         {% endfor %}

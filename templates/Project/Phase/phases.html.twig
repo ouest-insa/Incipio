@@ -1,12 +1,12 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.modifier_les'|trans({}, 'suivi') }} {{ 'suivi.phases'|trans({}, 'suivi') }}
+    {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ 'suivi.phases'|trans({}, 'project') }}
     - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.modifier_les'|trans({}, 'suivi') }} {{ form.phases | length }} {{ 'suivi.phases'|trans({}, 'suivi') }}
+    {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ form.phases | length }} {{ 'suivi.phases'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
@@ -14,8 +14,8 @@
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
 
-    <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'suivi') }}" name="add" class="btn btn-info"/>
-        - <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'suivi') }}" class="btn btn-default"/></p>
+    <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'project') }}" name="add" class="btn btn-info"/>
+        - <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'project') }}" class="btn btn-default"/></p>
 
     <div class="row">
         <div class="col-md-12">
@@ -25,13 +25,13 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th>{{ 'suivi.groupe'|trans({}, 'suivi') }}</th>
-                    <th>{{ 'suivi.details'|trans({}, 'suivi') }}</th>
-                    <th>{{ 'suivi.titre'|trans({}, 'suivi') }}</th>
-                    <th>{{ 'suivi.jeh_nombre'|trans({}, 'suivi') }}</th>
-                    <th>{{ 'suivi.prix_jeh'|trans({}, 'suivi') }}</th>
-                    <th>{{ 'suivi.date_debut'|trans({}, 'suivi') }}</th>
-                    <th>{{ 'suivi.delai_jour'|trans({}, 'suivi') }}</th>
+                    <th>{{ 'suivi.groupe'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.details'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.titre'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.jeh_nombre'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.prix_jeh'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.date_debut'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.delai_jour'|trans({}, 'project') }}</th>
                 </tr>
                 </thead>
                 <tbody id="phases">
@@ -89,8 +89,8 @@
         </div>
         </div>
     </div>
-    <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'suivi') }}" name="add" class="btn btn-info"/>
-        - <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'suivi') }}" class="btn btn-default"/></p>
+    <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'project') }}" name="add" class="btn btn-info"/>
+        - <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'project') }}" class="btn btn-default"/></p>
 
     {{ form_end(form) }}
 

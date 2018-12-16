@@ -11,6 +11,7 @@
 
 namespace App\Service\Project;
 
+use App\Entity\Project\Cc;
 use App\Entity\Project\Etude;
 use Doctrine\Common\Persistence\ObjectManager;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
@@ -148,7 +149,7 @@ class EtudeManager
         $qb = $this->em->createQueryBuilder();
 
         $query = $qb->select('e.num')
-            ->from('MgateSuiviBundle:Etude', 'e')
+            ->from(Etude::class, 'e')
             ->andWhere('e.mandat = :mandat')
             ->setParameter('mandat', $mandat)
             ->orderBy('e.num', 'DESC');
@@ -197,7 +198,7 @@ class EtudeManager
         $qb = $this->em->createQueryBuilder();
 
         $query = $qb->select('e.mandat')
-            ->from('MgateSuiviBundle:Etude', 'e')
+            ->from(Etude::class, 'e')
             ->orderBy('e.mandat', 'DESC');
 
         $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
@@ -216,7 +217,7 @@ class EtudeManager
         $qb = $this->em->createQueryBuilder();
 
         $query = $qb->select('e.mandat')
-            ->from('MgateSuiviBundle:Etude', 'e')
+            ->from(Etude::class, 'e')
             ->orderBy('e.mandat', 'ASC');
 
         $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
@@ -235,7 +236,7 @@ class EtudeManager
         $qb = $this->em->createQueryBuilder();
 
         $query = $qb->select('c.dateSignature')
-            ->from('MgateSuiviBundle:Cc', 'c')
+            ->from(Cc::class, 'c')
             ->orderBy('c.dateSignature', 'DESC');
 
         $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
@@ -255,7 +256,7 @@ class EtudeManager
         $tauxConversion = [];
 
         //recup toute les etudes
-        $etudes = $this->em->getRepository('MgateSuiviBundle:Etude')->findAll();
+        $etudes = $this->em->getRepository(Etude::class)->findAll();
         foreach ($etudes as $etude) {
             $mandat = $etude->getMandat();
             if (null !== $etude->getAp()) {

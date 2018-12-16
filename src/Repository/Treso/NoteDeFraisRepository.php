@@ -11,6 +11,7 @@
 
 namespace App\Repository\Treso;
 
+use App\Entity\Treso\NoteDeFrais;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -28,6 +29,7 @@ class NoteDeFraisRepository extends EntityRepository
     {
         $entities = $this->findBy([], ['mandat' => 'desc', 'date' => 'asc']);
         $nfsParMandat = [];
+        /** @var NoteDeFrais $nf */
         foreach ($entities as $nf) {
             $mandat = $nf->getMandat();
             if (array_key_exists($mandat, $nfsParMandat)) {
@@ -44,13 +46,17 @@ class NoteDeFraisRepository extends EntityRepository
      * Renvoie les NDF pour un mois donné
      * YEAR MONTH DAY sont défini dans DashBoardBundle/DQL (qui doit devenir FrontEndBundle).
      *
+     * @param      $month
+     * @param      $year
+     * @param bool $trimestriel
+     *
      * @return array
      */
     public function findAllByMonth($month, $year, $trimestriel = false)
     {
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('f')
-                     ->from('MgateTresoBundle:NoteDeFrais', 'f');
+                     ->from(NoteDeFrais::class, 'f');
         if ($trimestriel) {
             $query->where("MONTH(f.date) >= $month")
                   ->andWhere("MONTH(f.date) < ($month + 2)");

@@ -11,40 +11,29 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use App\Entity\User\User;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadAdminData implements FixtureInterface, ContainerAwareInterface
+class LoadAdminData extends Fixture
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
-        $su = $manager->getRepository('Mgate\UserBundle\Entity\User')->findOneBy(['username' => $this->container->getParameter('su_username')]);
+        $username = getenv('SUPER_ADMIN_USERNAME');
+        $password = getenv('SUPER_ADMIN_PASSWORD');
+        $mail = getenv('TECHNICAL_TO');
+
+        $su = $manager->getRepository(User::class)->findOneBy(['username' => $username]);
         if (!$su) {
             $su = new User();
         }
 
-        $su->setUsername($this->container->getParameter('su_username')); //mettre le login de l'admin
-        $su->setPlainPassword($this->container->getParameter('su_password')); //mettre le mdp de l'admin
-        $su->setEmail($this->container->getParameter('su_mail'));
+        $su->setUsername($username); //mettre le login de l'admin
+        $su->setPlainPassword($password); //mettre le mdp de l'admin
+        $su->setEmail($mail);
         $su->setEnabled(true);
         $su->setRoles(['ROLE_SUPER_ADMIN']);
 

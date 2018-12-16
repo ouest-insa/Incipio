@@ -11,17 +11,15 @@
 
 namespace App\Entity\Project;
 
-use App\Entity\Membre;
+use App\Entity\Personne\Membre;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Mgate\SuiviBundle\Entity\Mission.
- *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\SuiviBundle\Entity\MissionRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Project\MissionRepository")
  */
 class Mission extends DocType
 {
@@ -41,14 +39,14 @@ class Mission extends DocType
     protected $etude;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Membre")
      * @ORM\JoinColumn(nullable=true)
      */
     private $referentTechnique;
 
     /**
      * @Assert\NotNull()
-     * @ORM\ManyToOne(targetEntity="\Mgate\PersonneBundle\Entity\Membre", inversedBy="missions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Membre", inversedBy="missions", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $intervenant;
@@ -89,14 +87,14 @@ class Mission extends DocType
 
     /**
      * @var RepartitionJEH
-     * @ORM\OneToMany(targetEntity="Mgate\SuiviBundle\Entity\RepartitionJEH", mappedBy="mission",  cascade="all",
+     * @ORM\OneToMany(targetEntity="App\Entity\Project\RepartitionJEH", mappedBy="mission",  cascade="all",
      *                                                                        orphanRemoval=true, fetch="EAGER")
      */
     private $repartitionsJEH;
 
     /**
      * @var Phase
-     * @ORM\OneToMany(targetEntity="Mgate\SuiviBundle\Entity\Phase", mappedBy="mission", cascade={"merge"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Project\Phase", mappedBy="mission", cascade={"merge"})
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $phases;

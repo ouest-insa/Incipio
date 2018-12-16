@@ -2,13 +2,13 @@
 
 namespace App\Command;
 
-use App\Entity\User;
+use App\Entity\User\User;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateTestUsersCommand extends ContainerAwareCommand
+class CreateTestUsersCommand extends Command
 {
     /** user by tests, should remain public */
     public const DEFAULT_USERS = [
@@ -22,6 +22,12 @@ class CreateTestUsersCommand extends ContainerAwareCommand
 
     /** @var ObjectManager */
     private $em;
+
+    public function __construct(ObjectManager $em)
+    {
+        parent::__construct();
+        $this->em = $em;
+    }
 
     /**
      * {@inheritdoc}
@@ -39,8 +45,6 @@ class CreateTestUsersCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->em = $this->getContainer()->get('doctrine.orm.entity_manager');
-
         $this->createUsers($output);
 
         $output->writeln('Done.');

@@ -24,16 +24,16 @@ class DomaineCompetenceController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="MgateSuivi_domaine_index", path="/suivi/DomainesDeCompetence", methods={"GET","HEAD","POST"})
+     * @Route(name="project_domaine_index", path="/suivi/DomainesDeCompetence", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      *
      * @return RedirectResponse|Response
      */
-    public function indexAction(Request $request)
+    public function index(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('MgateSuiviBundle:DomaineCompetence')->findAll();
+        $entities = $em->getRepository(DomaineCompetence::class)->findAll();
 
         $domaine = new DomaineCompetence();
 
@@ -46,7 +46,7 @@ class DomaineCompetenceController extends AbstractController
                 $em->persist($domaine);
                 $em->flush();
 
-                return $this->redirectToRoute('MgateSuivi_domaine_index');
+                return $this->redirectToRoute('project_domaine_index');
             }
         }
 
@@ -58,19 +58,19 @@ class DomaineCompetenceController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="MgateSuivi_domaine_delete", path="/suivi/DomainesDeCompetence/Supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_domaine_delete", path="/suivi/DomainesDeCompetence/Supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param DomaineCompetence $domaine
      *
      * @return RedirectResponse
      */
-    public function deleteAction(DomaineCompetence $domaine)
+    public function delete(DomaineCompetence $domaine)
     {
         $em = $this->getDoctrine()->getManager();
 
         $em->remove($domaine);
         $em->flush();
 
-        return $this->redirectToRoute('MgateSuivi_domaine_index');
+        return $this->redirectToRoute('project_domaine_index');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Entity\Personne\Membre;
 use App\Entity\Project\DocType;
 use App\Entity\Project\Etude;
 use App\Entity\Project\Mission;
@@ -14,7 +15,7 @@ class EtudeExtension extends \Twig_Extension
     // Pour utiliser les fonctions depuis twig
     public function getName()
     {
-        return 'Mgate_EtudeManager';
+        return 'Twig_EtudeExtension';
     }
 
     // Pour utiliser les fonctions depuis twig

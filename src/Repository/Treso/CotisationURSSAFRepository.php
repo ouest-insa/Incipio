@@ -11,6 +11,7 @@
 
 namespace App\Repository\Treso;
 
+use App\Entity\Treso\CotisationURSSAF;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -25,6 +26,8 @@ class CotisationURSSAFRepository extends EntityRepository
      * Renvoie les cotisations pour une date donnée
      * YEAR MONTH DAY sont défini dans DashBoardBundle/DQL (qui doit devenir FrontEndBundle).
      *
+     * @param \DateTime $date
+     *
      * @return array
      */
     public function findAllByDate(\DateTime $date)
@@ -34,7 +37,7 @@ class CotisationURSSAFRepository extends EntityRepository
         $date = $date->format('Y-m-d');
 
         $query = $qb->select('c')
-                     ->from('MgateTresoBundle:CotisationURSSAF', 'c')
+                     ->from(CotisationURSSAF::class, 'c')
                      ->where("'$date' >= c.dateDebut")
                      ->andWhere("'$date' <= c.dateFin");
 

@@ -26,14 +26,14 @@ class EmployeController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_employe_ajouter", path="/employe/add/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_employe_ajouter", path="/employe/add/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request  $request
      * @param Prospect $prospect
      *
      * @return RedirectResponse|Response
      */
-    public function ajouterAction(Request $request, Prospect $prospect)
+    public function ajouter(Request $request, Prospect $prospect)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -52,7 +52,7 @@ class EmployeController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Employé ajouté');
 
-                return $this->redirectToRoute('MgatePersonne_prospect_voir', ['id' => $employe->getProspect()->getId()]);
+                return $this->redirectToRoute('personne_prospect_voir', ['id' => $employe->getProspect()->getId()]);
             }
         }
 
@@ -64,14 +64,14 @@ class EmployeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_employe_modifier", path="/employe/modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_employe_modifier", path="/employe/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param Employe $employe
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Employe $employe)
+    public function modifier(Request $request, Employe $employe)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -86,12 +86,12 @@ class EmployeController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Employé modifié');
 
-                return $this->redirectToRoute('MgatePersonne_prospect_voir', ['id' => $employe->getProspect()->getId()]);
+                return $this->redirectToRoute('personne_prospect_voir', ['id' => $employe->getProspect()->getId()]);
             }
         }
 
         //to avoid asynchronous request at display time
-        $prospect = $em->getRepository('MgatePersonneBundle:Prospect')->findOneById($employe->getProspect()->getId());
+        $prospect = $em->getRepository(Prospect::class)->findOneById($employe->getProspect()->getId());
 
         return $this->render('Personne/Employe/modifier.html.twig', [
             'form' => $form->createView(),
@@ -103,14 +103,14 @@ class EmployeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_employe_supprimer", path="/employe/supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_employe_supprimer", path="/employe/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Employe $employe the employee to delete
      * @param Request $request
      *
      * @return RedirectResponse
      */
-    public function deleteAction(Employe $employe, Request $request)
+    public function delete(Employe $employe, Request $request)
     {
         $form = $this->createDeleteForm($employe->getId());
         $form->handleRequest($request);
@@ -122,10 +122,10 @@ class EmployeController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Employé supprimé');
 
-            return $this->redirectToRoute('MgatePersonne_prospect_voir', ['id' => $employe->getProspect()->getId()]);
+            return $this->redirectToRoute('personne_prospect_voir', ['id' => $employe->getProspect()->getId()]);
         }
 
-        return $this->redirectToRoute('MgatePersonne_prospect_homepage');
+        return $this->redirectToRoute('personne_prospect_homepage');
     }
 
     private function createDeleteForm($id)

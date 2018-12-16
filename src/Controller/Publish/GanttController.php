@@ -18,7 +18,7 @@ class GanttController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="Mgate_publi_getgantt", path="/Documents/GetGantt/{id}/{width}", methods={"GET","HEAD"}, requirements={"width": "\d+"}, defaults={"width": "960"})
+     * @Route(name="publish_getgantt", path="/Documents/GetGantt/{id}/{width}", methods={"GET","HEAD"}, requirements={"width": "\d+"}, defaults={"width": "960"})
      * Génère le Gantt Chart de l'étude passée en paramètre.
      *
      * @param Etude                  $etude        project whom gantt chart should be exported
@@ -29,7 +29,7 @@ class GanttController extends AbstractController
      *
      * @return Response a png of project gantt chart
      */
-    public function getGanttAction(Etude $etude, $width = 960, $debug = false, EtudePermissionChecker $permChecker, ChartManager $chartManager)
+    public function getGantt(Etude $etude, $width = 960, $debug = false, EtudePermissionChecker $permChecker, ChartManager $chartManager)
     {
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');

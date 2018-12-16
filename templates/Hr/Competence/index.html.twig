@@ -22,14 +22,14 @@
 
     <div class="row">
         <div class="col-md-3 col-xs-12">
-            <a href="{{ path('N7consultingRh_competence_ajouter') }}" class="btn btn-info">
+            <a href="{{ path('hr_competence_ajouter') }}" class="btn btn-info">
                 Ajouter une compétence
             </a>
             <br/><br/>
             <ul>
                 {% for competence in competences %}
                     <li>
-                        <a href="{{ path('N7consultingRh_competence_voir', {'id': competence.id}) }}"> {{ competence.nom }} </a>
+                        <a href="{{ path('hr_competence_voir', {'id': competence.id}) }}"> {{ competence.nom }} </a>
                     </li>
                 {% else %}
                     <li>Pas (encore !) de competences</li>
@@ -47,7 +47,7 @@
     {{ parent() }}
     <script src="{{ asset('js/d3/d3.min.js') }}"></script>
     <script src="{{ asset('js/d3/competencesNet.js') }}"></script>
-    <script src="{{ path('N7consultingRh_competence_visualiser') }}"></script>
+    <script src="{{ path('hr_competence_visualiser') }}"></script>
     <script type="text/javascript">
         $(function () { //initialisation graph d3.min.js
             restart();

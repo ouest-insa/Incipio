@@ -9,17 +9,15 @@
  * file that was distributed with this source code.
  */
 
-// src/Mgate/UserBundle/Entity/User.php
-
 namespace App\Entity\User;
 
-use App\Entity\Personne;
+use App\Entity\Personne\Personne;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="Mgate\UserBundle\Entity\UserRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\User\UserRepository")
  * @ORM\Table(name="fos_user")
  */
 class User extends BaseUser
@@ -32,7 +30,7 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="\Mgate\PersonneBundle\Entity\Personne", inversedBy="user", cascade={"persist",
+     * @ORM\OneToOne(targetEntity="\App\Entity\Personne\Personne", inversedBy="user", cascade={"persist",
      *                                                                     "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */

@@ -12,12 +12,11 @@
 namespace App\Entity\Publish;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="Mgate\PubliBundle\Entity\DocumentRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Publish\DocumentRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Document
@@ -54,12 +53,11 @@ class Document
      * @var \DateTime
      *
      * @ORM\Column(name="uptime", type="datetime")
-     * @Gedmo\Timestampable(on="update")
      */
     private $uptime;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Personne", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne", cascade={"persist"})
      * @ORM\JoinColumn(name="author_personne_id", referencedColumnName="id", nullable=true)
      */
     private $author;
@@ -109,6 +107,7 @@ class Document
             $this->path = $filename . '.' . $this->file->guessExtension();
             $this->size = filesize($this->file);
         }
+        $this->uptime = new \DateTime();
     }
 
     /**

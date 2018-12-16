@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -13,7 +13,7 @@
 
 {% block content_bundle %}
     <button type="button" class="btn btn-success"
-            onclick="location.href='{{ path('MgateTreso_BaseURSSAF_ajouter') }}';">{{ 'treso.ajouter_base_urssaf'|trans({}, 'treso') }}
+            onclick="location.href='{{ path('treso_BaseURSSAF_ajouter') }}';">{{ 'treso.ajouter_base_urssaf'|trans({}, 'treso') }}
     </button>
     <table class="display dataTable table table-bordered table-striped dt-responsive" id="listeBase">
         <thead>
@@ -26,7 +26,7 @@
         </thead>
         {% for base in bases %}
             <tr class="{{ base.dateFin < date() ? 'danger' : 'success' }}">
-                <td><a href="{{ path('MgateTreso_BaseURSSAF_modifier', {'id' : base.id }) }}" title="Modifier"><span
+                <td><a href="{{ path('treso_BaseURSSAF_modifier', {'id' : base.id }) }}" title="Modifier"><span
                                 class="fa fa-pencil"></span></a></td>
                 <td>{{ base.dateDebut | date('d/m/Y') }}</td>
                 <td>{{ base.dateFin | date('d/m/Y') }}</td>

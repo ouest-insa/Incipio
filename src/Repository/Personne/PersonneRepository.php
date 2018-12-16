@@ -11,6 +11,7 @@
 
 namespace App\Repository\Personne;
 
+use App\Entity\Personne\Personne;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -24,7 +25,7 @@ class PersonneRepository extends EntityRepository
     public function getMembreOnly()
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('n')->from('MgatePersonneBundle:Personne', 'n')
+        $query = $qb->select('n')->from(Personne::class, 'n')
           ->where('n.membre IS NOT NULL')
           ->orderBy('n.prenom', 'ASC')
           ->addOrderBy('n.nom', 'ASC');
@@ -45,7 +46,7 @@ class PersonneRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $query = $qb
                 ->select('p')
-                ->from('MgatePersonneBundle:Personne', 'p')
+                ->from(Personne::class, 'p')
                 ->innerJoin('p.membre', 'me')
                 ->innerJoin('me.mandats', 'ma')
                 ->innerJoin('ma.poste', 'po')
@@ -74,14 +75,14 @@ class PersonneRepository extends EntityRepository
 
         if (null !== $prospect) {
             $query = $qb->select('p')
-                        ->from('MgatePersonneBundle:Personne', 'p')
+                        ->from(Personne::class, 'p')
                         ->leftJoin('p.employe', 'e')
                         ->addSelect('e')
                         ->where('p.employe IS NOT NULL')
                         ->andWhere('e.prospect = :prospect')
                             ->setParameter('prospect', $prospect);
         } else {
-            $query = $qb->select('n')->from('MgatePersonneBundle:Personne', 'n')
+            $query = $qb->select('n')->from(Personne::class, 'n')
                         ->where('n.employe IS NOT NULL');
         }
 
@@ -91,7 +92,7 @@ class PersonneRepository extends EntityRepository
     public function getMembreNotUser($user = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('n')->from('MgatePersonneBundle:Personne', 'n')
+        $query = $qb->select('n')->from(Personne::class, 'n')
           ->where('n.user IS NULL')
           ->andWhere('n.membre IS NOT NULL');
 
@@ -113,7 +114,7 @@ class PersonneRepository extends EntityRepository
     public function getAllPersonne($orderByNom = false)
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('p')->from('MgatePersonneBundle:Personne', 'p')
+        $query = $qb->select('p')->from(Personne::class, 'p')
             ->leftJoin('p.employe', 'employe')
             ->addSelect('employe')
              ->leftJoin('p.membre', 'membre')
@@ -137,7 +138,7 @@ class PersonneRepository extends EntityRepository
 
         $query = $qb
             ->select('p')
-            ->from('MgatePersonneBundle:Personne', 'p')
+            ->from(Personne::class, 'p')
             ->leftJoin('p.membre', 'm')->addSelect('m')
             ->leftJoin('m.mandats', 'mm')->addSelect('mm')
             ->where('mm.id IS NOT NULL')
@@ -156,7 +157,7 @@ class PersonneRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('p')
-            ->from('MgatePersonneBundle:Personne', 'p')
+            ->from(Personne::class, 'p')
             ->where('p.nom LIKE :nom')
             ->orWhere('p.prenom LIKE :prenom')
             ->setParameter('nom', '%' . $search . '%')

@@ -1,20 +1,20 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.ap_rediger'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.ap_rediger'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.ap_rediger'|trans({}, 'suivi') }}
+    {{ 'suivi.ap_rediger'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
 
-    <!--<a href="{{ path('MgatePersonne_employe_ajouter', {'prospect_id':etude.prospect.id, 'format':'mini'}) }}?KeepThis=true&TB_iframe=true&height=400&width=600" title="Ajouter un signataire" class="thickbox">Ajouter un signataire</a>-->
+    <!--<a href="{{ path('personne_employe_ajouter', {'prospect_id':etude.prospect.id, 'format':'mini'}) }}?KeepThis=true&TB_iframe=true&height=400&width=600" title="Ajouter un signataire" class="thickbox">Ajouter un signataire</a>-->
 
 
     {{ form_start(form) }}
-    {% form_theme form 'MgateSuiviBundle:Form:fields.html.twig' %}
+    {% form_theme form 'Project/Form/fields.html.twig' %}
     <table class="table table-bordered table-striped standard">
         <tr>
             <th>
@@ -56,7 +56,7 @@
         </tr>
         <tr>
             <th id="{{ form.ap.newSignataire2.vars.id }}_block" colspan="2"
-                class="success">{{ 'suivi.signataire_client_ajouter'|trans({}, 'suivi') }}</th>
+                class="success">{{ 'suivi.signataire_client_ajouter'|trans({}, 'project') }}</th>
         </tr>
         <tr>
             <th>{{ form_label(form.ap.newSignataire2.personne.prenom) }}</th>
@@ -92,7 +92,7 @@
         </tr>
         <tr>
             <th id="{{ form.ap.newSignataire2.vars.id }}_block" colspan="2"
-                class="success">{{ 'suivi.avant_projet'|trans({}, 'suivi') }}</th>
+                class="success">{{ 'suivi.avant_projet'|trans({}, 'project') }}</th>
         </tr>
         <tr>
             <th>
@@ -146,8 +146,8 @@
     </table>
     {{ form_widget(form) }}
 
-    <input type="submit" value="{{ 'suivi.ap_enregistrer'|trans({}, 'suivi') }}" class="btn btn-success"/>
-    <input type="submit" value="{{ 'suivi.ap_enregistrer_phases_passer'|trans({}, 'suivi') }}" name="phases"
+    <input type="submit" value="{{ 'suivi.ap_enregistrer'|trans({}, 'project') }}" class="btn btn-success"/>
+    <input type="submit" value="{{ 'suivi.ap_enregistrer_phases_passer'|trans({}, 'project') }}" name="phases"
            class="btn btn-success"/>
     {{ form_end(form) }}
 
@@ -159,5 +159,5 @@
      <script type="text/javascript">
          $(".select2-multiple").select2({width: '100%'});
      </script>
-     {% include "MgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.ap.knownSignataire2, knowned: form.ap.signataire2, newed: form.ap.newSignataire2 } %}
+     {% include "Project/DocType/selectOrNew.html.twig" with { known: form.ap.knownSignataire2, knowned: form.ap.signataire2, newed: form.ap.newSignataire2 } %}
  {% endblock %}

@@ -372,7 +372,7 @@ class ChartManager /*extends \Twig_Extension*/
         $ob->credits->enabled(false);
         $ob->legend->enabled(false);
         $ob->exporting->enabled(false);
-        $ob->plotOptions->series(['pointPadding' => 0, 'groupPadding' => 0, 'pointWidth' => 10, 'groupPadding' => 0,
+        $ob->plotOptions->series(['pointPadding' => 0, 'groupPadding' => 0, 'pointWidth' => 10,
                                   'marker' => ['radius' => 5],
                                   'tooltip' => ['pointFormat' => '<b>{point.titre}</b><br /> {point.detail}'],
         ]);

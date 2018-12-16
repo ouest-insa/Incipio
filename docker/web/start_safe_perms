@@ -15,10 +15,11 @@ main() {
     owner="www-data"
     group="www-data"
 
-    chown -R "$owner:$group" /var/{lock,log,run}/apache*
+    chown -R "$owner:$group" /var/lock/apache* /var/log/apache* /var/run/apache*
     chown -R "$owner:$group" var
     chown -R "$owner:$group" web/tmp
-    rm web/tmp/*--* # clean web/tmp folder from exported file
+    # clean web/tmp folder from exported file
+    rm -f public/tmp/*.json public/tmp/*.png public/tmp/*--*
     exec /usr/sbin/apache2ctl "$@"
 }
 

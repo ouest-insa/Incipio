@@ -11,15 +11,13 @@
 
 namespace App\Entity\Project;
 
-use App\Entity\Personne;
-use App\Entity\Thread;
+use App\Entity\Comment\Thread;
+use App\Entity\Personne\Personne;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Mgate\SuiviBundle\Entity\ClientContact.
- *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\SuiviBundle\Entity\ClientContactRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Project\ClientContactRepository")
  */
 class ClientContact
 {
@@ -39,7 +37,7 @@ class ClientContact
     protected $etude;
 
     /** , inversedBy="clientContacts", cascade={"persist"}
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Personne")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne")
      * @ORM\JoinColumn(nullable=false)
      */
     private $faitPar;
@@ -52,7 +50,7 @@ class ClientContact
     private $date;
 
     /**
-     * @ORM\OneToOne(targetEntity="\Mgate\CommentBundle\Entity\Thread",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Comment\Thread",cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $thread;

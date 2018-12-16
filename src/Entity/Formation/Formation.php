@@ -11,7 +11,7 @@
 
 namespace App\Entity\Formation;
 
-use App\Entity\Personne;
+use App\Entity\Personne\Personne;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Formation.
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\FormationBundle\Entity\FormationRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Formation\FormationRepository")
  */
 class Formation
 {
@@ -67,7 +67,7 @@ class Formation
     /**
      * @var Personne
      *
-     * @ORM\ManyToMany(targetEntity="Mgate\PersonneBundle\Entity\Personne")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Personne\Personne")
      * @ORM\JoinTable(name="formation_formateurs")
      */
     private $formateurs;
@@ -75,7 +75,7 @@ class Formation
     /**
      * @var Personne
      *
-     * @ORM\ManyToMany(targetEntity="Mgate\PersonneBundle\Entity\Personne")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Personne\Personne")
      * @ORM\JoinTable(name="formation_membresPresents")
      */
     private $membresPresents;
@@ -122,9 +122,9 @@ class Formation
             return $choices;
         } elseif (array_key_exists($choice, $choices)) {
             return $choices[$choice];
-        } else {
-            return;
         }
+
+        return '';
     }
 
     /**
@@ -154,7 +154,7 @@ class Formation
     /**
      * Get categorie.
      *
-     * @return int
+     * @return array
      */
     public function getCategorie()
     {
@@ -226,7 +226,7 @@ class Formation
     /**
      * Get formateurs.
      *
-     * @return \stdClass
+     * @return Personne[]|ArrayCollection
      */
     public function getFormateurs()
     {
@@ -250,7 +250,7 @@ class Formation
     /**
      * Get membresPresents.
      *
-     * @return \stdClass
+     * @return Personne[]|ArrayCollection
      */
     public function getMembresPresents()
     {

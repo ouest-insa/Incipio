@@ -1,4 +1,4 @@
-{% extends "MgateFormationBundle::layout.html.twig" %}
+{% extends "Formation/layout.html.twig" %}
 
 {% block content_title %}
     {{ 'formation.formations_liste'|trans({}, 'formation') }}
@@ -27,7 +27,7 @@
                             <br/> {% endfor %}</td>
                     <td>{{ formation.dateDebut | date("d/m/Y") }}</td>
                     <td>
-                        <a href="{{ path('Mgate_formation_voir', {'id': formation.id}) }}">{{ formation.titre | title }}</a>
+                        <a href="{{ path('formation_voir', {'id': formation.id}) }}">{{ formation.titre | title }}</a>
                     </td>
                     <td>{{ formation.description | nl2br }}</td>
                     <td>{% for personne in formation.formateurs %} {{ personne.prenomNom }};{% endfor %}</td>

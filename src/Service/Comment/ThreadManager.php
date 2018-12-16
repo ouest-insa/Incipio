@@ -29,10 +29,11 @@ class ThreadManager
     }
 
     /**
-     * @param $namead
+     * @param $name
      * @param $permaLink
      * @param Etude $entity
-     *                      Used  only in Mgate\CommentBundle\Controller\DefaultController for undocumented purpose (maintenance ??)
+     *
+     * Used  only in Controller/Comment for undocumented purpose (maintenance ??)
      */
     public function creerThread($name, $permaLink, Etude $entity)
     {

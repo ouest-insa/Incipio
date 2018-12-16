@@ -1,4 +1,4 @@
-{% extends "MgateFormationBundle::layout.html.twig" %}
+{% extends "Formation/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -24,7 +24,7 @@
         {{ form_label(form.mandat) }} {{ form_widget(form.mandat) }}
         {{ form_widget(form) }}
         <button type="button" class="btn btn-primary"
-                onclick="window.location.href = '{{ path('Mgate_formation_participation') }}/'+$('#form_mandat').val();">
+                onclick="window.location.href = '{{ path('formation_participation') }}/'+$('#form_mandat').val();">
             {{ 'formation.chercher'|trans({}, 'formation') }}
         </button>
     </form>

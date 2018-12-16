@@ -1,6 +1,6 @@
 {# Page de liste des membres : les personnes s'étant inscrites à la Junior. #}
 
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -47,10 +47,10 @@
                     <span class="label label-info">{{ membre.identifiant }}</span>
                 </td>
                 <td>
-                    <a href="{{ path('MgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne ? membre.personne.prenom }}</a>
+                    <a href="{{ path('personne_membre_voir', {'id': membre.id}) }}">{{ membre.personne ? membre.personne.prenom }}</a>
                 </td>
                 <td>
-                    <a href="{{ path('MgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne ? membre.personne.nom }}</a>
+                    <a href="{{ path('personne_membre_voir', {'id': membre.id}) }}">{{ membre.personne ? membre.personne.nom }}</a>
                 </td>
                 <td>
                     {% for mandat in membre.mandats %}

@@ -1,4 +1,4 @@
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
     {{ 'prospect.modifier_prospect'|trans({}, 'personne') }} {{ parent() }}
@@ -10,8 +10,8 @@
 
 {% block breadcrumb %}
     <ul class="breadcrumb no-margin pull-right">
-        <li><a href="{{ path('MgatePersonne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
-        <li><a href="{{ path('MgatePersonne_prospect_voir', {'id': prospect.id}) }}">{{ prospect.nom }}</a></li>
+        <li><a href="{{ path('personne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
+        <li><a href="{{ path('personne_prospect_voir', {'id': prospect.id}) }}">{{ prospect.nom }}</a></li>
         <li class="active">{{ 'prospect.modifier_prospect'|trans({}, 'personne') }}</li>
     </ul>
 {% endblock %}
@@ -20,7 +20,7 @@
     <div class="table-responsive content">
         {{ form_start(form) }}
         <table class="table table-bordered table-striped">
-            {% include "MgatePersonneBundle:Prospect:formulaire.html.twig" %}
+            {% include ":Personne/Prospect/formulaire.html.twig" %}
             <tr>
                 <td colspan="2">
                     <div class="row">
@@ -34,7 +34,7 @@
                         <div class="col-md-2 col-xs-4">
                             <form class="bootbox-confirm inline"
                                   data-content="{{ 'prospect.confirmation_supprimer_prospect'|trans({}, 'personne') }}"
-                                  action="{{ path('MgatePersonne_prospect_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+                                  action="{{ path('personne_prospect_supprimer', { 'id': form.vars.value.id }) }}" method="post">
                                 {{ form_widget(delete_form) }}
                                 <button class="btn btn-danger">{{ 'prospect.supprimer_prospect'|trans({}, 'personne') }}</button>
                             </form>

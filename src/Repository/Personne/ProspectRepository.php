@@ -11,6 +11,7 @@
 
 namespace App\Repository\Personne;
 
+use App\Entity\Personne\Prospect;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -24,7 +25,7 @@ class ProspectRepository extends EntityRepository
     public function ajaxSearch($nom)
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('n')->from('MgatePersonneBundle:Prospect', 'n')
+        $query = $qb->select('n')->from(Prospect::class, 'n')
           ->where($qb->expr()->like('n.nom', $qb->expr()->literal('%' . $nom . '%')))
           ->getQuery();
 
@@ -40,7 +41,7 @@ class ProspectRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('p')
-                    ->from('MgatePersonneBundle:Prospect', 'p')
+                    ->from(Prospect::class, 'p')
                     ->leftJoin('p.employes', 'employes')
                     ->addSelect('employes')
                     ->getQuery();
@@ -58,7 +59,7 @@ class ProspectRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('p')
-            ->from('MgatePersonneBundle:Prospect', 'p')
+            ->from(Prospect::class, 'p')
             ->where('p.nom LIKE :nom')
             ->setParameter('nom', '%' . $search . '%')
             ->setMaxResults($limit);

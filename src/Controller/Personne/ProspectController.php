@@ -13,6 +13,7 @@ namespace App\Controller\Personne;
 
 use App\Entity\Personne\Employe;
 use App\Entity\Personne\Prospect;
+use App\Entity\Project\Etude;
 use App\Form\Personne\ProspectType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -28,14 +29,14 @@ class ProspectController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_prospect_ajouter", path="/prospect/add/", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_prospect_ajouter", path="/prospect/add/", methods={"GET","HEAD","POST"})
      *
      * @param Request       $request
      * @param ObjectManager $em
      *
      * @return RedirectResponse|Response
      */
-    public function ajouterAction(Request $request, ObjectManager $em)
+    public function ajouter(Request $request, ObjectManager $em)
     {
         $prospect = new Prospect();
 
@@ -49,7 +50,7 @@ class ProspectController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Prospect enregistré');
 
-                return $this->redirectToRoute('MgatePersonne_prospect_voir', ['id' => $prospect->getId()]);
+                return $this->redirectToRoute('personne_prospect_voir', ['id' => $prospect->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -61,15 +62,15 @@ class ProspectController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_prospect_homepage", path="/prospect/", methods={"GET","HEAD"})
+     * @Route(name="personne_prospect_homepage", path="/prospect/", methods={"GET","HEAD"})
      *
      * @return Response
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('MgatePersonneBundle:Prospect')->getAllProspect();
+        $entities = $em->getRepository(Prospect::class)->getAllProspect();
 
         return $this->render('Personne/Prospect/index.html.twig', [
             'prospects' => $entities,
@@ -78,14 +79,14 @@ class ProspectController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_prospect_voir", path="/prospect/voir/{id}", methods={"GET","HEAD"})
+     * @Route(name="personne_prospect_voir", path="/prospect/voir/{id}", methods={"GET","HEAD"})
      *
      * @param Prospect      $prospect
      * @param ObjectManager $em
      *
      * @return Response
      */
-    public function voirAction(Prospect $prospect, ObjectManager $em)
+    public function voir(Prospect $prospect, ObjectManager $em)
     {
         //récupération des employés
         $mailing = '';
@@ -103,7 +104,7 @@ class ProspectController extends AbstractController
         }
 
         //récupération des études faites avec ce prospect
-        $etudes = $em->getRepository('MgateSuiviBundle:Etude')->findByProspect($prospect);
+        $etudes = $em->getRepository(Etude::class)->findByProspect($prospect);
 
         return $this->render('Personne/Prospect/voir.html.twig', [
             'prospect' => $prospect,
@@ -114,7 +115,7 @@ class ProspectController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_prospect_modifier", path="/prospect/modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_prospect_modifier", path="/prospect/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request       $request
      * @param Prospect      $prospect
@@ -122,7 +123,7 @@ class ProspectController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Prospect $prospect, ObjectManager $em)
+    public function modifier(Request $request, Prospect $prospect, ObjectManager $em)
     {
         $form = $this->createForm(ProspectType::class, $prospect);
         $deleteForm = $this->createDeleteForm($prospect->getId());
@@ -134,7 +135,7 @@ class ProspectController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Prospect enregistré');
 
-                return $this->redirectToRoute('MgatePersonne_prospect_voir', ['id' => $prospect->getId()]);
+                return $this->redirectToRoute('personne_prospect_voir', ['id' => $prospect->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -148,7 +149,7 @@ class ProspectController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_prospect_supprimer", path="/prospect/supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="personne_prospect_supprimer", path="/prospect/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Prospect      $prospect the prospect to delete
      * @param Request       $request
@@ -156,19 +157,19 @@ class ProspectController extends AbstractController
      *
      * @return RedirectResponse
      */
-    public function deleteAction(Prospect $prospect, Request $request, ObjectManager $em)
+    public function delete(Prospect $prospect, Request $request, ObjectManager $em)
     {
         $form = $this->createDeleteForm($prospect->getId());
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $related_projects = $em->getRepository('MgateSuiviBundle:Etude')->findByProspect($prospect);
+            $related_projects = $em->getRepository(Etude::class)->findByProspect($prospect);
 
             if (count($related_projects) > 0) {
                 //can't delete a prospect with related projects
                 $this->addFlash('warning', 'Impossible de supprimer un prospect ayant une étude liée.');
 
-                return $this->redirectToRoute('MgatePersonne_prospect_voir', ['id' => $prospect->getId()]);
+                return $this->redirectToRoute('personne_prospect_voir', ['id' => $prospect->getId()]);
             } else {
                 //remove employes
                 foreach ($prospect->getEmployes() as $employe) {
@@ -180,7 +181,7 @@ class ProspectController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('MgatePersonne_prospect_homepage');
+        return $this->redirectToRoute('personne_prospect_homepage');
     }
 
     private function createDeleteForm($id)
@@ -195,17 +196,17 @@ class ProspectController extends AbstractController
      * Point d'entré ajax retournant un json des prospect dont le nom contient une partie de $_GET['term'].
      *
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_ajax_prospect", path="/ajax/ajax_prospect/", methods={"GET","HEAD"})
+     * @Route(name="personne_ajax_prospect", path="/ajax/ajax_prospect/", methods={"GET","HEAD"})
      *
      * @param Request       $request
      * @param ObjectManager $em
      *
      * @return Response
      */
-    public function ajaxProspectAction(Request $request, ObjectManager $em)
+    public function ajaxProspect(Request $request, ObjectManager $em)
     {
         $value = $request->get('term');
-        $members = $em->getRepository('MgatePersonneBundle:Prospect')->ajaxSearch($value);
+        $members = $em->getRepository(Prospect::class)->ajaxSearch($value);
 
         $json = [];
         foreach ($members as $member) {
@@ -225,16 +226,16 @@ class ProspectController extends AbstractController
      * Point d'entrée ajax retournant un Json avec la liste des employés d'un prospect donné.
      *
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgatePersonne_ajax_employes_de_prospect", path="/ajax/employes_de_prospect/{id}", methods={"GET","HEAD"})
+     * @Route(name="personne_ajax_employes_de_prospect", path="/ajax/employes_de_prospect/{id}", methods={"GET","HEAD"})
      *
      * @param Prospect $prospect
      *
      * @return JsonResponse
      */
-    public function ajaxEmployesAction(Prospect $prospect)
+    public function ajaxEmployes(Prospect $prospect)
     {
         $em = $this->getDoctrine()->getManager();
-        $employes = $em->getRepository('MgatePersonneBundle:Employe')->findByProspect($prospect);
+        $employes = $em->getRepository(Employe::class)->findByProspect($prospect);
         $json = [];
         /** @var Employe $employe */
         foreach ($employes as $employe) {

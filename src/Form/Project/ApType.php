@@ -11,6 +11,8 @@
 
 namespace App\Form\Project;
 
+use App\Entity\Hr\Competence;
+use App\Entity\Personne\Personne;
 use App\Entity\Project\Ap;
 use App\Repository\Personne\PersonneRepository;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
@@ -52,7 +54,7 @@ class ApType extends AbstractType
                  ],
                 ])
             ->add('competences', Select2EntityType::class, [
-                'class' => 'N7consulting\RhBundle\Entity\Competence',
+                'class' => Competence::class,
                 'by_reference' => false,
                 'multiple' => true,
             ]);

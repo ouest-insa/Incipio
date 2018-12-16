@@ -11,7 +11,9 @@
 
 namespace App\Controller\Treso;
 
+use App\Entity\Treso\BaseURSSAF;
 use App\Entity\Treso\BV;
+use App\Entity\Treso\CotisationURSSAF;
 use App\Form\Treso\BVType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,44 +26,44 @@ class BVController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_BV_index", path="/Tresorerie/BV", methods={"GET","HEAD"})
+     * @Route(name="treso_BV_index", path="/Tresorerie/BV", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
-        $bvs = $em->getRepository('MgateTresoBundle:BV')->findAll();
+        $bvs = $em->getRepository(BV::class)->findAll();
 
         return $this->render('Treso/BV/index.html.twig', ['bvs' => $bvs]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_BV_voir", path="/Tresorerie/BV/Voir/{id}", methods={"GET","HEAD"})
+     * @Route(name="treso_BV_voir", path="/Tresorerie/BV/Voir/{id}", methods={"GET","HEAD"})
      *
      * @param BV $bv
      *
      * @return Response
      */
-    public function voirAction(BV $bv)
+    public function voir(BV $bv)
     {
         return $this->render('Treso/BV/voir.html.twig', ['bv' => $bv]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO', 'ROLE_SUIVEUR')")
-     * @Route(name="MgateTreso_BV_ajouter", path="/Tresorerie/BV/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
-     * @Route(name="MgateTreso_BV_modifier", path="/Tresorerie/BV/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="treso_BV_ajouter", path="/Tresorerie/BV/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
+     * @Route(name="treso_BV_modifier", path="/Tresorerie/BV/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request $request
      * @param $id
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, $id)
+    public function modifier(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$bv = $em->getRepository('MgateTresoBundle:BV')->find($id)) {
+        if (!$bv = $em->getRepository(BV::class)->find($id)) {
             $bv = new BV();
             $bv->setTypeDeTravail('Réalisateur')
                 ->setDateDeVersement(new \DateTime('now'))
@@ -74,23 +76,23 @@ class BVController extends AbstractController
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $bv->setCotisationURSSAF();
-                $charges = $em->getRepository('MgateTresoBundle:CotisationURSSAF')->findAllByDate($bv->getDateDemission());
+                $charges = $em->getRepository(CotisationURSSAF::class)->findAllByDate($bv->getDateDemission());
                 foreach ($charges as $charge) {
                     $bv->addCotisationURSSAF($charge);
                 }
                 if (null === $charges) {
                     $this->addFlash('danger', 'Il n\'y a aucune cotisation Urssaf définie pour cette période. 
-                    Pour ajouter des cotisations URSSAF : ' . $this->get('router')->generate('MgateTreso_CotisationURSSAF_index') . '.');
+                    Pour ajouter des cotisations URSSAF : ' . $this->get('router')->generate('treso_CotisationURSSAF_index') . '.');
 
-                    return $this->redirectToRoute('MgateTreso_BV_index');
+                    return $this->redirectToRoute('treso_BV_index');
                 }
 
-                $baseURSSAF = $em->getRepository('MgateTresoBundle:BaseURSSAF')->findByDate($bv->getDateDemission());
+                $baseURSSAF = $em->getRepository(BaseURSSAF::class)->findByDate($bv->getDateDemission());
                 if (null === $baseURSSAF) {
                     $this->addFlash('danger', 'Il n\'y a aucune base Urssaf définie pour cette période. 
-                    Pour ajouter une base URSSAF : ' . $this->get('router')->generate('MgateTreso_BaseURSSAF_index') . '.');
+                    Pour ajouter une base URSSAF : ' . $this->get('router')->generate('treso_BaseURSSAF_index') . '.');
 
-                    return $this->redirectToRoute('MgateTreso_BV_index');
+                    return $this->redirectToRoute('treso_BV_index');
                 }
                 $bv->setBaseURSSAF($baseURSSAF);
 
@@ -98,7 +100,7 @@ class BVController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'BV enregistré');
 
-                return $this->redirectToRoute('MgateTreso_BV_index', []);
+                return $this->redirectToRoute('treso_BV_index', []);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -111,13 +113,13 @@ class BVController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="MgateTreso_BV_supprimer", path="/Tresorerie/BV/Supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="treso_BV_supprimer", path="/Tresorerie/BV/Supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param BV $bv
      *
      * @return RedirectResponse
      */
-    public function supprimerAction(BV $bv)
+    public function supprimer(BV $bv)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -125,6 +127,6 @@ class BVController extends AbstractController
         $em->flush();
         $this->addFlash('success', 'BV supprimé');
 
-        return $this->redirectToRoute('MgateTreso_BV_index', []);
+        return $this->redirectToRoute('treso_BV_index', []);
     }
 }

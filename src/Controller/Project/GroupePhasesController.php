@@ -27,7 +27,7 @@ class GroupePhasesController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_groupes_modifier", path="/suivi/groupes/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="project_groupes_modifier", path="/suivi/groupes/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -35,7 +35,7 @@ class GroupePhasesController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function modifier(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -62,7 +62,7 @@ class GroupePhasesController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', isset($message) ? $message : 'Groupes modifiés');
 
-                return $this->redirectToRoute('MgateSuivi_groupes_modifier', ['id' => $etude->getId()]);
+                return $this->redirectToRoute('project_groupes_modifier', ['id' => $etude->getId()]);
             }
 
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');

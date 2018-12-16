@@ -1,28 +1,28 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.proces_verbal_modifier'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.proces_verbal_modifier'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.proces_verbal_modifier'|trans({}, 'suivi') }}
+    {{ 'suivi.proces_verbal_modifier'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
 
     {{ form_start(form) }}
 
-    {% include 'MgateSuiviBundle:ProcesVerbal:formulaire.html.twig' %}
+    {% include 'Project/ProcesVerbal/formulaire.html.twig' %}
 
     <button type="submit" class="btn btn-success">
-        {{ 'suivi.proces_verbal_enregistrer'|trans({}, 'suivi') }}
+        {{ 'suivi.proces_verbal_enregistrer'|trans({}, 'project') }}
     </button>
     {{ form_end(form) }}
     <br/>
-    <form class="bootbox-confirm" data-content="{{ 'suivi.proces_verbal_supprimer_confirmation'|trans({}, 'suivi') }}"
-          action="{{ path('MgateSuivi_procesverbal_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+    <form class="bootbox-confirm" data-content="{{ 'suivi.proces_verbal_supprimer_confirmation'|trans({}, 'project') }}"
+          action="{{ path('project_procesverbal_supprimer', { 'id': form.vars.value.id }) }}" method="post">
         {{ form_widget(delete_form) }}
-        <button class="btn btn-danger">{{ 'suivi.proces_verbal_supprimer'|trans({}, 'suivi') }}</button>
+        <button class="btn btn-danger">{{ 'suivi.proces_verbal_supprimer'|trans({}, 'project') }}</button>
     </form>
 
 {% endblock %}
@@ -30,5 +30,5 @@
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
-    {% include "MgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 } %}
+    {% include "Project/DocType/selectOrNew.html.twig" with { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 } %}
 {% endblock %}

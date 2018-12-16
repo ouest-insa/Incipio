@@ -11,6 +11,7 @@
 
 namespace App\Repository\Treso;
 
+use App\Entity\Treso\BV;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -28,6 +29,7 @@ class BVRepository extends EntityRepository
     {
         $entities = $this->findBy([], ['mandat' => 'desc', 'dateDeVersement' => 'asc']);
         $bvsParMandat = [];
+        /** @var BV $bv */
         foreach ($entities as $bv) {
             $mandat = $bv->getMandat();
             if (array_key_exists($mandat, $bvsParMandat)) {
@@ -44,13 +46,17 @@ class BVRepository extends EntityRepository
      * Renvoie les bv d'un mois concerné
      * YEAR MONTH DAY sont défini dans DashBoardBundle/DQL (qui doit devenir FrontEndBundle).
      *
+     * @param      $month
+     * @param      $year
+     * @param bool $trimestriel
+     *
      * @return array
      */
     public function findAllByMonth($month, $year, $trimestriel = false)
     {
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('b')
-                     ->from('MgateTresoBundle:BV', 'b');
+                     ->from(BV::class, 'b');
         if ($trimestriel) {
             $query->where("MONTH(b.dateDeVersement) >= $month")
                   ->andWhere("MONTH(b.dateDeVersement) < ($month + 2)");

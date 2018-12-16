@@ -39,26 +39,26 @@ class RelatedDocument
     private $document;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Membre", inversedBy="relatedDocuments",
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Membre", inversedBy="relatedDocuments",
      *                                                                   cascade={"persist"})
      * @ORM\JoinColumn(name="membre_id", referencedColumnName="id", nullable=true)
      */
     private $membre;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\SuiviBundle\Entity\Etude", inversedBy="relatedDocuments", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project\Etude", inversedBy="relatedDocuments", cascade={"persist"})
      * @ORM\JoinColumn(name="etude_id", referencedColumnName="id", nullable=true)
      */
     private $etude;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\FormationBundle\Entity\Formation", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Formation\Formation", cascade={"persist"})
      * @ORM\JoinColumn(name="formation_id", referencedColumnName="id", nullable=true)
      */
     private $formation;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Prospect", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Prospect", cascade={"persist"})
      * @ORM\JoinColumn(name="prospect_id", referencedColumnName="id", nullable=true)
      */
     private $prospect;

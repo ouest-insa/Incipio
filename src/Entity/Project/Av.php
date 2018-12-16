@@ -62,7 +62,7 @@ class Av extends DocType
 
     /**
      * @var AvMission
-     * @ORM\OneToMany(targetEntity="Mgate\SuiviBundle\Entity\AvMission", mappedBy="avenant", cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Project\AvMission", mappedBy="avenant", cascade={"persist","remove"})
      */
     private $avenantsMissions;
 
@@ -74,7 +74,7 @@ class Av extends DocType
 
     /**
      * @var ArrayCollection phase differentiel
-     * @ORM\OneToMany(targetEntity="Mgate\SuiviBundle\Entity\Phase", mappedBy="avenant", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Project\Phase", mappedBy="avenant", cascade={"persist", "remove"})
      */
     private $phases;
 

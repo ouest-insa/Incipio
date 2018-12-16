@@ -1,6 +1,6 @@
 {# page de visualisation de l'ensemble des personnes inscrites dans l'erp.#}
 
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -49,7 +49,7 @@
                     {% if is_granted('ROLE_ADMIN') and  personne.membre == null and personne.employe == null %}
                     <form class="bootbox-confirm inline" id="confirm"
                           data-content="{{ 'annuaire.confirmation_supprimer_personne'|trans({}, 'personne') }}"
-                          action="{{ path('MgatePersonne_personne_supprimer', { 'id': personne.id }) }}"
+                          action="{{ path('personne_personne_supprimer', { 'id': personne.id }) }}"
                           method="post">
                         <button class="btn btn-danger">{{ 'generique.supprimer'|trans({}, 'personne') }}</button>
                     </form>

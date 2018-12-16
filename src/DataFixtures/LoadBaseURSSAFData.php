@@ -11,11 +11,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\BaseURSSAF;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use App\Entity\Treso\BaseURSSAF;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadBaseURSSAFData implements FixtureInterface
+class LoadBaseURSSAFData extends Fixture
 {
     /**
      * {@inheritdoc}
@@ -42,7 +42,7 @@ class LoadBaseURSSAFData implements FixtureInterface
                 $manager->persist($baseURSSAF);
             }
         }
-        if (!$manager->getRepository('MgateTresoBundle:BaseURSSAF')->findBy([
+        if (!$manager->getRepository(BaseURSSAF::class)->findBy([
             'dateDebut' => $baseURSSAF->getDateDebut(),
             ])) {
             $manager->flush();

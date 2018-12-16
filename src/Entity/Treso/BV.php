@@ -11,7 +11,7 @@
 
 namespace App\Entity\Treso;
 
-use App\Entity\Mission;
+use App\Entity\Project\Mission;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     message="Le couple mandat/numéro doit être unique")
  *
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"mandat", "numero"})})
- * @ORM\Entity(repositoryClass="Mgate\TresoBundle\Entity\BVRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Treso\BVRepository")
  */
 class BV
 {
@@ -115,19 +115,19 @@ class BV
     private $numeroVirement;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\SuiviBundle\Entity\Mission")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project\Mission")
      */
     private $mission;
 
     /**
      * @var BaseURSSAF
      *
-     * @ORM\ManyToOne(targetEntity="Mgate\TresoBundle\Entity\BaseURSSAF")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Treso\BaseURSSAF")
      */
     private $baseURSSAF;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Mgate\TresoBundle\Entity\CotisationURSSAF")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Treso\CotisationURSSAF")
      */
     private $cotisationURSSAF;
 

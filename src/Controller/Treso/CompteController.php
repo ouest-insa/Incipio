@@ -23,26 +23,26 @@ class CompteController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_Compte_index", path="/Tresorerie/Comptes", methods={"GET","HEAD"})
+     * @Route(name="treso_Compte_index", path="/Tresorerie/Comptes", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
-        $comptes = $em->getRepository('MgateTresoBundle:Compte')->findAll();
+        $comptes = $em->getRepository(Compte::class)->findAll();
 
         return $this->render('Treso/Compte/index.html.twig', ['comptes' => $comptes]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_Compte_ajouter", path="/Tresorerie/Compte/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1", "etude_id": "-1"})
-     * @Route(name="MgateTreso_Compte_modifier", path="/Tresorerie/Compte/Modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="treso_Compte_ajouter", path="/Tresorerie/Compte/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1", "etude_id": "-1"})
+     * @Route(name="treso_Compte_modifier", path="/Tresorerie/Compte/Modifier/{id}", methods={"GET","HEAD","POST"})
      */
-    public function modifierAction(Request $request, $id)
+    public function modifier(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$compte = $em->getRepository('MgateTresoBundle:Compte')->find($id)) {
+        if (!$compte = $em->getRepository(Compte::class)->find($id)) {
             $compte = new Compte();
         }
 
@@ -54,7 +54,7 @@ class CompteController extends AbstractController
                 $em->persist($compte);
                 $em->flush();
 
-                return $this->redirectToRoute('MgateTreso_Compte_index', []);
+                return $this->redirectToRoute('treso_Compte_index', []);
             }
         }
 
@@ -66,19 +66,19 @@ class CompteController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="MgateTreso_Compte_supprimer", path="/Tresorerie/Compte/Supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="treso_Compte_supprimer", path="/Tresorerie/Compte/Supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Compte $compte
      *
      * @return RedirectResponse
      */
-    public function supprimerAction(Compte $compte)
+    public function supprimer(Compte $compte)
     {
         $em = $this->getDoctrine()->getManager();
 
         $em->remove($compte);
         $em->flush();
 
-        return $this->redirectToRoute('MgateTreso_Compte_index', []);
+        return $this->redirectToRoute('treso_Compte_index', []);
     }
 }

@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-md-3 col-sm-5 col-xs-6">
-        <input type="submit" value="{{ 'suivi.avenant_mission_enregistrer'|trans({}, 'suivi') }}"
+        <input type="submit" value="{{ 'suivi.avenant_mission_enregistrer'|trans({}, 'project') }}"
                class="btn btn-default"/>
         {{ form_end(form) }}
     </div>
@@ -14,11 +14,11 @@
     {% if delete_form is not none %}
         <div class="col-md-3 col-sm-5 col-xs-6">
             <form class="bootbox-confirm"
-                  data-content="{{ 'suivi.avenant_mission_supprimer_confirm'|trans({}, 'suivi') }}"
-                  action="{{ path('MgateSuivi_avmission_delete', { 'id': avmission.id }) }}" method="post">
+                  data-content="{{ 'suivi.avenant_mission_supprimer_confirm'|trans({}, 'project') }}"
+                  action="{{ path('project_avmission_delete', { 'id': avmission.id }) }}" method="post">
                 {{ form_widget(delete_form) }}
                 <button class="btn btn-danger">
-                    {{ 'suivi.avenant_mission_supprimer' |trans({}, 'suivi') }}
+                    {{ 'suivi.avenant_mission_supprimer' |trans({}, 'project') }}
                 </button>
             </form>
         </div>

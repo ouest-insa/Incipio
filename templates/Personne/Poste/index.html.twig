@@ -1,4 +1,4 @@
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
     {{ 'dashboard.postes_filieres'|trans({}, 'dashboard') }} {{ parent() }}
@@ -19,7 +19,7 @@
         <div class="col-sm-6 col-xs-12">
             <h2>{{ 'poste.liste_poste'|trans({}, 'personne') }}</h2>
 
-            <a href="{{ path('MgatePersonne_poste_ajouter') }}" class="btn btn-info">
+            <a href="{{ path('personne_poste_ajouter') }}" class="btn btn-info">
                 {{ 'dashboard.poste_ajouter'|trans({}, 'dashboard') }}
             </a>
 
@@ -35,7 +35,7 @@
                         <tr>
                     {% endif %}
                         <td>
-                            <a href="{{ path('MgatePersonne_poste_modifier', {'id': poste.id}) }}">
+                            <a href="{{ path('personne_poste_modifier', {'id': poste.id}) }}">
                                 <i class="fa fa-pencil"></i>
                                 {{ poste.intitule }}
                             </a>
@@ -54,7 +54,7 @@
 
         {% if is_granted('ROLE_ADMIN') %}
             <div class="col-sm-6 col-xs-12">
-                {% include '@MgatePersonne/Filiere/index.html.twig' %}
+                {% include 'Personne/Filiere/index.html.twig' %}
             </div>
         {% endif %}
     </div>

@@ -1,4 +1,4 @@
-{% extends "MgateUserBundle::layout.html.twig" %}
+{% extends "User/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -39,7 +39,7 @@
                 <td>{{ user.username }}</td>
                 <td>{% if user.personne %}
                         {% if user.personne.membre %}
-                            <a href="{{ path('MgatePersonne_membre_voir', {'id': user.personne.membre.id}) }}">{{ user.personne.prenomNom }}</a>
+                            <a href="{{ path('personne_membre_voir', {'id': user.personne.membre.id}) }}">{{ user.personne.prenomNom }}</a>
                         {% else %}
                             exception
                         {% endif %}
@@ -51,7 +51,7 @@
                 <td>{{ user.rolesDisplay }}</td>
                 <td>{{ user.lastLogin is empty ? "-" : user.lastLogin | date('Y/m/d H:i')}}</td>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <td><a href="{{ path('Mgate_user_modifier', {'id': user.id}) }}">{{ 'user.modifier'|trans({}, 'user') }}</a></td>
+                    <td><a href="{{ path('user_modifier', {'id': user.id}) }}">{{ 'user.modifier'|trans({}, 'user') }}</a></td>
                 {% endif %}
             </tr>
         {% else %}

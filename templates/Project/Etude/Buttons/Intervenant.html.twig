@@ -1,13 +1,13 @@
 {# Bouton Intervenant
  # Input : mission, etude
- # use : {% include "MgateSuiviBundle:Etude:Buttons/Intervenant.html.twig" with  {'mission' : mission, 'etude': etude }
+ # use : {% include "Project/Etude/Buttons/Intervenant.html.twig" with  {'mission' : mission, 'etude': etude }
  # etude has been added to avoid unexpected async query.
  %}
  #}
 {% if mission.intervenant %}
     <div class="btn-group" style="width: auto; min-width: 220px; max-width:500px;">
         <a class="btn btn-primary"
-           href="{{ path('MgatePersonne_membre_voir', {'id': mission.intervenant.id|default('0')}) }}"
+           href="{{ path('personne_membre_voir', {'id': mission.intervenant.id|default('0')}) }}"
            style="width : calc(100% - 26px); text-align: left; overflow: hidden;">
             <i class="icon-user icon-white"></i>
             {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}
@@ -16,24 +16,26 @@
         <ul class="dropdown-menu">
             <li>
                 <a href="mailto:{{ mission.intervenant.personne.email | default("#") }}">
-                    <i class="fa fa-envelope"></i> {{ 'suivi.contacter'|trans({}, 'suivi') }}
+                    <i class="fa fa-envelope"></i> {{ 'suivi.contacter'|trans({}, 'project') }}
                 </a>
             </li>
             <li>
-                <a href="{{ path('Mgate_publi_publiposter',
+                <a href="{{ path('publish_publiposter',
                 { 'templateName' : 'CE', 'rootName' : 'mission', 'rootObject_id' : mission.id }) }}">
-                    <i class="fa fa-envelope"></i> {{ 'suivi.générer'|trans({}, 'suivi') }}
+                    <i class="fa fa-envelope"></i> {{ 'suivi.générer'|trans({}, 'project') }}
                 </a>
             </li>
-            <li><a href="#" class="avancement" data-mission="{{ mission.id }}" data-etude="{{ etude.id }}"><i
-                            class="fa fa-envelope"></i> {{ 'suivi.avancement_modifier'|trans({}, 'suivi') }}</a></li>
+            <li>
+                <a href="#" class="avancement" data-mission="{{ mission.id }}" data-etude="{{ etude.id }}"><i
+                            class="fa fa-envelope"></i> {{ 'suivi.avancement_modifier'|trans({}, 'project') }}</a>
+            </li>
             <li class="divider"></li>
-            <li><a href="#"><i class="i"></i> {{ 'suivi.autre'|trans({}, 'suivi') }}</a></li>
+            <li><a href="#"><i class="i"></i> {{ 'suivi.autre'|trans({}, 'project') }}</a></li>
         </ul>
     </div>
 {% else %}
     <div class="btn-group" style="min-width: 220px;">
-        <a class="btn btn-info" href="{{ path('MgateSuivi_missions_modifier', {'id': etude.id}) }}">
+        <a class="btn btn-info" href="{{ path('project_missions_modifier', {'id': etude.id}) }}">
             <i class="icon-user icon-white"></i>
             {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }}
             {{ mission.intervenant.nom | default("") }}

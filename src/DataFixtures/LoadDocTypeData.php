@@ -2,14 +2,14 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Document;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use App\Entity\Publish\Document;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * Class LoadDocTypeData.
  */
-class LoadDocTypeData implements FixtureInterface
+class LoadDocTypeData extends Fixture
 {
     /**
      * {@inheritdoc}

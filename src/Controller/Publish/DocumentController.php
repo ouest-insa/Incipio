@@ -19,7 +19,6 @@ use App\Entity\Publish\RelatedDocument;
 use App\Form\Publish\DocumentType;
 use App\Service\Project\EtudePermissionChecker;
 use App\Service\Publish\DocumentManager;
-use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -35,13 +34,13 @@ class DocumentController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="Mgate_publi_documenttype_index", path="/Documents/", methods={"GET","HEAD"})
+     * @Route(name="publish_documenttype_index", path="/Documents/", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('MgatePubliBundle:Document')->findAll();
+        $entities = $em->getRepository(Document::class)->findAll();
 
         $totalSize = 0;
         foreach ($entities as $entity) {
@@ -56,7 +55,7 @@ class DocumentController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="Mgate_publi_document_voir", path="/Documents/show/{id}", methods={"GET","HEAD"})
+     * @Route(name="publish_document_voir", path="/Documents/show/{id}", methods={"GET","HEAD"})
      *
      * @param Document $documentType (ParamConverter) The document to be downloaded
      *
@@ -64,7 +63,7 @@ class DocumentController extends AbstractController
      *
      * @throws \Exception
      */
-    public function voirAction(Document $documentType)
+    public function voir(Document $documentType)
     {
         $documentStoragePath = $this->get('kernel')->getRootDir() . '' . Document::DOCUMENT_STORAGE_ROOT;
         if (file_exists($documentStoragePath . '/' . $documentType->getPath())) {
@@ -79,7 +78,7 @@ class DocumentController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="Mgate_publi_document_uploadEtude", path="/Documents/Upload/Etude/{nom}", methods={"GET","HEAD","POST"})
+     * @Route(name="publish_document_uploadEtude", path="/Documents/Upload/Etude/{nom}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -87,7 +86,7 @@ class DocumentController extends AbstractController
      *
      * @return Response
      */
-    public function uploadEtudeAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function uploadEtude(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle !');
@@ -96,7 +95,7 @@ class DocumentController extends AbstractController
         if (!$response = $this->upload($request, false, ['etude' => $etude])) {
             $this->addFlash('success', 'Document mis en ligne');
 
-            return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+            return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
         }
 
         return $response;
@@ -104,22 +103,21 @@ class DocumentController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="Mgate_publi_document_uploadEtudiant", path="/Documents/Upload/Etudiant/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="publish_document_uploadEtudiant", path="/Documents/Upload/Etudiant/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Request       $request
-     * @param Membre        $membre
-     * @param ObjectManager $em
+     * @param Request $request
+     * @param Membre  $membre
      *
      * @return bool|RedirectResponse|Response
      */
-    public function uploadEtudiantAction(Request $request, Membre $membre, ObjectManager $em)
+    public function uploadEtudiant(Request $request, Membre $membre)
     {
         $options['etudiant'] = $membre;
 
         if (!$response = $this->upload($request, false, $options)) {
             $this->addFlash('success', 'Document mis en ligne');
 
-            return $this->redirectToRoute('MgatePersonne_membre_voir', ['id' => $membre_id]);
+            return $this->redirectToRoute('personne_membre_voir', ['id' => $membre->getId()]);
         }
 
         return $response;
@@ -127,30 +125,30 @@ class DocumentController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="Mgate_publi_document_uploadFormation", path="/Documents/Upload/Formation/{id}", methods={"GET","HEAD"})
+     * @Route(name="publish_document_uploadFormation", path="/Documents/Upload/Formation/{id}", methods={"GET","HEAD"})
      *
      * @param Formation $formation
      *
      * @return JsonResponse
      */
-    public function uploadFormationAction(Formation $formation)
+    public function uploadFormation(Formation $formation)
     {
         return new JsonResponse([], Response::HTTP_NOT_IMPLEMENTED);
     }
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="Mgate_publi_document_uploadDoctype", path="/Documents/Upload/Doctype", methods={"GET","HEAD","POST"})
+     * @Route(name="publish_document_uploadDoctype", path="/Documents/Upload/Doctype", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      *
      * @return Response
      */
-    public function uploadDoctypeAction(Request $request)
+    public function uploadDoctype(Request $request)
     {
         if (!$response = $this->upload($request, true)) {
             // Si tout est ok
-            return $this->redirectToRoute('Mgate_publi_documenttype_index');
+            return $this->redirectToRoute('publish_documenttype_index');
         } else {
             return $response;
         }
@@ -158,13 +156,13 @@ class DocumentController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="Mgate_publi_document_delete", path="/Documents/Supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="publish_document_delete", path="/Documents/Supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Document $doc
      *
      * @return Response
      */
-    public function deleteAction(Document $doc)
+    public function delete(Document $doc)
     {
         $em = $this->getDoctrine()->getManager();
         $doc->setRootDir($this->get('kernel')->getRootDir());
@@ -179,7 +177,7 @@ class DocumentController extends AbstractController
         $em->remove($doc);
         $em->flush();
 
-        return $this->redirectToRoute('Mgate_publi_documenttype_index');
+        return $this->redirectToRoute('publish_documenttype_index');
     }
 
     private function upload(Request $request, $deleteIfExist = false, $options = [], DocumentManager $documentManager)

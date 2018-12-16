@@ -24,44 +24,44 @@ class NoteDeFraisController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_NoteDeFrais_index", path="/Tresorerie/NoteDeFrais", methods={"GET","HEAD"})
+     * @Route(name="treso_NoteDeFrais_index", path="/Tresorerie/NoteDeFrais", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
-        $nfs = $em->getRepository('MgateTresoBundle:NoteDeFrais')->findAll();
+        $nfs = $em->getRepository(NoteDeFrais::class)->findAll();
 
         return $this->render('Treso/NoteDeFrais/index.html.twig', ['nfs' => $nfs]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_NoteDeFrais_voir", path="/Tresorerie/NoteDeFrais/{id}", methods={"GET","HEAD"})
+     * @Route(name="treso_NoteDeFrais_voir", path="/Tresorerie/NoteDeFrais/{id}", methods={"GET","HEAD"})
      *
      * @param NoteDeFrais $nf
      *
      * @return Response
      */
-    public function voirAction(NoteDeFrais $nf)
+    public function voir(NoteDeFrais $nf)
     {
         return $this->render('Treso/NoteDeFrais/voir.html.twig', ['nf' => $nf]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_NoteDeFrais_ajouter", path="/Tresorerie/NoteDeFrais/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
-     * @Route(name="MgateTreso_NoteDeFrais_modifier", path="/Tresorerie/NoteDeFrais/Modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="treso_NoteDeFrais_ajouter", path="/Tresorerie/NoteDeFrais/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
+     * @Route(name="treso_NoteDeFrais_modifier", path="/Tresorerie/NoteDeFrais/Modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param $id
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, $id)
+    public function modifier(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$nf = $em->getRepository('MgateTresoBundle:NoteDeFrais')->find($id)) {
+        if (!$nf = $em->getRepository(NoteDeFrais::class)->find($id)) {
             $nf = new NoteDeFrais();
             $now = new \DateTime('now');
             $nf->setDate($now);
@@ -80,7 +80,7 @@ class NoteDeFraisController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Note de frais enregistrée');
 
-                return $this->redirectToRoute('MgateTreso_NoteDeFrais_voir', ['id' => $nf->getId()]);
+                return $this->redirectToRoute('treso_NoteDeFrais_voir', ['id' => $nf->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -92,13 +92,13 @@ class NoteDeFraisController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="MgateTreso_NoteDeFrais_supprimer", path="/Tresorerie/NoteDeFrais/Supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="treso_NoteDeFrais_supprimer", path="/Tresorerie/NoteDeFrais/Supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param NoteDeFrais $nf
      *
      * @return RedirectResponse
      */
-    public function supprimerAction(NoteDeFrais $nf)
+    public function supprimer(NoteDeFrais $nf)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -106,6 +106,6 @@ class NoteDeFraisController extends AbstractController
         $em->flush();
         $this->addFlash('success', 'Note de frais supprimée');
 
-        return $this->redirectToRoute('MgateTreso_NoteDeFrais_index', []);
+        return $this->redirectToRoute('treso_NoteDeFrais_index', []);
     }
 }

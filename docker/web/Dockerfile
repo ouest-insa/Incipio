@@ -40,12 +40,12 @@ RUN buildDeps=" \
 
 # Apache config
 RUN a2enmod rewrite headers
-ADD docker/web/vhost.conf /etc/apache2/sites-available/000-default.conf
-ADD docker/web/php.ini /usr/local/etc/php/php.ini
-ADD docker/web/composer.sh /usr/bin/composer.sh
+COPY docker/web/vhost.conf /etc/apache2/sites-available/000-default.conf
+COPY docker/web/php.ini /usr/local/etc/php/php.ini
+COPY docker/web/composer.sh /usr/bin/composer.sh
 
 # Add the application
-ADD . /app
+COPY . /app
 WORKDIR /app
 
 # Install composer

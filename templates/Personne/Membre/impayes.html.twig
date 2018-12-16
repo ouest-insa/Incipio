@@ -1,6 +1,6 @@
 {# Page de liste des impayés : les personnes s'étant inscrites à la Junior mais dont le format de paiement n'est pas défini. #}
 
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -41,10 +41,10 @@
         {% for membre in membres %}
             <tr>
                 <td>
-                    <a href="{{ path('MgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne ? membre.personne.prenom }}</a>
+                    <a href="{{ path('personne_membre_voir', {'id': membre.id}) }}">{{ membre.personne ? membre.personne.prenom }}</a>
                 </td>
                 <td>
-                    <a href="{{ path('MgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne ? membre.personne.nom }}</a>
+                    <a href="{{ path('personne_membre_voir', {'id': membre.id}) }}">{{ membre.personne ? membre.personne.nom }}</a>
                 </td>
                 <td>{{ membre.personne ? membre.personne.email }}</td>
                 <td class="text-center">

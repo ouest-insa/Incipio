@@ -1,4 +1,4 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 {% set valide    = asset('img/succes.png') %}
 {% set nonValide = asset('img/cross.png') %}
 {% set enCours   = asset('img/progress.png') %}
@@ -11,39 +11,39 @@
 {% block content_bundle %}
     <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
-            <a class="brand" href="{{ path('MgateSuivi_etude_voir', {'nom': etude.nom}) }}">
+            <a class="brand" href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">
                 <h4>{{ etude.reference(param('namingConvention')) }}</h4>
             </a>
         </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                <li><a href="{{ path('MgateSuivi_vu_ca', {'id': prevID}) }}"><i
-                                class="fa fa-arrow-left"></i> {{ 'suivi.précédent'|trans({}, 'suivi') }}</a></li>
+                <li><a href="{{ path('project_vu_ca', {'id': prevID}) }}"><i
+                                class="fa fa-arrow-left"></i> {{ 'suivi.précédent'|trans({}, 'project') }}</a></li>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
-                                class="fa fa-th-list"></i> {{ 'suivi.acces_rapide'|trans({}, 'suivi') }} <b
+                                class="fa fa-th-list"></i> {{ 'suivi.acces_rapide'|trans({}, 'project') }} <b
                                 class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li class="nav-header"><i
-                                    class="fa fa-unchecked"></i> {{ 'suivi.en_negociation'|trans({}, 'suivi') }}</li>
+                                    class="fa fa-unchecked"></i> {{ 'suivi.en_negociation'|trans({}, 'project') }}</li>
                         {% for etude in etudesDisplayList if etude.stateID == STATE_ID_EN_NEGOCIATION %}
-                            <li><a href="{{ path('MgateSuivi_vu_ca', {'id': etude.id}) }}"><i
+                            <li><a href="{{ path('project_vu_ca', {'id': etude.id}) }}"><i
                                             class="fa fa-minus"></i> {{ etude.reference(param('namingConvention')) }}
                                 </a></li>
                         {% endfor %}
                         <li class="divider"></li>
-                        <li class="nav-header"><i class="fa fa-check"></i> {{ 'suivi.en_cours'|trans({}, 'suivi') }}
+                        <li class="nav-header"><i class="fa fa-check"></i> {{ 'suivi.en_cours'|trans({}, 'project') }}
                         </li>
                         {% for etude in etudesDisplayList if etude.stateID == STATE_ID_EN_COURS %}
-                            <li><a href="{{ path('MgateSuivi_vu_ca', {'id': etude.id}) }}"><i
+                            <li><a href="{{ path('project_vu_ca', {'id': etude.id}) }}"><i
                                             class="fa fa-minus"></i> {{ etude.reference(param('namingConvention')) }}
                                 </a></li>
                         {% endfor %}
                     </ul>
                 </li>
-                <li><a href="{{ path('MgateSuivi_vu_ca', {'id': nextID}) }}">{{ 'suivi.suivant'|trans({}, 'suivi') }} <i
+                <li><a href="{{ path('project_vu_ca', {'id': nextID}) }}">{{ 'suivi.suivant'|trans({}, 'project') }} <i
                                 class="fa fa-arrow-right"></i></a></li>
             </ul>
 
@@ -59,10 +59,10 @@
             <td colspan="5"><strong>{{ etude.stateDescription }}</strong></td>
         </tr>
         <tr>
-            <td>{{ 'suivi.client'|trans({}, 'suivi') }}</td>
-            <td colspan="2">{% include "MgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}</td>
-            <td>{{ 'suivi.suiveur'|trans({}, 'suivi') }}</td>
-            <td colspan="2">{% include "MgateSuiviBundle:Etude:Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}</td>
+            <td>{{ 'suivi.client'|trans({}, 'project') }}</td>
+            <td colspan="2">{% include "Project/Etude/Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}</td>
+            <td>{{ 'suivi.suiveur'|trans({}, 'project') }}</td>
+            <td colspan="2">{% include "Project/Etude/Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}</td>
         </tr>
         {% if etude.missions is not empty %}
             <tr>
@@ -71,11 +71,11 @@
                     {% set sommeAvancement = 0 %}
                     {% for mission in etude.missions %}
                         {% set sommeAvancement = sommeAvancement + mission.avancement %}
-                        {% include "MgateSuiviBundle:Etude:Buttons/Intervenant.html.twig" with  {'mission' : mission, 'etude' : etude } %}
+                        {% include "Project/Etude/Buttons/Intervenant.html.twig" with  {'mission' : mission, 'etude' : etude } %}
                     {% endfor %}
                 </td>
                 <td>
-                    {{ 'suivi.avancement'|trans({}, 'suivi') }}<br/>
+                    {{ 'suivi.avancement'|trans({}, 'project') }}<br/>
                     {% set avancementGlobal = sommeAvancement / max(etude.missions|length,1) %}
                     <div class="progress-bar" style="width: {{ avancementGlobal ~ '%;'|default('0%;') }}" id="avancementBar-{{ etude.id}}">
                         {{ avancementGlobal ~ '%'|default('0%') }}
@@ -84,11 +84,11 @@
             </tr>
         {% endif %}
         <tr>
-            <td>{{ 'suivi.etude.cree_le'|trans({}, 'suivi') }}</td>
+            <td>{{ 'suivi.etude.cree_le'|trans({}, 'project') }}</td>
             <th>{{ etude.dateCreation|date("d/m/Y") }}</th>
-            <td>{{ 'suivi.fin_le'|trans({}, 'suivi') }}</td>
+            <td>{{ 'suivi.fin_le'|trans({}, 'project') }}</td>
             <th>{{ etude.dateFin|date("d/m/Y") }}</th>
-            <td>{{ 'suivi.dernier_contact'|trans({}, 'suivi') }}</td>
+            <td>{{ 'suivi.dernier_contact'|trans({}, 'project') }}</td>
             <th>
                 {% set dernierContact = 0 %}
                 {% set derniercontactObject = null %}
@@ -104,32 +104,32 @@
         </tr>
         <tr>
             <td style="text-align: center;"><span
-                        class="label label-{{ getEtatDoc(etude.ap) == 1 ? "warning" : getEtatDoc(etude.ap) == 2 ? "success" : "important" }}">{{ 'suivi.ap'|trans({}, 'suivi') }}</span>
+                        class="label label-{{ getEtatDoc(etude.ap) == 1 ? "warning" : getEtatDoc(etude.ap) == 2 ? "success" : "important" }}">{{ 'suivi.ap'|trans({}, 'project') }}</span>
             </td>
             <td style="text-align: center;"><span
-                        class="label label-{{ getEtatDoc(etude.cc) == 1 ? "warning" : getEtatDoc(etude.cc) == 2 ? "success" : "important" }}">{{ 'suivi.cc'|trans({}, 'suivi') }}</span>
+                        class="label label-{{ getEtatDoc(etude.cc) == 1 ? "warning" : getEtatDoc(etude.cc) == 2 ? "success" : "important" }}">{{ 'suivi.cc'|trans({}, 'project') }}</span>
             </td>
             <td style="text-align: center;"><span
-                        class="label label-{{ getEtatFacture(etude.fa) == 1 ? "warning" : getEtatFacture(etude.fa) == 2 ? "success" : "important" }}">{{ 'suivi.fa'|trans({}, 'suivi') }}</span>
+                        class="label label-{{ getEtatFacture(etude.fa) == 1 ? "warning" : getEtatFacture(etude.fa) == 2 ? "success" : "important" }}">{{ 'suivi.fa'|trans({}, 'project') }}</span>
             </td>
             <td style="text-align: center;">
                 {% for mission in etude.missions %}
                     <span title="{{ mission.intervenant.personne.prenomNom | default("") }}"
-                          class="label label-{{ getEtatDoc(mission) == 1 ? "warning" : getEtatDoc(mission) == 2 ? "success" : "important" }}">{{ 'suivi.rm'|trans({}, 'suivi') }} {{ loop.index }}</span>
+                          class="label label-{{ getEtatDoc(mission) == 1 ? "warning" : getEtatDoc(mission) == 2 ? "success" : "important" }}">{{ 'suivi.rm'|trans({}, 'project') }} {{ loop.index }}</span>
                 {% endfor %}
             </td>
             <td style="text-align: center;"><span
-                        class="label label-{{ getEtatDoc(etude.pvr) == 1 ? "warning" : getEtatDoc(etude.pvr) == 2 ? "success" : "important" }}">{{ 'suivi.pvr'|trans({}, 'suivi') }}</span>
+                        class="label label-{{ getEtatDoc(etude.pvr) == 1 ? "warning" : getEtatDoc(etude.pvr) == 2 ? "success" : "important" }}">{{ 'suivi.pvr'|trans({}, 'project') }}</span>
             </td>
             <td style="text-align: center;"><span
-                        class="label label-{{ getEtatFacture(etude.fs) == 1 ? "warning" : getEtatFacture(etude.fs) == 2 ? "success" : "important" }}">{{ 'suivi.fs'|trans({}, 'suivi') }}</span>
+                        class="label label-{{ getEtatFacture(etude.fs) == 1 ? "warning" : getEtatFacture(etude.fs) == 2 ? "success" : "important" }}">{{ 'suivi.fs'|trans({}, 'project') }}</span>
             </td>
         </tr>
         <tr>
-            <td>{{ 'suivi.jeh'|trans({}, 'suivi') }}</td>
-            <th colspan="2">{{ etude.NbrJEH | default('0') }} {{ 'suivi.jeh'|trans({}, 'suivi') }}</th>
-            <td>{{ 'suivi.prix'|trans({}, 'suivi') }}</td>
-            <th colspan="2">{{ etude.montantHT | default('0') }} € {{ 'suivi.ht'|trans({}, 'suivi') }}</th>
+            <td>{{ 'suivi.jeh'|trans({}, 'project') }}</td>
+            <th colspan="2">{{ etude.NbrJEH | default('0') }} {{ 'suivi.jeh'|trans({}, 'project') }}</th>
+            <td>{{ 'suivi.prix'|trans({}, 'project') }}</td>
+            <th colspan="2">{{ etude.montantHT | default('0') }} € {{ 'suivi.ht'|trans({}, 'project') }}</th>
         </tr>
         <tr>
             <td colspan="6">{{ etude.description }}</td>
@@ -148,6 +148,6 @@
     <script type="text/javascript">
         {{ chart(chart) }}
 
-        {% include 'MgateSuiviBundle:Etude/Tools:Avancement.js.twig' %}
+        {% include 'Project/Etude/Tools/Avancement.js.twig' %}
     </script>
 {% endblock %}

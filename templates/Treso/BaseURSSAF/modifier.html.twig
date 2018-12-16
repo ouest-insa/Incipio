@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block title %}
 	{{ 'treso.base_urssaf_gestion'|trans({}, 'treso') }} - {{ parent() }}
@@ -28,7 +28,7 @@
     {% if base.baseURSSAF %}
     <table class="table">
         <tr>
-            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('MgateTreso_BaseURSSAF_supprimer', {'id': base.id})}}';">{{ 'treso.supprimer_base'|trans({}, 'treso') }}</button></td>
+            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('treso_BaseURSSAF_supprimer', {'id': base.id})}}';">{{ 'treso.supprimer_base'|trans({}, 'treso') }}</button></td>
         </tr>
     </table>
     {% endif %}

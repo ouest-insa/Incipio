@@ -1,4 +1,4 @@
-{% extends "MgateFormationBundle::layout.html.twig" %}
+{% extends "Formation/layout.html.twig" %}
 
 {% block content_title %}
     {{ 'formation.formations'|trans({}, 'formation') }} - {{ 'formation.espace_admin'|trans({}, 'formation') }}
@@ -24,7 +24,7 @@
                 <td><i class="fa fa-arrow-circle-down"></i></td>
                 <td>{{ formation.dateDebut | date("d/m/Y") }}</td>
                 <td><a title="{{ 'formation.modifier'|trans({}, 'formation') }}"
-                       href="{{ path('Mgate_formation_modifier', {'id': formation.id}) }}">{{ formation.titre | title }}</a>
+                       href="{{ path('formation_modifier', {'id': formation.id}) }}">{{ formation.titre | title }}</a>
                 </td>
                 <td>{{ formation.description }}</td>
                 <td>{% for membre in formation.formateurs %} {{ membre.prenomNom }};{% endfor %}</td>

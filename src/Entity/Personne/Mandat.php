@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Table intermédiaire ManyToMany avec attribut : Mandat = MembrePoste.
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\PersonneBundle\Entity\MandatRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Personne\MandatRepository")
  */
 class Mandat
 {
@@ -56,7 +56,7 @@ class Mandat
 
     /**
      * @Assert\NotNull()
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Membre", inversedBy="mandats")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Membre", inversedBy="mandats")
      */
     private $membre;
 
@@ -67,7 +67,7 @@ class Mandat
      *
      * @Groups({"gdpr"})
      *
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Poste", inversedBy="mandats")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Poste", inversedBy="mandats")
      */
     private $poste;
 

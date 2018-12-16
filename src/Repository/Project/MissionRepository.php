@@ -8,6 +8,7 @@
 
 namespace App\Repository\Project;
 
+use App\Entity\Project\Mission;
 use Doctrine\ORM\EntityRepository;
 
 class MissionRepository extends EntityRepository
@@ -16,7 +17,7 @@ class MissionRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('m')
-            ->from('MgateSuiviBundle:Mission', 'm')
+            ->from(Mission::class, 'm')
             ->leftJoin('m.intervenant', 'intervenant')
             ->addSelect('intervenant')
             ->leftJoin('intervenant.personne', 'personne')
@@ -46,7 +47,7 @@ class MissionRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('m')
-            ->from('MgateSuiviBundle:Mission', 'm')
+            ->from(Mission::class, 'm')
             ->leftJoin('m.etude', 'etude')
             ->addSelect('etude');
 

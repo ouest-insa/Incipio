@@ -1,16 +1,16 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 
 {% block title %}
-    {{ 'suivi.client_contact_ajouter'|trans({}, 'suivi') }}
+    {{ 'suivi.client_contact_ajouter'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.client_contact_ajouter'|trans({}, 'suivi') }}
+    {{ 'suivi.client_contact_ajouter'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
-    {% include "MgateSuiviBundle:ClientContact:formulaire.html.twig" %}
+    {% include "Project/ClientContact/formulaire.html.twig" %}
 {% endblock %}
 
 {% block javascript %}

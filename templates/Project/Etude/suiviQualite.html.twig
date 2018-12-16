@@ -1,25 +1,25 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.suivi_qualite_etudes'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.suivi_qualite_etudes'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
 
     <table id="control" class="table table-bordered">
         <tr>
-            <th>{{ 'suivi.panneau_controle'|trans({}, 'suivi') }}</th>
-            <td><label for="checkbox-gantt">{{ 'suivi.gantt'|trans({}, 'suivi') }}</label>
+            <th>{{ 'suivi.panneau_controle'|trans({}, 'project') }}</th>
+            <td><label for="checkbox-gantt">{{ 'suivi.gantt'|trans({}, 'project') }}</label>
                 <input id="checkbox-gantt" type="checkbox" onchange="$('#ganttChart').toggle();"/></td>
-            <td><label for="checkbox-encou">{{ 'suivi.etudes_en_cours'|trans({}, 'suivi') }}</label>
+            <td><label for="checkbox-encou">{{ 'suivi.etudes_en_cours'|trans({}, 'project') }}</label>
                 <input id="checkbox-encou" type="checkbox" checked="checked" onchange="$('#content-1').toggle();"/></td>
-            <td><label for="checkbox-termi">{{ 'suivi.etudes_terminees'|trans({}, 'suivi') }}</label>
+            <td><label for="checkbox-termi">{{ 'suivi.etudes_terminees'|trans({}, 'project') }}</label>
                 <input id="checkbox-termi" type="checkbox" checked="checked" onchange="$('#content-2').toggle();"/></td>
-            <td><label for="checkbox-infos">{{ 'suivi.informations_qualites'|trans({}, 'suivi') }}</label>
+            <td><label for="checkbox-infos">{{ 'suivi.informations_qualites'|trans({}, 'project') }}</label>
                 <input id="checkbox-infos" type="checkbox" checked="checked" onchange="$('.rawInfos').toggle();"/></td>
-            <td><label for="checkbox-warns">{{ 'suivi.warnings'|trans({}, 'suivi') }}</label>
+            <td><label for="checkbox-warns">{{ 'suivi.warnings'|trans({}, 'project') }}</label>
                 <input id="checkbox-warns" type="checkbox" checked="checked" onchange="$('.rawWarns').toggle();"/></td>
-            <td><label for="checkbox-error">{{ 'suivi.errors'|trans({}, 'suivi') }}</label>
+            <td><label for="checkbox-error">{{ 'suivi.errors'|trans({}, 'project') }}</label>
                 <input id="checkbox-error" type="checkbox" checked="checked" onchange="$('.rawError').toggle();"/></td>
         </tr>
     </table>
@@ -32,12 +32,12 @@
         <table id="content-{{ loop.index }}" class="table table-bordered table-striped">
             <tr>
                 <th>{{ label }}</th>
-                <th>{{ 'suivi.client'|trans({}, 'suivi') }}</th>
-                <th>{{ 'suivi.intervenants'|trans({}, 'suivi') }}</th>
+                <th>{{ 'suivi.client'|trans({}, 'project') }}</th>
+                <th>{{ 'suivi.intervenants'|trans({}, 'project') }}</th>
             </tr>
             {% for etude in etudes %}
                 <tr>
-                    <th><a href="{{ path('MgateSuivi_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a></th>
+                    <th><a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a></th>
                     <td></td>
                     <td></td>
                 </tr>
@@ -46,17 +46,17 @@
                         <td colspan="3">
                             <div class="alert alert-block alert-success alert-dismissable">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <h4>{{ 'suivi.controle_qualite'|trans({}, 'suivi') }} :</h4>
+                                <h4>{{ 'suivi.controle_qualite'|trans({}, 'project') }} :</h4>
                                 {{ etude.stateDescription | nl2br }}
                             </div>
                         </td>
                     </tr>
                 {% endif %}
                 <tr class="rawError">
-                    <td colspan="3">{% include "MgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}</td>
+                    <td colspan="3">{% include "Project/Etude/Infos/error.html.twig" with  {'etude':  etude} %}</td>
                 </tr>
                 <tr class="rawWarns">
-                    <td colspan="3">{% include "MgateSuiviBundle:Etude:Infos/warning.html.twig" with  {'etude':  etude} %}</td>
+                    <td colspan="3">{% include "Project/Etude/Infos/warning.html.twig" with  {'etude':  etude} %}</td>
                 </tr>
             {% endfor %}
         </table>

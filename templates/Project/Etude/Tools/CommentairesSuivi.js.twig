@@ -1,10 +1,10 @@
 $('body').click(function(e){
     var Elem = e.target;
     if (Elem.id == 'commentaire'){
-        bootbox.prompt("{{ 'suivi.commentaire'|trans({}, 'suivi') }} :", function(result) {
+        bootbox.prompt("{{ 'suivi.commentaire'|trans({}, 'project') }} :", function(result) {
         if (result !== null) {
             $.ajax({
-                url: "{{ path('MgateSuivi_state') }}",
+                url: "{{ path('project_state') }}",
                 type: "PUT",
                 data: "state=" + result +"&etude=" + $(Elem).data("title") + "&id=" + $(Elem).data("content"),
                 success: function(){}

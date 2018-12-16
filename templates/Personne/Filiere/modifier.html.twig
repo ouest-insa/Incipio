@@ -1,4 +1,4 @@
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
     {{ 'filiere.modifier_filiere'|trans({}, 'personne') }} {{ parent() }}
@@ -10,7 +10,7 @@
 
 {% block breadcrumb %}
     <ul class="breadcrumb no-margin pull-right">
-        <li><a href="{{ path('MgatePersonne_poste_homepage') }}">{{ 'dashboard.postes_filieres'|trans({}, 'dashboard') }}</a></li>
+        <li><a href="{{ path('personne_poste_homepage') }}">{{ 'dashboard.postes_filieres'|trans({}, 'dashboard') }}</a></li>
         <li class="active">{{ 'filiere.modifier_filiere'|trans({}, 'personne') }}</li>
     </ul>
 {% endblock %}
@@ -38,7 +38,7 @@
                         <div class="col-md-2 col-xs-4">
                             <form class="bootbox-confirm inline"
                                   data-content="{{ 'filiere.confirmation_supprimer_filiere'|trans({}, 'personne') }}"
-                                  action="{{ path('MgatePersonne_filiere_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+                                  action="{{ path('personne_filiere_supprimer', { 'id': form.vars.value.id }) }}" method="post">
                                 {{ form_widget(delete_form) }}
                                 <button class="btn btn-danger">{{ 'filiere.supprimer_filiere'|trans({}, 'personne') }}</button>
                             </form>

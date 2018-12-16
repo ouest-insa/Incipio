@@ -1,0 +1,37 @@
+monolog:
+    handlers:
+        main:
+            type: fingers_crossed
+            action_level: error
+            handler: grouped
+            excluded_404s:
+                # regex: exclude all 404 errors from the logs
+                - ^/
+        grouped:
+            type: group
+            members: [nested, buffered]
+        nested:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+        buffered:
+            type:    buffer
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: "%env(TECHNICAL_FROM)%"
+            to_email:   "%env(TECHNICAL_TO)%"
+            subject:    An Error Occurred!
+            level:      error
+        console:
+            type: console
+            process_psr_3_messages: false
+            channels: ["!event", "!doctrine"]
+        deprecation:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+        deprecation_filter:
+            type: filter
+            handler: deprecation
+            max_level: info
+            channels: ["php"]

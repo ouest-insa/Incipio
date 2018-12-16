@@ -11,7 +11,7 @@
 
 namespace App\Entity\Treso;
 
-use App\Entity\Personne;
+use App\Entity\Personne\Personne;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     message="Le couple mandat/numéro doit être unique")
  *
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"mandat", "numero"})})
- * @ORM\Entity(repositoryClass="Mgate\TresoBundle\Entity\NoteDeFraisRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Treso\NoteDeFraisRepository")
  */
 class NoteDeFrais implements TresoDetailableInterface
 {
@@ -82,7 +82,7 @@ class NoteDeFrais implements TresoDetailableInterface
     /**
      * @Assert\NotNull()
      *
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Personne")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $demandeur;

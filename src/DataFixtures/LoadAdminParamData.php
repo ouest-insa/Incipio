@@ -8,16 +8,14 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\AdminParam;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use App\Entity\Dashboard\AdminParam;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * Loads the parameters modifiable through the admin form.
- *
- * Class LoadAdminFormData
  */
-class LoadAdminParamData implements FixtureInterface
+class LoadAdminParamData extends Fixture
 {
     /**
      * {@inheritdoc}
@@ -59,7 +57,7 @@ class LoadAdminParamData implements FixtureInterface
             $p->setDefaultValue($param['defaultValue']);
             $p->setRequired($param['required']);
             $p->setParamLabel($param['paramLabel']);
-            $p->setParamDescription($param['paramDescription']);
+            $p->setParamDescription($param['paramDescription'] ?? '');
             $p->setPriority(1000 - $i * 10);
             $manager->persist($p);
             ++$i;

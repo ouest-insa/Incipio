@@ -1,4 +1,4 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block javascript %}
     {{ parent() }}
@@ -6,11 +6,11 @@
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.avenant_mission_ajouter' |trans({}, 'suivi') }}
+    {{ 'suivi.avenant_mission_ajouter' |trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
 
-    {% include "MgateSuiviBundle:AvMission:formulaire.html.twig" %}
+    {% include "Project/AvMission/formulaire.html.twig" %}
 
 {% endblock %}

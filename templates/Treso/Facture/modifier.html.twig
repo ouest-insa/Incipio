@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block title %}
     {{ 'treso.facture_modifier'|trans({}, 'treso') }} - {{ parent() }}
@@ -10,11 +10,11 @@
 
 {% block breadcrumb_items %}
     <li>
-        <a href="{{ path('MgateTreso_Facture_index') }}">{{ 'treso.factures_liste'|trans({}, 'treso') }}</a>
+        <a href="{{ path('treso_Facture_index') }}">{{ 'treso.factures_liste'|trans({}, 'treso') }}</a>
     </li>
     {% if facture is defined %}
         <li>
-            <a href="{{ path('MgateTreso_Facture_voir', {'id': facture.id}) }}">
+            <a href="{{ path('treso_Facture_voir', {'id': facture.id}) }}">
                 {{ 'treso.facture'|trans({}, 'treso') }} {{ facture.reference }}
             </a>
         </li>

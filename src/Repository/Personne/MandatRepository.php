@@ -11,6 +11,7 @@
 
 namespace App\Repository\Personne;
 
+use App\Entity\Personne\Mandat;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -24,7 +25,7 @@ class MandatRepository extends EntityRepository
     public function getCotisantMandats()
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('ma')->from('MgatePersonneBundle:mandat', 'ma')
+        $query = $qb->select('ma')->from(Mandat::class, 'ma')
           ->innerJoin('ma.poste', 'p')
           ->orderBy('ma.debutMandat')
           ->where("p.intitule LIKE 'Membre'");

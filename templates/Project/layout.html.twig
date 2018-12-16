@@ -1,7 +1,7 @@
-{% extends "::layout.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.suivi'|trans({}, 'suivi') }}
+    {{ 'suivi.suivi'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content %}
@@ -9,18 +9,18 @@
         <div class="box-header with-border">
             <h3 class="box-title">
                 {% block content_title %}
-                    {{ 'suivi.suivi_etude'|trans({}, 'suivi') }}
+                    {{ 'suivi.suivi_etude'|trans({}, 'project') }}
                 {% endblock %}
             </h3>
 
             {% block breadcrumb %}
                 <ul class="breadcrumb no-margin pull-right">
                     <li>
-                        <a href="{{ path('MgateSuivi_etude_homepage') }}">{{ 'suivi.suivi_etude'|trans({}, 'suivi') }}</a>
+                        <a href="{{ path('project_etude_homepage') }}">{{ 'suivi.suivi_etude'|trans({}, 'project') }}</a>
                     </li>
                     {% if etude is defined %}
                         <li>
-                            <a href="{{ path('MgateSuivi_etude_voir', {'nom': etude.nom}) }}">{{ etude.reference(param('namingConvention')) }}</a>
+                            <a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.reference(param('namingConvention')) }}</a>
                         </li>
                     {% endif %}
                     {% block breadcrumb_items %}{% endblock %}

@@ -22,14 +22,14 @@ class MissionController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_mission_avancement", path="/suivi/missions/avancement/{id}", methods={"PUT"})
+     * @Route(name="project_mission_avancement", path="/suivi/missions/avancement/{id}", methods={"PUT"})
      *
      * @param Mission $mission
      * @param Request $request
      *
      * @return Response
      */
-    public function avancementAction(Mission $mission, Request $request)
+    public function avancement(Mission $mission, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $avancement = !empty($request->request->get('avancement')) ? intval($request->request->get('avancement')) : 0;

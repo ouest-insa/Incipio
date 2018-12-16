@@ -62,7 +62,7 @@ class SiajeEtudeImporter extends CsvImporter implements FileImporterInterface
                 //iterate csv, row by row
                 while (false !== ($data = fgetcsv($handle, 0, ','))) {
                     if ($i > 1 && '' != $this->readArray($data, 'Intitule')) { //first row is column headers
-                        $etude = $this->em->getRepository('MgateSuiviBundle:Etude')->findOneByNom($this->readArray($data, 'Intitule'));
+                        $etude = $this->em->getRepository(Etude::class)->findOneByNom($this->readArray($data, 'Intitule'));
 
                         if (null === $etude) {
                             //create project if it doesn't exists in DB
@@ -92,7 +92,7 @@ class SiajeEtudeImporter extends CsvImporter implements FileImporterInterface
                             /* Prospect management */
                             // Check if a prospect with same already exists in database
                             if ('' !== $this->readArray($data, 'Entreprise', true)) {
-                                $prospect = $this->em->getRepository('MgatePersonneBundle:Prospect')->findOneByNom($this->readArray($data, 'Entreprise', true));
+                                $prospect = $this->em->getRepository(Prospect::class)->findOneByNom($this->readArray($data, 'Entreprise', true));
                                 if (null === $prospect) {
                                     //check if prospect already exist in local objects
                                     if (array_key_exists($this->readArray($data, 'Entreprise', true), $array_prospect)) {
@@ -170,7 +170,7 @@ class SiajeEtudeImporter extends CsvImporter implements FileImporterInterface
                             $firstname = $contact[0];
                             unset($contact[0]);
                             $surname = implode(' ', $contact);
-                            $pm = $this->em->getRepository('MgatePersonneBundle:Personne')->findOneBy(['nom' => $surname, 'prenom' => $firstname]);
+                            $pm = $this->em->getRepository(Personne::class)->findOneBy(['nom' => $surname, 'prenom' => $firstname]);
 
                             if (null !== $pm) {
                                 $e->setSuiveur($pm);

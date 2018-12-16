@@ -11,7 +11,8 @@
 
 namespace App\Repository\Personne;
 
-use App\Repository\Competence;
+use App\Entity\Hr\Competence;
+use App\Entity\Personne\Membre;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -25,7 +26,7 @@ class MembreRepository extends EntityRepository
     public function getIntervenantsParPromo()
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('m')->from('MgatePersonneBundle:Membre', 'm')
+        $query = $qb->select('m')->from(Membre::class, 'm')
             ->innerJoin('m.missions', 'mi')
             ->orderBy('m.promotion', 'ASC');
 
@@ -54,7 +55,7 @@ class MembreRepository extends EntityRepository
     public function getCotisants()
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('m')->from('MgatePersonneBundle:Membre', 'm')
+        $query = $qb->select('m')->from(Membre::class, 'm')
             ->innerJoin('m.mandats', 'ma')
             ->innerJoin('ma.poste', 'p')
             ->where('p.intitule LIKE :membre')
@@ -76,7 +77,7 @@ class MembreRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
 
         $query = $qb->select('m')
-            ->from('MgatePersonneBundle:Membre', 'm')
+            ->from(Membre::class, 'm')
             ->leftJoin('m.competences', 'c')
             ->addSelect('c')
             ->leftJoin('m.filiere', 'filiere')
@@ -100,7 +101,7 @@ class MembreRepository extends EntityRepository
 
         $query = $qb
             ->select('m')
-            ->from('MgatePersonneBundle:Membre', 'm')
+            ->from(Membre::class, 'm')
             ->leftJoin('m.mandats', 'mm')
             ->where('mm.id IS NOT NULL');
 
@@ -113,7 +114,7 @@ class MembreRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
 
         $query = $qb->select('m')
-            ->from('MgatePersonneBundle:Membre', 'm')
+            ->from(Membre::class, 'm')
             ->where(' m.id = :id ')
             ->setParameter('id', $id)
             ->leftJoin('m.competences', 'c')
@@ -129,7 +130,7 @@ class MembreRepository extends EntityRepository
 
         $query = $qb
             ->select('m')
-            ->from('MgatePersonneBundle:Membre', 'm')
+            ->from(Membre::class, 'm')
             ->leftJoin('m.competences', 'competences')
             ->where('competences.id IS NOT NULL')
             ->orderBy('m.id', 'asc')
@@ -148,7 +149,7 @@ class MembreRepository extends EntityRepository
 
         $query = $qb
             ->select('m')
-            ->from('MgatePersonneBundle:Membre', 'm')
+            ->from(Membre::class, 'm')
             ->leftJoin('m.missions', 'missions')
             ->addSelect('missions')
             ->leftJoin('m.personne', 'personne')
@@ -178,7 +179,7 @@ class MembreRepository extends EntityRepository
 
         $query = $qb
             ->select('m')
-            ->from('MgatePersonneBundle:Membre', 'm')
+            ->from(Membre::class, 'm')
             ->leftJoin('m.mandats', 'mandats')
             ->addSelect('mandats')
             ->leftJoin('mandats.poste', 'poste')

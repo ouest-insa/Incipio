@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\Comment;
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -1,7 +1,11 @@
-{% extends "N7consultingPrivacyBundle::layout.html.twig" %}
+{% extends "Privacy/layout.html.twig" %}
 
 {% block content_title %}
     {{ 'dashboard.vie_privee'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+    Accueil
 {% endblock %}
 
 {% block content_bundle %}
@@ -30,10 +34,10 @@
                     {{ 'privacy.action_select'|trans({}, 'privacy') }}
                 </label>
                 <select class="select2 form-control" id="action" name="action">
-                    <option value="{{ constant('N7consulting\\PrivacyBundle\\Controller\\PrivacyController::GDPR_ACCESS_ACTION') }}">{{ 'privacy.acceder'|trans({}, 'privacy') }}</option>
-                    <option value="{{ constant('N7consulting\\PrivacyBundle\\Controller\\PrivacyController::GDPR_DELETE_ACTION') }}">{{ 'privacy.supprimer'|trans({}, 'privacy') }}</option>
-                    <option value="{{ constant('N7consulting\\PrivacyBundle\\Controller\\PrivacyController::GDPR_MODIFY_ACTION') }}">{{ 'privacy.modifier'|trans({}, 'privacy') }}</option>
-                    <option value="{{ constant('N7consulting\\PrivacyBundle\\Controller\\PrivacyController::GDPR_EXPORT_ACTION') }}">{{ 'privacy.exporter'|trans({}, 'privacy') }}</option>
+                    <option value="{{ constant('App\\Controller\\Privacy\\PrivacyController::GDPR_ACCESS_ACTION') }}">{{ 'privacy.acceder'|trans({}, 'privacy') }}</option>
+                    <option value="{{ constant('App\\Controller\\Privacy\\PrivacyController::GDPR_DELETE_ACTION') }}">{{ 'privacy.supprimer'|trans({}, 'privacy') }}</option>
+                    <option value="{{ constant('App\\Controller\\Privacy\\PrivacyController::GDPR_MODIFY_ACTION') }}">{{ 'privacy.modifier'|trans({}, 'privacy') }}</option>
+                    <option value="{{ constant('App\\Controller\\Privacy\\PrivacyController::GDPR_EXPORT_ACTION') }}">{{ 'privacy.exporter'|trans({}, 'privacy') }}</option>
                 </select>
 
             </div>
@@ -64,7 +68,7 @@
                 callback: function (result) {
                     if (result) {
                         var privacyForm = $("#privacy-form");
-                        privacyForm.attr('action', '{{ path('privacy_action', {'id':0}) }}'+$("#personne").val());
+                        privacyForm.attr('action', '{{ path('privacy_action', {'id':0}) }}'+'/'+$("#personne").val());
                         privacyForm.submit();
                     }
                 }

@@ -1,25 +1,25 @@
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
-    {{ 'membre.ajout_modification_membre'|trans({}, 'personne') }} {{ parent() }}
+    {{ 'membre.modification_membre'|trans({}, 'personne') }} {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'membre.ajout_modification_membre'|trans({}, 'personne') }}
+    {{ 'membre.modification_membre'|trans({}, 'personne') }}
 {% endblock %}
 
 {% block breadcrumb %}
     <ul class="breadcrumb no-margin pull-right">
-        <li><a href="{{ path('MgatePersonne_membre_homepage') }}">{{ 'membre.liste_membre'|trans({}, 'personne') }}</a></li>
+        <li><a href="{{ path('personne_membre_homepage') }}">{{ 'membre.liste_membre'|trans({}, 'personne') }}</a></li>
         {% if form.vars.value.personne is not none %}
             <li>
-                <a href="{{ path('MgatePersonne_membre_voir', {'id': form.vars.value.id}) }}">
+                <a href="{{ path('personne_membre_voir', {'id': form.vars.value.id}) }}">
                     {{ form.vars.value.personne.prenomNom }}
                 </a>
             </li>
             <li class="active">{{ 'membre.modifier'|trans({}, 'personne') }}</li>
         {% else %}
-            <li class="active">{{ 'membre.ajout_modification_membre'|trans({}, 'personne') }}</li>
+            <li class="active">{{ 'membre.modification_membre'|trans({}, 'personne') }}</li>
         {% endif %}
     </ul>
 {% endblock %}
@@ -27,288 +27,7 @@
 {% block content_bundle %}
     {{ form_start(form, {'attr': {'id': 'form', 'class': 'form-horizontal'}}) }}
 
-    <div class="row">
-        <div class="col-md-7 col-xs-12">
-            <div class="box box-info box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'membre.membre'|trans({}, 'personne') }}</h3>
-                </div>
-                <div class="box-body">
-                    <div class="form-group">
-                        <div class="col-md-2 col-xs-12">
-                            {{ form_label(form.personne.prenom) }}
-                        </div>
-                        <div class="col-md-4 col-xs-12">
-                            {{ form_widget(form.personne.prenom, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.personne.prenom) }}
-                        </div>
-                        <div class="col-md-1 col-xs-12">
-                            {{ form_label(form.personne.nom) }}
-                        </div>
-                        <div class="col-md-5 col-xs-12">
-                            {{ form_widget(form.personne.nom, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.personne.nom) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.personne.sexe) }}
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_widget(form.personne.sexe, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.personne.sexe) }}
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.promotion) }}
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_widget(form.promotion, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.promotion) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.personne.email) }}
-                        </div>
-                        <div class="col-md-9 col-xs-12">
-                            {{ form_widget(form.personne.email, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.personne.email) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.personne.mobile) }}
-                        </div>
-                        <div class="col-md-9 col-xs-12">
-                            {{ form_widget(form.personne.mobile, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.personne.mobile) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.personne.adresse) }}
-                        </div>
-                        <div class="col-md-9 col-xs-12">
-                            {{ form_widget(form.personne.adresse, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.personne.adresse) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-1 col-xs-12">
-                            {{ form_label(form.personne.codepostal) }}
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_widget(form.personne.codepostal, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.personne.codepostal) }}
-                        </div>
-                        <div class="col-md-1 col-xs-12">
-                            {{ form_label(form.personne.ville) }}
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_widget(form.personne.ville, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.personne.ville) }}
-                        </div>
-                        <div class="col-md-1 col-xs-12">
-                            {{ form_label(form.personne.pays) }}
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_widget(form.personne.pays, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.personne.pays) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.nationalite) }}
-                        </div>
-                        <div class="col-md-9 col-xs-12">
-                            {{ form_widget(form.nationalite, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.nationalite) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.dateDeNaissance) }}
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_widget(form.dateDeNaissance, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.dateDeNaissance) }}
-                        </div>
-                        <div class="col-md-2 col-xs-12">
-                            {{ form_label(form.lieuDeNaissance) }}
-                        </div>
-                        <div class="col-md-4 col-xs-12">
-                            {{ form_widget(form.lieuDeNaissance, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.lieuDeNaissance) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-2 col-xs-12">
-                            {{ form_label(form.emailEMSE) }}
-                        </div>
-                        <div class="col-md-6 col-xs-12">
-                            {{ form_widget(form.emailEMSE, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.emailEMSE) }}
-                        </div>
-                        <div class="col-md-2 col-xs-12">
-                            {{ form_label(form.identifiant) }}
-                        </div>
-                        <div class="col-md-2 col-xs-12">
-                            {{ form_widget(form.identifiant, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.identifiant) }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-5 col-xs-12">
-            <div class="box box-info box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'membre.intervenant'|trans({}, 'personne') }}</h3>
-                </div>
-                <div class="box-body">
-                    <div class="form-group">
-                        <div class="col-md-2 col-xs-12">
-                            {{ form_label(form.filiere) }}
-                        </div>
-                        <div class="col-md-4 col-xs-12">
-                            {{ form_widget(form.filiere, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.filiere) }}
-                        </div>
-                        <div class="col-md-2 col-xs-12">
-                            {{ form_label(form.formatPaiement) }}
-                        </div>
-                        <div class="col-md-4 col-xs-12">
-                            {{ form_widget(form.formatPaiement, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.formatPaiement) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-5 col-xs-12">
-                            {{ form_label(form.dateConventionEleve) }}
-                        </div>
-                        <div class="col-md-7 col-xs-12">
-                            {{ form_widget(form.dateConventionEleve, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.dateConventionEleve) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.securiteSociale) }}
-                        </div>
-                        <div class="col-md-9 col-xs-12">
-                            {% if is_granted('ROLE_TRESO') or is_granted('ROLE_RGPD') %}
-                                {{ form_widget(form.securiteSociale, {'attr': {'class': 'form-control'}}) }}
-                                {{ form_errors(form.securiteSociale) }}
-                            {% else %}
-                                {% do form.securiteSociale.setRendered %}
-                                <small>
-                                    {{ 'membre.securite_sociale_message'|trans({}, 'personne') }}
-                                </small>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.commentaire) }}
-                        </div>
-                        <div class="col-md-9 col-xs-12">
-                            {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'rows': 5, 'cols': 50}}) }}
-                            {{ form_errors(form.commentaire) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.personne.estAbonneNewsletter) }}
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_widget(form.personne.estAbonneNewsletter) }}
-                            {{ form_errors(form.personne.estAbonneNewsletter) }}
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_label(form.personne.emailEstValide) }}
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            {{ form_widget(form.personne.emailEstValide) }}
-                            {{ form_errors(form.personne.emailEstValide) }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-8 col-xs-12">
-            <div class="box box-info box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'membre.competences'|trans({}, 'personne') }}</h3>
-                </div>
-                <div class="box-body">
-                    {{ form_label(form.competences) }}
-                    {{ form_widget(form.competences, {'attr': {'class': 'select2-multiple', 'style': 'width: 100%'}}) }}
-                    {{ form_errors(form.competences) }}
-                </div>
-            </div>
-
-            <div class="box box-info box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'membre.mandats'|trans({}, 'personne') }}</h3>
-                </div>
-                <div class="box-body">
-                    <table class="table table-bordered table-striped" id="mandats-fields-list"
-                            data-prototype="{% set proto = form.mandats.vars.prototype %}
-                              <td>{{ form_label(proto.poste) |e }}</td>
-                              <td colspan='2'>{{ form_widget(proto.poste, {'attr': {'class': 'select2'}}) |e }} {{ form_errors(proto.poste) |e }}</td>
-                              <td>{{ form_label(proto.debutMandat) |e }}</td>
-                              <td>{{ form_widget(proto.debutMandat, {'attr': {'class': 'js-datepicker'}}) |e }} {{ form_errors(proto.debutMandat) |e }}</td>
-                              <td>{{ form_label(proto.finMandat) |e }}</td>
-                              <td>{{ form_widget(proto.finMandat, {'attr': {'class': 'js-datepicker'}}) |e }} {{ form_errors(proto.finMandat) |e }}</td>">
-                        <tbody>
-                        <tr>
-                            <td colspan="7">
-                                <h4 style="display: inline;">{{ 'membre.postes_occupes'|trans({}, 'personne') }}</h4>
-                            </td>
-                        </tr>
-                        {% for mandat in form.mandats %}
-                            <tr class="mandats">
-                                <td>{{ form_label(mandat.poste) }}</td>
-                                <td colspan="2">{{ form_widget(mandat.poste, {'attr': {'class': 'select2'}}) }} {{ form_errors(mandat.poste) }}</td>
-                                <td>{{ form_label(mandat.debutMandat) }}</td>
-                                <td>{{ form_widget(mandat.debutMandat) }} {{ form_errors(mandat.debutMandat) }}</td>
-                                <td>{{ form_label(mandat.finMandat) }}</td>
-                                <td>{{ form_widget(mandat.finMandat) }} {{ form_errors(mandat.finMandat) }}</td>
-                            </tr>
-                        {% else %}
-                            {{ form_row(form.mandats) }}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    <a href="#" id="add-another-mandat" class="btn btn-xs btn-primary">
-                        {{ 'membre.ajouter_mandat'|trans({}, 'personne') }}
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 col-xs-12">
-            <div class="box box-info box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'membre.photo'|trans({}, 'personne') }}</h3>
-                </div>
-                <div class="box-body">
-                    <table class="table table-bordered table-striped">
-                        <tr>
-                            <td rowspan="6" style="text-align: center;">
-                                <img class="img-thumbnail" style="height: 200px" src="{{ asset(photoURI) }}"/><br><br>
-                                {{ form_widget(form.photo) }}
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include "Personne/Membre/formulaire.html.twig" %}
 
     <div class="row">
         <div class="col-md-2 col-xs-4">
@@ -318,7 +37,7 @@
         <div class="col-md-2 col-xs-4">
             <form class="bootbox-confirm inline"
                   data-content="{{ 'membre.confirmation_supprimer_membre'|trans({}, 'personne') }}"
-                  action="{{ path('MgatePersonne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+                  action="{{ path('personne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
                 {{ form_widget(delete_form) }}
                 <button class="btn btn-danger">{{ 'membre.supprimer_membre'|trans({}, 'personne') }}</button>
             </form>

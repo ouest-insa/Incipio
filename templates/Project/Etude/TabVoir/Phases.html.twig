@@ -9,20 +9,20 @@
         </div>
         <div class="collapse navbar-collapse navbar-phase">
             <ul class="nav  navbar-nav">
-                <li><a href="#groupes" data-toggle="tab" class="active"><span class="fa fa-list-alt"></span> {{ 'suivi.phases'|trans({}, 'suivi') }}</a></li>
-                <li><a href="#delai" data-toggle="tab"><span class="fa fa-dashboard"></span> {{ 'suivi.delai'|trans({}, 'suivi') }}</a></li>
-                <li><a href="#budget" data-toggle="tab"><span class="fa fa-euro"></span> {{ 'suivi.budget'|trans({}, 'suivi') }}</a></li>
+                <li><a href="#groupes" data-toggle="tab" class="active"><span class="fa fa-list-alt"></span> {{ 'suivi.phases'|trans({}, 'project') }}</a></li>
+                <li><a href="#delai" data-toggle="tab"><span class="fa fa-dashboard"></span> {{ 'suivi.delai'|trans({}, 'project') }}</a></li>
+                <li><a href="#budget" data-toggle="tab"><span class="fa fa-euro"></span> {{ 'suivi.budget'|trans({}, 'project') }}</a></li>
             </ul>
         </div>
     </nav>
     <div class="tab-content">
     <div class="tab-pane active" id="groupes">
         <ul class="list-unstyled">
-            <li><a href="{{ path('MgateSuivi_groupes_modifier', {'id': etude.id}) }}">{{ 'suivi.groupes_modifier'|trans({}, 'suivi') }}</a></li>
-            <li><a href="{{ path('MgateSuivi_phases_modifier', {'id': etude.id}) }}">{{ 'suivi.phases_modifier'|trans({}, 'suivi') }}</a></li>
+            <li><a href="{{ path('project_groupes_modifier', {'id': etude.id}) }}">{{ 'suivi.groupes_modifier'|trans({}, 'project') }}</a></li>
+            <li><a href="{{ path('project_phases_modifier', {'id': etude.id}) }}">{{ 'suivi.phases_modifier'|trans({}, 'project') }}</a></li>
         </ul>
         {% if etude.groupes | length == 0 %}
-            <div class="alert alert-warning">{{ 'suivi.groupes_phases_aucun_etude'|trans({}, 'suivi') }}</div>
+            <div class="alert alert-warning">{{ 'suivi.groupes_phases_aucun_etude'|trans({}, 'project') }}</div>
         {% endif %}
 
 
@@ -36,7 +36,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <span class="label label-info">{{ 'suivi.phase'|trans({}, 'suivi') }} n°{{ loop.index }}</span>&nbsp;
+                                        <span class="label label-info">{{ 'suivi.phase'|trans({}, 'project') }} n°{{ loop.index }}</span>&nbsp;
                                     </td>
                                     <td>
                                         <h3 class="inline">{{ groupe.titre | upper }}</h3>
@@ -92,7 +92,7 @@
                         <table>
                             <tr>
                                 <td>
-                                    <span class="label label-danger">{{ 'suivi.incomplet'|trans({}, 'suivi') }}</span>&nbsp;
+                                    <span class="label label-danger">{{ 'suivi.incomplet'|trans({}, 'project') }}</span>&nbsp;
                                 </td>
                                 <td>
                                    {# <h3 class="inline">{{ groupe.titre | upper }}</h3>
@@ -133,14 +133,14 @@
     <div class="tab-pane" id="delai">
         <table class="table table-striped table-bordered">
             <tr>
-                <th colspan="2">{{ 'suivi.titre'|trans({}, 'suivi') }}</th>
-                <th>{{ 'suivi.date_debut'|trans({}, 'suivi') }}</th>
-                <th>{{ 'suivi.duree'|trans({}, 'suivi') }}</th>
-                <th>{{ 'suivi.date_fin'|trans({}, 'suivi') }}</th>
+                <th colspan="2">{{ 'suivi.titre'|trans({}, 'project') }}</th>
+                <th>{{ 'suivi.date_debut'|trans({}, 'project') }}</th>
+                <th>{{ 'suivi.duree'|trans({}, 'project') }}</th>
+                <th>{{ 'suivi.date_fin'|trans({}, 'project') }}</th>
             </tr>
             {% for phase in etude.phases %}
                 <tr>
-                    <th>{{ 'suivi.phase'|trans({}, 'suivi') }} n°{{ phase.position+1 }}</th>
+                    <th>{{ 'suivi.phase'|trans({}, 'project') }} n°{{ phase.position+1 }}</th>
                     <td>{{ phase.titre | nl2br }}</td>
                     <td>{{ phase.dateDebut|date("d/m/Y") }}</td>
                     <td>{{ phase.delai|default(0) }} jours</td>
@@ -183,7 +183,7 @@
                     </tr>
                 {% endfor %}
                 <tr class="warning">
-                    <th colspan="2">{{ 'suivi.sous_total'|trans({}, 'suivi') }}</th>
+                    <th colspan="2">{{ 'suivi.sous_total'|trans({}, 'project') }}</th>
                     <td align="right">{{ nbJEH }} JEH</td>
                     <td align="right">{% if nbJEH > 0 %}{{ (total / nbJEH ) | number_format(2, ',', ' ') }}{% else %} - {% endif %}
                         €
@@ -192,7 +192,7 @@
                 </tr>
             {% endfor %}
             <tr class="success">
-                <th colspan="5">{{ 'suivi.phases_non_groupees'|trans({}, 'suivi') }}</th>
+                <th colspan="5">{{ 'suivi.phases_non_groupees'|trans({}, 'project') }}</th>
             </tr>
             {% set nbJEHGlobal = nbJEHGlobal + nbJEH %}
             {% set totalGlobal = totalGlobal + total %}
@@ -202,7 +202,7 @@
                 {% set nbJEH = nbJEH + phase.nbrJEH %}
                 {% set total = total + phase.nbrJEH * phase.prixJEH %}
                 <tr>
-                    <td>{{ 'suivi.phase'|trans({}, 'suivi') }} n°{{ phase.position+1 }}</td>
+                    <td>{{ 'suivi.phase'|trans({}, 'project') }} n°{{ phase.position+1 }}</td>
                     <td>{{ phase.titre | nl2br }}</td>
                     <td align="right">{{ phase.nbrJEH }} JEH</td>
                     <td align="right">{{ phase.prixJEH | number_format(2, ',', ' ') }} €</td>
@@ -210,8 +210,8 @@
                 </tr>
             {% endfor %}
             <tr class="warning">
-                <th colspan="2">{{ 'suivi.sous_total'|trans({}, 'suivi') }}</th>
-                <td align="right">{{ nbJEH }} {{ 'suivi.jeh'|trans({}, 'suivi') }}</td>
+                <th colspan="2">{{ 'suivi.sous_total'|trans({}, 'project') }}</th>
+                <td align="right">{{ nbJEH }} {{ 'suivi.jeh'|trans({}, 'project') }}</td>
                 <td align="right">{% if nbJEH > 0 %}{{ (total / nbJEH ) | number_format(2, ',', ' ') }}{% else %} - {% endif %}
                     €
                 </td>
@@ -220,8 +220,8 @@
             {% set nbJEHGlobal = nbJEHGlobal + nbJEH %}
             {% set totalGlobal = totalGlobal + total %}
             <tr class="danger">
-                <th colspan="2">{{ 'suivi.total'|trans({}, 'suivi') }}</th>
-                <td align="right">{{ nbJEHGlobal }} {{ 'suivi.jeh'|trans({}, 'suivi') }}</td>
+                <th colspan="2">{{ 'suivi.total'|trans({}, 'project') }}</th>
+                <td align="right">{{ nbJEHGlobal }} {{ 'suivi.jeh'|trans({}, 'project') }}</td>
                 <td align="right">{% if nbJEHGlobal > 0 %}{{ (totalGlobal / nbJEHGlobal ) | number_format(2, ',', ' ') }}{% else %} - {% endif %}
                     €
                 </td>

@@ -1,4 +1,4 @@
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
     {{ 'prospect.affichage_prospect'|trans({}, 'personne') }} {{ parent() }}
@@ -17,7 +17,7 @@
 
 {% block breadcrumb %}
     <ul class="breadcrumb no-margin pull-right">
-        <li><a href="{{ path('MgatePersonne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
+        <li><a href="{{ path('personne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
         <li class="active">{{ prospect.nom }}</li>
     </ul>
 {% endblock %}
@@ -40,19 +40,19 @@
         <div class="tab-content">
             <!-- Liste des employés -->
             <div class="tab-pane active" id="tab1">
-                {% include "MgatePersonneBundle:Prospect:TabVoir/employes.html.twig" %}
+                {% include "Personne/Prospect/TabVoir/employes.html.twig" %}
             </div>
             <!-- Etudes faites avec ce prospect -->
             <div class="tab-pane" id="tab2" style="min-height:200px;">
-                {% include "MgatePersonneBundle:Prospect:TabVoir/etudes.html.twig" %}
+                {% include "Personne/Prospect/TabVoir/etudes.html.twig" %}
             </div>
             <!-- Mailing list -->
             <div class="tab-pane" id="tab3">
-                {% include "MgatePersonneBundle:Prospect:TabVoir/mailing.html.twig" %}
+                {% include "Personne/Prospect/TabVoir/mailing.html.twig" %}
             </div>
             <!-- commentaires (fos rest) -->
             <div class="tab-pane" id="tab4">
-                {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': prospect.thread.id} %}
+                {% include 'Comment/Thread/async.html.twig' with {'id': prospect.thread.id} %}
             </div>
         </div>
     </div>

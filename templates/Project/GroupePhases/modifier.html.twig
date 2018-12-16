@@ -1,16 +1,16 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.modifier_les'|trans({}, 'suivi') }} {{ 'suivi.groupes'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ 'suivi.groupes'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.modifier_les'|trans({}, 'suivi') }} {{ form.groupes | length }}
-    {{ 'suivi.groupes'|trans({}, 'suivi') }}
+    {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ form.groupes | length }}
+    {{ 'suivi.groupes'|trans({}, 'project') }}
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ 'suivi.modifier_les'|trans({}, 'suivi') }} {{ 'suivi.groupes'|trans({}, 'suivi') }}
+    {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ 'suivi.groupes'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
@@ -30,14 +30,14 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ 'suivi.titre'|trans({}, 'suivi') }}
+                            {{ 'suivi.titre'|trans({}, 'project') }}
                             {{ form_errors(groupe.titre) }}
                         </th>
                         <td>{{ form_widget(groupe.titre, {'attr':{'class': 'form-control'}}) }}</td>
                     </tr>
                     <tr>
                         <th>
-                            {{ 'suivi.description'|trans({}, 'suivi') }}
+                            {{ 'suivi.description'|trans({}, 'project') }}
                             {{ form_errors(groupe.description) }}
                         </th>
                         <td>{{ form_widget(groupe.description, {'attr':{'class': 'form-control'}}) }}</td>
@@ -51,11 +51,11 @@
 
     <div class="row">
         <div class="col-md-3 col-sm-5 col-xs-6">
-            <input type="submit" value="{{ 'suivi.groupe_ajouter'|trans({}, 'suivi') }}" name="add"
+            <input type="submit" value="{{ 'suivi.groupe_ajouter'|trans({}, 'project') }}" name="add"
                    class="btn btn-primary"/>
         </div>
         <div class="col-md-3 col-sm-5 col-xs-6">
-            <input type="submit" value="{{ 'suivi.groupes_enregistrer'|trans({}, 'suivi') }}" class="btn btn-success"/>
+            <input type="submit" value="{{ 'suivi.groupes_enregistrer'|trans({}, 'project') }}" class="btn btn-success"/>
         </div>
     </div>
 

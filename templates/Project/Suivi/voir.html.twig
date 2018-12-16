@@ -1,45 +1,45 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.suivi_affichage'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.suivi_affichage'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{  'suivi.suivi_affichage'|trans({}, 'suivi') }}
+    {{  'suivi.suivi_affichage'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.suivi_affichage'|trans({}, 'suivi') }}
+    {{ 'suivi.suivi_affichage'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
     <table class="table table-bordered">
         <tr>
             <td colspan="2">
-                <a href="{{ path('MgateSuivi_suivi_modifier', {'id': selectedSuivi.id}) }}"><i
-                            class="fa fa-pencil"></i> {{ 'suivi.modifier'|trans({}, 'suivi') }}</a>
+                <a href="{{ path('project_suivi_modifier', {'id': selectedSuivi.id}) }}"><i
+                            class="fa fa-pencil"></i> {{ 'suivi.modifier'|trans({}, 'project') }}</a>
             </td>
         </tr>
         <tr>
-            <th>{{ 'suivi.date'|trans({}, 'suivi') }}</th>
+            <th>{{ 'suivi.date'|trans({}, 'project') }}</th>
             <td>{{ selectedSuivi.date | date("\\L\\e d/m/Y") }}</td>
         </tr>
         <tr>
-            <th>{{ 'suivi.etat'|trans({}, 'suivi') }}</th>
+            <th>{{ 'suivi.etat'|trans({}, 'project') }}</th>
             <td>{{ selectedSuivi.etat | nl2br }}</td>
         </tr>
         <tr>
-            <th>{{ 'suivi.todo'|trans({}, 'suivi') }}</th>
+            <th>{{ 'suivi.todo'|trans({}, 'project') }}</th>
             <td>{{ selectedSuivi.todo | nl2br }}</td>
         </tr>
     </table>
 
-    <h3>{{ 'suivi.historique'|trans({}, 'suivi') }}</h3>
+    <h3>{{ 'suivi.historique'|trans({}, 'project') }}</h3>
     <table class="table table-bordered table-striped">
         {% for suivi in suivis | reverse %}
             <tr>
                 <td>
-                    <a href="{{ path('MgateSuivi_suivi_voir', {'id': suivi.id}) }}">{{ 'suivi.suivi'|trans({}, 'suivi') }}
+                    <a href="{{ path('project_suivi_voir', {'id': suivi.id}) }}">{{ 'suivi.suivi'|trans({}, 'project') }}
                         n°{{ suivis | length - loop.index0 }}</a>
                 </td>
                 <td>{{ suivi.date | date("d/m/Y") }}</td>

@@ -1,5 +1,5 @@
 {{ form_start(form) }}
-{% form_theme form 'MgateSuiviBundle:Form:fields.html.twig' %}
+{% form_theme form 'Project/Form/fields.html.twig' %}
 <table class="table table-bordered table-striped standard">
     <tr>
         <th>{{ form_label(form.knownProspect) }} {{ form_errors(form.knownProspect) }}</th>
@@ -7,7 +7,7 @@
     </tr>
     <tr>
         <th id="{{ form.newProspect.vars.id }}_block" colspan="2" class="success">
-            {{ 'suivi.etude_form.prospect_nouveau'|trans({}, 'suivi') }}
+            {{ 'suivi.etude_form.prospect_nouveau'|trans({}, 'project') }}
         </th>
     </tr>
     <tr>
@@ -36,7 +36,7 @@
     </tr>
     <tr>
         <th id="{{ form.newProspect.vars.id }}_block" colspan="2" class="success">
-            {{ 'suivi.etude_l'|trans({}, 'suivi') }}
+            {{ 'suivi.etude_l'|trans({}, 'project') }}
         </th>
     </tr>
     <tr>
@@ -58,7 +58,7 @@
     <tr>
         <th>{{ form_label(form.num) }} {{ form_errors(form.num) }}
             <span class="badge badge-default" data-toggle="tooltip"
-                  title="{{ 'suivi.etude_form.mandat_tooltip'|trans({}, 'suivi') }}">?</span>
+                  title="{{ 'suivi.etude_form.mandat_tooltip'|trans({}, 'project') }}">?</span>
         </th>
         <td>{{ form_widget(form.num) }}</td>
     </tr>
@@ -86,11 +86,11 @@
 
 {{ form_widget(form) }}
 
-<input type="submit" value="{{ 'suivi.etude_enregistrer'|trans({}, 'suivi') }}" class="btn btn-success"/>
-<input type="submit" value="{{ 'suivi.etude_enregistrer_passer_ap'|trans({}, 'suivi') }}" name="ap" id="ap"
+<input type="submit" value="{{ 'suivi.etude_enregistrer'|trans({}, 'project') }}" class="btn btn-success"/>
+<input type="submit" value="{{ 'suivi.etude_enregistrer_passer_ap'|trans({}, 'project') }}" name="ap" id="ap"
        class="btn btn-success"/>
 
 {{ form_end(form) }}
 
 {{ form_javascript(form) }}
-{% include "MgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.knownProspect, knowned: form.prospect, newed: form.newProspect } %}
+{% include "Project/DocType/selectOrNew.html.twig" with { known: form.knownProspect, knowned: form.prospect, newed: form.newProspect } %}

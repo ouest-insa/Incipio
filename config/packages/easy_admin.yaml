@@ -1,22 +1,22 @@
 easy_admin:
     entities:
         Avenant:
-          class: Mgate\SuiviBundle\Entity\Av
+          class: App\Entity\Project\Av
           list :
               fields:
                 - 'id'
                 - 'etude'
                 - 'objet'
         ContactClient:
-            class: Mgate\SuiviBundle\Entity\ClientContact
+            class: App\Entity\Project\ClientContact
         Competence:
-            class: N7consulting\RhBundle\Entity\Competence
+            class: App\Entity\Hr\Competence
         Document:
-            class: Mgate\PubliBundle\Entity\Document
+            class: App\Entity\Publish\Document
         Employe:
-            class: Mgate\PersonneBundle\Entity\Employe
+            class: App\Entity\Personne\Employe
         Etude:
-            class: Mgate\SuiviBundle\Entity\Etude
+            class: App\Entity\Project\Etude
             list :
                 fields:
                   - 'id'
@@ -27,13 +27,13 @@ easy_admin:
                   - 'stateDescription'
                   - 'confidentiel'
         Filiere:
-            class: Mgate\PersonneBundle\Entity\Filiere
+            class: App\Entity\Personne\Filiere
         Mandat:
-            class: Mgate\PersonneBundle\Entity\Mandat
+            class: App\Entity\Personne\Mandat
         Membre:
-            class: Mgate\PersonneBundle\Entity\Membre
+            class: App\Entity\Personne\Membre
         Mission:
-            class: Mgate\SuiviBundle\Entity\Mission
+            class: App\Entity\Project\Mission
             list :
               fields:
                 - 'id'
@@ -43,14 +43,14 @@ easy_admin:
                 - 'finOm'
                 - 'pourcentageJunior'
         Personne:
-            class: Mgate\PersonneBundle\Entity\Personne
+            class: App\Entity\Personne\Personne
         Poste:
-            class: Mgate\PersonneBundle\Entity\Poste
+            class: App\Entity\Personne\Poste
         Prospect:
-            class: Mgate\PersonneBundle\Entity\Prospect
+            class: App\Entity\Personne\Prospect
         RelatedDocument:
-            class: Mgate\PubliBundle\Entity\RelatedDocument
+            class: App\Entity\Publish\RelatedDocument
         Suivi:
-            class: Mgate\SuiviBundle\Entity\Suivi
+            class: App\Entity\Project\Suivi
         User:
-            class: Mgate\UserBundle\Entity\User
+            class: App\Entity\User\User

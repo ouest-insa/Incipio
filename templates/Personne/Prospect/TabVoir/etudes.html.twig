@@ -18,7 +18,7 @@
                 {{ etude.dateCreation|date("d/m/Y") }}
             </td>
             <td>
-                <a href="{{ path('MgateSuivi_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a>
+                <a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a>
             </td>
             <td>
                 {{ ( etude.stateID == 4 ?

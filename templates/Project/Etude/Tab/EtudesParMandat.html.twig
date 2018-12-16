@@ -3,7 +3,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{key}}" href="#collapse{{key}}{{loop.index}}" data-mandat="{{  mandatMax - loop.index0 }}" data-stateID="{{key +3}}" data-loaded="false">
-                    {{ 'suivi.mandat'|trans({}, 'suivi') }} {{ mandatMax - loop.index0 }}
+                    {{ 'suivi.mandat'|trans({}, 'project') }} {{ mandatMax - loop.index0 }}
                 </a>
             </div>
             <div id="collapse{{key}}{{loop.index}}" class="panel-collapse collapse">
@@ -14,7 +14,7 @@
         {% if loop.last %}
             </div>
 
-            <p>{{ 'suivi.rien_entre'|trans({}, 'suivi') }} {{ mandatMax - loop.index0 }} et {{ anneeCreation }}.</p>
+            <p>{{ 'suivi.rien_entre'|trans({}, 'project') }} {{ mandatMax - loop.index0 }} et {{ anneeCreation }}.</p>
         {% endif %}
     {% endfor%}
 

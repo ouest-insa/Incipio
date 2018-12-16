@@ -11,6 +11,7 @@
 
 namespace App\Form\Project;
 
+use App\Entity\Personne\Personne;
 use App\Entity\Project\ClientContact;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;

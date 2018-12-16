@@ -1,4 +1,4 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -8,11 +8,11 @@
 {% endblock %}
 
 {% block title %}
-    {{ 'suivi.suivi_etudes'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.suivi_etudes'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.suivis_liste'|trans({}, 'suivi') }}
+    {{ 'suivi.suivis_liste'|trans({}, 'project') }}
 {% endblock %}
 
 
@@ -20,24 +20,24 @@
     <table class="table table-bordered table-striped dt-responsive" id="listeSuivi">
         <thead>
         <tr>
-            <th>{{ 'suivi.voir'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.date'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.etude.etude'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.suiveur'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.client'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.etat'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.todo'|trans({}, 'suivi') }}</th>
+            <th>{{ 'suivi.voir'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.date'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.etude.etude'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.suiveur'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.client'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.etat'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.todo'|trans({}, 'project') }}</th>
         </tr>
         </thead>
         <tbody>
         {% for s in suivis %}
             <tr>
                 <td>
-                    <a href="{{ path('MgateSuivi_suivi_voir', {'id': s.id}) }}">{{ s.id }}</a>
+                    <a href="{{ path('project_suivi_voir', {'id': s.id}) }}">{{ s.id }}</a>
                 </td>
                 <td>{{ s.date | date("d/m/y") }}</td>
                 <td>
-                    <a href="{{ path('MgateSuivi_etude_voir', {'nom': s.etude.nom}) }}">{{ s.etude.nom }}</a>
+                    <a href="{{ path('project_etude_voir', {'nom': s.etude.nom}) }}">{{ s.etude.nom }}</a>
                 </td>
                 <td>{{ s.etude.suiveur.prenomNom }}</td>
                 <td>{{ s.etude.prospect.nom }}</td>

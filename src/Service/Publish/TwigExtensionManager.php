@@ -15,7 +15,7 @@ class TwigExtensionManager extends \Twig_Extension
 {
     public function getName()
     {
-        return 'Mgate_publibundle_twigextensionmanager';
+        return 'publish_twigextensionmanager';
     }
 
     public function getFunctions()

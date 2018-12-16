@@ -26,14 +26,14 @@ class FormationController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="Mgate_formations_index_admin", path="/formations/admin", methods={"GET","HEAD"})
+     * @Route(name="formations_index_admin", path="/formations/admin", methods={"GET","HEAD"})
      *
      * Display a list of all training given order by date desc
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
-        $formations = $em->getRepository('MgateFormationBundle:Formation')
+        $formations = $em->getRepository(Formation::class)
             ->getAllFormations([], ['dateDebut' => 'DESC']);
 
         return $this->render('Formation/Gestion/index.html.twig', [
@@ -43,14 +43,14 @@ class FormationController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="Mgate_formations_lister", path="/formations", methods={"GET","HEAD"})
+     * @Route(name="formations_lister", path="/formations", methods={"GET","HEAD"})
      *
      * Display a list of all training group by term.
      */
-    public function listerAction()
+    public function lister()
     {
         $em = $this->getDoctrine()->getManager();
-        $formationsParMandat = $em->getRepository('MgateFormationBundle:Formation')->findAllByMandat();
+        $formationsParMandat = $em->getRepository(Formation::class)->findAllByMandat();
 
         return $this->render('Formation/Formations/lister.html.twig', [
             'formationsParMandat' => $formationsParMandat,
@@ -59,13 +59,13 @@ class FormationController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="Mgate_formation_voir", path="/formations/{id}", methods={"GET","HEAD"}, requirements={"id": "\d+"})
+     * @Route(name="formation_voir", path="/formations/{id}", methods={"GET","HEAD"}, requirements={"id": "\d+"})
      *
      * @param Formation $formation The training to display
      *
      * @return Response
      */
-    public function voirAction(Formation $formation)
+    public function voir(Formation $formation)
     {
         return $this->render('Formation/Formations/voir.html.twig', [
             'formation' => $formation,
@@ -74,13 +74,13 @@ class FormationController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="Mgate_formation_ajouter", path="/formations/admin/ajouter", methods={"GET","HEAD","POST"})
+     * @Route(name="formation_ajouter", path="/formations/admin/ajouter", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      *
      * @return Response
      */
-    public function ajouterAction(Request $request)
+    public function ajouter(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $formation = new Formation();
@@ -94,7 +94,7 @@ class FormationController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Formation enregistrée');
 
-                return $this->redirectToRoute('Mgate_formation_voir', ['id' => $formation->getId()]);
+                return $this->redirectToRoute('formation_voir', ['id' => $formation->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -106,14 +106,14 @@ class FormationController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="Mgate_formation_modifier", path="/formations/admin/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="formation_modifier", path="/formations/admin/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request   $request
      * @param Formation $formation The training to modify
      *
      * @return Response
      */
-    public function modifierAction(Request $request, Formation $formation)
+    public function modifier(Request $request, Formation $formation)
     {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(FormationType::class, $formation);
@@ -127,7 +127,7 @@ class FormationController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Formation enregistrée');
 
-                return $this->redirectToRoute('Mgate_formation_voir', ['id' => $formation->getId()]);
+                return $this->redirectToRoute('formation_voir', ['id' => $formation->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -141,16 +141,16 @@ class FormationController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="Mgate_formation_participation", path="/formations/admin/participation/{mandat}", methods={"GET","HEAD"}, defaults={"mandat": ""})
+     * @Route(name="formation_participation", path="/formations/admin/participation/{mandat}", methods={"GET","HEAD"}, defaults={"mandat": ""})
      *
      * @param $mandat string The mandat during which trainings were given
      *
      * @return Response Manage participant present to a training
      */
-    public function participationAction($mandat = null)
+    public function participation($mandat = null)
     {
         $em = $this->getDoctrine()->getManager();
-        $formationsParMandat = $em->getRepository('MgateFormationBundle:Formation')->findAllByMandat();
+        $formationsParMandat = $em->getRepository(Formation::class)->findAllByMandat();
 
         $choices = [];
         foreach ($formationsParMandat as $key => $value) {
@@ -198,14 +198,14 @@ class FormationController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="Mgate_formation_supprimer", path="/formations/admin/supprimer/{id}", methods={"HEAD","POST"})
+     * @Route(name="formation_supprimer", path="/formations/admin/supprimer/{id}", methods={"HEAD","POST"})
      *
      * @param Request   $request
      * @param Formation $formation The training to delete (paramconverter from id)
      *
      * @return RedirectResponse Delete a training
      */
-    public function supprimerAction(Request $request, Formation $formation)
+    public function supprimer(Request $request, Formation $formation)
     {
         $form = $this->createDeleteForm($formation->getId());
         $form->handleRequest($request);
@@ -217,7 +217,7 @@ class FormationController extends AbstractController
             $this->addFlash('success', 'Formation supprimée');
         }
 
-        return $this->redirectToRoute('Mgate_formations_lister', []);
+        return $this->redirectToRoute('formations_lister', []);
     }
 
     /**

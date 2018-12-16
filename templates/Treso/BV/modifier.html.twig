@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block title %}
     {% if bv.numero is null %}
@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block breadcrumb_items %}
-    <li><a href="{{ path('MgateTreso_BV_index') }}">{{ 'treso.bv_list'|trans({}, 'treso') }}</a></li>
+    <li><a href="{{ path('treso_BV_index') }}">{{ 'treso.bv_list'|trans({}, 'treso') }}</a></li>
 {% endblock %}
 
 {% block breadcrumb_active %}
@@ -100,7 +100,7 @@
         </div>
         {% if bv.numero is not null %}
             <div class="col-md-2 col-xs-4">
-                <a href="{{ path('MgateTreso_BV_supprimer', {'id': bv.id}) }}" class="btn btn-danger">
+                <a href="{{ path('treso_BV_supprimer', {'id': bv.id}) }}" class="btn btn-danger">
                     {{ 'treso.bv_supprimer'|trans({}, 'treso') }}
                 </a>
             </div>

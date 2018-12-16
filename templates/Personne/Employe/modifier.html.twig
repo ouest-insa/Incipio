@@ -1,4 +1,4 @@
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
     {{ 'employe.modifier_employe'|trans({}, 'personne') }} {{ parent() }}
@@ -10,8 +10,8 @@
 
 {% block breadcrumb %}
     <ul class="breadcrumb no-margin pull-right">
-        <li><a href="{{ path('MgatePersonne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
-        <li><a href="{{  path('MgatePersonne_prospect_voir', {'id': prospect.id}) }}">{{ prospect.nom }}</a></li>
+        <li><a href="{{ path('personne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
+        <li><a href="{{  path('personne_prospect_voir', {'id': prospect.id}) }}">{{ prospect.nom }}</a></li>
         <li class="active">{{ 'employe.modifier_employe'|trans({}, 'personne') }} {{ form.vars.value.personne.prenomNom }}</li>
     </ul>
 {% endblock %}
@@ -20,7 +20,7 @@
     <div class="table-responsive content">
         {{ form_start(form) }}
         <table class="table table-bordered table-striped">
-            {% include "MgatePersonneBundle:Employe:formulaire.html.twig" %}
+            {% include "Personne/Employe/formulaire.html.twig" %}
             <tr>
                 <td colspan="6">
                     <div class="row">
@@ -33,7 +33,7 @@
                         {% if is_granted('ROLE_SUIVEUR') %}
                         <div class="col-md-2 col-xs-4">
                             <form class="bootbox-confirm" data-content="{{ 'employe.confirmation_supprimer_employe'|trans({}, 'personne') }}"
-                                  action="{{ path('MgatePersonne_employe_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+                                  action="{{ path('personne_employe_supprimer', { 'id': form.vars.value.id }) }}" method="post">
                                 {{ form_widget(delete_form) }}
                                 <button class=" btn btn-danger">{{ 'employe.supprimer_employe'|trans({}, 'personne') }}</button>
                             </form>

@@ -1,24 +1,24 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.etude_modifier'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.etude_modifier'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.etude_modifier'|trans({}, 'suivi') }}
+    {{ 'suivi.etude_modifier'|trans({}, 'project') }}
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ 'suivi.etude_modifier'|trans({}, 'suivi') }}
+    {{ 'suivi.etude_modifier'|trans({}, 'project') }}
 {% endblock %}
 
 
 {% block content_bundle %}
-    {% include "MgateSuiviBundle:Etude:formulaire.html.twig" %}
+    {% include "Project/Etude/formulaire.html.twig" %}
     <br/>
-    <form class="bootbox-confirm inline" data-content="{{ 'suivi.etude_supprimer_confirm'|trans({}, 'suivi') }} ?"
-          action="{{ path('MgateSuivi_etude_supprimer', { 'nom': etude.nom }) }}" method="post">
+    <form class="bootbox-confirm inline" data-content="{{ 'suivi.etude_supprimer_confirm'|trans({}, 'project') }} ?"
+          action="{{ path('project_etude_supprimer', { 'nom': etude.nom }) }}" method="post">
         {{ form_widget(delete_form) }}
-        <button class="btn btn-danger">{{ 'suivi.etude_supprimer'|trans({}, 'suivi') }}</button>
+        <button class="btn btn-danger">{{ 'suivi.etude_supprimer'|trans({}, 'project') }}</button>
     </form>
 {% endblock %}

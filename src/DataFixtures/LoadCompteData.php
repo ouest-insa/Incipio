@@ -11,11 +11,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Compte;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use App\Entity\Treso\Compte;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadCompteData implements FixtureInterface
+class LoadCompteData extends Fixture
 {
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ class LoadCompteData implements FixtureInterface
             $compte->setCategorie(false)->setLibelle($value)->setNumero($key);
             $manager->persist($compte);
         }
-        if (!$manager->getRepository('MgateTresoBundle:Compte')->findBy(['numero' => $compte->getNumero()])) {
+        if (!$manager->getRepository(Compte::class)->findBy(['numero' => $compte->getNumero()])) {
             $manager->flush();
         }
     }

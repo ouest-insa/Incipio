@@ -84,7 +84,7 @@
 
             <form class="bootbox-confirm inline"
                   data-content="{{ 'formation.confirmation_supprimer_formation'|trans({}, 'formation') }}"
-                  action="{{ path('Mgate_formation_supprimer', { 'id': delete_form.vars.value.id }) }}" method="post">
+                  action="{{ path('formation_supprimer', { 'id': delete_form.vars.value.id }) }}" method="post">
                 {{ form_widget(delete_form) }}
                 <button class="btn btn-danger">{{ 'formation.formation_supprimer'|trans({}, 'formation') }}</button>
             </form>

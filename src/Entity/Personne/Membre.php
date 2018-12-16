@@ -40,7 +40,7 @@ class Membre implements AnonymizableInterface
     /**
      * @Groups({"gdpr"})
      *
-     * @ORM\OneToMany(targetEntity="Mgate\SuiviBundle\Entity\Mission", mappedBy="intervenant",
+     * @ORM\OneToMany(targetEntity="App\Entity\Project\Mission", mappedBy="intervenant",
      *                                                                 cascade={"persist","remove"})
      */
     private $missions;
@@ -48,7 +48,7 @@ class Membre implements AnonymizableInterface
     /**
      * @Assert\Valid()
      *
-     * @ORM\OneToOne(targetEntity="Mgate\PersonneBundle\Entity\Personne", inversedBy="membre", fetch="EAGER",
+     * @ORM\OneToOne(targetEntity="App\Entity\Personne\Personne", inversedBy="membre", fetch="EAGER",
      *                                                                    cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -115,7 +115,7 @@ class Membre implements AnonymizableInterface
      *
      * @Groups({"gdpr"})
      *
-     * @ORM\OneToMany(targetEntity="Mgate\PersonneBundle\Entity\Mandat", mappedBy="membre",
+     * @ORM\OneToMany(targetEntity="App\Entity\Personne\Mandat", mappedBy="membre",
      *                                                                   cascade={"persist","remove"},
      *                                                                   orphanRemoval=true)
      */
@@ -131,7 +131,7 @@ class Membre implements AnonymizableInterface
     private $nationalite;
 
     /**
-     * @ORM\OneToMany(targetEntity="Mgate\PubliBundle\Entity\RelatedDocument", mappedBy="membre", cascade={"remove"},
+     * @ORM\OneToMany(targetEntity="App\Entity\Publish\RelatedDocument", mappedBy="membre", cascade={"remove"},
      *     orphanRemoval=true)
      */
     private $relatedDocuments;
@@ -163,7 +163,7 @@ class Membre implements AnonymizableInterface
      *
      * @Assert\NotNull()
      *
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Filiere")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Filiere")
      */
     private $filiere;
 
@@ -188,7 +188,7 @@ class Membre implements AnonymizableInterface
      *
      * @Groups({"gdpr"})
      *
-     * @ORM\ManyToMany(targetEntity="N7consulting\RhBundle\Entity\Competence", mappedBy="membres", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Hr\Competence", mappedBy="membres", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $competences;

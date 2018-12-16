@@ -21,7 +21,7 @@
 
 {% block content_bundle %}
 
-    <a href="{{ path('N7consultingRh_competence_modifier', {'id': competence.id}) }}" class="btn btn-default pull-right">Modifier
+    <a href="{{ path('hr_competence_modifier', {'id': competence.id}) }}" class="btn btn-default pull-right">Modifier
         la compétence</a>
     <h4><em>{{ competence.description }}</em></h4>
 
@@ -43,7 +43,7 @@
                 <tbody>
                 {% for dev in devs %}
                     <tr>
-                        <td><a href="{{ path('MgatePersonne_membre_voir', {'id': dev.id}) }}">{{ dev.personne.Prenom }} {{ dev.personne.Nom }}</a></td>
+                        <td><a href="{{ path('personne_membre_voir', {'id': dev.id}) }}">{{ dev.personne.Prenom }} {{ dev.personne.Nom }}</a></td>
                         <td>{{ dev.personne.email }}</td>
                         <td>{{ dev.personne.mobile }}</td>
                         <td> {{ dev.filiere.nom }}</td>
@@ -51,7 +51,7 @@
                         <td>
                             {% for competence in dev.competences %}
                                 <label class="label label-default">
-                                    <a href="{{ path('N7consultingRh_competence_voir', {'id' : competence.id}) }}">{{ competence.nom }}</a>
+                                    <a href="{{ path('hr_competence_voir', {'id' : competence.id}) }}">{{ competence.nom }}</a>
                                 </label>
                             {% endfor %}
                         </td>
@@ -86,7 +86,7 @@
                         <td>
                             {{ etude.dateCreation|date("d/m/Y") }}
                         </td>
-                        <td><a href="{{ path('MgateSuivi_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a></td>
+                        <td><a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a></td>
                         <td>
                             {{ (etude.stateID == 4 ? "Terminée" : (etude.stateID == 5 ? "Avortée" : (etude.stateID == 3 ? "En Pause" : (etude.stateID == 2 ? "En Cours" : "En négociation")))) }}
                         </td>
@@ -96,7 +96,7 @@
                         <td>
                             {% for competence in etude.competences %}
                                 <label class="label label-default">
-                                    <a href="{{ path('N7consultingRh_competence_voir', {'id' : competence.id}) }}">{{ competence.nom }}</a>
+                                    <a href="{{ path('hr_competence_voir', {'id' : competence.id}) }}">{{ competence.nom }}</a>
                                 </label>
                             {% endfor %}
                         </td>

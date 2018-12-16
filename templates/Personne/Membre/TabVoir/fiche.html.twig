@@ -101,7 +101,7 @@
                             <div class="box-body">
                                 <table class="table table-hover table-striped">
                                     {% for c in membre.competences %}
-                                    <a href="{{ path('N7consultingRh_competence_voir', {'id': c.id}) }}">
+                                    <a href="{{ path('hr_competence_voir', {'id': c.id}) }}">
                                     <span class="badge badge-default">{{ c.nom }}</span></a>
                                     {% endfor %}
                                 </table>
@@ -121,7 +121,7 @@
                                 <table class="table table-hover table-striped">
                                     {% for mission in membre.missions %}
                                     <tr class="mandats">
-                                        <td><a href="{{ path("MgateSuivi_etude_voir", {'nom' : mission.etude.nom}) }}"
+                                        <td><a href="{{ path("project_etude_voir", {'nom' : mission.etude.nom}) }}"
                                            title="{{ mission.etude.nom }}">{{ mission.etude.reference(param('namingConvention')) }}</a></td>
                                         <td>{{ 'membre.date_debut'|trans({}, 'personne') }} : {{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }}</td>
                                         <td>{{ 'membre.date_fin'|trans({}, 'personne') }} : {{ mission.finOm ? mission.finOm  | date("d/m/Y") : "?" }}</td>

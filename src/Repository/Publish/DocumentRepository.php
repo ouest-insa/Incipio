@@ -11,6 +11,7 @@
 
 namespace App\Repository\Publish;
 
+use App\Entity\Publish\Document;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -22,15 +23,13 @@ use Doctrine\ORM\EntityRepository;
 class DocumentRepository extends EntityRepository
 {
     /**
-     * @return array
+     * @return int
      */
     public function getTotalSize()
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->add('select', 'SUM(u.size)')
-                    ->add('from', 'MgatePubliBundle:Document u');
-        $result = $query->getQuery()->getResult();
+        $query = $qb->select('SUM(d.size)')->from(Document::class, 'd');
 
-        return $result[0] ? $result[0][1] : null;
+        return $query->getQuery()->getSingleScalarResult();
     }
 }

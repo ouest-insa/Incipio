@@ -11,6 +11,7 @@
 
 namespace App\Controller\Project;
 
+use App\Entity\Project\ClientContact;
 use App\Entity\Project\Etude;
 use App\Entity\User\User;
 use App\Form\Project\EtudeType;
@@ -28,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class EtudeController extends AbstractController
 {
@@ -41,15 +43,22 @@ class EtudeController extends AbstractController
 
     const STATE_ID_AVORTEE = 5;
 
+    private $keyValueStore;
+
+    public function __construct(KeyValueStore $keyValueStore)
+    {
+        $this->keyValueStore = $keyValueStore;
+    }
+
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_etude_homepage", path="/suivi/", methods={"GET","HEAD"})
+     * @Route(name="project_etude_homepage", path="/suivi/", methods={"GET","HEAD"})
      *
      * @param EtudeManager $etudeManager
      *
      * @return Response
      */
-    public function indexAction(EtudeManager $etudeManager)
+    public function index(EtudeManager $etudeManager)
     {
         $MANDAT_MAX = $etudeManager->getMaxMandat();
         $MANDAT_MIN = $etudeManager->getMinMandat();
@@ -57,20 +66,17 @@ class EtudeController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         //Etudes En Négociation : stateID = 1
-        $etudesEnNegociation = $em->getRepository('MgateSuiviBundle:Etude')
+        $etudesEnNegociation = $em->getRepository(Etude::class)
             ->getPipeline(['stateID' => self::STATE_ID_EN_NEGOCIATION], ['mandat' => 'DESC', 'num' => 'DESC']);
 
         //Etudes En Cours : stateID = 2
-        $etudesEnCours = $em->getRepository('MgateSuiviBundle:Etude')
+        $etudesEnCours = $em->getRepository(Etude::class)
             ->getPipeline(['stateID' => self::STATE_ID_EN_COURS], ['mandat' => 'DESC', 'num' => 'DESC']);
 
         //Etudes en pause : stateID = 3
-        $etudesEnPause = $em->getRepository('MgateSuiviBundle:Etude')
+        $etudesEnPause = $em->getRepository(Etude::class)
             ->getPipeline(['stateID' => self::STATE_ID_EN_PAUSE], ['mandat' => 'DESC', 'num' => 'DESC']);
 
-        /**
-         * @Route(name="MgateSuivi_etude_ajax", path="/suivi/get", methods={"GET","HEAD"})
-         */
         //Etudes Terminees et Avortees Chargée en Ajax dans getEtudesAsyncAction
         //On push des arrays vides pour avoir les menus déroulants
         $etudesTermineesParMandat = [];
@@ -81,7 +87,7 @@ class EtudeController extends AbstractController
             array_push($etudesAvorteesParMandat, []);
         }
 
-        $anneeCreation = $this->get('app.json_key_value_store')->get('anneeCreation');
+        $anneeCreation = $this->keyValueStore->get('anneeCreation');
 
         return $this->render('Project/Etude/index.html.twig', [
             'etudesEnNegociation' => $etudesEnNegociation,
@@ -96,12 +102,13 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="project_etude_ajax", path="/suivi/get", methods={"GET","HEAD"})
      *
      * @param Request $request
      *
      * @return Response
      */
-    public function getEtudesAsyncAction(Request $request)
+    public function getEtudesAsync(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -110,7 +117,7 @@ class EtudeController extends AbstractController
             $stateID = intval($request->query->get('stateID'));
 
             if (!empty($mandat) && !empty($stateID)) { // works because state & mandat > 0
-                $etudes = $em->getRepository('MgateSuiviBundle:Etude')->findBy(['stateID' => $stateID,
+                $etudes = $em->getRepository(Etude::class)->findBy(['stateID' => $stateID,
                                                                                 'mandat' => $mandat,
                 ], ['num' => 'DESC']);
 
@@ -129,13 +136,13 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_state", path="/suivi/suivi/state/", methods={"PUT"})
+     * @Route(name="project_state", path="/suivi/suivi/state/", methods={"PUT"})
      *
      * @param Request $request
      *
      * @return Response
      */
-    public function stateAction(Request $request)
+    public function state(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -143,7 +150,7 @@ class EtudeController extends AbstractController
         $stateID = !empty($request->request->get('id')) ? intval($request->request->get('id')) : 0;
         $etudeID = !empty($request->request->get('etude')) ? intval($request->request->get('etude')) : 0;
 
-        if (!$etude = $em->getRepository('Mgate\SuiviBundle\Entity\Etude')->find($etudeID)) {
+        if (!$etude = $em->getRepository(Etude::class)->find($etudeID)) {
             throw $this->createNotFoundException('L\'étude n\'existe pas !');
         } else {
             $etude->setStateDescription($stateDescription);
@@ -157,14 +164,14 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_etude_ajouter", path="/suivi/etude/ajouter", methods={"GET","HEAD","POST"})
+     * @Route(name="project_etude_ajouter", path="/suivi/etude/ajouter", methods={"GET","HEAD","POST"})
      *
      * @param Request      $request
      * @param EtudeManager $etudeManager
      *
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, EtudeManager $etudeManager)
+    public function add(Request $request, EtudeManager $etudeManager)
     {
         $etude = new Etude();
 
@@ -198,9 +205,9 @@ class EtudeController extends AbstractController
                 $this->addFlash('success', 'Etude ajoutée');
 
                 if ($request->get('ap')) {
-                    return $this->redirectToRoute('MgateSuivi_ap_rediger', ['id' => $etude->getId()]);
+                    return $this->redirectToRoute('project_ap_rediger', ['id' => $etude->getId()]);
                 } else {
-                    return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                    return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
                 }
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
@@ -214,7 +221,7 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_etude_voir", path="/suivi/etude/{nom}", methods={"GET","HEAD"})
+     * @Route(name="project_etude_voir", path="/suivi/etude/{nom}", methods={"GET","HEAD"})
      *
      * @param Etude                  $etude
      * @param EtudePermissionChecker $permChecker
@@ -222,7 +229,7 @@ class EtudeController extends AbstractController
      *
      * @return Response
      */
-    public function voirAction(Etude $etude, EtudePermissionChecker $permChecker, ChartManager $chartManager)
+    public function voir(Etude $etude, EtudePermissionChecker $permChecker, ChartManager $chartManager)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -231,7 +238,7 @@ class EtudeController extends AbstractController
         }
 
         //get contacts clients
-        $clientContacts = $em->getRepository('MgateSuiviBundle:ClientContact')->getByEtude($etude, ['date' => 'desc']);
+        $clientContacts = $em->getRepository(ClientContact::class)->getByEtude($etude, ['date' => 'desc']);
 
         $ob = $chartManager->getGantt($etude, 'suivi');
 
@@ -248,7 +255,7 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_etude_modifier", path="/suivi/etude/modifier/{nom}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_etude_modifier", path="/suivi/etude/modifier/{nom}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -256,7 +263,7 @@ class EtudeController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function modifier(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -288,9 +295,9 @@ class EtudeController extends AbstractController
                 $this->addFlash('success', 'Etude modifiée');
 
                 if ($request->get('ap')) {
-                    return $this->redirectToRoute('MgateSuivi_ap_rediger', ['id' => $etude->getId()]);
+                    return $this->redirectToRoute('project_ap_rediger', ['id' => $etude->getId()]);
                 } else {
-                    return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                    return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
                 }
             } else {
                 $errors = $this->get('validator')->validate($etude);
@@ -309,7 +316,7 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="MgateSuivi_etude_supprimer", path="/suivi/etude/supprimer/{nom}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_etude_supprimer", path="/suivi/etude/supprimer/{nom}", methods={"GET","HEAD","POST"})
      *
      * @param Etude                  $etude
      * @param Request                $request
@@ -317,7 +324,7 @@ class EtudeController extends AbstractController
      *
      * @return RedirectResponse
      */
-    public function deleteAction(Etude $etude, Request $request, EtudePermissionChecker $permChecker)
+    public function delete(Etude $etude, Request $request, EtudePermissionChecker $permChecker)
     {
         $form = $this->createDeleteForm($etude);
 
@@ -335,7 +342,7 @@ class EtudeController extends AbstractController
             $request->getSession()->getFlashBag()->add('success', 'Etude supprimée');
         }
 
-        return $this->redirectToRoute('MgateSuivi_etude_homepage');
+        return $this->redirectToRoute('project_etude_homepage');
     }
 
     private function createDeleteForm(Etude $etude)
@@ -347,14 +354,14 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_etude_suivi", path="/suivi/etudes/suivi", methods={"GET","HEAD"})
+     * @Route(name="project_etude_suivi", path="/suivi/etudes/suivi", methods={"GET","HEAD"})
      *
      * @param Request      $request
      * @param ChartManager $chartManager
      *
      * @return Response
      */
-    public function suiviAction(Request $request, ChartManager $chartManager)
+    public function suivi(Request $request, ChartManager $chartManager)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -364,7 +371,7 @@ class EtudeController extends AbstractController
 
         for ($i = 1; $i < $MANDAT_MAX; ++$i) {
             array_push($etudesParMandat,
-                $em->getRepository('MgateSuiviBundle:Etude')->findBy(['mandat' => $i], ['num' => 'DESC']));
+                $em->getRepository(Etude::class)->findBy(['mandat' => $i], ['num' => 'DESC']));
         }
 
         //WARN
@@ -387,8 +394,8 @@ class EtudeController extends AbstractController
 
         $form = $this->createFormBuilder();
 
-        if ($this->get('app.json_key_value_store')->exists('namingConvention')) {
-            $namingConvention = $this->get('app.json_key_value_store')->get('namingConvention');
+        if ($this->keyValueStore->exists('namingConvention')) {
+            $namingConvention = $this->keyValueStore->get('namingConvention');
         } else {
             $namingConvention = 'id';
         }
@@ -446,19 +453,19 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_etude_suiviQualite", path="/suivi/etudes/suiviQualite", methods={"GET","HEAD"})
+     * @Route(name="project_etude_suiviQualite", path="/suivi/etudes/suiviQualite", methods={"GET","HEAD"})
      *
      * @param ChartManager $chartManager
      *
      * @return Response
      */
-    public function suiviQualiteAction(ChartManager $chartManager)
+    public function suiviQualite(ChartManager $chartManager)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $etudesEnCours = $em->getRepository('MgateSuiviBundle:Etude')
+        $etudesEnCours = $em->getRepository(Etude::class)
             ->findBy(['stateID' => self::STATE_ID_EN_COURS], ['mandat' => 'DESC', 'num' => 'DESC']);
-        $etudesTerminees = $em->getRepository('MgateSuiviBundle:Etude')
+        $etudesTerminees = $em->getRepository(Etude::class)
             ->findBy(['stateID' => self::STATE_ID_TERMINEE], ['mandat' => 'DESC', 'num' => 'DESC']);
         $etudes = array_merge($etudesEnCours, $etudesTerminees);
 
@@ -473,7 +480,7 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_etude_suivi_update", path="/suivi/suivi/update/{id}", methods={"POST"})
+     * @Route(name="project_etude_suivi_update", path="/suivi/suivi/update/{id}", methods={"POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -481,7 +488,7 @@ class EtudeController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function suiviUpdateAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function suiviUpdate(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -506,25 +513,25 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_vu_ca", path="/suivi/ca/{id}", methods={"GET","HEAD"}, defaults={"id": "-1"})
+     * @Route(name="project_vu_ca", path="/suivi/ca/{id}", methods={"GET","HEAD"}, defaults={"id": "-1"})
      *
      * @param              $id
      * @param ChartManager $chartManager
      *
      * @return Response
      */
-    public function vuCAAction($id, ChartManager $chartManager)
+    public function vuCA($id, ChartManager $chartManager)
     {
         $em = $this->getDoctrine()->getManager();
 
         if ($id > 0) {
-            $etude = $em->getRepository('MgateSuiviBundle:Etude')->find($id);
+            $etude = $em->getRepository(Etude::class)->find($id);
         } else {
-            $etude = $em->getRepository('MgateSuiviBundle:Etude')->findOneBy(['stateID' => self::STATE_ID_EN_COURS]);
+            $etude = $em->getRepository(Etude::class)->findOneBy(['stateID' => self::STATE_ID_EN_COURS]);
         }
 
         if (null === $etude) {
-            $etude = $em->getRepository('MgateSuiviBundle:Etude')
+            $etude = $em->getRepository(Etude::class)
                 ->findOneBy(['stateID' => self::STATE_ID_EN_NEGOCIATION]);
         }
 
@@ -533,7 +540,7 @@ class EtudeController extends AbstractController
         }
 
         //Etudes En Négociation : stateID = 1
-        $etudesDisplayList = $em->getRepository('MgateSuiviBundle:Etude')->getTwoStates([self::STATE_ID_EN_NEGOCIATION,
+        $etudesDisplayList = $em->getRepository(Etude::class)->getTwoStates([self::STATE_ID_EN_NEGOCIATION,
                                                                                          self::STATE_ID_EN_COURS,
         ], ['mandat' => 'ASC', 'num' => 'ASC']);
 

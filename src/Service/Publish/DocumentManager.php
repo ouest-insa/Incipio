@@ -24,13 +24,13 @@ namespace App\Service\Publish;
 
 use App\Entity\Publish\Document;
 use App\Entity\Publish\RelatedDocument;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class DocumentManager extends BaseManager
+class DocumentManager
 {
     protected $em;
 
@@ -43,20 +43,26 @@ class DocumentManager extends BaseManager
     protected $junior_id;
 
     /**
-     * @param EntityManager   $em
-     * @param                 $junior_id
-     * @param                 $authorizedStorageSize
-     * @param TokenStorage    $tokenStorage
-     * @param KernelInterface $kernel
+     * @param ObjectManager         $em
+     * @param                       $juniorId
+     * @param                       $authorizedStorageSize
+     * @param TokenStorageInterface $tokenStorage
+     * @param KernelInterface       $kernel
      */
-    public function __construct(EntityManager $em, $junior_id, $authorizedStorageSize, TokenStorage $tokenStorage,
+    public function __construct(ObjectManager $em, $juniorId, $authorizedStorageSize, TokenStorageInterface $tokenStorage,
                                 KernelInterface $kernel)
     {
         $this->em = $em;
-        $this->junior_id = $junior_id;
+        $this->junior_id = $juniorId;
         $this->junior_authorizedStorageSize = $authorizedStorageSize;
         $this->tokenStorage = $tokenStorage;
         $this->kernel = $kernel;
+    }
+
+    private function persistAndFlush($entity)
+    {
+        $this->em->persist($entity);
+        $this->em->flush();
     }
 
     /**
@@ -157,7 +163,7 @@ class DocumentManager extends BaseManager
         // Authorized Storage Size Overflow
         $totalSize = $document->getSize() + $this->getRepository()->getTotalSize();
         if ($totalSize > $this->junior_authorizedStorageSize) {
-            throw new UploadException('Vous n\'avez plus d\'espace disponible ! Vous pouvez en demander plus à dsi@N7consulting.fr.');
+            throw new UploadException('Vous n\'avez plus d\'espace disponible ! Vous pouvez en demander plus à dsi@n7consulting.fr.');
         }
 
         // Delete every document with the same name

@@ -2,11 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Indicateur;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use App\Entity\Stat\Indicateur;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadIndicateurData implements FixtureInterface
+class LoadIndicateurData extends Fixture
 {
     /**
      * {@inheritdoc}

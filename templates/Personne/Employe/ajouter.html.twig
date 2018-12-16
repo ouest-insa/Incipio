@@ -1,4 +1,4 @@
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
     {{ 'employe.ajouter_employe'|trans({}, 'personne') }} {{ parent() }}
@@ -10,8 +10,8 @@
 
 {% block breadcrumb %}
     <ul class="breadcrumb no-margin pull-right">
-        <li><a href="{{ path('MgatePersonne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
-        <li><a href="{{ path('MgatePersonne_prospect_voir', {'id': prospect.id}) }}">{{ prospect.nom }}</a></li>
+        <li><a href="{{ path('personne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
+        <li><a href="{{ path('personne_prospect_voir', {'id': prospect.id}) }}">{{ prospect.nom }}</a></li>
         <li class="active">{{ 'employe.ajouter_employe'|trans({}, 'personne') }}</li>
     </ul>
 {% endblock %}

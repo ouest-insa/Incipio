@@ -78,7 +78,8 @@ generique:
   supprimer: Supprimer
 membre:
   affichage_membre: Affichage d'un membre
-  ajout_modification_membre: Ajout-Modification d'un membre
+  ajout_membre: Ajout d'un membre
+  modification_membre: Modification d'un membre
   ajouter_document: Ajouter un document
   ajouter_mandat: Ajouter un mandat
   competences: Compétences

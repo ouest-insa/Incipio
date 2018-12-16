@@ -27,7 +27,7 @@ class PhasesController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_phases_modifier", path="/suivi/phases/modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_phases_modifier", path="/suivi/phases/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -35,7 +35,7 @@ class PhasesController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function modifier(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -60,7 +60,7 @@ class PhasesController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Phases enregistrées');
 
-                return $this->redirectToRoute('MgateSuivi_phases_modifier', ['id' => $etude->getId()]);
+                return $this->redirectToRoute('project_phases_modifier', ['id' => $etude->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }

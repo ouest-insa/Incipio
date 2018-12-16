@@ -24,31 +24,31 @@ class CotisationURSSAFController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_CotisationURSSAF_index", path="/Tresorerie/CotisationsURSSAF", methods={"GET","HEAD"})
+     * @Route(name="treso_CotisationURSSAF_index", path="/Tresorerie/CotisationsURSSAF", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
-        $cotisations = $em->getRepository('MgateTresoBundle:CotisationURSSAF')->findAll();
+        $cotisations = $em->getRepository(CotisationURSSAF::class)->findAll();
 
         return $this->render('Treso/CotisationURSSAF/index.html.twig', ['cotisations' => $cotisations]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_CotisationURSSAF_ajouter", path="/Tresorerie/CotisationURSSAF/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
-     * @Route(name="MgateTreso_CotisationURSSAF_modifier", path="/Tresorerie/CotisationURSSAF/Modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="treso_CotisationURSSAF_ajouter", path="/Tresorerie/CotisationURSSAF/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
+     * @Route(name="treso_CotisationURSSAF_modifier", path="/Tresorerie/CotisationURSSAF/Modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param         $id
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, $id)
+    public function modifier(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$cotisation = $em->getRepository('MgateTresoBundle:CotisationURSSAF')->find($id)) {
+        if (!$cotisation = $em->getRepository(CotisationURSSAF::class)->find($id)) {
             $cotisation = new CotisationURSSAF();
         }
 
@@ -60,7 +60,7 @@ class CotisationURSSAFController extends AbstractController
                 $em->persist($cotisation);
                 $em->flush();
 
-                return $this->redirectToRoute('MgateTreso_CotisationURSSAF_index', []);
+                return $this->redirectToRoute('treso_CotisationURSSAF_index', []);
             }
         }
 
@@ -72,19 +72,19 @@ class CotisationURSSAFController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="MgateTreso_CotisationURSSAF_supprimer", path="/Tresorerie/CotisationURSSAF/Supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="treso_CotisationURSSAF_supprimer", path="/Tresorerie/CotisationURSSAF/Supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param CotisationURSSAF $cotisation
      *
      * @return RedirectResponse
      */
-    public function supprimerAction(CotisationURSSAF $cotisation)
+    public function supprimer(CotisationURSSAF $cotisation)
     {
         $em = $this->getDoctrine()->getManager();
 
         $em->remove($cotisation);
         $em->flush();
 
-        return $this->redirectToRoute('MgateTreso_CotisationURSSAF_index', []);
+        return $this->redirectToRoute('treso_CotisationURSSAF_index', []);
     }
 }

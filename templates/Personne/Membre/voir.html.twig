@@ -1,4 +1,4 @@
-{% extends "MgatePersonneBundle::layout.html.twig" %}
+{% extends "Personne/layout.html.twig" %}
 
 {% block title %}
     {{ 'membre.affichage_membre'|trans({}, 'personne') }} {{ parent() }}
@@ -6,7 +6,7 @@
 
 {% block breadcrumb %}
     <ul class="breadcrumb no-margin pull-right">
-        <li><a href="{{ path('MgatePersonne_membre_homepage') }}">{{ 'membre.liste_membre'|trans({}, 'personne') }}</a></li>
+        <li><a href="{{ path('personne_membre_homepage') }}">{{ 'membre.liste_membre'|trans({}, 'personne') }}</a></li>
         <li class="active">{{ membre.personne.PrenomNom }}</li>
     </ul>
 {% endblock %}
@@ -24,11 +24,11 @@
         <div class="tab-content">
             <!-- FICHE -->
             <div class="tab-pane active" id="tab1">
-                {% include "MgatePersonneBundle:Membre:TabVoir/fiche.html.twig" with  {'membre':  membre} %}
+                {% include "Personne/Membre/TabVoir/fiche.html.twig" with  {'membre':  membre} %}
             </div>
             <!-- DOCUMENTS -->
             <div class="tab-pane" id="tab2">
-                {% include "MgatePersonneBundle:Membre:TabVoir/documents.html.twig" with  {'membre':  membre} %}
+                {% include "Personne/Membre/TabVoir/documents.html.twig" with  {'membre':  membre} %}
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
             </div>
         {% endif %}
         <div class="col-md-4 col-sm-5 col-xs-6">
-            <a class="btn btn-warning" href="{{ path('MgatePersonne_membre_modifier', {'id': membre.id}) }}">
+            <a class="btn btn-warning" href="{{ path('personne_membre_modifier', {'id': membre.id}) }}">
                 {{ 'membre.modifier_membre'|trans({}, 'personne') }}
             </a>
         </div>

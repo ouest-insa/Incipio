@@ -1,4 +1,4 @@
-{% extends "MgateFormationBundle::layout.html.twig" %}
+{% extends "Formation/layout.html.twig" %}
 
 {% block content_title %}
     {{ formation.titre }}
@@ -22,7 +22,7 @@
     <div class="row">
         {% if is_granted('ROLE_CA') %}
             <div class="col-md-2 col-xs-4">
-                <a href="{{ path('Mgate_formation_modifier', {'id': formation.id}) }}" class="btn btn-primary">
+                <a href="{{ path('formation_modifier', {'id': formation.id}) }}" class="btn btn-primary">
                     {{ 'formation.formation_modifier'|trans({}, 'formation') }}
                 </a>
             </div>

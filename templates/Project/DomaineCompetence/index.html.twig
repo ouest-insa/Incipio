@@ -1,4 +1,4 @@
-{% extends "MgateSuiviBundle::layout.html.twig" %}
+{% extends "Project/layout.html.twig" %}
 
 
 {% block stylesheets %}
@@ -9,11 +9,11 @@
 {% endblock %}
 
 {% block title %}
-    {{ 'suivi.domaines_competences_affichage'|trans({}, 'suivi') }} - {{ parent() }}
+    {{ 'suivi.domaines_competences_affichage'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.domaines_competences_affichage'|trans({}, 'suivi') }}
+    {{ 'suivi.domaines_competences_affichage'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
@@ -21,7 +21,7 @@
         <table>
             <tr>
                 <td>{{ form_widget(form) }}</td>
-                <td><input type="submit" value="{{ 'suivi.ajouter'|trans({}, 'suivi') }}" class="btn btn-success"/></td>
+                <td><input type="submit" value="{{ 'suivi.ajouter'|trans({}, 'project') }}" class="btn btn-success"/></td>
             </tr>
         </table>
     {{ form_end(form) }}
@@ -29,15 +29,15 @@
     <table class="display dataTable table table-bordered table-striped" id="listeDomaines">
         <thead>
         <tr>
-            <th>{{ 'suivi.action'|trans({}, 'suivi') }}</th>
-            <th>{{ 'suivi.domaine'|trans({}, 'suivi') }}</th>
+            <th>{{ 'suivi.action'|trans({}, 'project') }}</th>
+            <th>{{ 'suivi.domaine'|trans({}, 'project') }}</th>
         </tr>
         </thead>
         <tbody>
         {% for domaine in domaines %}
             <tr>
                 <td>
-                    <a href="{{ path('MgateSuivi_domaine_delete', { 'id' : domaine.id }) }}">
+                    <a href="{{ path('project_domaine_delete', { 'id' : domaine.id }) }}">
                         <i class="fa fa-times"></i>
                     </a>
                 </td>

@@ -2,11 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Competence;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use App\Entity\Hr\Competence;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadCompetenceData implements FixtureInterface
+class LoadCompetenceData extends Fixture
 {
     /**
      * {@inheritdoc}

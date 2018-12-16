@@ -44,7 +44,7 @@ class Facture implements TresoDetailableInterface
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\SuiviBundle\Entity\Etude", inversedBy="factures",  cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project\Etude", inversedBy="factures",  cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     protected $etude;
@@ -52,7 +52,7 @@ class Facture implements TresoDetailableInterface
     /**
      * @Assert\NotNull()
      *
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Prospect", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Prospect", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $beneficiaire;

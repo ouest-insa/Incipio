@@ -24,7 +24,7 @@ framework:
 
     validation:
         enable_annotations: true
-        strict_email: true
+        email_validation_mode: strict
 
     cache:
         # Put the unique name of your app here: the prefix seed

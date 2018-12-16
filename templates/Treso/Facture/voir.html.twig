@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block title %}
     {{ 'treso.facture'|trans({}, 'treso') }} {{ facture.reference }} - {{ parent() }}
@@ -10,11 +10,11 @@
 
 {% block breadcrumb_items %}
     <li>
-        <a href="{{ path('MgateTreso_Facture_index') }}">{{ 'treso.factures_liste'|trans({}, 'treso') }}</a>
+        <a href="{{ path('treso_Facture_index') }}">{{ 'treso.factures_liste'|trans({}, 'treso') }}</a>
     </li>
     {% if facture.etude is not null %}
         <li>
-            <a href="{{ path('MgateSuivi_etude_voir', {'nom': facture.etude.nom }) }}">{{ facture.etude.nom }}</a>
+            <a href="{{ path('project_etude_voir', {'nom': facture.etude.nom }) }}">{{ facture.etude.nom }}</a>
         </li>
     {% endif %}
 {% endblock %}
@@ -100,9 +100,9 @@
     </table>
     <div class="row">
         <div class="col-md-3 col-xs-6">
-            <a href="{{ path('Mgate_publi_publiposter', {
+            <a href="{{ path('publish_publiposter', {
                 'templateName' : facture.typeAbbrToString ,
-                'rootName' : constant('\\Mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_FACTURE'),
+                'rootName' : constant('\\App\\Controller\\Publish\\TraitementController::ROOTNAME_FACTURE'),
                 'rootObject_id' : facture.id}) }}"
                class="btn btn-success"
                >
@@ -111,7 +111,7 @@
         </div>
         {% if is_granted('ROLE_TRESO') %}
             <div class="col-md-3 col-xs-6">
-                <a href="{{ path('MgateTreso_Facture_modifier', {'id': facture.id}) }}" class="btn btn-primary">
+                <a href="{{ path('treso_Facture_modifier', {'id': facture.id}) }}" class="btn btn-primary">
                     {{ 'treso.facture_modifier'|trans({}, 'treso') }}
                 </a>
             </div>

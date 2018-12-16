@@ -1,4 +1,4 @@
-{% extends "MgateDashboardBundle::layout.html.twig" %}
+{% extends "Dashboard/layout.html.twig" %}
 
 {% block title %}
     Recherche - {{ search }} - {{ parent() }}
@@ -27,7 +27,7 @@
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title"><a
-                            href="{{ path('MgateSuivi_etude_voir', {'nom': project.nom}) }}">Etude {{ project.nom }}</a>
+                            href="{{ path('project_etude_voir', {'nom': project.nom}) }}">Etude {{ project.nom }}</a>
                 </h3>
             </div>
             <div class="box-body">
@@ -47,7 +47,7 @@
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    <a href="{{ path('MgatePersonne_prospect_voir', {'id': prospect.id}) }}">Prospect {{ prospect.nom }}</a>
+                    <a href="{{ path('personne_prospect_voir', {'id': prospect.id}) }}">Prospect {{ prospect.nom }}</a>
                 </h3>
             </div>
             <div class="box-body">
@@ -68,10 +68,10 @@
             <div class="box-header with-border">
                 <h3 class="box-title">
                     {% if person.employe is not null %}
-                    <a href="{{ path('MgatePersonne_prospect_voir', {'id': person.employe.prospect.id}) }}">Employé {{ person.prenom }} {{ person.nom }}</a>
+                    <a href="{{ path('personne_prospect_voir', {'id': person.employe.prospect.id}) }}">Employé {{ person.prenom }} {{ person.nom }}</a>
                     {% endif %}
                     {% if person.membre is not null %}
-                        <a href="{{ path('MgatePersonne_membre_voir', {'id': person.membre.id}) }}">Membre {{ person.prenom }} {{ person.nom }}</a>
+                        <a href="{{ path('personne_membre_voir', {'id': person.membre.id}) }}">Membre {{ person.prenom }} {{ person.nom }}</a>
                     {% endif %}
                 </h3>
             </div>

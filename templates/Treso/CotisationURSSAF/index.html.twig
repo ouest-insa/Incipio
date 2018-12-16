@@ -1,4 +1,4 @@
-{% extends "MgateTresoBundle::layout.html.twig" %}
+{% extends "Treso/layout.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content_bundle %}
-    <a href="{{ path('MgateTreso_CotisationURSSAF_ajouter') }}" class="btn btn-success">{{ 'treso.cotisations_urssaf_ajouter'|trans({}, 'treso') }}</a>
+    <a href="{{ path('treso_CotisationURSSAF_ajouter') }}" class="btn btn-success">{{ 'treso.cotisations_urssaf_ajouter'|trans({}, 'treso') }}</a>
     <table class="display dataTable table table-bordered table-striped dt-responsive" id="listeCotisations">
         <thead>
         <tr>
@@ -28,7 +28,7 @@
         </thead>
         {% for cotisation in cotisations %}
             <tr style="text-align: right;" class="{{ cotisation.dateFin < date() ? 'danger' : 'success' }}">
-                <td><a href="{{ path('MgateTreso_CotisationURSSAF_modifier', {'id' : cotisation.id }) }}"
+                <td><a href="{{ path('treso_CotisationURSSAF_modifier', {'id' : cotisation.id }) }}"
                        title="{{ 'treso.modifier'|trans({}, 'treso') }}"><span class="fa fa-pencil"></span></a></td>
                 <td>{{ cotisation.dateDebut | date('d/m/Y') }}</td>
                 <td>{{ cotisation.dateFin | date('d/m/Y') }}</td>

@@ -11,8 +11,8 @@
 
 namespace App\Entity\Project;
 
-use App\Entity\Personne;
-use App\Entity\Thread;
+use App\Entity\Comment\Thread;
+use App\Entity\Personne\Personne;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -24,6 +24,9 @@ class DocType
      */
     private $knownSignataire2 = false;
 
+    /**
+     * @var Personne
+     */
     private $newSignataire2;
 
     /**
@@ -36,7 +39,7 @@ class DocType
     private $version;
 
     /**
-     * @ORM\OneToOne(targetEntity="\Mgate\CommentBundle\Entity\Thread", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Comment\Thread", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $thread;
@@ -72,7 +75,7 @@ class DocType
     /**
      * @var Personne
      *
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Personne", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $signataire1;
@@ -80,7 +83,7 @@ class DocType
     /**
      * @var Personne
      *
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Personne", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $signataire2;
@@ -151,6 +154,9 @@ class DocType
         $this->knownSignataire2 = $boolean;
     }
 
+    /**
+     * @return Personne
+     */
     public function getNewSignataire2()
     {
         return $this->newSignataire2;

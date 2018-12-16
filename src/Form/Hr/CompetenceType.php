@@ -37,6 +37,6 @@ class CompetenceType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'N7consulting_rhbundle_competence';
+        return 'hr_competence';
     }
 }

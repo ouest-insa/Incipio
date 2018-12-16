@@ -1,4 +1,4 @@
-{% extends "::layout.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block content_bundle %}
 
@@ -30,7 +30,7 @@
             </table>
         </div>
     {% endif %}
-    <form action="{{ path('Mgate_publi_telecharger') }}" method="post">
+    <form action="{{ path('publish_telecharger') }}" method="post">
         <input type="submit" value="Telecharger"/>
     </form>
 {% endblock %}

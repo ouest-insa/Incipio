@@ -13,6 +13,7 @@ namespace App\Controller\Treso;
 
 use App\Entity\Project\Etude;
 use App\Entity\Project\Phase;
+use App\Entity\Treso\Compte;
 use App\Entity\Treso\Facture;
 use App\Entity\Treso\FactureDetail;
 use App\Form\Treso\FactureType;
@@ -31,25 +32,25 @@ class FactureController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_Facture_index", path="/Tresorerie/Factures", methods={"GET","HEAD"})
+     * @Route(name="treso_Facture_index", path="/Tresorerie/Factures", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
-        $factures = $em->getRepository('MgateTresoBundle:Facture')->getFactures();
+        $factures = $em->getRepository(Facture::class)->getFactures();
 
         return $this->render('Treso/Facture/index.html.twig', ['factures' => $factures]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_Facture_voir", path="/Tresorerie/Facture/{id}", methods={"GET","HEAD"})
+     * @Route(name="treso_Facture_voir", path="/Tresorerie/Facture/{id}", methods={"GET","HEAD"})
      *
      * @param Facture $facture
      *
      * @return Response
      */
-    public function voirAction(Facture $facture)
+    public function voir(Facture $facture)
     {
         $deleteForm = $this->createDeleteForm($facture);
 
@@ -60,7 +61,7 @@ class FactureController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_Facture_ajouter", path="/Tresorerie/Facture/Ajouter/{id}", methods={"GET","HEAD","POST"}, defaults={"id": ""})
+     * @Route(name="treso_Facture_ajouter", path="/Tresorerie/Facture/Ajouter/{id}", methods={"GET","HEAD","POST"}, defaults={"id": ""})
      *
      * @param Request                   $request   Http request
      * @param Etude                     $etude     Etude to which the Facture will be added
@@ -68,7 +69,7 @@ class FactureController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function ajouterAction(Request $request, ?Etude $etude, ConversionLettreFormatter $formatter)
+    public function ajouter(Request $request, ?Etude $etude, ConversionLettreFormatter $formatter)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -95,7 +96,7 @@ class FactureController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Facture ajoutée');
 
-                return $this->redirectToRoute('MgateTreso_Facture_voir', ['id' => $facture->getId()]);
+                return $this->redirectToRoute('treso_Facture_voir', ['id' => $facture->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -107,14 +108,14 @@ class FactureController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_Facture_modifier", path="/Tresorerie/Facture/Modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="treso_Facture_modifier", path="/Tresorerie/Facture/Modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
      * @param Facture $facture
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, Facture $facture)
+    public function modifier(Request $request, Facture $facture)
     {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(FactureType::class, $facture);
@@ -137,7 +138,7 @@ class FactureController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Facture modifiée');
 
-                return $this->redirectToRoute('MgateTreso_Facture_voir', ['id' => $facture->getId()]);
+                return $this->redirectToRoute('treso_Facture_voir', ['id' => $facture->getId()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -152,14 +153,14 @@ class FactureController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="MgateTreso_Facture_supprimer", path="/Tresorerie/Facture/Supprimer/{id}", methods={"DELETE"})
+     * @Route(name="treso_Facture_supprimer", path="/Tresorerie/Facture/Supprimer/{id}", methods={"DELETE"})
      *
      * @param Facture $facture
      * @param Request $request
      *
      * @return RedirectResponse
      */
-    public function supprimerAction(Facture $facture, Request $request)
+    public function supprimer(Facture $facture, Request $request)
     {
         $form = $this->createDeleteForm($facture);
 
@@ -176,7 +177,7 @@ class FactureController extends AbstractController
             $this->addFlash('danger', 'Erreur dans le formulaire');
         }
 
-        return $this->redirectToRoute('MgateTreso_Facture_index');
+        return $this->redirectToRoute('treso_Facture_index');
     }
 
     /**
@@ -189,7 +190,7 @@ class FactureController extends AbstractController
         return $this->createFormBuilder(['id' => $facture->getId()])
             ->add('id', HiddenType::class)
             ->setmethod('DELETE')
-            ->setAction($this->generateUrl('MgateTreso_Facture_supprimer', ['id' => $facture->getId()]))
+            ->setAction($this->generateUrl('treso_Facture_supprimer', ['id' => $facture->getId()]))
             ->getForm();
     }
 
@@ -231,7 +232,7 @@ class FactureController extends AbstractController
             $facture->setObjet('Facture d\'acompte sur l\'étude ' . $etude->getReference($namingConvention) . ', correspondant au règlement de ' .
                 $formatter->moneyFormat(($etude->getPourcentageAcompte() * 100)) . ' % de l’étude.');
             $detail = new FactureDetail();
-            $detail->setCompte($em->getRepository('MgateTresoBundle:Compte')->findOneBy(['numero' => $compteAcompte]));
+            $detail->setCompte($em->getRepository(Compte::class)->findOneBy(['numero' => $compteAcompte]));
             $detail->setFacture($facture);
             $facture->addDetail($detail);
             $detail->setDescription('Acompte de ' . $formatter->moneyFormat(($etude->getPourcentageAcompte() * 100)) . ' % sur l\'étude ' .
@@ -253,7 +254,7 @@ class FactureController extends AbstractController
                 /** @var Phase $phase */
                 foreach ($etude->getPhases() as $phase) {
                     $detail = new FactureDetail();
-                    $detail->setCompte($em->getRepository('MgateTresoBundle:Compte')
+                    $detail->setCompte($em->getRepository(Compte::class)
                         ->findOneBy(['numero' => $compteEtude]));
                     $detail->setFacture($facture);
                     $facture->addDetail($detail);
@@ -264,7 +265,7 @@ class FactureController extends AbstractController
                 }
 
                 $detail = new FactureDetail();
-                $detail->setCompte($em->getRepository('MgateTresoBundle:Compte')->findOneBy(['numero' => $compteFrais]))
+                $detail->setCompte($em->getRepository(Compte::class)->findOneBy(['numero' => $compteFrais]))
                     ->setFacture($facture)
                     ->setDescription('Frais de dossier')
                     ->setMontantHT($etude->getFraisDossier());

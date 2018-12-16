@@ -29,20 +29,20 @@ class UserController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="Mgate_user_lister", path="/user/lister", methods={"GET","HEAD"})
+     * @Route(name="user_lister", path="/user/lister", methods={"GET","HEAD"})
      */
-    public function listerAction()
+    public function lister()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('MgateUserBundle:User')->findAll();
+        $entities = $em->getRepository(User::class)->findAll();
 
         return $this->render('User/Default/lister.html.twig', ['users' => $entities]);
     }
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="Mgate_user_modifier", path="/user/modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="user_modifier", path="/user/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request              $request
      * @param User                 $user
@@ -50,7 +50,7 @@ class UserController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, User $user, UserManagerInterface $userManager)
+    public function modifier(Request $request, User $user, UserManagerInterface $userManager)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -59,7 +59,7 @@ class UserController extends AbstractController
         }
 
         $form = $this->createForm(UserAdminType::class, $user, [
-            'user_class' => 'Mgate\UserBundle\Entity\User',
+            'user_class' => User::class,
             'roles' => $this->getParameter('security.role_hierarchy.roles'),
         ]);
         $deleteForm = $this->createDeleteForm($user->getId());
@@ -73,7 +73,7 @@ class UserController extends AbstractController
                 $userManager->reloadUser($user);
                 $this->addFlash('success', 'Utilisateur modifié');
 
-                return $this->redirectToRoute('Mgate_user_lister');
+                return $this->redirectToRoute('user_lister');
             }
         }
 
@@ -85,7 +85,7 @@ class UserController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="Mgate_user_supprimer", path="/user/supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="user_supprimer", path="/user/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param User    $user    the user to be deleted
      * @param Request $request
@@ -94,7 +94,7 @@ class UserController extends AbstractController
      *
      * @internal param $id
      */
-    public function deleteAction(Request $request, User $user)
+    public function delete(Request $request, User $user)
     {
         $form = $this->createDeleteForm($user->getId());
 
@@ -116,7 +116,7 @@ class UserController extends AbstractController
             $this->addFlash('success', 'Utilisateur supprimé');
         }
 
-        return $this->redirectToRoute('Mgate_user_lister');
+        return $this->redirectToRoute('user_lister');
     }
 
     private function createDeleteForm($id)
@@ -128,7 +128,7 @@ class UserController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="Mgate_user_addFromPersonne", path="/user/addFromPersonne/{id}", methods={"POST"})
+     * @Route(name="user_addFromPersonne", path="/user/addFromPersonne/{id}", methods={"POST"})
      *
      * @param Request              $request
      * @param Personne             $personne    the personne whom a user should be added
@@ -139,7 +139,7 @@ class UserController extends AbstractController
      *
      * @throws \Exception
      */
-    public function addUserFromPersonneAction(Request $request, Personne $personne, UserManagerInterface $userManager,
+    public function addUserFromPersonne(Request $request, Personne $personne, UserManagerInterface $userManager,
                                               MailerInterface $mailer)
     {
         $create_user_form = $this->createFormBuilder(['id' => $personne->getId()])
@@ -178,7 +178,7 @@ class UserController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('Mgate_user_lister');
+        return $this->redirectToRoute('user_lister');
     }
 
     private function enMinusculeSansAccent($texte)

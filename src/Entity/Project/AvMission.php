@@ -16,8 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Mgate\SuiviBundle\Entity\AvMission.
- *
  * @ORM\Table()
  * @ORM\Entity
  */
@@ -40,13 +38,13 @@ class AvMission extends DocType
 
     /**
      * @var Mission
-     * @ORM\ManyToOne(targetEntity="Mgate\SuiviBundle\Entity\Mission")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project\Mission")
      */
     private $mission;
 
     /**
      * @var int
-     * @ORM\OneToMany(targetEntity="Mgate\SuiviBundle\Entity\RepartitionJEH", mappedBy="avMission", cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Project\RepartitionJEH", mappedBy="avMission", cascade={"persist","remove"})
      */
     private $nouvelleRepartition;
 

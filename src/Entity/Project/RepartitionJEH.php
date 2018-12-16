@@ -31,7 +31,7 @@ class RepartitionJEH
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\SuiviBundle\Entity\Mission", inversedBy="repartitionsJEH")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project\Mission", inversedBy="repartitionsJEH")
      */
     private $mission;
 

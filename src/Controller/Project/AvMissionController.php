@@ -28,7 +28,7 @@ class AvMissionController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_avmission_ajouter", path="/suivi/avmission/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
+     * @Route(name="project_avmission_ajouter", path="/suivi/avmission/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -36,7 +36,7 @@ class AvMissionController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function add(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -55,7 +55,7 @@ class AvMissionController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Avenant de mission ajouté');
 
-                return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -68,7 +68,7 @@ class AvMissionController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_avmission_modifier", path="/suivi/avmission/modifier/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_avmission_modifier", path="/suivi/avmission/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param AvMission              $avmission
@@ -76,7 +76,7 @@ class AvMissionController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifierAction(Request $request, AvMission $avmission, EtudePermissionChecker $permChecker)
+    public function modifier(Request $request, AvMission $avmission, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -94,7 +94,7 @@ class AvMissionController extends AbstractController
             if ($form->isValid()) {
                 $em->flush();
 
-                return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             }
         }
         $deleteForm = $this->createDeleteForm($avmission);
@@ -109,7 +109,7 @@ class AvMissionController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="MgateSuivi_avmission_delete", path="/suivi/avmission/supprimer/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_avmission_delete", path="/suivi/avmission/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
      * @param AvMission              $av
      * @param Request                $request
@@ -117,7 +117,7 @@ class AvMissionController extends AbstractController
      *
      * @return RedirectResponse
      */
-    public function deleteAction(AvMission $av, Request $request, EtudePermissionChecker $permChecker)
+    public function delete(AvMission $av, Request $request, EtudePermissionChecker $permChecker)
     {
         $form = $this->createDeleteForm($av);
 
@@ -135,7 +135,7 @@ class AvMissionController extends AbstractController
             $this->addFlash('success', 'Avenant au RM supprimé');
         }
 
-        return $this->redirectToRoute('MgateSuivi_etude_voir', ['nom' => $av->getEtude()->getNom()]);
+        return $this->redirectToRoute('project_etude_voir', ['nom' => $av->getEtude()->getNom()]);
     }
 
     private function createDeleteForm(AvMission $contact)

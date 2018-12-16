@@ -11,12 +11,10 @@
 
 namespace App\Entity\Project;
 
-use App\Entity\Personne;
+use App\Entity\Personne\Personne;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Mgate\SuiviBundle\Entity\Ap.
- *
  * @ORM\Table()
  * @ORM\Entity
  */
@@ -45,7 +43,7 @@ class Ap extends DocType
     private $nbrDev;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Personne")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne")
      * @ORM\JoinColumn(nullable=true)
      */
     protected $contactMgate;

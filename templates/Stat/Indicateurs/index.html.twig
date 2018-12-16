@@ -1,4 +1,4 @@
-{% extends "MgateStatBundle::layout.html.twig" %}
+{% extends "Stat/layout.html.twig" %}
 
 {% block content_bundle %}
     <div class="nav-tabs-custom">
@@ -90,7 +90,7 @@
     <script>
         function getChartAsync(sender, chart) {
             $.get(
-                '{{ path('Mgate_indicateurs_ajax_suivi') }}',
+                '{{ path('stat_ajax_suivi') }}',
                 {chartMethode: chart})
                 .done(function (data) {
                     $('#jsChart').append(data);

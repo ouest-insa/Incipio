@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CotisationURSSAF.
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Mgate\TresoBundle\Entity\CotisationURSSAFRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Treso\CotisationURSSAFRepository")
  */
 class CotisationURSSAF
 {

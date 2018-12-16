@@ -1,4 +1,4 @@
-{% extends "MgateUserBundle::layout.html.twig" %}
+{% extends "User/layout.html.twig" %}
 
 {% block title %}
     {{ 'user.utilisateur_modifier_un'|trans({}, 'user') }} - {{ parent() }}
@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block breadcrumb_items %}
-    <li><a href="{{ path('Mgate_user_lister') }}">{{ 'user.utilisateurs_lister'|trans({}, 'user') }}</a></li>
+    <li><a href="{{ path('user_lister') }}">{{ 'user.utilisateurs_lister'|trans({}, 'user') }}</a></li>
 {% endblock %}
 
 {% block breadcrumb_active %}
@@ -83,7 +83,7 @@
 
         <div class="col-md-2 col-xs-4">
 
-            <form action="{{ path('Mgate_user_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+            <form action="{{ path('user_supprimer', { 'id': form.vars.value.id }) }}" method="post">
                 {{ form_widget(delete_form) }}
                 <button class="btn btn-danger bootbox-confirm"
                         data-content="Êtes-vous sûr de vouloir supprimer définitivement cet utilisateur ?">Supprimer

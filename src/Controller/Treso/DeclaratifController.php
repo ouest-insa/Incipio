@@ -13,6 +13,7 @@ namespace App\Controller\Treso;
 
 use App\Entity\Treso\BV;
 use App\Entity\Treso\Facture;
+use App\Entity\Treso\NoteDeFrais;
 use App\Entity\Treso\TresoDetailableInterface;
 use App\Entity\Treso\TresoDetailInterface;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType as GenemuDateType;
@@ -28,19 +29,19 @@ class DeclaratifController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_Declaratif_index", path="/Tresorerie/Declaratifs", methods={"GET","HEAD"})
+     * @Route(name="treso_Declaratif_index", path="/Tresorerie/Declaratifs", methods={"GET","HEAD"})
      */
-    public function indexAction()
+    public function index()
     {
         $em = $this->getDoctrine()->getManager();
-        $bvs = $em->getRepository('MgateTresoBundle:BV')->findAll();
+        $bvs = $em->getRepository(BV::class)->findAll();
 
         return $this->render('Treso/BV/index.html.twig', ['bvs' => $bvs]);
     }
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_Declaratif_TVA", path="/Tresorerie/Declaratifs/TVA/{year}/{month}/{trimestriel}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": "", "trimestriel": ""})
+     * @Route(name="treso_Declaratif_TVA", path="/Tresorerie/Declaratifs/TVA/{year}/{month}/{trimestriel}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": "", "trimestriel": ""})
      *
      * @param Request $request
      * @param int     $year
@@ -49,7 +50,7 @@ class DeclaratifController extends AbstractController
      *
      * @return Response
      */
-    public function tvaAction(Request $request, $year, $month, bool $trimestriel)
+    public function tva(Request $request, $year, $month, bool $trimestriel)
     {
         setlocale(LC_TIME, 'fra_fra');
         /** Date Management form */
@@ -72,7 +73,7 @@ class DeclaratifController extends AbstractController
             /** @var \DateTime $date */
             $date = $data['date'];
 
-            return $this->redirectToRoute('MgateTreso_Declaratif_TVA', ['year' => $date->format('Y'),
+            return $this->redirectToRoute('treso_Declaratif_TVA', ['year' => $date->format('Y'),
                 'month' => $date->format('m'),
                 'trimestriel' => $data['trimestriel'],
             ]);
@@ -100,15 +101,15 @@ class DeclaratifController extends AbstractController
         if ($trimestriel) {
             $periode = 'Déclaratif pour la période : ' . date('F Y', $date->getTimestamp()) . ' - ' . date('F Y', $date->modify('+2 month')->getTimestamp());
             for ($i = 0; $i < 3; ++$i) {
-                $nfs = $em->getRepository('MgateTresoBundle:NoteDeFrais')->findAllByMonth($month, $year, true);
-                $fas = $em->getRepository('MgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_ACHAT, $month, $year, true);
-                $fvs = $em->getRepository('MgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_VENTE, $month, $year, true);
+                $nfs = $em->getRepository(NoteDeFrais::class)->findAllByMonth($month, $year, true);
+                $fas = $em->getRepository(Facture::class)->findAllTVAByMonth(Facture::TYPE_ACHAT, $month, $year, true);
+                $fvs = $em->getRepository(Facture::class)->findAllTVAByMonth(Facture::TYPE_VENTE, $month, $year, true);
             }
         } else {
             $periode = 'Déclaratif pour la période : ' . date('F Y', $date->getTimestamp());
-            $nfs = $em->getRepository('MgateTresoBundle:NoteDeFrais')->findAllByMonth($month, $year);
-            $fas = $em->getRepository('MgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_ACHAT, $month, $year);
-            $fvs = $em->getRepository('MgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_VENTE, $month, $year);
+            $nfs = $em->getRepository(NoteDeFrais::class)->findAllByMonth($month, $year);
+            $fas = $em->getRepository(Facture::class)->findAllTVAByMonth(Facture::TYPE_ACHAT, $month, $year);
+            $fvs = $em->getRepository(Facture::class)->findAllTVAByMonth(Facture::TYPE_VENTE, $month, $year);
         }
 
         /*
@@ -222,7 +223,7 @@ class DeclaratifController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="MgateTreso_Declaratif_BRC", path="/Tresorerie/Declaratifs/BRC/{year}/{month}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": ""})
+     * @Route(name="treso_Declaratif_BRC", path="/Tresorerie/Declaratifs/BRC/{year}/{month}", methods={"GET","HEAD","POST"}, defaults={"year": "", "month": ""})
      *
      * @param Request $request
      * @param null    $year
@@ -230,7 +231,7 @@ class DeclaratifController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function brcAction(Request $request, $year, $month)
+    public function brc(Request $request, $year, $month)
     {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder(['message' => 'Date'])
@@ -249,7 +250,7 @@ class DeclaratifController extends AbstractController
             /** @var \DateTime $date */
             $date = $data['date'];
 
-            return $this->redirectToRoute('MgateTreso_Declaratif_BRC', ['year' => $date->format('Y'),
+            return $this->redirectToRoute('treso_Declaratif_BRC', ['year' => $date->format('Y'),
                 'month' => $date->format('m'),
             ]);
         }
@@ -260,7 +261,7 @@ class DeclaratifController extends AbstractController
             $year = $date->format('Y');
         }
 
-        $bvs = $em->getRepository('MgateTresoBundle:BV')->findAllByMonth($month, $year);
+        $bvs = $em->getRepository(BV::class)->findAllByMonth($month, $year);
 
         $salarieRemunere = [];
         /** @var BV $bv */
