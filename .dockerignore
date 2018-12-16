@@ -7,7 +7,11 @@
 !src
 !templates
 !translations
-!var
+!var/documents
+!var/key_value_store
+!var/sessions/.gitkeep
+!behat.yml
+!.env
 !composer.json
 !composer.lock
 !LICENCE

@@ -44,22 +44,22 @@ COPY docker/web/vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/web/php.ini /usr/local/etc/php/php.ini
 COPY docker/web/composer.sh /usr/bin/composer.sh
 
+# Install composer
+RUN /usr/bin/composer.sh \
+    && mv composer.phar /usr/bin/composer \
+    && composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative \
+    && composer clear-cache
+
 # Add the application
 COPY . /app
 WORKDIR /app
 
-# Install composer
-RUN ./docker/web/composer.sh \
-    && mv composer.phar /usr/bin/composer \
-    && composer global require "hirak/prestissimo:^0.3"
-
-RUN \
-    # Remove var directory if it's accidentally included
-    (rm -rf var || true) \
-    # Create the var sub-directories
-    && mkdir -p var/cache var/logs var/sessions \
+RUN mkdir -p var/cache var/logs var/sessions \
     # Install dependencies
-    && composer install --optimize-autoloader --no-scripts \
+    && composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest \
+    && composer clear-cache \
+    && composer dump-autoload --classmap-authoritative --no-dev \
+    && composer run-script --no-dev post-install-cmd \
     # Fixes permissions issues in non-dev mode
     && chown -R www-data . var/cache var/logs var/sessions
 

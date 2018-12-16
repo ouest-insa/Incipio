@@ -17,19 +17,10 @@ main() {
 
     chown -R "$owner:$group" /var/lock/apache* /var/log/apache* /var/run/apache*
     chown -R "$owner:$group" var
-    chown -R "$owner:$group" web/tmp
+    chown -R "$owner:$group" public/tmp
     # clean web/tmp folder from exported file
     rm -f public/tmp/*.json public/tmp/*.png public/tmp/*--*
     exec /usr/sbin/apache2ctl "$@"
-}
-
-##
-# Generate a random sixteen-character
-# string of alphabetical characters
-randname() {
-    local -x LC_ALL=C
-    tr -dc '[:lower:]' < /dev/urandom |
-        dd count=1 bs=16 2>/dev/null
 }
 
 main "$@"

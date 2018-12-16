@@ -6,19 +6,17 @@ services:
         build:
             context: .
             dockerfile: ./docker/web/Dockerfile
-        environment:
-            # That parameter is set to prod by the auto-install script.
-            # Don't forget to set it manually to prod if you don't use the auto-install script
-            SYMFONY_ENV: dev
-            TECHNICAL_FROM: REPLACE_WITH_YOUR_EMAIL
-            TECHNICAL_TO: REPLACE_WITH_YOUR_EMAIL
-            TECHNICAL_HOST: REPLACE_WITH_YOUR_HOST
+        env_file:
+            - .env.prod
         depends_on:
             - database
             - mailer
         volumes:
-            - .:/app
-        restart: "no"
+            - ./var/documents:/app/var/documents
+            - ./var/key_value_store:/app/var/key_value_store
+            - ./var/sessions:/app/var/sessions
+            - ./var/log:/app/var/log
+        restart: no
         labels:
             - "traefik.backend=web-jeyser"
             - "traefik.frontend.rule=Host:REPLACE_WITH_YOUR_HOST"
@@ -33,7 +31,7 @@ services:
         volumes:
             # mysql
             - "./docker/mysql:/var/lib/mysql"
-        restart: "no"
+        restart: no
         labels:
             - traefik.enable=false
 
@@ -51,12 +49,12 @@ services:
             - "443:443"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-        restart: "no"
+        restart: no
         labels:
             - traefik.enable=false
 
     mailer:
         build: ./docker/mail
-        restart: "no"
+        restart: no
         labels:
             - traefik.enable=false
