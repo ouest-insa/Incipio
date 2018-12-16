@@ -11,9 +11,9 @@
 
 namespace App\Entity\Project;
 
-use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Thread;
 use App\Entity\Personne;
+use App\Entity\Thread;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /** @ORM\MappedSuperclass */

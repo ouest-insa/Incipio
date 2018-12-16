@@ -11,8 +11,8 @@
 
 namespace App\Entity\Project;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Personne;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Mgate\SuiviBundle\Entity\Ap.

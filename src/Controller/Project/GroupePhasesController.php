@@ -11,7 +11,6 @@
 
 namespace App\Controller\Project;
 
-
 use App\Entity\Project\Etude;
 use App\Entity\Project\GroupePhases;
 use App\Form\Project\GroupesPhasesType;

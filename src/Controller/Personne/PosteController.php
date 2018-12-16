@@ -86,12 +86,11 @@ class PosteController extends AbstractController
      * @param ObjectManager $em
      *
      * @return RedirectResponse|Response
-     * @internal param $id
      *
+     * @internal param $id
      */
     public function modifierAction(Request $request, Poste $poste, ObjectManager $em)
     {
-
         // On passe l'$article récupéré au formulaire
         $form = $this->createForm(PosteType::class, $poste);
         $deleteForm = $this->createDeleteForm($poste->getId());
@@ -140,8 +139,9 @@ class PosteController extends AbstractController
 
                 return $this->redirectToRoute('MgatePersonne_poste_homepage');
             }
-                $this->addFlash('danger', 'Impossible de supprimer un poste ayant des membres.');
-            }
+            $this->addFlash('danger', 'Impossible de supprimer un poste ayant des membres.');
+        }
+
         return $this->redirectToRoute('MgatePersonne_poste_modifier', ['id' => $poste->getId()]);
     }
 

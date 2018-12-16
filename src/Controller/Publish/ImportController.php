@@ -8,9 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ImportController extends AbstractController
 {
@@ -23,8 +23,7 @@ class ImportController extends AbstractController
      * @param Request            $request
      * @param SiajeEtudeImporter $siajeImporter
      *
-     * @return Response Display an upload form for a csv resources from other crm.
-     *
+     * @return Response display an upload form for a csv resources from other crm
      */
     public function indexAction(Request $request, SiajeEtudeImporter $siajeImporter)
     {
@@ -62,7 +61,7 @@ class ImportController extends AbstractController
      * @Security("has_role('ROLE_ADMIN')")
      * @Route(name="Mgate_publi_import_format", path="/Documents/import/format/{service_number}", methods={"GET","HEAD"})
      *
-     * @param integer            $service_number id of service as stated in $this::AVAILABLE_FORMATS
+     * @param int                $service_number id of service as stated in $this::AVAILABLE_FORMATS
      *                                           Return an html snippet of how csv should be formatted to match import
      * @param SiajeEtudeImporter $siajeImporter
      *

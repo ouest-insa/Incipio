@@ -11,15 +11,14 @@
 
 namespace App\Controller\Project;
 
-
 use App\Entity\Project\DomaineCompetence;
 use App\Form\Project\DomaineCompetenceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DomaineCompetenceController extends AbstractController
 {

@@ -2,9 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Indicateur;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\Entity\Indicateur;
 
 class LoadIndicateurData implements FixtureInterface
 {

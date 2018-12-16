@@ -11,7 +11,6 @@
 
 namespace App\Controller\Personne;
 
-
 use App\Entity\Personne\Employe;
 use App\Entity\Personne\Prospect;
 use App\Form\Personne\ProspectType;

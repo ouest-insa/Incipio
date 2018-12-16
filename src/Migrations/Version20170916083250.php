@@ -2,8 +2,8 @@
 
 namespace Application\Migrations;
 
-use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Remove devco bundle, thus remove Appel table.
@@ -16,10 +16,10 @@ class Version20170916083250 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql',
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(),
             'Migration can only be executed safely on \'mysql\'.');
 
-        /**
+        /*
          * Jeyser got migrations quite late in the project.
          * This check is to keep thing working smoothly on every install: migration is not performed is its result
          * is already there.
@@ -37,7 +37,7 @@ class Version20170916083250 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql',
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(),
             'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE Appel (id INT AUTO_INCREMENT NOT NULL, suiveur_id INT NOT NULL, employe_id INT NOT NULL, prospect_id INT NOT NULL, noteAppel LONGTEXT NOT NULL COLLATE utf8_unicode_ci, dateAppel DATE NOT NULL, aRappeller TINYINT(1) DEFAULT \'1\' NOT NULL, dateRappel DATE DEFAULT NULL, INDEX IDX_C0F1FCB935E10B95 (suiveur_id), INDEX IDX_C0F1FCB91B65292 (employe_id), INDEX IDX_C0F1FCB9D182060A (prospect_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');

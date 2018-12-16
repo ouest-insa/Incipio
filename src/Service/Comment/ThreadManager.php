@@ -13,6 +13,7 @@ namespace App\Service\Comment;
 
 use App\Entity\Project\Etude;
 use Doctrine\ORM\EntityManager;
+
 //use FOS\CommentBundle\Acl\AclThreadManager as FOSthread;
 
 class ThreadManager

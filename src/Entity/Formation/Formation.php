@@ -11,9 +11,9 @@
 
 namespace App\Entity\Formation;
 
+use App\Entity\Personne;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Personne;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

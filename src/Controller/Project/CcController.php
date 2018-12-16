@@ -31,7 +31,7 @@ class CcController extends AbstractController
      * @Route(name="MgateSuivi_cc_rediger", path="/suivi/cc/rediger/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
-     * @param Etude                  $etude etude which CC should belong to
+     * @param Etude                  $etude          etude which CC should belong to
      * @param EtudePermissionChecker $permChecker
      * @param DocTypeManager         $docTypeManager
      *

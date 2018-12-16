@@ -11,8 +11,8 @@
 
 namespace App\Repository\Project;
 
-use Doctrine\ORM\EntityRepository;
 use App\Repository\Competence;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * EtudeRepository.

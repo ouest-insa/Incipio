@@ -36,7 +36,7 @@ class HelpMessageTypeExtension extends AbstractTypeExtension
         ]);
     }
 
-    static function getExtendedTypes(): iterable
+    public static function getExtendedTypes(): iterable
     {
         return ['form'];
     }

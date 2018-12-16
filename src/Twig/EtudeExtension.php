@@ -2,7 +2,6 @@
 
 namespace App\Twig;
 
-
 use App\Entity\Project\DocType;
 use App\Entity\Project\Etude;
 use App\Entity\Project\Mission;

@@ -11,7 +11,6 @@
 
 namespace App\Controller\User;
 
-
 use App\Entity\Personne\Personne;
 use App\Entity\User\User;
 use App\Form\User\UserAdminType;
@@ -88,7 +87,7 @@ class UserController extends AbstractController
      * @Security("has_role('ROLE_ADMIN')")
      * @Route(name="Mgate_user_supprimer", path="/user/supprimer/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param User    $user the user to be deleted
+     * @param User    $user    the user to be deleted
      * @param Request $request
      *
      * @return RedirectResponse
@@ -132,11 +131,12 @@ class UserController extends AbstractController
      * @Route(name="Mgate_user_addFromPersonne", path="/user/addFromPersonne/{id}", methods={"POST"})
      *
      * @param Request              $request
-     * @param Personne             $personne the personne whom a user should be added
+     * @param Personne             $personne    the personne whom a user should be added
      * @param UserManagerInterface $userManager
      * @param MailerInterface      $mailer
      *
      * @return RedirectResponse
+     *
      * @throws \Exception
      */
     public function addUserFromPersonneAction(Request $request, Personne $personne, UserManagerInterface $userManager,

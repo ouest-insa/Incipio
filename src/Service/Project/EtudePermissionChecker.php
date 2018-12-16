@@ -19,7 +19,6 @@ class EtudePermissionChecker
 {
     protected $authorizationChecker;
 
-
     public function __construct(AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->authorizationChecker = $authorizationChecker;

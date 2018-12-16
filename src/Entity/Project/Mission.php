@@ -11,9 +11,9 @@
 
 namespace App\Entity\Project;
 
+use App\Entity\Membre;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Membre;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 

@@ -11,9 +11,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Compte;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\Entity\Compte;
 
 class LoadCompteData implements FixtureInterface
 {

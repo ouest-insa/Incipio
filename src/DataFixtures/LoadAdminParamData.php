@@ -8,9 +8,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\AdminParam;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\Entity\AdminParam;
 
 /**
  * Loads the parameters modifiable through the admin form.

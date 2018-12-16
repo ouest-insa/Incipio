@@ -11,16 +11,15 @@
 
 namespace App\Controller\Project;
 
-
 use App\Entity\Project\Etude;
 use App\Entity\Project\Suivi;
 use App\Form\Project\SuiviType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class SuiviController extends AbstractController
 {

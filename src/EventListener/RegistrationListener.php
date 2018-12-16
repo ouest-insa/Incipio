@@ -25,7 +25,6 @@ class RegistrationListener implements EventSubscriberInterface
 
     private $templating;
 
-
     public function __construct(\Swift_Mailer $mailer, EngineInterface $templating)
     {
         $this->mailer = $mailer;

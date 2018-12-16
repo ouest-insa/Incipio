@@ -52,7 +52,7 @@ class ClientContactController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, Etude $etude,EtudePermissionChecker $permChecker)
+    public function addAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -93,7 +93,7 @@ class ClientContactController extends AbstractController
      *
      * @return Response
      */
-    public function voirAction(ClientContact $clientContact,EtudePermissionChecker $permChecker)
+    public function voirAction(ClientContact $clientContact, EtudePermissionChecker $permChecker)
     {
         $etude = $clientContact->getEtude();
 
@@ -165,7 +165,7 @@ class ClientContactController extends AbstractController
      *
      * @return RedirectResponse
      */
-    public function deleteAction(ClientContact $contact, Request $request,EtudePermissionChecker $permChecker)
+    public function deleteAction(ClientContact $contact, Request $request, EtudePermissionChecker $permChecker)
     {
         $form = $this->createDeleteForm($contact);
 

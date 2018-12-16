@@ -11,7 +11,6 @@
 
 namespace App\Controller\Project;
 
-
 use App\Entity\Project\Etude;
 use App\Entity\User\User;
 use App\Form\Project\EtudeType;
@@ -33,9 +32,13 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class EtudeController extends AbstractController
 {
     const STATE_ID_EN_NEGOCIATION = 1;
+
     const STATE_ID_EN_COURS = 2;
+
     const STATE_ID_EN_PAUSE = 3;
+
     const STATE_ID_TERMINEE = 4;
+
     const STATE_ID_AVORTEE = 5;
 
     /**
@@ -393,12 +396,12 @@ class EtudeController extends AbstractController
         foreach (array_reverse($etudesParMandat) as $etudesInMandat) {
             /** @var Etude $etude */
             foreach ($etudesInMandat as $etude) {
-                $form = $form->add((string)(2 * $id), HiddenType::class,
+                $form = $form->add((string) (2 * $id), HiddenType::class,
                     ['label' => 'refEtude',
                      'data' => $etude->getReference($namingConvention),
                     ]
                 )
-                    ->add((string)(2 * $id + 1), TextareaType::class,
+                    ->add((string) (2 * $id + 1), TextareaType::class,
                         ['label' => $etude->getReference($namingConvention),
                          'required' => false, 'data' => $etude->getStateDescription(),
                         ]);

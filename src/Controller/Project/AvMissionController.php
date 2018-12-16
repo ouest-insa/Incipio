@@ -14,7 +14,6 @@ namespace App\Controller\Project;
 use App\Entity\Project\AvMission;
 use App\Entity\Project\Etude;
 use App\Form\Project\AvMissionType;
-use App\Service\Project\EtudeManager;
 use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

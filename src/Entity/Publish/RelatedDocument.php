@@ -17,7 +17,6 @@ use App\Entity\Personne\Prospect;
 use App\Entity\Project\Etude;
 use Doctrine\ORM\Mapping as ORM;
 
-
 /**
  * A related document is a join table between a document and objects in the application.
  *

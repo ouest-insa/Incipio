@@ -43,11 +43,11 @@ class DocumentManager extends BaseManager
     protected $junior_id;
 
     /**
-     * @param EntityManager               $em
-     * @param                             $junior_id
-     * @param                             $authorizedStorageSize
-     * @param TokenStorage                $tokenStorage
-     * @param KernelInterface             $kernel
+     * @param EntityManager   $em
+     * @param                 $junior_id
+     * @param                 $authorizedStorageSize
+     * @param TokenStorage    $tokenStorage
+     * @param KernelInterface $kernel
      */
     public function __construct(EntityManager $em, $junior_id, $authorizedStorageSize, TokenStorage $tokenStorage,
                                 KernelInterface $kernel)

@@ -7,10 +7,10 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Filiere;
 use App\Entity\Poste;
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class LoadPosteFiliereData implements FixtureInterface
 {

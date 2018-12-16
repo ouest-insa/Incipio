@@ -11,7 +11,6 @@
 
 namespace App\Controller\Personne;
 
-
 use App\Entity\Personne\Membre;
 use App\Entity\Publish\RelatedDocument;
 use App\Form\Personne\MembreType;
@@ -131,17 +130,16 @@ class MembreController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-            $membre = new Membre();
+        $membre = new Membre();
 
-            $now = new \DateTime('now');
-            $now->modify('+ 3 year');
+        $now = new \DateTime('now');
+        $now->modify('+ 3 year');
 
-            $membre->setPromotion($now->format('Y'));
+        $membre->setPromotion($now->format('Y'));
 
-            $birth = new \DateTime('now');
-            $birth->modify('- 20 year');
-            $membre->setDateDeNaissance($birth);
-
+        $birth = new \DateTime('now');
+        $birth->modify('- 20 year');
+        $membre->setDateDeNaissance($birth);
 
         $form = $this->createForm(MembreType::class, $membre);
 
@@ -204,8 +202,8 @@ class MembreController extends AbstractController
      * @param DocumentManager $documentManager
      *
      * @return RedirectResponse|Response
-     * @internal param $id
      *
+     * @internal param $id
      */
     public function modifierAction(Request $request, Membre $membre, DocumentManager $documentManager)
     {
@@ -220,7 +218,6 @@ class MembreController extends AbstractController
             $photoUpload = $form->get('photo')->getData();
 
             if ($form->isValid()) {
-
                 /*
                  * Traitement de l'image de profil
                  */
@@ -269,7 +266,6 @@ class MembreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
             if ($membre->getPersonne()) {
                 $membre->getPersonne()->setMembre(null);
                 if ($membre->getPersonne()->getUser()) {

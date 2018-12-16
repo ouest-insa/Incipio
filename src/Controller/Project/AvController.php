@@ -29,8 +29,8 @@ class AvController extends AbstractController
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="MgateSuivi_av_ajouter", path="/suivi/av/ajouter/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
-     * @param Request      $request
-     * @param Etude        $etude
+     * @param Request                $request
+     * @param Etude                  $etude
      * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response
@@ -72,8 +72,8 @@ class AvController extends AbstractController
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="MgateSuivi_av_modifier", path="/suivi/av/modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
-     * @param Request      $request
-     * @param Av           $av
+     * @param Request                $request
+     * @param Av                     $av
      * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response

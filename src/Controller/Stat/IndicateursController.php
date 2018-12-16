@@ -11,7 +11,6 @@
 
 namespace App\Controller\Stat;
 
-
 use App\Entity\Stat\Indicateur;
 use App\Service\Project\EtudeManager;
 use App\Service\Stat\ChartFactory;
@@ -19,15 +18,17 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class IndicateursController extends AbstractController
 {
     const STATE_ID_EN_COURS_X = 2;
+
     const STATE_ID_TERMINEE_X = 4;
 
     private $chartFactory;
+
     private $etudeManager;
 
     public function __construct(ChartFactory $chartFactory, EtudeManager $etudeManager)
@@ -253,7 +254,6 @@ class IndicateursController extends AbstractController
             ];
         }
 
-
         $series = [['type' => 'pie', 'name' => 'Répartition des dépenses HT', 'data' => $data,
                     'Dépenses totale' => $montantTotal,
                    ],
@@ -321,14 +321,13 @@ class IndicateursController extends AbstractController
 
             foreach ($comptes as $libelle => $compte) {
                 $total += $compte;
-                $drilldownData[] = [$libelle, round((float)$compte, 2)];
+                $drilldownData[] = [$libelle, round((float) $compte, 2)];
             }
 
             $drilldownSeries[] = ['name' => 'Dépenses du mandat ' . $mandat, 'id' => $mandat, 'data' => $drilldownData];
-            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float)$total, 2), 'drilldown' => $mandat];
+            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float) $total, 2), 'drilldown' => $mandat];
         }
         $series = [['name' => 'Montant des dépenses', 'colorByPoint' => true, 'data' => $dataSeries]];
-
 
         $ob = $this->chartFactory->newColumnDrilldownChart($series, $drilldownSeries);
 
@@ -385,7 +384,6 @@ class IndicateursController extends AbstractController
             $data[] = ['name' => $clientType, 'y' => 100 * $nbr / $nombreClient];
         }
 
-
         $series = [['type' => 'pie', 'name' => 'Taux de fidélisation', 'data' => $data,
                     'Nombre de clients' => $nombreClient,
                    ],
@@ -435,7 +433,6 @@ class IndicateursController extends AbstractController
             $series[] = ['name' => 'Mandat ' . $mandat, 'data' => $data];
         }
 
-
         $ob = $this->chartFactory->newLineChart($series);
 
         $ob->chart->renderTo(__FUNCTION__);
@@ -475,7 +472,6 @@ class IndicateursController extends AbstractController
             $data[] = count($formations);
             $categories[] = $mandat;
         }
-
 
         $series = [['name' => 'Nombre de formations', 'colorByPoint' => true, 'data' => $data]];
         $ob = $this->chartFactory->newColumnChart($series, $categories);
@@ -543,7 +539,6 @@ class IndicateursController extends AbstractController
             }
         }
 
-
         $series = [['name' => "Taux d'avenants par mandat", 'colorByPoint' => true, 'data' => $data]];
         $ob = $this->chartFactory->newColumnChart($series, $categories);
 
@@ -589,7 +584,6 @@ class IndicateursController extends AbstractController
             $data[] = ['name' => $type, 'y' => round($CA / $chiffreDAffairesTotal * 100, 2), 'CA' => $CA];
         }
 
-
         $series = [['type' => 'pie', 'name' => 'Provenance du CA selon le type de client (tous mandats)',
                     'data' => $data, 'CA Total' => $chiffreDAffairesTotal,
                    ],
@@ -634,7 +628,6 @@ class IndicateursController extends AbstractController
             }
             $data[] = ['name' => $type, 'y' => round($nombre / $nombreClient * 100, 2), 'nombre' => $nombre];
         }
-
 
         $series = [['type' => 'pie', 'name' => 'Provenance des études selon le type de client (tous mandats)',
                     'data' => $data, 'nombreClient' => $nombreClient,
@@ -707,7 +700,6 @@ class IndicateursController extends AbstractController
             $series[] = ['name' => 'P' . $promo, 'data' => array_values($cumuls[$promo])];
         }
 
-
         $ob = $this->chartFactory->newLineChart($series);
 
         $ob->chart->renderTo(__FUNCTION__);
@@ -757,7 +749,6 @@ class IndicateursController extends AbstractController
             $categories[] = 'P' . $promo;
         }
 
-
         $series = [['name' => 'Membres', 'colorByPoint' => true, 'data' => $data]];
         $ob = $this->chartFactory->newColumnChart($series, $categories);
 
@@ -798,7 +789,6 @@ class IndicateursController extends AbstractController
             $data[] = $nombre;
             $categories[] = 'P' . $promo;
         }
-
 
         $series = [['name' => 'Intervenants', 'colorByPoint' => true, 'data' => $data]];
         $ob = $this->chartFactory->newColumnChart($series, $categories);
@@ -880,7 +870,6 @@ class IndicateursController extends AbstractController
             ],
         ];
 
-
         $ob = $this->chartFactory->newColumnChart($series, $categories);
 
         $ob->chart->renderTo(__FUNCTION__);
@@ -943,7 +932,6 @@ class IndicateursController extends AbstractController
         foreach ($mandats as $mandat => $data) {
             $series[] = ['name' => 'Mandat ' . $mandat, 'data' => $data];
         }
-
 
         $ob = $this->chartFactory->newLineChart($series);
 
@@ -1245,7 +1233,6 @@ class IndicateursController extends AbstractController
                 ++$k;
             }
         }
-
 
         $ob = $this->chartFactory->newColumnChart($series, $categories);
 

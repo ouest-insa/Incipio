@@ -2,9 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Competence;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\Entity\Competence;
 
 class LoadCompetenceData implements FixtureInterface
 {

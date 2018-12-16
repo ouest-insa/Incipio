@@ -13,16 +13,16 @@ namespace App\Controller\Dashboard;
 
 use App\Controller\Project\EtudeController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class DashboardController extends AbstractController
 {
     public const EXPIRATION = 3600; // cache on dashboard is updated every hour
-    public $statsStore;
 
+    public $statsStore;
 
     public function __construct(KeyValueStore $statsStore)
     {

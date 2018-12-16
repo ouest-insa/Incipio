@@ -11,9 +11,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\CotisationURSSAF;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\Entity\CotisationURSSAF;
 
 class LoadCotisationURSSAFData implements FixtureInterface
 {

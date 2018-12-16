@@ -11,7 +11,6 @@
 
 namespace App\Controller\Publish;
 
-
 use App\Entity\Formation\Formation;
 use App\Entity\Personne\Membre;
 use App\Entity\Project\Etude;
@@ -112,7 +111,6 @@ class DocumentController extends AbstractController
      * @param ObjectManager $em
      *
      * @return bool|RedirectResponse|Response
-     *
      */
     public function uploadEtudiantAction(Request $request, Membre $membre, ObjectManager $em)
     {

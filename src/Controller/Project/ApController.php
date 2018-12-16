@@ -21,8 +21,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ApController extends AbstractController
@@ -31,13 +31,12 @@ class ApController extends AbstractController
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="MgateSuivi_ap_rediger", path="/suivi/ap/rediger/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
-     * @param Request        $request
-     * @param Etude          $etude etude which Ap should be edited
-     * @param EtudePermissionChecker   $permChecker
-     * @param DocTypeManager $docTypeManager
+     * @param Request                $request
+     * @param Etude                  $etude          etude which Ap should be edited
+     * @param EtudePermissionChecker $permChecker
+     * @param DocTypeManager         $docTypeManager
      *
      * @return RedirectResponse|Response
-     *
      */
     public function redigerAction(Request $request, Etude $etude, EtudePermissionChecker $permChecker, DocTypeManager $docTypeManager)
     {
@@ -81,8 +80,8 @@ class ApController extends AbstractController
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="MgateSuivi_ap_suivi", path="/suivi/ap/suivi/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
-     * @param Request      $request
-     * @param Etude        $etude
+     * @param Request                $request
+     * @param Etude                  $etude
      * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response

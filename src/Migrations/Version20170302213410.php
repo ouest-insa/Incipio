@@ -3,11 +3,11 @@
 namespace Application\Migrations;
 
 use Doctrine\DBAL\Exception\TableNotFoundException;
-use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
 
 /**
- * Migration 0: Create the schema
+ * Migration 0: Create the schema.
  */
 class Version20170302213410 extends AbstractMigration
 {
@@ -17,9 +17,9 @@ class Version20170302213410 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
-        /**
+        /*
          * Jeyser got migrations quite late in the project. And at the beginning, they were used as a way to execute
          * SQL and were not thought to be used to manage the whole schema.
          * This migration has been added much later after the first migration. Therefore, we have to ensure that every
@@ -32,7 +32,7 @@ class Version20170302213410 extends AbstractMigration
          */
         try {
             $this->connection->executeQuery('SELECT 1 FROM fos_user LIMIT 1;')->execute();
-            $this->skipIf(true,'Table fos_user already available');
+            $this->skipIf(true, 'Table fos_user already available');
         } catch (TableNotFoundException $e) {
             // table not available, do nothing, just keep on and create the tables.
         }
@@ -177,7 +177,7 @@ class Version20170302213410 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE Personne DROP FOREIGN KEY FK_F6B8ABB9A76ED395');
         $this->addSql('ALTER TABLE Comment DROP FOREIGN KEY FK_5BC96BF0F675F31B');

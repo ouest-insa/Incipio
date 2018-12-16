@@ -24,8 +24,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class FactureController extends AbstractController
 {
@@ -62,8 +62,8 @@ class FactureController extends AbstractController
      * @Security("has_role('ROLE_TRESO')")
      * @Route(name="MgateTreso_Facture_ajouter", path="/Tresorerie/Facture/Ajouter/{id}", methods={"GET","HEAD","POST"}, defaults={"id": ""})
      *
-     * @param Request                   $request Http request
-     * @param Etude                     $etude   Etude to which the Facture will be added
+     * @param Request                   $request   Http request
+     * @param Etude                     $etude     Etude to which the Facture will be added
      * @param ConversionLettreFormatter $formatter
      *
      * @return RedirectResponse|Response

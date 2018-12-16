@@ -11,8 +11,8 @@
 
 namespace App\Repository\Personne;
 
-use Doctrine\ORM\EntityRepository;
 use App\Repository\Competence;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * MembreRepository.

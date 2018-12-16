@@ -13,9 +13,9 @@
 
 namespace App\Entity\User;
 
+use App\Entity\Personne;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use App\Entity\Personne;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**

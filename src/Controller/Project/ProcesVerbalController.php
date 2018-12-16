@@ -11,7 +11,6 @@
 
 namespace App\Controller\Project;
 
-
 use App\Entity\Project\Etude;
 use App\Entity\Project\ProcesVerbal;
 use App\Form\Project\ProcesVerbalSubType;
@@ -129,7 +128,7 @@ class ProcesVerbalController extends AbstractController
      *
      * @param Request                $request
      * @param Etude                  $etude
-     * @param string                 $type PVR or PVRI
+     * @param string                 $type        PVR or PVRI
      * @param EtudePermissionChecker $permChecker
      *
      * @return RedirectResponse|Response
