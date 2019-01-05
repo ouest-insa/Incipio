@@ -7,18 +7,18 @@
                     {{ 'indicateur.donnees_brutes'|trans({}, 'indicateur') }}</a></li>
             <li class=""><a href="#gestion" data-toggle="tab" data-loaded="false">
                     {{ 'indicateur.gestion_associative'|trans({}, 'indicateur') }}</a></li>
-            <li class=""><a href="#rfp" data-toggle="tab" data-loaded="false">
+            <li class=""><a href="#formations" data-toggle="tab" data-loaded="false">
                     {{ 'indicateur.formations'|trans({}, 'indicateur') }}</a></li>
             <li class=""><a href="#suivi" data-toggle="tab" data-loaded="false">
                     {{ 'indicateur.gestion_etudes'|trans({}, 'indicateur') }}</a></li>
             <li class=""><a href="#treso" data-toggle="tab" data-loaded="false">
                     {{ 'indicateur.tresorerie'|trans({}, 'indicateur') }}</a></li>
-            <li class=""><a href="#com" data-toggle="tab" data-loaded="false">
+            <li class=""><a href="#devco" data-toggle="tab" data-loaded="false">
                     {{ 'indicateur.developpement_commercial'|trans({}, 'indicateur') }}</a></li>
         </ul>
     </div>
 
-    <div id="myTabContent" class="tab-content">
+    <div id="indicateursTabs" class="tab-content">
         <div class="tab-pane active row" id="infos">
             <div class="col-md-12">
                 {% for title, stat in stats %}
@@ -28,19 +28,19 @@
         </div>
 
         <div class="tab-pane row" id="gestion">
-            {% for indicateur in indicateurs if indicateur.categorie == 'Gestion' %}
-                <div class="indicateur col-md-6" id="{{ indicateur.methode }}">
-                    <div id="{{ indicateur.methode }}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+            {% for indicateur in indicateurs['asso'] %}
+                <div class="indicateur-container col-md-6" id="{{ indicateur }}-container">
+                    <div id="{{ indicateur }}" style="min-width: 400px; margin: 0 auto; text-align: center;" data-url="{{ path(indicateur) }}">
                         <img src="{{ asset('img/loading.gif') }}"/>
                     </div>
                 </div>
             {% endfor %}
         </div>
 
-        <div class="tab-pane row" id="rfp">
-            {% for indicateur in indicateurs if indicateur.categorie == 'Rfp' %}
-                <div class="indicateur col-md-6" id="{{ indicateur.methode }}">
-                    <div id="{{ indicateur.methode }}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+        <div class="tab-pane row" id="formations">
+            {% for indicateur in indicateurs['formations'] %}
+                <div class="indicateur-container col-md-6" id="{{ indicateur }}-container">
+                    <div id="{{ indicateur }}" style="min-width: 400px; margin: 0 auto; text-align: center;" data-url="{{ path(indicateur) }}">
                         <img src="{{ asset('img/loading.gif') }}"/>
                     </div>
                 </div>
@@ -48,9 +48,9 @@
         </div>
 
         <div class="tab-pane row" id="suivi">
-            {% for indicateur in indicateurs if indicateur.categorie == 'Suivi' %}
-                <div class="indicateur col-md-6" id="{{ indicateur.methode }}">
-                    <div id="{{ indicateur.methode }}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+            {% for indicateur in indicateurs['suivi'] %}
+                <div class="indicateur-container col-md-6" id="{{ indicateur }}-container">
+                    <div id="{{ indicateur }}" style="min-width: 400px; margin: 0 auto; text-align: center;" data-url="{{ path(indicateur) }}">
                         <img src="{{ asset('img/loading.gif') }}"/>
                     </div>
                 </div>
@@ -58,19 +58,19 @@
         </div>
 
         <div class="tab-pane row" id="treso">
-            {% for indicateur in indicateurs if indicateur.categorie == 'Treso' %}
-                <div class="indicateur col-md-6" id="{{ indicateur.methode }}">
-                    <div id="{{ indicateur.methode }}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+            {% for indicateur in indicateurs['treso'] %}
+                <div class="indicateur-container col-md-6" id="{{ indicateur }}-container">
+                    <div id="{{ indicateur }}" style="min-width: 400px; margin: 0 auto; text-align: center;" data-url="{{ path(indicateur) }}">
                         <img src="{{ asset('img/loading.gif') }}"/>
                     </div>
                 </div>
             {% endfor %}
         </div>
 
-        <div class="tab-pane row" id="com">
-            {% for indicateur in indicateurs if indicateur.categorie == 'Com' %}
-                <div class="indicateur col-md-6" id="{{ indicateur.methode }}">
-                    <div id="{{ indicateur.methode }}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+        <div class="tab-pane row" id="devco">
+            {% for indicateur in indicateurs['devco'] %}
+                <div class="indicateur-container col-md-6" id="{{ indicateur }}-container">
+                    <div id="{{ indicateur }}" style="min-width: 400px; margin: 0 auto; text-align: center;" data-url="{{ path(indicateur) }}">
                         <img src="{{ asset('img/loading.gif') }}"/>
                     </div>
                 </div>
@@ -87,11 +87,9 @@
     <script src="{{ asset('js/highcharts-fr.js') }}"></script>
     <span id="jsChart"></span>
 
-    <script>
-        function getChartAsync(sender, chart) {
-            $.get(
-                '{{ path('stat_ajax_suivi') }}',
-                {chartMethode: chart})
+    <script type="text/javascript" >
+        function getChartAsync(url) {
+            $.get(url)
                 .done(function (data) {
                     $('#jsChart').append(data);
                 });
@@ -101,10 +99,11 @@
             function () {
                 $(this).click(
                     function () {
-                        if ($(this).children().first().attr('data-loaded') == 'false') {
-                            $($($(this).children().first().attr('href'))).children().each(
+                        var tabLink = $(this).children().first();
+                        if (tabLink.attr('data-loaded') === 'false') {
+                            $(tabLink.attr('href')).children().each( // for each indicateur-container
                                 function () {
-                                    getChartAsync($(this).attr('id'), $(this).attr('id'));
+                                    getChartAsync($(this).children().first().attr('data-url'));
                                 });
                             $(this).children().first().attr('data-loaded', true)
                         }

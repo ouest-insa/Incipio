@@ -195,7 +195,7 @@ class NoteDeFrais implements TresoDetailableInterface
     /**
      * Get details.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection|NoteDeFraisDetail[]
      */
     public function getDetails()
     {

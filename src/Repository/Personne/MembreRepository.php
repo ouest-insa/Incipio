@@ -23,6 +23,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class MembreRepository extends EntityRepository
 {
+    /**
+     * @return Membre[]
+     */
     public function getIntervenantsParPromo()
     {
         $qb = $this->_em->createQueryBuilder();
@@ -34,13 +37,14 @@ class MembreRepository extends EntityRepository
     }
 
     /**
-     * @return array
+     * @return Membre[]
      */
     public function getMembresParPromo()
     {
-        $entities = $this->findBy([], ['promotion' => 'desc']);
+        /** @var Membre[] $membres */
+        $membres = $this->findBy([], ['promotion' => 'desc']);
         $membresParMandat = [];
-        foreach ($entities as $membre) {
+        foreach ($membres as $membre) {
             $promo = $membre->getPromotion();
             if (array_key_exists($promo, $membresParMandat)) {
                 $membresParMandat[$promo][] = $membre;
@@ -52,6 +56,9 @@ class MembreRepository extends EntityRepository
         return $membresParMandat;
     }
 
+    /**
+     * @return Membre[]
+     */
     public function getCotisants()
     {
         $qb = $this->_em->createQueryBuilder();
@@ -70,7 +77,7 @@ class MembreRepository extends EntityRepository
      *
      * @param Competence $competence
      *
-     * @return array
+     * @return Membre[]
      */
     public function findByCompetence(Competence $competence)
     {
@@ -108,7 +115,12 @@ class MembreRepository extends EntityRepository
         return $query;
     }
 
-    /** Fonction retournant une jointure entre un membre et ses competences */
+    /** Fonction retournant une jointure entre un membre et ses competences
+     *
+     * @param $id
+     *
+     * @return Membre|null
+     */
     public function getMembreCompetences($id)
     {
         $qb = $this->_em->createQueryBuilder();
@@ -124,6 +136,9 @@ class MembreRepository extends EntityRepository
         return $query->getOneOrNullResult();
     }
 
+    /**
+     * @return Membre[]
+     */
     public function getByCompetencesNonNul()
     {
         $qb = $this->_em->createQueryBuilder();
@@ -142,6 +157,8 @@ class MembreRepository extends EntityRepository
     /** Fonction retournant l'ensemble des personnes ayant déjà fait une mission + les études associées aux missions
      * Utilisée notamment dans la liste des intervenants.
      * Permet de passer de 64 à 3 requetes sur la page de liste des intervenants.
+     *
+     * @return Membre[]
      */
     public function getByMissionsNonNul()
     {
@@ -171,7 +188,7 @@ class MembreRepository extends EntityRepository
     /**
      * Fonction retournant l'ensemble des membres avec une jointure sur les mandats et les postes.ti.
      *
-     * @return array
+     * @return Membre[]
      */
     public function getMembres()
     {

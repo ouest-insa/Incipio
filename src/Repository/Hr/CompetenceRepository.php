@@ -2,6 +2,7 @@
 
 namespace App\Repository\Hr;
 
+use App\Entity\Hr\Competence;
 use Doctrine\ORM\EntityRepository;
 
 class CompetenceRepository extends EntityRepository
@@ -16,7 +17,7 @@ class CompetenceRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
 
         $query = $qb->select('c')
-            ->from('N7consultingRhBundle:Competence', 'c')
+            ->from(Competence::class, 'c')
             ->leftJoin('c.membres', 'membres')
             ->addSelect('membres')
             ->orderBy('c.id', 'asc')
@@ -35,7 +36,7 @@ class CompetenceRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
 
         $query = $qb->select('c')
-            ->from('N7consultingRhBundle:Competence', 'c')
+            ->from(Competence::class, 'c')
             ->leftJoin('c.etudes', 'etudes')
             ->addSelect('etudes')
             ->leftJoin('etudes.phases', 'phases')

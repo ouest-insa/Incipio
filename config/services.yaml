@@ -39,6 +39,9 @@ services:
     App\Controller\Publish\TraitementController:
         arguments:
             $keyValueStore: "@app.json_key_value_store"
+    App\Controller\Stat\IndicateursController:
+        arguments:
+            $keyValueStore: "@app.json_key_value_store"
     App\Service\Project\ChartManager:
         arguments:
             $keyValueStore: "@app.json_key_value_store"

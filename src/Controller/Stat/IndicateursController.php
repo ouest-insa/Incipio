@@ -23,12 +23,14 @@ use App\Entity\Treso\BV;
 use App\Entity\Treso\NoteDeFrais;
 use App\Service\Project\EtudeManager;
 use App\Service\Stat\ChartFactory;
+use Doctrine\Common\Persistence\ObjectManager;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class IndicateursController extends AbstractController
 {
@@ -40,10 +42,39 @@ class IndicateursController extends AbstractController
 
     private $etudeManager;
 
-    public function __construct(ChartFactory $chartFactory, EtudeManager $etudeManager)
+    private $keyValueStore;
+
+    const INDICATEURS = [
+        'suivi' => ['stat_ajax_suivi_retardParMandat',
+                    'stat_ajax_suivi_nombreEtudes',
+                    'stat_ajax_suivi_tauxAvenantsParMandat',
+        ],
+        'treso' => ['stat_ajax_treso_repartitionSorties',
+                    'stat_ajax_treso_sorties',
+                    'stat_ajax_treso_caParMandatHistogram',
+                    'stat_ajax_treso_caParMandatCourbe',
+        ],
+        'asso' => ['stat_ajax_asso_nombreMembres',
+                   'stat_ajax_asso_membresParPromo',
+                   'stat_ajax_asso_intervenantsParPromo',
+        ],
+        'formations' => ['stat_ajax_formations_nombreDePresentFormationsTimed',
+                         'stat_ajax_formations_nombreFormationsParMandat',
+        ],
+        'devco' => ['stat_ajax_devco_repartitionClientSelonChiffreAffaire',
+                    'stat_ajax_devco_repartitionClientParNombreDEtude',
+                    'stat_ajax_devco_caParMandatCourbe',
+                    'stat_ajax_devco_sourceProspectionParNombreDEtude',
+                    'stat_ajax_devco_sourceProspectionSelonChiffreAffaire',
+                    'stat_ajax_devco_caCompetences',
+        ],
+    ];
+
+    public function __construct(ChartFactory $chartFactory, EtudeManager $etudeManager, KeyValueStore $keyValueStore)
     {
         $this->chartFactory = $chartFactory;
         $this->etudeManager = $etudeManager;
+        $this->keyValueStore = $keyValueStore;
     }
 
     /**
@@ -52,63 +83,26 @@ class IndicateursController extends AbstractController
      */
     public function index()
     {
-        $em = $this->getDoctrine()->getManager();
-        $indicateurs = $em->getRepository(Indicateur::class)->findAll();
         $statsBrutes = ['Pas de données' => 'A venir'];
 
-        return $this->render('Stat/Indicateurs/index.html.twig', ['indicateurs' => $indicateurs,
-                                                                  'stats' => $statsBrutes,
-        ]);
-    }
-
-    /**
-     * @Security("has_role('ROLE_ADMIN')")
-     * @Route(name="stat_debug", path="/admin/indicateurs/{get}", methods={"GET","HEAD"})
-     */
-    public function debug($get)
-    {
-        $indicateur = new Indicateur();
-        $indicateur->setTitre($get)
-            ->setMethode($get);
-
-        return $this->render('Stat/Indicateurs/debug.html.twig', ['indicateur' => $indicateur,
-        ]);
+        return $this->render('Stat/Indicateurs/index.html.twig',
+            ['stats' => $statsBrutes, 'indicateurs' => self::INDICATEURS]);
     }
 
     /**
      * @Security("has_role('ROLE_CA')")
-     * @Route(name="stat_ajax_suivi", path="/admin/indicateurs/etudes", methods={"GET","HEAD"})
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function ajax(Request $request)
-    {
-        if ('GET' == $request->getMethod()) {
-            $chartMethode = $request->query->get('chartMethode');
-            $em = $this->getDoctrine()->getManager();
-            $indicateur = $em->getRepository(Indicateur::class)->findOneByMethode($chartMethode);
-
-            if (null !== $indicateur) {
-                $method = $indicateur->getMethode();
-
-                return $this->$method(); //okay, it's a little bit dirty ...
-            }
-        }
-
-        return new Response('<!-- Chart ' . $chartMethode . ' does not exist. -->');
-    }
-
-    /**
-     * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_suivi_retardParMandat", path="/admin/indicateurs/etudes/retardParMandat", methods={"GET","HEAD"})
      *
      * Retard par mandat (gestion d'études)
      * Basé sur les dates de signature CC et non pas les numéros
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
      */
-    private function getRetardParMandat()
+    public function getRetardParMandat(Request $request, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
         $ccs = $em->getRepository(Cc::class)->findBy([], ['dateSignature' => 'asc']);
 
         $nombreJoursParMandat = [];
@@ -149,7 +143,7 @@ class IndicateursController extends AbstractController
         ];
         $ob = $this->chartFactory->newColumnChart($series, $categories);
 
-        $ob->chart->renderTo(__FUNCTION__);
+        $ob->chart->renderTo($request->get('_route'));
         $ob->title->text('Retard par Mandat');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
         $ob->tooltip->pointFormat('Les études ont duré en moyenne {point.y:.2f} % de plus que prévu<br/>avec {point.nombreEtudesAvecAv} jours de retard sur {point.nombreEtudes} jours travaillés');
@@ -164,12 +158,17 @@ class IndicateursController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_suivi_nombreEtudes", path="/admin/indicateurs/etudes/nombresEtudes", methods={"GET","HEAD"})
      *
      * Nombre d'études par mandat (gestion d'études)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
      */
-    private function getNombreEtudes()
+    public function getNombreEtudes(Request $request, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
         $ccs = $em->getRepository(Cc::class)->findBy([], ['dateSignature' => 'asc']);
 
         $nombreEtudesParMandat = [];
@@ -201,7 +200,7 @@ class IndicateursController extends AbstractController
         $series = [['name' => "Nombre d'études du mandat", 'colorByPoint' => true, 'data' => $data]];
         $ob = $this->chartFactory->newColumnChart($series, $categories);
 
-        $ob->chart->renderTo(__FUNCTION__);
+        $ob->chart->renderTo($request->get('_route'));
         $ob->title->text('Nombre d\'études par mandat');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} études');
@@ -217,12 +216,88 @@ class IndicateursController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_suivi_tauxAvenantsParMandat", path="/admin/indicateurs/etudes/tauxAvenantsParMandat", methods={"GET","HEAD"})
+     *
+     * Taux d'avenants par mandat (gestion d'études)
+     * Basé sur les dates de signature CC et non pas les numéros
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
+     */
+    public function getTauxAvenantsParMandat(Request $request, ObjectManager $em)
+    {
+        $ccs = $em->getRepository(Cc::class)->findBy([], ['dateSignature' => 'asc']);
+
+        $nombreEtudesParMandat = [];
+        $nombreEtudesAvecAvenantParMandat = [];
+        $nombreAvsParMandat = [];
+
+        foreach ($ccs as $cc) {
+            $etude = $cc->getEtude();
+            $dateSignature = $cc->getDateSignature();
+            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID();
+            $mandat = $etude->getMandat();
+
+            if ($dateSignature && $signee) {
+                if (array_key_exists($mandat, $nombreEtudesParMandat)) {
+                    $nombreEtudesParMandat[$mandat] += 1;
+                } else {
+                    $nombreEtudesParMandat[$mandat] = 1;
+                    $nombreEtudesAvecAvenantParMandat[$mandat] = 0;
+                    $nombreAvsParMandat[$mandat] = 0;
+                }
+
+                if (count($etude->getAvs()->toArray())) {
+                    $nombreEtudesAvecAvenantParMandat[$mandat] += 1;
+                    $nombreAvsParMandat[$mandat] += count($etude->getAvs()->toArray());
+                }
+            }
+        }
+
+        $data = [];
+        $categories = [];
+        foreach ($nombreEtudesParMandat as $mandat => $datas) {
+            if ($datas > 0) {
+                $categories[] = $mandat;
+                $data[] = ['y' => 100 * $nombreEtudesAvecAvenantParMandat[$mandat] / $datas,
+                           'nombreEtudes' => $datas,
+                           'nombreEtudesAvecAv' => $nombreEtudesAvecAvenantParMandat[$mandat],
+                           'nombreAvs' => $nombreAvsParMandat[$mandat],
+                ];
+            }
+        }
+
+        $series = [['name' => "Taux d'avenants par mandat", 'colorByPoint' => true, 'data' => $data]];
+        $ob = $this->chartFactory->newColumnChart($series, $categories);
+
+        $ob->chart->renderTo($request->get('_route'));
+        $ob->title->text('Taux d\'avenants du mandat');
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
+        $ob->tooltip->pointFormat('{point.y:.2f} %<br/>Avec {point.nombreEtudesAvecAv} sur {point.nombreEtudes} études<br/>Pour un total de {point.nombreAvs} Avenants');
+        $ob->yAxis->max(100);
+        $ob->xAxis->title(['text' => 'Mandat']);
+        $ob->yAxis->title(['text' => 'Taux (%)']);
+
+        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
+            'chart' => $ob,
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_treso_repartitionSorties", path="/admin/indicateurs/treso/repartitionSorties", methods={"GET","HEAD"})
      *
      * Répartition des dépenses HT selon les comptes comptables pour le mandat en cours (trésorerie)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
      */
-    private function getRepartitionSorties()
+    public function getRepartitionSorties(Request $request, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
         $mandat = $this->etudeManager->getMaxMandatCc();
 
         $nfs = $em->getRepository(NoteDeFrais::class)->findBy(['mandat' => $mandat]);
@@ -269,7 +344,7 @@ class IndicateursController extends AbstractController
         ];
         $ob = $this->chartFactory->newPieChart($series);
 
-        $ob->chart->renderTo(__FUNCTION__);
+        $ob->chart->renderTo($request->get('_route'));
         $ob->title->text('Répartition des dépenses HT selon les comptes comptables<br/>(Mandat en cours)');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.name} : {point.montantHT:,.2f} € / {point.montantTotal:,.2f} € ({point.percentage:.1f}%)');
@@ -281,17 +356,23 @@ class IndicateursController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_treso_sorties", path="/admin/indicateurs/treso/sorties", methods={"GET","HEAD"})
      *
      * Montant HT des dépenses (trésorerie)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
      */
-    private function getSortie()
+    public function getSorties(Request $request, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
         $sortiesParMandat = $em->getRepository(NoteDeFrais::class)->findAllByMandat();
         $bvsParMandat = $em->getRepository(BV::class)->findAllByMandat();
 
         $mandats = [];
         ksort($sortiesParMandat); // Tri selon les mandats
+        /** @var NoteDeFrais[] $nfs */
         foreach ($sortiesParMandat as $mandat => $nfs) { // Pour chaque Mandat
             $mandats[$mandat] = ['Honoraires BV' => 0, 'URSSAF' => 0];
             foreach ($nfs as $nf) { // Pour chaque NF d'un mandat
@@ -314,6 +395,7 @@ class IndicateursController extends AbstractController
                 $mandats[$mandat] = [];
             }
 
+            /** @var BV[] $bvs */
             foreach ($bvs as $bv) {
                 $mandats[$mandat]['Honoraires BV'] += $bv->getRemunerationBrute();
                 $mandats[$mandat]['URSSAF'] += $bv->getPartJunior();
@@ -330,17 +412,17 @@ class IndicateursController extends AbstractController
 
             foreach ($comptes as $libelle => $compte) {
                 $total += $compte;
-                $drilldownData[] = [$libelle, round((float) $compte, 2)];
+                $drilldownData[] = [$libelle, round((float)$compte, 2)];
             }
 
             $drilldownSeries[] = ['name' => 'Dépenses du mandat ' . $mandat, 'id' => $mandat, 'data' => $drilldownData];
-            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float) $total, 2), 'drilldown' => $mandat];
+            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float)$total, 2), 'drilldown' => $mandat];
         }
         $series = [['name' => 'Montant des dépenses', 'colorByPoint' => true, 'data' => $dataSeries]];
 
         $ob = $this->chartFactory->newColumnDrilldownChart($series, $drilldownSeries);
 
-        $ob->chart->renderTo(__FUNCTION__);
+        $ob->chart->renderTo($request->get('_route'));
         $ob->title->text('Montant HT des dépenses');
         $ob->subtitle->text('Sélectionnez une colonne pour en voir le détail');
         $ob->yAxis->title(['text' => 'Montant (€)']);
@@ -353,476 +435,20 @@ class IndicateursController extends AbstractController
         ]);
     }
 
-    /**
-     * @Security("has_role('ROLE_CA')")
-     *
-     * Taux de fidélisation (développement commercial)
-     */
-    private function getPartClientFidel()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $etudes = $em->getRepository(Etude::class)->findAll();
-
-        $clients = [];
-        foreach ($etudes as $etude) {
-            if (self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID()) {
-                $clientID = $etude->getProspect()->getId();
-                if (array_key_exists($clientID, $clients)) {
-                    ++$clients[$clientID];
-                } else {
-                    $clients[$clientID] = 1;
-                }
-            }
-        }
-
-        $repartitions = [];
-        $nombreClient = count($clients);
-        foreach ($clients as $clientID => $nombreEtude) {
-            if (array_key_exists($nombreEtude, $repartitions)) {
-                ++$repartitions[$nombreEtude];
-            } else {
-                $repartitions[$nombreEtude] = 1;
-            }
-        }
-
-        /* Initialisation */
-        $data = [];
-        ksort($repartitions);
-        foreach ($repartitions as $occ => $nbr) {
-            $clientType = 1 == $occ ? "$nbr Nouveaux clients" : "$nbr Anciens clients avec $occ études";
-            $data[] = ['name' => $clientType, 'y' => 100 * $nbr / $nombreClient];
-        }
-
-        $series = [['type' => 'pie', 'name' => 'Taux de fidélisation', 'data' => $data,
-                    'Nombre de clients' => $nombreClient,
-                   ],
-        ];
-        $ob = $this->chartFactory->newPieChart($series);
-
-        $ob->chart->renderTo(__FUNCTION__);
-        $ob->title->text('Taux de fidélisation (% de clients ayant demandé plusieurs études)');
-        $ob->tooltip->headerFormat('<b>{point.key}</b><br/>');
-        $ob->tooltip->pointFormat('{point.percentage:.1f} %');
-
-        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
-            'chart' => $ob,
-        ]);
-    }
 
     /**
      * @Security("has_role('ROLE_CA')")
-     *
-     * Nombre de présents aux formations (formations)
-     */
-    private function getNombreDePresentFormationsTimed()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $formationsParMandat = $em->getRepository(Formation::class)->findAllByMandat();
-
-        $maxMandat = $formationsParMandat !== [] ? max(array_keys($formationsParMandat)) : 0;
-        $mandats = [];
-
-        foreach ($formationsParMandat as $mandat => $formations) {
-            foreach ($formations as $formation) {
-                if ($formation->getDateDebut()) {
-                    $interval = new \DateInterval('P' . ($maxMandat - $mandat) . 'Y');
-                    $dateDecale = clone $formation->getDateDebut();
-                    $dateDecale->add($interval);
-                    $mandats[$mandat][] = [
-                        'x' => $dateDecale->getTimestamp() * 1000,
-                        'y' => count($formation->getMembresPresents()), 'name' => $formation->getTitre(),
-                        'date' => $dateDecale->format('d/m/Y'),
-                    ];
-                }
-            }
-        }
-
-        $series = [];
-        foreach ($mandats as $mandat => $data) {
-            $series[] = ['name' => 'Mandat ' . $mandat, 'data' => $data];
-        }
-
-        $ob = $this->chartFactory->newLineChart($series);
-
-        $ob->chart->renderTo(__FUNCTION__);
-        $ob->global->useUTC(false);
-
-        $ob->title->text('Nombre de présents aux formations');
-        $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
-        $ob->tooltip->pointFormat('{point.y} présents le {point.date}<br/>{point.name}');
-        $ob->xAxis->dateTimeLabelFormats(['month' => '%b']);
-        $ob->xAxis->title(['text' => 'Date']);
-        $ob->xAxis->type('datetime');
-        $ob->yAxis->allowDecimals(false);
-        $ob->yAxis->title(['text' => 'Nombre de présents']);
-        $ob->yAxis->min(0);
-
-        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
-            'chart' => $ob,
-        ]);
-    }
-
-    /**
-     * @Security("has_role('ROLE_CA')")
-     *
-     * Nombre de formations par mandat (formations)
-     */
-    private function getNombreFormationsParMandat()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $formationsParMandat = $em->getRepository(Formation::class)->findAllByMandat();
-
-        $data = [];
-        $categories = [];
-
-        ksort($formationsParMandat); // Tri selon les promos
-        foreach ($formationsParMandat as $mandat => $formations) {
-            $data[] = count($formations);
-            $categories[] = $mandat;
-        }
-
-        $series = [['name' => 'Nombre de formations', 'colorByPoint' => true, 'data' => $data]];
-        $ob = $this->chartFactory->newColumnChart($series, $categories);
-
-        $ob->chart->renderTo(__FUNCTION__);
-        $ob->title->text('Nombre de formations par mandat');
-        $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
-        $ob->tooltip->pointFormat('{point.y} formations');
-        $ob->xAxis->title(['text' => 'Mandat']);
-        $ob->yAxis->title(['text' => 'Nombre de formations']);
-        $ob->yAxis->max(null);
-
-        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
-            'chart' => $ob,
-        ]);
-    }
-
-    /**
-     * @Security("has_role('ROLE_CA')")
-     *
-     * Taux d'avenants par mandat (gestion d'études)
-     * Basé sur les dates de signature CC et non pas les numéros
-     */
-    private function getTauxDAvenantsParMandat()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $ccs = $em->getRepository(Cc::class)->findBy([], ['dateSignature' => 'asc']);
-
-        $nombreEtudesParMandat = [];
-        $nombreEtudesAvecAvenantParMandat = [];
-        $nombreAvsParMandat = [];
-
-        foreach ($ccs as $cc) {
-            $etude = $cc->getEtude();
-            $dateSignature = $cc->getDateSignature();
-            $signee = self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID();
-            $mandat = $etude->getMandat();
-
-            if ($dateSignature && $signee) {
-                if (array_key_exists($mandat, $nombreEtudesParMandat)) {
-                    $nombreEtudesParMandat[$mandat] += 1;
-                } else {
-                    $nombreEtudesParMandat[$mandat] = 1;
-                    $nombreEtudesAvecAvenantParMandat[$mandat] = 0;
-                    $nombreAvsParMandat[$mandat] = 0;
-                }
-
-                if (count($etude->getAvs()->toArray())) {
-                    $nombreEtudesAvecAvenantParMandat[$mandat] += 1;
-                    $nombreAvsParMandat[$mandat] += count($etude->getAvs()->toArray());
-                }
-            }
-        }
-
-        $data = [];
-        $categories = [];
-        foreach ($nombreEtudesParMandat as $mandat => $datas) {
-            if ($datas > 0) {
-                $categories[] = $mandat;
-                $data[] = ['y' => 100 * $nombreEtudesAvecAvenantParMandat[$mandat] / $datas,
-                           'nombreEtudes' => $datas,
-                           'nombreEtudesAvecAv' => $nombreEtudesAvecAvenantParMandat[$mandat],
-                           'nombreAvs' => $nombreAvsParMandat[$mandat],
-                ];
-            }
-        }
-
-        $series = [['name' => "Taux d'avenants par mandat", 'colorByPoint' => true, 'data' => $data]];
-        $ob = $this->chartFactory->newColumnChart($series, $categories);
-
-        $ob->chart->renderTo(__FUNCTION__);
-        $ob->title->text('Taux d\'avenants du mandat');
-        $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
-        $ob->tooltip->pointFormat('{point.y:.2f} %<br/>Avec {point.nombreEtudesAvecAv} sur {point.nombreEtudes} études<br/>Pour un total de {point.nombreAvs} Avenants');
-        $ob->yAxis->max(100);
-        $ob->xAxis->title(['text' => 'Mandat']);
-        $ob->yAxis->title(['text' => 'Taux (%)']);
-
-        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
-            'chart' => $ob,
-        ]);
-    }
-
-    /**
-     * @Security("has_role('ROLE_CA')")
-     *
-     * Répartition du CA selon le type de client (développement commercial)
-     */
-    private function getRepartitionClientSelonChiffreAffaire()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $etudes = $em->getRepository(Etude::class)->findAll();
-
-        $chiffreDAffairesTotal = 0;
-        $repartitions = [];
-        foreach ($etudes as $etude) {
-            if (self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID()) {
-                $type = $etude->getProspect()->getEntiteToString();
-                $CA = $etude->getMontantHT();
-                $chiffreDAffairesTotal += $CA;
-                array_key_exists($type, $repartitions) ? $repartitions[$type] += $CA : $repartitions[$type] = $CA;
-            }
-        }
-
-        $data = [];
-        foreach ($repartitions as $type => $CA) {
-            if (null === $type) {
-                $type = 'Autre';
-            }
-            $data[] = ['name' => $type, 'y' => round($CA / $chiffreDAffairesTotal * 100, 2), 'CA' => $CA];
-        }
-
-        $series = [['type' => 'pie', 'name' => 'Provenance du CA selon le type de client (tous mandats)',
-                    'data' => $data, 'CA Total' => $chiffreDAffairesTotal,
-                   ],
-        ];
-        $ob = $this->chartFactory->newPieChart($series);
-
-        $ob->chart->renderTo(__FUNCTION__);
-        $ob->title->text("Répartition du CA selon le type de client ($chiffreDAffairesTotal € CA)");
-        $ob->tooltip->headerFormat('<b>{point.key}</b><br />');
-        $ob->tooltip->pointFormat('{point.percentage:.1f} %<br/>{point.CA} €');
-
-        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
-            'chart' => $ob,
-        ]);
-    }
-
-    /**
-     * @Security("has_role('ROLE_CA')")
-     *
-     * Provenance des études selon le type de client (développement commercial)
-     */
-    private function getRepartitionClientParNombreDEtude()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $etudes = $em->getRepository(Etude::class)->findAll();
-
-        $nombreClient = 0;
-        $repartitions = [];
-
-        foreach ($etudes as $etude) {
-            if (self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID()) {
-                ++$nombreClient;
-                $type = $etude->getProspect()->getEntiteToString();
-                array_key_exists($type, $repartitions) ? $repartitions[$type]++ : $repartitions[$type] = 1;
-            }
-        }
-
-        $data = [];
-        foreach ($repartitions as $type => $nombre) {
-            if (null === $type) {
-                $type = 'Autre';
-            }
-            $data[] = ['name' => $type, 'y' => round($nombre / $nombreClient * 100, 2), 'nombre' => $nombre];
-        }
-
-        $series = [['type' => 'pie', 'name' => 'Provenance des études selon le type de client (tous mandats)',
-                    'data' => $data, 'nombreClient' => $nombreClient,
-                   ],
-        ];
-        $ob = $this->chartFactory->newPieChart($series);
-
-        $ob->chart->renderTo(__FUNCTION__);
-        $ob->title->text('Provenance des études selon le type de client (' . $nombreClient . ' Etudes)');
-        $ob->tooltip->headerFormat('<b>{point.key}</b><br />');
-        $ob->tooltip->pointFormat('{point.percentage:.1f} %<br/>{point.nombre} études');
-
-        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
-            'chart' => $ob,
-        ]);
-    }
-
-    private function cmp($a, $b)
-    {
-        if ($a['date'] == $b['date']) {
-            return 0;
-        }
-
-        return ($a['date'] < $b['date']) ? -1 : 1;
-    }
-
-    /**
-     * @Security("has_role('ROLE_CA')")
-     *
-     * Nombre de membres (gestion associative)
-     */
-    private function getNombreMembres()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $mandats = $em->getRepository(Mandat::class)->getCotisantMandats();
-
-        $promos = [];
-        $cumuls = [];
-        $dates = [];
-        foreach ($mandats as $mandat) {
-            if ($membre = $mandat->getMembre()) {
-                $p = $membre->getPromotion();
-                if (!in_array($p, $promos)) {
-                    $promos[] = $p;
-                }
-                $dates[] = ['date' => $mandat->getDebutMandat(), 'type' => '1', 'promo' => $p];
-                $dates[] = ['date' => $mandat->getFinMandat(), 'type' => '-1', 'promo' => $p];
-            }
-        }
-        sort($promos);
-        usort($dates, [$this, 'cmp']);
-
-        foreach ($dates as $date) {
-            $d = $date['date']->format('m/y');
-            $p = $date['promo'];
-            $t = $date['type'];
-            foreach ($promos as $promo) {
-                if (!array_key_exists($promo, $cumuls)) {
-                    $cumuls[$promo] = [];
-                }
-                $cumuls[$promo][$d] = (array_key_exists($d,
-                    $cumuls[$promo]) ? $cumuls[$promo][$d] : (end($cumuls[$promo]) ? end($cumuls[$promo]) : 0));
-            }
-            $cumuls[$p][$d] += $t;
-        }
-
-        $series = [];
-        $categories = null !== $cumuls ? array_keys($cumuls[$promos[0]]) : [];
-        foreach (array_reverse($promos) as $promo) {
-            $series[] = ['name' => 'P' . $promo, 'data' => array_values($cumuls[$promo])];
-        }
-
-        $ob = $this->chartFactory->newLineChart($series);
-
-        $ob->chart->renderTo(__FUNCTION__);
-        $ob->chart->type('area');
-        $ob->chart->zoomType('x');
-        $ob->legend->reversed(false);
-        $ob->xAxis->categories($categories);
-        $ob->xAxis->labels(['rotation' => -45]);
-        $ob->xAxis->title(['text' => 'Date']);
-        $ob->yAxis->allowDecimals(false);
-        $ob->yAxis->min(0);
-        $ob->yAxis->title(['text' => 'Nombre de membres']);
-        $ob->plotOptions->area(['stacking' => 'normal']);
-        $ob->title->text('Nombre de membres');
-        $ob->subtitle->text('Zoomable en sélectionnant une zone horizontalement');
-        $ob->tooltip->shared(true);
-        $ob->tooltip->valueSuffix(' cotisants');
-
-        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
-            'chart' => $ob,
-        ]);
-    }
-
-    /**
-     * @Security("has_role('ROLE_CA')")
-     *
-     * Nombres de membres par promotion (gestion associative)
-     */
-    private function getMembresParPromo()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $membres = $em->getRepository(Membre::class)->findAll();
-
-        $promos = [];
-        foreach ($membres as $membre) {
-            $p = $membre->getPromotion();
-            if ($p) {
-                array_key_exists($p, $promos) ? $promos[$p]++ : $promos[$p] = 1;
-            }
-        }
-
-        $data = [];
-        $categories = [];
-        ksort($promos); // Tri selon les promos
-        foreach ($promos as $promo => $nombre) {
-            $data[] = $nombre;
-            $categories[] = 'P' . $promo;
-        }
-
-        $series = [['name' => 'Membres', 'colorByPoint' => true, 'data' => $data]];
-        $ob = $this->chartFactory->newColumnChart($series, $categories);
-
-        $ob->chart->renderTo(__FUNCTION__);
-        $ob->xAxis->title(['text' => 'Promotion']);
-        $ob->yAxis->max(null);
-        $ob->yAxis->title(['text' => 'Nombre de membres']);
-        $ob->title->text('Nombre de membres par promotion');
-        $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
-        $ob->tooltip->pointFormat('{point.y}');
-
-        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
-            'chart' => $ob,
-        ]);
-    }
-
-    /**
-     * @Security("has_role('ROLE_CA')")
-     *
-     * Nombre d'intervenants par promotion (gestion associative)
-     */
-    private function getIntervenantsParPromo()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $intervenants = $em->getRepository(Membre::class)->getIntervenantsParPromo();
-
-        $promos = [];
-        foreach ($intervenants as $intervenant) {
-            $p = $intervenant->getPromotion();
-            if ($p) {
-                array_key_exists($p, $promos) ? $promos[$p]++ : $promos[$p] = 1;
-            }
-        }
-
-        $data = [];
-        $categories = [];
-        foreach ($promos as $promo => $nombre) {
-            $data[] = $nombre;
-            $categories[] = 'P' . $promo;
-        }
-
-        $series = [['name' => 'Intervenants', 'colorByPoint' => true, 'data' => $data]];
-        $ob = $this->chartFactory->newColumnChart($series, $categories);
-
-        $ob->chart->renderTo(__FUNCTION__);
-        $ob->xAxis->title(['text' => 'Promotion']);
-        $ob->yAxis->max(null);
-        $ob->yAxis->title(['text' => "Nombre d'intervenants"]);
-        $ob->title->text('Nombre d\'intervenants par promotion');
-        $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
-        $ob->tooltip->pointFormat('{point.y}');
-
-        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
-            'chart' => $ob,
-        ]);
-    }
-
-    /**
-     * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_treso_caParMandatHistogram", path="/admin/indicateurs/treso/caParMandatHistogram", methods={"GET","HEAD"})
      *
      * Chiffre d'affaires signé cumulé par mandat (trésorerie)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
      */
-    private function getCAM()
+    public function getCAParMandatHistogram(Request $request, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
         $ccs = $em->getRepository(Cc::class)->findBy([], ['dateSignature' => 'asc']);
 
         $cumuls = [];
@@ -881,7 +507,7 @@ class IndicateursController extends AbstractController
 
         $ob = $this->chartFactory->newColumnChart($series, $categories);
 
-        $ob->chart->renderTo(__FUNCTION__);
+        $ob->chart->renderTo($request->get('_route'));
         $ob->xAxis->title(['text' => 'Mandat']);
         $ob->yAxis->max(null);
         $ob->yAxis->title(['text' => 'CA (€)']);
@@ -896,16 +522,22 @@ class IndicateursController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_treso_caParMandatCourbe", path="/admin/indicateurs/treso/caParMandatCourbe", methods={"GET","HEAD"})
      *
      * Evolution par mandat du chiffre d'affaires signé cumulé (trésorerie)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
      */
-    private function getCA()
+    public function getCA(Request $request, ObjectManager $em)
     {
-        $ccs = $this->getDoctrine()->getManager()->getRepository(Cc::class)
+        $ccs = $em->getRepository(Cc::class)
             ->findBy([], ['dateSignature' => 'asc']);
 
-        if ($this->get('app.json_key_value_store')->exists('namingConvention')) {
-            $namingConvention = $this->get('app.json_key_value_store')->get('namingConvention');
+        if ($this->keyValueStore->exists('namingConvention')) {
+            $namingConvention = $this->keyValueStore->get('namingConvention');
         } else {
             $namingConvention = 'id';
         }
@@ -944,7 +576,7 @@ class IndicateursController extends AbstractController
 
         $ob = $this->chartFactory->newLineChart($series);
 
-        $ob->chart->renderTo(__FUNCTION__);  // The #id of the div where to render the chart
+        $ob->chart->renderTo($request->get('_route'));  // The #id of the div where to render the chart
         $ob->global->useUTC(false);
         $ob->title->text('Évolution par mandat du chiffre d\'affaires signé cumulé');
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
@@ -962,16 +594,297 @@ class IndicateursController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_formations_nombreDePresentFormationsTimed", path="/admin/indicateurs/formations/nombreDePresentFormationsTimed", methods={"GET","HEAD"})
+     *
+     * Nombre de présents aux formations (formations)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
+     */
+    public function getNombreDePresentFormationsTimed(Request $request, ObjectManager $em)
+    {
+        $formationsParMandat = $em->getRepository(Formation::class)->findAllByMandat();
+
+        $maxMandat = $formationsParMandat !== [] ? max(array_keys($formationsParMandat)) : 0;
+        $mandats = [];
+
+        /** @var Formation[] $formations */
+        foreach ($formationsParMandat as $mandat => $formations) {
+            foreach ($formations as $formation) {
+                if ($formation->getDateDebut()) {
+                    $interval = new \DateInterval('P' . ($maxMandat - $mandat) . 'Y');
+                    $dateDecale = clone $formation->getDateDebut();
+                    $dateDecale->add($interval);
+                    $mandats[$mandat][] = [
+                        'x' => $dateDecale->getTimestamp() * 1000,
+                        'y' => count($formation->getMembresPresents()), 'name' => $formation->getTitre(),
+                        'date' => $dateDecale->format('d/m/Y'),
+                    ];
+                }
+            }
+        }
+
+        $series = [];
+        foreach ($mandats as $mandat => $data) {
+            $series[] = ['name' => 'Mandat ' . $mandat, 'data' => $data];
+        }
+
+        $ob = $this->chartFactory->newLineChart($series);
+
+        $ob->chart->renderTo($request->get('_route'));
+        $ob->global->useUTC(false);
+
+        $ob->title->text('Nombre de présents aux formations');
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
+        $ob->tooltip->pointFormat('{point.y} présents le {point.date}<br/>{point.name}');
+        $ob->xAxis->dateTimeLabelFormats(['month' => '%b']);
+        $ob->xAxis->title(['text' => 'Date']);
+        $ob->xAxis->type('datetime');
+        $ob->yAxis->allowDecimals(false);
+        $ob->yAxis->title(['text' => 'Nombre de présents']);
+        $ob->yAxis->min(0);
+
+        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
+            'chart' => $ob,
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_formations_nombreFormationsParMandat", path="/admin/indicateurs/formations/nombreFormationsParMandat", methods={"GET","HEAD"})
+     *
+     * Nombre de formations par mandat (formations)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
+     */
+    public function getNombreFormationsParMandat(Request $request, ObjectManager $em)
+    {
+        $formationsParMandat = $em->getRepository(Formation::class)->findAllByMandat();
+
+        $data = [];
+        $categories = [];
+
+        ksort($formationsParMandat); // Tri selon les promos
+        foreach ($formationsParMandat as $mandat => $formations) {
+            $data[] = count($formations);
+            $categories[] = $mandat;
+        }
+
+        $series = [['name' => 'Nombre de formations', 'colorByPoint' => true, 'data' => $data]];
+        $ob = $this->chartFactory->newColumnChart($series, $categories);
+
+        $ob->chart->renderTo($request->get('_route'));
+        $ob->title->text('Nombre de formations par mandat');
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
+        $ob->tooltip->pointFormat('{point.y} formations');
+        $ob->xAxis->title(['text' => 'Mandat']);
+        $ob->yAxis->title(['text' => 'Nombre de formations']);
+        $ob->yAxis->max(null);
+
+        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
+            'chart' => $ob,
+        ]);
+    }
+
+    private function cmp($a, $b)
+    {
+        if ($a['date'] == $b['date']) {
+            return 0;
+        }
+
+        return ($a['date'] < $b['date']) ? -1 : 1;
+    }
+
+    /**
+     * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_asso_nombreMembres", path="/admin/indicateurs/asso/nombreMembres", methods={"GET","HEAD"})
+     *
+     * Nombre de membres (gestion associative)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
+     */
+    public function getNombreMembres(Request $request, ObjectManager $em)
+    {
+        /** @var Mandat[] $mandats */
+        $mandats = $em->getRepository(Mandat::class)->getCotisantMandats();
+
+        $promos = [];
+        $cumuls = [];
+        $dates = [];
+        foreach ($mandats as $mandat) {
+            if ($membre = $mandat->getMembre()) {
+                $p = $membre->getPromotion();
+                if (!in_array($p, $promos)) {
+                    $promos[] = $p;
+                }
+                $dates[] = ['date' => $mandat->getDebutMandat(), 'type' => '1', 'promo' => $p];
+                $dates[] = ['date' => $mandat->getFinMandat(), 'type' => '-1', 'promo' => $p];
+            }
+        }
+        sort($promos);
+        usort($dates, [$this, 'cmp']);
+
+        foreach ($dates as $date) {
+            $d = $date['date']->format('m/y');
+            $p = $date['promo'];
+            $t = $date['type'];
+            foreach ($promos as $promo) {
+                if (!array_key_exists($promo, $cumuls)) {
+                    $cumuls[$promo] = [];
+                }
+                $cumuls[$promo][$d] = (array_key_exists($d,
+                    $cumuls[$promo]) ? $cumuls[$promo][$d] : (end($cumuls[$promo]) ? end($cumuls[$promo]) : 0));
+            }
+            $cumuls[$p][$d] += $t;
+        }
+
+        $series = [];
+        $categories = (null !== $cumuls && count($promos) > 0 ? array_keys($cumuls[$promos[0]]) : []);
+        foreach (array_reverse($promos) as $promo) {
+            $series[] = ['name' => 'P' . $promo, 'data' => array_values($cumuls[$promo])];
+        }
+
+        $ob = $this->chartFactory->newLineChart($series);
+
+        $ob->chart->renderTo($request->get('_route'));
+        $ob->chart->type('area');
+        $ob->chart->zoomType('x');
+        $ob->legend->reversed(false);
+        $ob->xAxis->categories($categories);
+        $ob->xAxis->labels(['rotation' => -45]);
+        $ob->xAxis->title(['text' => 'Date']);
+        $ob->yAxis->allowDecimals(false);
+        $ob->yAxis->min(0);
+        $ob->yAxis->title(['text' => 'Nombre de membres']);
+        $ob->plotOptions->area(['stacking' => 'normal']);
+        $ob->title->text('Nombre de membres');
+        $ob->subtitle->text('Zoomable en sélectionnant une zone horizontalement');
+        $ob->tooltip->shared(true);
+        $ob->tooltip->valueSuffix(' cotisants');
+
+        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
+            'chart' => $ob,
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_asso_membresParPromo", path="/admin/indicateurs/asso/membresParPromo", methods={"GET","HEAD"})
+     *
+     * Nombres de membres par promotion (gestion associative)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
+     */
+    public function getMembresParPromo(Request $request, ObjectManager $em)
+    {
+        $membres = $em->getRepository(Membre::class)->findAll();
+
+        $promos = [];
+        foreach ($membres as $membre) {
+            $p = $membre->getPromotion();
+            if ($p) {
+                array_key_exists($p, $promos) ? $promos[$p]++ : $promos[$p] = 1;
+            }
+        }
+
+        $data = [];
+        $categories = [];
+        ksort($promos); // Tri selon les promos
+        foreach ($promos as $promo => $nombre) {
+            $data[] = $nombre;
+            $categories[] = 'P' . $promo;
+        }
+
+        $series = [['name' => 'Membres', 'colorByPoint' => true, 'data' => $data]];
+        $ob = $this->chartFactory->newColumnChart($series, $categories);
+
+        $ob->chart->renderTo($request->get('_route'));
+        $ob->xAxis->title(['text' => 'Promotion']);
+        $ob->yAxis->max(null);
+        $ob->yAxis->title(['text' => 'Nombre de membres']);
+        $ob->title->text('Nombre de membres par promotion');
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br/>');
+        $ob->tooltip->pointFormat('{point.y}');
+
+        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
+            'chart' => $ob,
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_asso_intervenantsParPromo", path="/admin/indicateurs/asso/intervenantsParPromo", methods={"GET","HEAD"})
+     *
+     * Nombre d'intervenants par promotion (gestion associative)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
+     */
+    public function getIntervenantsParPromo(Request $request, ObjectManager $em)
+    {
+        $intervenants = $em->getRepository(Membre::class)->getIntervenantsParPromo();
+
+        $promos = [];
+        foreach ($intervenants as $intervenant) {
+            $p = $intervenant->getPromotion();
+            if ($p) {
+                array_key_exists($p, $promos) ? $promos[$p]++ : $promos[$p] = 1;
+            }
+        }
+
+        $data = [];
+        $categories = [];
+        foreach ($promos as $promo => $nombre) {
+            $data[] = $nombre;
+            $categories[] = 'P' . $promo;
+        }
+
+        $series = [['name' => 'Intervenants', 'colorByPoint' => true, 'data' => $data]];
+        $ob = $this->chartFactory->newColumnChart($series, $categories);
+
+        $ob->chart->renderTo($request->get('_route'));
+        $ob->xAxis->title(['text' => 'Promotion']);
+        $ob->yAxis->max(null);
+        $ob->yAxis->title(['text' => "Nombre d'intervenants"]);
+        $ob->title->text('Nombre d\'intervenants par promotion');
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
+        $ob->tooltip->pointFormat('{point.y}');
+
+        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
+            'chart' => $ob,
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_CA')")
      *
      * Not used at the moment
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
      */
-    private function getRh()
+    public function getRh(Request $request, ObjectManager $em)
     {
         $etudeManager = $this->etudeManager;
-        $missions = $this->getDoctrine()->getManager()->getRepository(Mission::class)
+        $missions = $em->getRepository(Mission::class)
             ->findBy([], ['debutOm' => 'asc']);
-        if ($this->get('app.json_key_value_store')->exists('namingConvention')) {
-            $namingConvention = $this->get('app.json_key_value_store')->get('namingConvention');
+        if ($this->keyValueStore->exists('namingConvention')) {
+            $namingConvention = $this->keyValueStore->get('namingConvention');
         } else {
             $namingConvention = 'id';
         }
@@ -1041,7 +954,6 @@ class IndicateursController extends AbstractController
 
         //Etapes 3 ++ --
         foreach ($missions as $mission) {
-            $etude = $mission->getEtude();
             $dateFin = $mission->getfinOm();
             $dateDebut = $mission->getdebutOm();
 
@@ -1070,7 +982,7 @@ class IndicateursController extends AbstractController
 
         //WARN :::
 
-        $ob->chart->renderTo('getRh');  // The #id of the div where to render the chart
+        $ob->chart->renderTo($request->get('_route'));  // The #id of the div where to render the chart
         ///
         $ob->chart->type('spline');
         $ob->title->text("Évolution par mandat du nombre d'intervenant");
@@ -1098,14 +1010,183 @@ class IndicateursController extends AbstractController
         ]);
     }
 
+
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_devco_repartitionClientSelonChiffreAffaire", path="/admin/indicateurs/devco/repartitionClientSelonChiffreAffaire", methods={"GET","HEAD"})
+     *
+     * Répartition du CA selon le type de client (développement commercial)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
+     */
+    public function getRepartitionClientSelonChiffreAffaire(Request $request, ObjectManager $em)
+    {
+        $etudes = $em->getRepository(Etude::class)->findAll();
+
+        $chiffreDAffairesTotal = 0;
+        $repartitions = [];
+        foreach ($etudes as $etude) {
+            if (self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID()) {
+                $type = $etude->getProspect()->getEntiteToString();
+                $CA = $etude->getMontantHT();
+                $chiffreDAffairesTotal += $CA;
+                array_key_exists($type, $repartitions) ? $repartitions[$type] += $CA : $repartitions[$type] = $CA;
+            }
+        }
+
+        $data = [];
+        foreach ($repartitions as $type => $CA) {
+            if (null === $type) {
+                $type = 'Autre';
+            }
+            $data[] = ['name' => $type, 'y' => round($CA / $chiffreDAffairesTotal * 100, 2), 'CA' => $CA];
+        }
+
+        $series = [['type' => 'pie', 'name' => 'Provenance du CA selon le type de client (tous mandats)',
+                    'data' => $data, 'CA Total' => $chiffreDAffairesTotal,
+                   ],
+        ];
+        $ob = $this->chartFactory->newPieChart($series);
+
+        $ob->chart->renderTo($request->get('_route'));
+        $ob->title->text("Répartition du CA selon le type de client ($chiffreDAffairesTotal € CA)");
+        $ob->tooltip->headerFormat('<b>{point.key}</b><br />');
+        $ob->tooltip->pointFormat('{point.percentage:.1f} %<br/>{point.CA} €');
+
+        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
+            'chart' => $ob,
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_devco_repartitionClientParNombreDEtude", path="/admin/indicateurs/devco/repartitionClientParNombreDEtude", methods={"GET","HEAD"})
+     *
+     * Provenance des études selon le type de client (développement commercial)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
+     */
+    public function getRepartitionClientParNombreDEtude(Request $request, ObjectManager $em)
+    {
+        $etudes = $em->getRepository(Etude::class)->findAll();
+
+        $nombreClient = 0;
+        $repartitions = [];
+
+        /** @var Etude[] $etudes */
+        foreach ($etudes as $etude) {
+            if (self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID()) {
+                ++$nombreClient;
+                $type = $etude->getProspect()->getEntiteToString();
+                array_key_exists($type, $repartitions) ? $repartitions[$type]++ : $repartitions[$type] = 1;
+            }
+        }
+
+        $data = [];
+        foreach ($repartitions as $type => $nombre) {
+            if (null === $type) {
+                $type = 'Autre';
+            }
+            $data[] = ['name' => $type, 'y' => round($nombre / $nombreClient * 100, 2), 'nombre' => $nombre];
+        }
+
+        $series = [['type' => 'pie', 'name' => 'Provenance des études selon le type de client (tous mandats)',
+                    'data' => $data, 'nombreClient' => $nombreClient,
+                   ],
+        ];
+        $ob = $this->chartFactory->newPieChart($series);
+
+        $ob->chart->renderTo($request->get('_route'));
+        $ob->title->text('Provenance des études selon le type de client (' . $nombreClient . ' Etudes)');
+        $ob->tooltip->headerFormat('<b>{point.key}</b><br />');
+        $ob->tooltip->pointFormat('{point.percentage:.1f} %<br/>{point.nombre} études');
+
+        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
+            'chart' => $ob,
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_devco_caParMandatCourbe", path="/admin/indicateurs/devco/partClientFideles", methods={"GET","HEAD"})
+     *
+     * Taux de fidélisation (développement commercial)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
+     */
+    public function getPartClientFideles(Request $request, ObjectManager $em)
+    {
+        $etudes = $em->getRepository(Etude::class)->findAll();
+
+        $clients = [];
+        foreach ($etudes as $etude) {
+            if (self::STATE_ID_EN_COURS_X == $etude->getStateID() || self::STATE_ID_TERMINEE_X == $etude->getStateID()) {
+                $clientID = $etude->getProspect()->getId();
+                if (array_key_exists($clientID, $clients)) {
+                    ++$clients[$clientID];
+                } else {
+                    $clients[$clientID] = 1;
+                }
+            }
+        }
+
+        $repartitions = [];
+        $nombreClient = count($clients);
+        foreach ($clients as $clientID => $nombreEtude) {
+            if (array_key_exists($nombreEtude, $repartitions)) {
+                ++$repartitions[$nombreEtude];
+            } else {
+                $repartitions[$nombreEtude] = 1;
+            }
+        }
+
+        /* Initialisation */
+        $data = [];
+        ksort($repartitions);
+        foreach ($repartitions as $occ => $nbr) {
+            $clientType = 1 == $occ ? "$nbr Nouveaux clients" : "$nbr Anciens clients avec $occ études";
+            $data[] = ['name' => $clientType, 'y' => 100 * $nbr / $nombreClient];
+        }
+
+        $series = [['type' => 'pie', 'name' => 'Taux de fidélisation', 'data' => $data,
+                    'Nombre de clients' => $nombreClient,
+                   ],
+        ];
+        $ob = $this->chartFactory->newPieChart($series);
+
+        $ob->chart->renderTo($request->get('_route'));
+        $ob->title->text('Taux de fidélisation (% de clients ayant demandé plusieurs études)');
+        $ob->tooltip->headerFormat('<b>{point.key}</b><br/>');
+        $ob->tooltip->pointFormat('{point.percentage:.1f} %');
+
+        return $this->render('Stat/Indicateurs/Indicateur.html.twig', [
+            'chart' => $ob,
+        ]);
+    }
+
+
+    /**
+     * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_devco_sourceProspectionParNombreDEtude", path="/admin/indicateurs/devco/sourceProspectionParNombreDEtude", methods={"GET","HEAD"})
      *
      * Provenance des études selon la source de prospection (développement commercial)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
      */
-    private function getSourceProspectionParNombreDEtude()
+    public function getSourceProspectionParNombreDEtude(Request $request, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
         $etudes = $em->getRepository(Etude::class)->findAll();
 
         $nombreClient = 0;
@@ -1132,7 +1213,7 @@ class IndicateursController extends AbstractController
         ];
         $ob = $this->chartFactory->newPieChart($series);
 
-        $ob->chart->renderTo(__FUNCTION__);
+        $ob->chart->renderTo($request->get('_route'));
         $ob->title->text('Provenance des études selon la source de prospection (' . $nombreClient . ' Etudes)');
         $ob->tooltip->headerFormat('<b>{point.key}</b><br />');
         $ob->tooltip->pointFormat('{point.percentage:.1f} %<br/>{point.nombre} études');
@@ -1144,12 +1225,17 @@ class IndicateursController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_devco_sourceProspectionSelonChiffreAffaire", path="/admin/indicateurs/devco/sourceProspectionSelonChiffreAffaire", methods={"GET","HEAD"})
      *
      * Répartition du CA selon la source de prospection (développement commercial)
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
      */
-    private function getSourceProspectionSelonChiffreAffaire()
+    public function getSourceProspectionSelonChiffreAffaire(Request $request, ObjectManager $em)
     {
-        $em = $this->getDoctrine()->getManager();
         $etudes = $em->getRepository(Etude::class)->findAll();
 
         $chiffreDAffairesTotal = 0;
@@ -1177,7 +1263,7 @@ class IndicateursController extends AbstractController
         ];
         $ob = $this->chartFactory->newPieChart($series);
 
-        $ob->chart->renderTo(__FUNCTION__);
+        $ob->chart->renderTo($request->get('_route'));
         $ob->title->text("Répartition du CA selon la source de prospection ($chiffreDAffairesTotal € CA)");
         $ob->tooltip->headerFormat('<b>{point.key}</b><br />');
         $ob->tooltip->pointFormat('{point.percentage:.1f} %<br/>{point.CA} €');
@@ -1189,17 +1275,23 @@ class IndicateursController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_CA')")
+     * @Route(name="stat_ajax_devco_caCompetences", path="/admin/indicateurs/devco/caCompetences", methods={"GET","HEAD"})
      *
      * A chart displaying how much a skill has brought in turnover
+     *
+     * @param Request       $request
+     * @param ObjectManager $em
+     *
+     * @return Response
      */
-    private function getCACompetences()
+    public function getCACompetences(Request $request, ObjectManager $em)
     {
         $etudeManager = $this->etudeManager;
         $MANDAT_MAX = $etudeManager->getMaxMandat();
         $MANDAT_MIN = $etudeManager->getMinMandat();
 
-        $em = $this->getDoctrine()->getManager();
-        $res = $em->getRepository(Competence::class)->getAllEtudesByCompetences();
+        /** @var Competence[] $competences */
+        $competences = $em->getRepository(Competence::class)->getAllEtudesByCompetences();
 
         //how much each skill has make us earn.
         $series = [];
@@ -1207,7 +1299,7 @@ class IndicateursController extends AbstractController
         $used_mandats = array_fill(0, $MANDAT_MAX - $MANDAT_MIN + 1,
             0); // an array to post-process results and remove mandats without data.
         //create array structure
-        foreach ($res as $c) {
+        foreach ($competences as $c) {
             $temp = [
                 'name' => $c->getNom(),
                 'data' => array_fill(0, $MANDAT_MAX - $MANDAT_MIN + 1, 0),
@@ -1245,7 +1337,7 @@ class IndicateursController extends AbstractController
 
         $ob = $this->chartFactory->newColumnChart($series, $categories);
 
-        $ob->chart->renderTo(__FUNCTION__);
+        $ob->chart->renderTo($request->get('_route'));
         $ob->xAxis->title(['text' => 'Mandat']);
         $ob->yAxis->max(null);
         $ob->yAxis->title(['text' => 'Revenus (€)']);
