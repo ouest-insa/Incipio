@@ -11,12 +11,12 @@
         "doctrine/doctrine-bundle": "^1.6.10",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "doctrine/doctrine-migrations-bundle": "^1.3",
-        "easycorp/easyadmin-bundle": "^1.9",
+        "easycorp/easyadmin-bundle": "^2.0",
         "friendsofsymfony/user-bundle": "^2.0",
         "ob/highcharts-bundle": "~1.2",
         "phpdocumentor/reflection-docblock": "^3.0|^4.0",
         "sensio/framework-extra-bundle": "^3.0",
-        "stoakes/form-bundle": "3.1.*",
+        "stoakes/form-bundle": "dev-master",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
         "symfony/expression-language": "4.2.*",
@@ -68,8 +68,8 @@
             "@auto-scripts"
         ],
         "install:first": [
-            "php bin/console doctrine:migration:migrate -n -v --env=prod --ansi",
-            "php bin/console doctrine:fixtures:load -n --env=prod --ansi"
+            "php bin/console doctrine:migration:migrate -n -v --ansi",
+            "php bin/console doctrine:fixtures:load -n --ansi"
         ],
         "clear-cache-prod": [
             "php bin/console cache:clear --env=prod --no-warmup",

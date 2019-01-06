@@ -31,7 +31,7 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_CA }
-        - { path: ^/over/, role: ROLE_SUPER_ADMIN }
+        - { path: ^/superadmin/, role: ROLE_SUPER_ADMIN }
 
         # PAGES ACCESSIBLES AUX SUIVEUR
         - { path: ^/suivi/*, role: ROLE_SUIVEUR }

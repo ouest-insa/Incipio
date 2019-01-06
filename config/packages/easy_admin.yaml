@@ -1,56 +1,111 @@
 easy_admin:
-    entities:
-        Avenant:
-          class: App\Entity\Project\Av
+  design:
+      menu:
+          - label: Gestion associative
+            icon: book
+            children:
+                - { entity: 'Competence' }
+                - { entity: 'Filiere' }
+                - { entity: 'Mandat' }
+                - { entity: 'Membre' }
+                - { entity: 'Personne' }
+                - { entity: 'Poste' }
+          - label: Suivi d'études
+            icon: calendar
+            children:
+                - { entity: 'Avenant' }
+                - { entity: 'Ap' }
+                - { entity: 'Cc' }
+                - { entity: 'ContactClient' }
+                - { entity: 'Document' }
+                - { entity: 'Etude' }
+                - { entity: 'Mission' }
+                - { entity: 'RelatedDocument' }
+                - { entity: 'Suivi' }
+          - label: Prospection
+            icon: address-book
+            children:
+                - { entity: 'Employe' }
+                - { entity: 'Personne' }
+                - { entity: 'Prospect' }
+          - label: Commentaires
+            icon: comments
+            children:
+                - { entity: 'Thread' }
+                - { entity: 'Comment' }
+          - { label: 'Utilisateurs', entity: 'User', icon: 'users' }
+          - { label: 'Accueil', url: '/', icon: 'home'}
+          - { label: 'Documentation', url: 'https://jeyser-crm.n7consulting.fr', icon: 'book', target: '_blank' }
+          - { label: 'Code', url: 'https://github.com/n7consulting/Incipio', icon: 'github', target: '_blank' }
+
+  entities:
+      Ap:
+          class: App\Entity\Project\Ap
+      Cc:
+          class: App\Entity\Project\Cc
+      Avenant:
+        class: App\Entity\Project\Av
+        list :
+            fields:
+              - 'id'
+              - 'etude'
+              - 'objet'
+      ContactClient:
+          class: App\Entity\Project\ClientContact
+      Comment:
+          class: App\Entity\Comment\Comment
+          list:
+              fields:
+                - id
+                - thread
+                - author
+                - createdAt
+                - state
+                - body
+      Competence:
+          class: App\Entity\Hr\Competence
+      Document:
+          class: App\Entity\Publish\Document
+      Employe:
+          class: App\Entity\Personne\Employe
+      Etude:
+          class: App\Entity\Project\Etude
           list :
               fields:
                 - 'id'
-                - 'etude'
-                - 'objet'
-        ContactClient:
-            class: App\Entity\Project\ClientContact
-        Competence:
-            class: App\Entity\Hr\Competence
-        Document:
-            class: App\Entity\Publish\Document
-        Employe:
-            class: App\Entity\Personne\Employe
-        Etude:
-            class: App\Entity\Project\Etude
-            list :
-                fields:
-                  - 'id'
-                  - 'Nom'
-                  - 'Mandat'
-                  - 'dateCreation'
-                  - 'dateModification'
-                  - 'stateDescription'
-                  - 'confidentiel'
-        Filiere:
-            class: App\Entity\Personne\Filiere
-        Mandat:
-            class: App\Entity\Personne\Mandat
-        Membre:
-            class: App\Entity\Personne\Membre
-        Mission:
-            class: App\Entity\Project\Mission
-            list :
-              fields:
-                - 'id'
-                - 'etude'
-                - 'intervenant'
-                - 'debutOm'
-                - 'finOm'
-                - 'pourcentageJunior'
-        Personne:
-            class: App\Entity\Personne\Personne
-        Poste:
-            class: App\Entity\Personne\Poste
-        Prospect:
-            class: App\Entity\Personne\Prospect
-        RelatedDocument:
-            class: App\Entity\Publish\RelatedDocument
-        Suivi:
-            class: App\Entity\Project\Suivi
-        User:
-            class: App\Entity\User\User
+                - 'Nom'
+                - 'Mandat'
+                - 'dateCreation'
+                - 'dateModification'
+                - 'stateDescription'
+                - 'confidentiel'
+      Filiere:
+          class: App\Entity\Personne\Filiere
+      Mandat:
+          class: App\Entity\Personne\Mandat
+      Membre:
+          class: App\Entity\Personne\Membre
+      Mission:
+          class: App\Entity\Project\Mission
+          list :
+            fields:
+              - 'id'
+              - 'etude'
+              - 'intervenant'
+              - 'debutOm'
+              - 'finOm'
+              - 'pourcentageJunior'
+      Personne:
+          class: App\Entity\Personne\Personne
+      Poste:
+          class: App\Entity\Personne\Poste
+      Prospect:
+          class: App\Entity\Personne\Prospect
+      RelatedDocument:
+          class: App\Entity\Publish\RelatedDocument
+      Suivi:
+          class: App\Entity\Project\Suivi
+      Thread:
+          class: App\Entity\Comment\Thread
+      User:
+          class: App\Entity\User\User
