@@ -83,8 +83,8 @@ class Prospect extends Adressable
             $em = $args->getObjectManager();
             $t = new Thread();
             $t->setId('prospect_' . $this->getId());
+            $t->setPermalink('fake');
             $this->setThread($t);
-            $this->getThread()->setPermalink('fake');
             $em->persist($t);
             $em->flush();
         }

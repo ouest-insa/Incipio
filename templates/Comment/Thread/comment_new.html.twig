@@ -22,8 +22,8 @@
 
                 {% block fos_comment_form_fields %}
                     <div class="fos_comment_form_errors">
-                    {{ form_errors(form) }}
-                    {{ form_errors(form.body) }}
+                        {{ form_errors(form) }}
+                        {{ form_errors(form.body) }}
                     </div>
                     {{ form_widget(form.body, {'attr': {'style': 'width: 100%', 'rows': 7}}) }}
                     <p style="margin-top: 5px"></p>

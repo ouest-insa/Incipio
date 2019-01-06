@@ -9,20 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\Comment;
 
-use App\Entity\Comment\Thread;
 use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
-//use FOS\CommentBundle\Entity\Comment as BaseComment;
-//use FOS\CommentBundle\Model\SignedCommentInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
  * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
  */
-class Comment //extends BaseComment implements SignedCommentInterface
+class Comment extends AbstractComment implements SignedCommentInterface
 {
     /**
      * @ORM\Id

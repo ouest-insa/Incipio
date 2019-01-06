@@ -11,7 +11,7 @@
 
 namespace App\Form\Comment;
 
-use App\Entity\Thread;
+use App\Entity\Comment\Thread;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
