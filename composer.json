@@ -16,7 +16,7 @@
         "ob/highcharts-bundle": "~1.2",
         "phpdocumentor/reflection-docblock": "^3.0|^4.0",
         "sensio/framework-extra-bundle": "^3.0",
-        "stoakes/form-bundle": "dev-master",
+        "stoakes/form-bundle": "dev-master#f23a3ce3ab185464045924a5cc1dc9b746a0a34a",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
         "symfony/expression-language": "4.2.*",
