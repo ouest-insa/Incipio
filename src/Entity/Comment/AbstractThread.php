@@ -34,7 +34,7 @@ abstract class AbstractThread implements ThreadInterface
      *
      * @ORM\Column(name="is_commentable", type="boolean")
      */
-    protected $isCommentable = true;
+    protected $commentable = true;
 
     /**
      * Denormalized number of comments.
@@ -110,7 +110,7 @@ abstract class AbstractThread implements ThreadInterface
      */
     public function isCommentable()
     {
-        return $this->isCommentable;
+        return $this->commentable;
     }
 
     /**
@@ -120,7 +120,7 @@ abstract class AbstractThread implements ThreadInterface
      */
     public function setCommentable($isCommentable)
     {
-        $this->isCommentable = (bool) $isCommentable;
+        $this->commentable = (bool) $isCommentable;
     }
 
     /**
