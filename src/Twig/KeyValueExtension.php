@@ -21,7 +21,7 @@ class KeyValueExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            'param' => new \Twig_Function_Method($this, 'param'),
+            'param' => new \Twig_Function('param', [$this, 'param']),
         ];
     }
 
