@@ -68,7 +68,7 @@
                 callback: function (result) {
                     if (result) {
                         var privacyForm = $("#privacy-form");
-                        privacyForm.attr('action', '{{ path('privacy_action', {'id':0}) }}'+'/'+$("#personne").val());
+                        privacyForm.attr('action', ('{{ path('privacy_action', {'id':0}) }}'.slice(0, -1))+$("#personne").val());
                         privacyForm.submit();
                     }
                 }
