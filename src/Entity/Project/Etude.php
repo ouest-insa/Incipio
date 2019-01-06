@@ -109,7 +109,7 @@ class Etude
 
     /**
      * @var int
-     * @Assert\Choice({"1","2","3","4","5"})
+     * @Assert\Choice({1,2,3,4,5})
      * @ORM\Column(name="stateID", type="integer", nullable=false)
      */
     private $stateID;
