@@ -33,49 +33,49 @@ class EtudeType extends AbstractType
     {
         $builder->add('knownProspect', CheckboxType::class, [
             'label' => 'suivi.etude_form.client_bdd',
-            'translation_domain' => 'suivi',
+            'translation_domain' => 'project',
             'required' => false,
         ])
             ->add('prospect', Select2EntityType::class, [
                 'class' => Prospect::class,
                 'choice_label' => 'nom',
                 'label' => 'suivi.etude_form.prospect_existant',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
                 'required' => false,
             ])
             ->add('newProspect', ProspectType::class, [
                 'label' => 'suivi.etude_form.prospect_nouveau',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
                 'required' => false,
             ])
             ->add('nom', TextType::class, [
                 'label' => 'suivi.etude_form.nom_interne',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'suivi.etude_form.presentation_interne',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
                 'attr' => ['cols' => '100%', 'rows' => 5],
                 'required' => false,
             ])
             ->add('mandat', IntegerType::class, [
                 'label' => 'suivi.etude_form.mandat',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
             ])
             ->add('num', IntegerType::class, [
                 'label' => 'suivi.etude_form.numero',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
                 'required' => false,
             ])
             ->add('confidentiel', CheckboxType::class, [
                 'label' => 'suivi.etude_form.confidentialite',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
                 'attr' => ['title' => 'suivi.etude_form.confidentialite_tooltip'],
                 'required' => false,
             ])
             ->add('suiveur', Select2EntityType::class, [
                 'label' => 'suivi.etude_form.suiveur_projet',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
                 'class' => Personne::class,
                 'choice_label' => 'prenomNom',
                 'query_builder' => function (PersonneRepository $pr) {
@@ -85,7 +85,7 @@ class EtudeType extends AbstractType
             ])
             ->add('suiveurQualite', Select2EntityType::class, [
                 'label' => 'suivi.etude_form.suiveur_qualite',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
                 'class' => Personne::class,
                 'choice_label' => 'prenomNom',
                 'query_builder' => function (PersonneRepository $pr) {
@@ -97,13 +97,13 @@ class EtudeType extends AbstractType
                 'class' => DomaineCompetence::class,
                 'choice_label' => 'nom',
                 'label' => 'suivi.etude_form.domaine_competence',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
                 'required' => false,
             ])
             ->add('sourceDeProspection', ChoiceType::class, [
                 'choices' => array_flip(Etude::getSourceDeProspectionChoice()),
                 'label' => 'suivi.etude_form.source_prospection',
-                'translation_domain' => 'suivi',
+                'translation_domain' => 'project',
                 'required' => false,
             ]);
     }
