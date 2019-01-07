@@ -59,7 +59,7 @@ abstract class AbstractThread implements ThreadInterface
      *
      * @var string
      *
-     * @ORM\Column(name="permalink", type="string", length=127)
+     * @ORM\Column(name="permalink", type="string", length=255)
      */
     protected $permalink;
 
