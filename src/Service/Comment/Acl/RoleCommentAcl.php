@@ -26,12 +26,6 @@ class RoleCommentAcl implements CommentAclInterface
      */
     private $authorizationChecker;
     /**
-     * The FQCN of the Comment object.
-     *
-     * @var string
-     */
-    private $commentClass;
-    /**
      * The role that will grant create permission for a comment.
      *
      * @var string
@@ -68,7 +62,6 @@ class RoleCommentAcl implements CommentAclInterface
         $this->viewRole = 'ROLE_SUIVEUR';
         $this->editRole = 'ROLE_SUIVEUR';
         $this->deleteRole = 'ROLE_ADMIN';
-        $this->commentClass = Comment::class;
     }
 
     /**

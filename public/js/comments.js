@@ -11,8 +11,6 @@
  * To use this reference javascript, you must also have jQuery installed. If
  * you want to embed comments cross-domain, then easyXDM CORS is also required.
  *
- * @todo: expand this explanation (also in the docs)
- *
  * Then a comment thread can be embedded on any page:
  *
  * <div id="fos_comment_thread">#comments</div>
@@ -489,7 +487,6 @@
                 }
             };
 
-            // todo: is there a better way to do this?
             FOS_COMMENT.xhr.request({
                 url: url,
                 method: method,

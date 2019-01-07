@@ -28,13 +28,6 @@ class RoleThreadAcl implements ThreadAclInterface
     private $authorizationChecker;
 
     /**
-     * The FQCN of the Thread object.
-     *
-     * @var string
-     */
-    private $threadClass;
-
-    /**
      * The role that will grant create permission for a thread.
      *
      * @var string
@@ -74,7 +67,6 @@ class RoleThreadAcl implements ThreadAclInterface
         $this->viewRole = 'ROLE_SUIVEUR';
         $this->editRole = 'ROLE_ADMIN';
         $this->deleteRole = 'ROLE_ADMIN';
-        $this->threadClass = Thread::class;
     }
 
     /**

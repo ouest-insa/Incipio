@@ -24,10 +24,10 @@ use App\Service\Comment\ThreadManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -494,7 +494,7 @@ class ThreadController extends AbstractController
         }
 
         if (!$thread->isCommentable()) {
-            throw new AccessDeniedHttpException(sprintf('Thread "%s" is not commentable', $id));
+            throw new AccessDeniedException(sprintf('Thread "%s" is not commentable', $id));
         }
 
         $parent = $this->getValidCommentParent($thread, $request->query->get('parentId'), $commentManager);
