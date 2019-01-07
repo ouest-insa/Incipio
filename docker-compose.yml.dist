@@ -16,7 +16,7 @@ services:
             - ./var/key_value_store:/app/var/key_value_store
             - ./var/sessions:/app/var/sessions
             - ./var/log:/app/var/log
-        restart: no
+        restart: "no"
         labels:
             - "traefik.backend=web-jeyser"
             - "traefik.frontend.rule=Host:REPLACE_WITH_YOUR_HOST"
@@ -31,7 +31,7 @@ services:
         volumes:
             # mysql
             - "./docker/mysql:/var/lib/mysql"
-        restart: no
+        restart: "no"
         labels:
             - traefik.enable=false
 
@@ -49,12 +49,12 @@ services:
             - "443:443"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-        restart: no
+        restart: "no"
         labels:
             - traefik.enable=false
 
     mailer:
         build: ./docker/mail
-        restart: no
+        restart: "no"
         labels:
             - traefik.enable=false

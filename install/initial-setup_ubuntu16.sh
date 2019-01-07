@@ -28,7 +28,7 @@ sed -i "s/REPLACE_WITH_YOUR_EMAIL/$email/g" .env.prod
 SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 sed -i "s/GENERATED_SECRET/$SECRET/g" .env.prod
 sed -i "s/#TRUSTED_HOSTS/TRUSTED_HOSTS/g" .env.prod
-sed -i "s/restart: no/restart: always/g" docker-compose.yml
+sed -i "s/restart: \"no\"/restart: \"always\"/g" docker-compose.yml
 
 # Set config.json
 cp var/key_value_store/config.json.dist var/key_value_store/config.json
