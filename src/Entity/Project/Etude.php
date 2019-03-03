@@ -199,6 +199,7 @@ class Etude
      * @var Ap
      *
      * @ORM\OneToOne(targetEntity="Ap", inversedBy="etude", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $ap;
 
