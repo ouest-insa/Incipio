@@ -12,6 +12,8 @@ default:
       kernel:
         env: "test"
         debug: "false"
+        bootstrap: features/bootstrap/bootstrap.php
+        class: App\Kernel
     Behat\MinkExtension:
       base_url: "http://localhost/"
       sessions:

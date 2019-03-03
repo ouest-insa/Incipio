@@ -64,7 +64,7 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @BeforeScenario @createSchema
+     * @createSchema
      * This handler doesn't seems to be executed before each scenario, but only when a scenario
      * is annotated with createSchema. Tried without BeforeScenario and it was not working as expected, so keep it.
      */
@@ -96,7 +96,7 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @AfterScenario @dropSchema
+     * @dropSchema
      * Beware : the annotation in cucumber should also match the case (dropschema is invalid)
      */
     public function dropDatabase()
@@ -122,7 +122,7 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->visit('/login');
         $this->fillField('_username', $username);
-        $this->fillField('_password', \Mgate\DashboardBundle\Command\CreateTestUsersCommand::DEFAULT_USERS[$username]['password']);
+        $this->fillField('_password', \App\Command\CreateTestUsersCommand::DEFAULT_USERS[$username]['password']);
         $this->pressButton('Connexion');
     }
 
@@ -139,7 +139,7 @@ class FeatureContext extends MinkContext implements Context
             'nom' => $name,
         ]);
 
-        $this->visit($this->getContainer()->get('router')->generate('MgateSuivi_etude_voir', ['nom' => $etude->getNom()]));
+        $this->visit($this->getContainer()->get('router')->generate('project_etude_voir', ['nom' => $etude->getNom()]));
     }
 
     /**

@@ -2,7 +2,8 @@
 !bin
 !docker/web
 !config
-!migrations
+!features
+features/bootstap/bootstrap.php
 !public
 !src
 !templates
