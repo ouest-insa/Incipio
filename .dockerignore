@@ -3,7 +3,6 @@
 !docker/web
 !config
 !features
-features/bootstap/bootstrap.php
 !public
 !src
 !templates

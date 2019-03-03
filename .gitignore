@@ -15,7 +15,6 @@ docker-compose.yml
 /public/documents/
 !/public/documents/.gikeep
 /vendor/
-/features/bootstap/bootstrap.php
 
 ###> symfony/phpunit-bridge ###
 .phpunit
