@@ -15,7 +15,7 @@ Feature: Related documents
   @dropSchema
   Scenario: I can delete a member with related document
     Given I am logged in as "admin"
-    Given I am on "/membres/1"
+    Given I am on "/membres/voir/1"
     Then I should see "composer.json"
     Given I am on "/membres/modifier/1"
     And I press "Supprimer le membre"
