@@ -1,8 +1,6 @@
 Feature: Bulletin de versement
   I am able to CRUD a BV.
 
-  # the "@createSchema" annotation provided by Behat creates a temporary SQLite database for testing the API
-  @createSchema
   Scenario: I can see the BV homepage
     Given I am logged in as "admin"
     When I go to "/Tresorerie/BV"
@@ -56,7 +54,3 @@ Feature: Bulletin de versement
     Then the response status code should not be 500
     Then the response status code should be 200
 
-  # The "@dropSchema" annotation must be added on the last scenario of the feature file to drop the temporary SQLite database
-  @dropSchema
-  Scenario: Void
-    Given I am logged in as "admin"

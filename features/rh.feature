@@ -1,7 +1,6 @@
 Feature: RH
   As an admin I am be able to CRUD a Competence
   
-  @createSchema
   Scenario: I can see RH Homepage & Add Competence button
     Given I am logged in as "admin"
     Given I am on "/rh"
@@ -52,7 +51,6 @@ Feature: RH
     Then the url should match "/rh"
     And I should not see "Django"
   
-  @dropSchema
   Scenario: I can see parameters
     Given I am logged in as "admin"
     Given I am on "/rh/visualiser/competences"

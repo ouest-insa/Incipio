@@ -2,7 +2,6 @@ Feature: Related documents
   Related documents can be created on a member or an etude
   They are correctly removed on cascade
 
-  @createSchema
   Scenario: I can create a related document on a member
     Given I am logged in as "admin"
     Given I am on "/Documents/Upload/Etudiant/1"

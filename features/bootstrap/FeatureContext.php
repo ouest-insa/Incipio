@@ -64,9 +64,8 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @createSchema
-     * This handler doesn't seems to be executed before each scenario, but only when a scenario
-     * is annotated with createSchema. Tried without BeforeScenario and it was not working as expected, so keep it.
+     * @BeforeScenario @createSchema
+     * Will create the schema before scenario tagged with createSchema.
      */
     public function createDatabase()
     {
@@ -96,7 +95,7 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @dropSchema
+     * @AfterScenario @dropSchema
      * Beware : the annotation in cucumber should also match the case (dropschema is invalid)
      */
     public function dropDatabase()

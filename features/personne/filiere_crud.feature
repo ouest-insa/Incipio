@@ -10,7 +10,6 @@ Feature: Filiere
     Then I should see "Liste des filières"
     And I should see "Ajouter une filière"
 
-
   Scenario: I can create a new Filiere
     Given I am logged in as "admin"
     Given I am on "/filiere/add"
@@ -76,9 +75,6 @@ Feature: Filiere
       | suiveur | /poste              |
       | ca      | /poste              |
 
-
-  # The "@dropSchema" annotation must be added on the last scenario of the feature file to drop the temporary SQLite database
-  @dropSchema
   Scenario: I can delete a Filiere
     Given I am logged in as "admin"
     Given I am on "/filiere/modifier/6"
