@@ -124,6 +124,7 @@ class FeatureContext extends MinkContext implements Context
         $this->fillField('_username', $username);
         $this->fillField('_password', \App\Command\CreateTestUsersCommand::DEFAULT_USERS[$username]['password']);
         $this->pressButton('Connexion');
+        assert($this->getSession()->getPage()->hasContent("Connecté en tant que"), "Connection as $username suceeded");
     }
 
     /**
