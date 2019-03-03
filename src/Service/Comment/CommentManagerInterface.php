@@ -7,7 +7,9 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace App\Service\Comment;
+
 use App\Entity\Comment\CommentInterface;
 use App\Entity\Comment\ThreadInterface;
 
@@ -36,6 +38,7 @@ interface CommentManagerInterface
      * @return CommentInterface[] An array of commentInterfaces
      */
     public function findCommentsByThread(ThreadInterface $thread, $depth = null, $sorterAlias = null);
+
     /**
      * Returns all thread comments in a nested array.
      *
@@ -67,6 +70,7 @@ interface CommentManagerInterface
      *                )
      */
     public function findCommentTreeByThread(ThreadInterface $thread, $sorterAlias = null, $depth = null);
+
     /**
      * Returns a partial comment tree based on a specific parent commentId.
      *
@@ -76,12 +80,14 @@ interface CommentManagerInterface
      * @return array See findCommentTreeByThread()
      */
     public function findCommentTreeByCommentId($commentId, $sorterAlias = null);
+
     /**
      * Saves a comment to the persistence backend used.
      *
      * @param CommentInterface $comment
      */
     public function saveComment(CommentInterface $comment);
+
     /**
      * Finds a comment by it's unique id.
      *
@@ -90,6 +96,7 @@ interface CommentManagerInterface
      * @return CommentInterface|null The comment or null when no comment found
      */
     public function findCommentById($id);
+
     /**
      * Creates a new comment object.
      *
@@ -99,6 +106,7 @@ interface CommentManagerInterface
      * @return CommentInterface The created comment
      */
     public function createComment(ThreadInterface $thread, CommentInterface $parent = null);
+
     /**
      * Checks if the comment was already persisted before, or if it's a new one.
      *
@@ -107,6 +115,7 @@ interface CommentManagerInterface
      * @return bool true if it's a new comment, false otherwise
      */
     public function isNewComment(CommentInterface $comment);
+
     /**
      * Returns the fully qualified comment class name.
      *

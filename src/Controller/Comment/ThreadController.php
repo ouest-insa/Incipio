@@ -11,7 +11,6 @@
 
 namespace App\Controller\Comment;
 
-
 use App\Entity\Comment\CommentInterface;
 use App\Entity\Comment\Thread;
 use App\Entity\Comment\ThreadInterface;
@@ -41,6 +40,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ThreadController extends AbstractController
 {
     const VIEW_FLAT = 'flat';
+
     const VIEW_TREE = 'tree';
 
     /**
@@ -82,8 +82,7 @@ class ThreadController extends AbstractController
             throw new NotFoundHttpException('Cannot query threads without id\'s.');
         }
 
-        $threads = $threadManager->findThreadsBy(array('id' => $ids));
-
+        $threads = $threadManager->findThreadsBy(['id' => $ids]);
 
         return new JsonResponse($serializer->serialize($threads, 'json'));
     }
@@ -91,7 +90,7 @@ class ThreadController extends AbstractController
     /**
      * Creates a new Thread from the submitted data.
      *
-     * @param Request                $request The current request
+     * @param Request                $request       The current request
      * @param ThreadManagerInterface $threadManager
      *
      * @return Response
@@ -123,8 +122,8 @@ class ThreadController extends AbstractController
      *
      * Get the edit form the open/close a thread.
      *
-     * @param Request                $request Current request
-     * @param mixed                  $id      Thread id
+     * @param Request                $request       Current request
+     * @param mixed                  $id            Thread id
      * @param ThreadManagerInterface $threadManager
      *
      * @return Response
@@ -155,8 +154,8 @@ class ThreadController extends AbstractController
      *
      * Edits the thread.
      *
-     * @param Request                $request Currenty request
-     * @param mixed                  $id      Thread id
+     * @param Request                $request       Currenty request
+     * @param mixed                  $id            Thread id
      * @param ThreadManagerInterface $threadManager
      *
      * @return Response
@@ -210,14 +209,13 @@ class ThreadController extends AbstractController
         $form = $this->createForm(CommentType::class, $comment);
         $form->setData($comment);
 
-        return $this->render('Comment/Thread/comment_new.html.twig', array(
+        return $this->render('Comment/Thread/comment_new.html.twig', [
             'form' => $form->createView(),
             'first' => 0 === $thread->getNumComments(),
             'thread' => $thread,
             'parent' => $parent,
             'id' => $id,
-        ));
-
+        ]);
     }
 
     /**
@@ -226,8 +224,8 @@ class ThreadController extends AbstractController
      *
      * Get a comment of a thread.
      *
-     * @param string                  $id        Id of the thread
-     * @param mixed                   $commentId Id of the comment
+     * @param string                  $id             Id of the thread
+     * @param mixed                   $commentId      Id of the comment
      * @param ThreadManagerInterface  $threadManager
      * @param CommentManagerInterface $commentManager
      *
@@ -262,10 +260,9 @@ class ThreadController extends AbstractController
      *
      * Get the delete form for a comment.
      *
-     * @param Request                 $request   Current request
-     * @param string                  $id        Id of the thread
-     * @param mixed                   $commentId Id of the comment
-     *
+     * @param Request                 $request        Current request
+     * @param string                  $id             Id of the thread
+     * @param mixed                   $commentId      Id of the comment
      * @param ThreadManagerInterface  $threadManager
      * @param CommentManagerInterface $commentManager
      *
@@ -296,10 +293,9 @@ class ThreadController extends AbstractController
      *
      * Edits the comment state.
      *
-     * @param Request                 $request   Current request
-     * @param mixed                   $id        Thread id
-     * @param mixed                   $commentId Id of the comment
-     *
+     * @param Request                 $request        Current request
+     * @param mixed                   $id             Thread id
+     * @param mixed                   $commentId      Id of the comment
      * @param ThreadManagerInterface  $threadManager
      * @param CommentManagerInterface $commentManager
      *
@@ -336,8 +332,8 @@ class ThreadController extends AbstractController
      *
      * Presents the form to use to edit a Comment for a Thread.
      *
-     * @param string                  $id        Id of the thread
-     * @param mixed                   $commentId Id of the comment
+     * @param string                  $id             Id of the thread
+     * @param mixed                   $commentId      Id of the comment
      * @param ThreadManagerInterface  $threadManager
      * @param CommentManagerInterface $commentManager
      *
@@ -354,7 +350,7 @@ class ThreadController extends AbstractController
                 $id));
         }
 
-        $form = $this->createForm(CommentType::class, $comment, array('method' => 'PUT'));
+        $form = $this->createForm(CommentType::class, $comment, ['method' => 'PUT']);
         $form->setData($comment);
 
         return $this->render('Comment/Thread/comment_edit.html.twig',
@@ -367,9 +363,9 @@ class ThreadController extends AbstractController
      *
      * Edits a given comment.
      *
-     * @param Request                 $request   Current request
-     * @param string                  $id        Id of the thread
-     * @param mixed                   $commentId Id of the comment
+     * @param Request                 $request        Current request
+     * @param string                  $id             Id of the thread
+     * @param mixed                   $commentId      Id of the comment
      * @param ThreadManagerInterface  $threadManager
      * @param CommentManagerInterface $commentManager
      *
@@ -405,9 +401,8 @@ class ThreadController extends AbstractController
      *
      * Get the comments of a thread. Creates a new thread if none exists.
      *
-     * @param Request                 $request Current request
-     * @param string                  $id      Id of the thread
-     *
+     * @param Request                 $request        Current request
+     * @param string                  $id             Id of the thread
      * @param ThreadManagerInterface  $threadManager
      * @param ValidatorInterface      $validator
      * @param CommentManagerInterface $commentManager
@@ -431,7 +426,7 @@ class ThreadController extends AbstractController
             $thread->setPermalink($permalink);
 
             // Validate the entity
-            $errors = $validator->validate($thread, null, array('NewThread'));
+            $errors = $validator->validate($thread, null, ['NewThread']);
             if (count($errors) > 0) {
                 $response = new Response('', Response::HTTP_BAD_REQUEST);
 
@@ -452,7 +447,7 @@ class ThreadController extends AbstractController
 
                 // We need nodes for the api to return a consistent response, not an array of comments
                 $comments = array_map(function ($comment) {
-                    return array('comment' => $comment, 'children' => array());
+                    return ['comment' => $comment, 'children' => []];
                 },
                     $comments
                 );
@@ -478,8 +473,8 @@ class ThreadController extends AbstractController
      *
      * Creates a new Comment for the Thread from the submitted data.
      *
-     * @param Request                 $request The current request
-     * @param string                  $id      The id of the thread
+     * @param Request                 $request        The current request
+     * @param string                  $id             The id of the thread
      * @param ThreadManagerInterface  $threadManager
      * @param CommentManagerInterface $commentManager
      *
@@ -500,7 +495,7 @@ class ThreadController extends AbstractController
         $parent = $this->getValidCommentParent($thread, $request->query->get('parentId'), $commentManager);
         $comment = $commentManager->createComment($thread, $parent);
 
-        $form = $form = $this->createForm(CommentType::class, $comment, array('method' => 'POST'));
+        $form = $form = $this->createForm(CommentType::class, $comment, ['method' => 'POST']);
         $form->setData($comment);
         $form->handleRequest($request);
 
@@ -525,7 +520,7 @@ class ThreadController extends AbstractController
     protected function onCreateCommentSuccess(FormInterface $form, $id)
     {
         return $this->forward($this->routeToControllerName('fos_comment_get_thread_comment'),
-            array('id' => $id, 'commentId' => $form->getData()->getId()))
+            ['id' => $id, 'commentId' => $form->getData()->getId()])
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
@@ -557,7 +552,7 @@ class ThreadController extends AbstractController
     protected function onCreateThreadSuccess(FormInterface $form)
     {
         return $this->forward($this->routeToControllerName('fos_comment_get_thread'),
-            array('id' => $form->getData()->getId()))
+            ['id' => $form->getData()->getId()])
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
@@ -570,7 +565,6 @@ class ThreadController extends AbstractController
      */
     protected function onCreateThreadError(FormInterface $form)
     {
-
         return $this->render('Comment/Thread/new.html.twig', ['form' => $form->createView()],
             new Response('', Response::HTTP_BAD_REQUEST));
     }
@@ -599,7 +593,7 @@ class ThreadController extends AbstractController
     protected function onEditCommentSuccess(FormInterface $form, $id)
     {
         return $this->forward($this->routeToControllerName('fos_comment_get_thread_comment'),
-            array('id' => $id, 'commentId' => $form->getData()->getId()))->setStatusCode(Response::HTTP_CREATED);
+            ['id' => $id, 'commentId' => $form->getData()->getId()])->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -629,7 +623,7 @@ class ThreadController extends AbstractController
     protected function onOpenThreadSuccess(FormInterface $form)
     {
         return $this->forward($this->routeToControllerName('fos_comment_edit_thread_commentable'),
-            array('id' => $form->getData()->getId(), 'value' => !$form->getData()->isCommentable()))
+            ['id' => $form->getData()->getId(), 'value' => !$form->getData()->isCommentable()])
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
@@ -660,7 +654,7 @@ class ThreadController extends AbstractController
     protected function onRemoveThreadCommentSuccess(FormInterface $form, $id)
     {
         return $this->forward($this->routeToControllerName('fos_comment_get_thread_comment'),
-            array('id' => $id, 'commentId' => $form->getData()->getId()))->setStatusCode(Response::HTTP_CREATED);
+            ['id' => $id, 'commentId' => $form->getData()->getId()])->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -684,8 +678,8 @@ class ThreadController extends AbstractController
     /**
      * Checks if a comment belongs to a thread. Returns the comment if it does.
      *
-     * @param ThreadInterface         $thread    Thread object
-     * @param mixed                   $commentId Id of the comment
+     * @param ThreadInterface         $thread         Thread object
+     * @param mixed                   $commentId      Id of the comment
      * @param CommentManagerInterface $commentManager
      *
      * @return CommentInterface|null The comment
@@ -710,7 +704,7 @@ class ThreadController extends AbstractController
     }
 
     /**
-     * Allow to forward to a route name instead of a controller method name
+     * Allow to forward to a route name instead of a controller method name.
      *
      * @param $routename
      *

@@ -28,7 +28,7 @@ class Tree
     /**
      * @var array of Tree
      */
-    private $children = array();
+    private $children = [];
 
     /**
      * Constructor.
@@ -44,8 +44,6 @@ class Tree
      * Adds a comment as a child of this node.
      *
      * @param CommentInterface $comment
-     *
-     * @return void
      */
     public function add(CommentInterface $comment)
     {
@@ -87,11 +85,11 @@ class Tree
      */
     public function toArray()
     {
-        $children = array();
+        $children = [];
         foreach ($this->children as $child) {
             $children[] = $child->toArray();
         }
 
-        return $this->comment ? array('comment' => $this->comment, 'children' => $children) : $children;
+        return $this->comment ? ['comment' => $this->comment, 'children' => $children] : $children;
     }
 }

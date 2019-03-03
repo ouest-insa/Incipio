@@ -27,11 +27,11 @@ class TwigExtensionManager extends \Twig_Extension
     public function getFilters()
     {
         return [
-            'nl2wbr' => new \Twig_Filter('nl2wbr', array($this, 'nl2wbr')),
-            'money' => new \Twig_Filter('money', array($this, 'money')),
-            'nbrToLetters' => new \Twig_Filter('nbrToLetters', array($this, 'nbrToLetters')),
-            'liaison' => new \Twig_Filter('liaison', array($this, 'liaison')),
-            'pluriel' => new \Twig_Filter('pluriel', array($this, 'pluriel')),
+            'nl2wbr' => new \Twig_Filter('nl2wbr', [$this, 'nl2wbr']),
+            'money' => new \Twig_Filter('money', [$this, 'money']),
+            'nbrToLetters' => new \Twig_Filter('nbrToLetters', [$this, 'nbrToLetters']),
+            'liaison' => new \Twig_Filter('liaison', [$this, 'liaison']),
+            'pluriel' => new \Twig_Filter('pluriel', [$this, 'pluriel']),
         ];
     }
 

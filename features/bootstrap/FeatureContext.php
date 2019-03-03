@@ -108,10 +108,10 @@ class FeatureContext extends MinkContext implements Context
     {
         if (!$event->getTestResult()->isPassed()) {
             echo $this->getSession()->getCurrentUrl() . "\n-------";
-            if (preg_match('/aside(.*?)footer/', $this->getSession()->getPage()->getContent(), $match) == 1) {
+            if (1 == preg_match('/aside(.*?)footer/', $this->getSession()->getPage()->getContent(), $match)) {
                 echo $match[1];
             } else {
-              echo $this->getSession()->getPage()->getContent();
+                echo $this->getSession()->getPage()->getContent();
             }
         }
     }
@@ -125,7 +125,7 @@ class FeatureContext extends MinkContext implements Context
         $this->fillField('_username', $username);
         $this->fillField('_password', \App\Command\CreateTestUsersCommand::DEFAULT_USERS[$username]['password']);
         $this->pressButton('Connexion');
-        assert($this->getSession()->getPage()->hasContent("Connecté en tant que"), "Connection as $username suceeded");
+        assert($this->getSession()->getPage()->hasContent('Connecté en tant que'), "Connection as $username suceeded");
     }
 
     /**

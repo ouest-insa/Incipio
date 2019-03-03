@@ -31,7 +31,6 @@ use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class FactureController extends AbstractController
 {
-
     public $keyValueStore;
 
     public function __construct(KeyValueStore $keyValueStore)

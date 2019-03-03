@@ -68,7 +68,7 @@ abstract class AbstractThread implements ThreadInterface
      */
     public function __toString()
     {
-        return 'Comment thread #'.$this->getId();
+        return 'Comment thread #' . $this->getId();
     }
 
     /**
@@ -97,8 +97,6 @@ abstract class AbstractThread implements ThreadInterface
 
     /**
      * @param  string
-     *
-     * @return void
      */
     public function setPermalink($permalink)
     {
@@ -115,8 +113,6 @@ abstract class AbstractThread implements ThreadInterface
 
     /**
      * @param  bool
-     *
-     * @return void
      */
     public function setCommentable($isCommentable)
     {
@@ -166,8 +162,6 @@ abstract class AbstractThread implements ThreadInterface
 
     /**
      * @param  DateTime
-     *
-     * @return void
      */
     public function setLastCommentAt($lastCommentAt)
     {

@@ -412,11 +412,11 @@ class IndicateursController extends AbstractController
 
             foreach ($comptes as $libelle => $compte) {
                 $total += $compte;
-                $drilldownData[] = [$libelle, round((float)$compte, 2)];
+                $drilldownData[] = [$libelle, round((float) $compte, 2)];
             }
 
             $drilldownSeries[] = ['name' => 'Dépenses du mandat ' . $mandat, 'id' => $mandat, 'data' => $drilldownData];
-            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float)$total, 2), 'drilldown' => $mandat];
+            $dataSeries[] = ['name' => 'Mandat ' . $mandat, 'y' => round((float) $total, 2), 'drilldown' => $mandat];
         }
         $series = [['name' => 'Montant des dépenses', 'colorByPoint' => true, 'data' => $dataSeries]];
 
@@ -434,7 +434,6 @@ class IndicateursController extends AbstractController
             'chart' => $ob,
         ]);
     }
-
 
     /**
      * @Security("has_role('ROLE_CA')")
@@ -1010,7 +1009,6 @@ class IndicateursController extends AbstractController
         ]);
     }
 
-
     /**
      * @Security("has_role('ROLE_CA')")
      * @Route(name="stat_ajax_devco_repartitionClientSelonChiffreAffaire", path="/admin/indicateurs/devco/repartitionClientSelonChiffreAffaire", methods={"GET","HEAD"})
@@ -1172,7 +1170,6 @@ class IndicateursController extends AbstractController
             'chart' => $ob,
         ]);
     }
-
 
     /**
      * @Security("has_role('ROLE_CA')")

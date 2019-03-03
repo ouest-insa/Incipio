@@ -12,8 +12,8 @@
 namespace App\Entity\Comment;
 
 use DateTime;
-use InvalidArgumentException;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 
 /**
  * @ORM\MappedSuperclass
@@ -101,7 +101,7 @@ abstract class AbstractComment implements CommentInterface
      */
     public function __toString()
     {
-        return 'Comment #'.$this->getId();
+        return 'Comment #' . $this->getId();
     }
 
     /**
@@ -201,8 +201,6 @@ abstract class AbstractComment implements CommentInterface
 
     /**
      * @param ThreadInterface $thread
-     *
-     * @return void
      */
     public function setThread(ThreadInterface $thread)
     {
@@ -239,13 +237,11 @@ abstract class AbstractComment implements CommentInterface
      */
     public function getAncestors()
     {
-        return $this->ancestors ? explode('/', $this->ancestors) : array();
+        return $this->ancestors ? explode('/', $this->ancestors) : [];
     }
 
     /**
      * @param  array
-     *
-     * @return void
      */
     public function setAncestors(array $ancestors)
     {

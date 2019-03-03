@@ -62,22 +62,16 @@ interface ThreadAclInterface
      * be called on new ThreadInterface instances.
      *
      * @param ThreadInterface $thread
-     *
-     * @return void
      */
     public function setDefaultAcl(ThreadInterface $thread);
 
     /**
      * Installs the Default 'fallback' Acl entries for generic access.
-     *
-     * @return void
      */
     public function installFallbackAcl();
 
     /**
      * Removes default Acl entries.
-     *
-     * @return void
      */
     public function uninstallFallbackAcl();
 }

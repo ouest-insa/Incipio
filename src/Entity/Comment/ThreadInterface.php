@@ -42,8 +42,6 @@ interface ThreadInterface
 
     /**
      * @param  string
-     *
-     * @return null
      */
     public function setPermalink($permalink);
 
@@ -92,8 +90,6 @@ interface ThreadInterface
 
     /**
      * @param  DateTime
-     *
-     * @return null
      */
     public function setLastCommentAt($lastCommentAt);
 }

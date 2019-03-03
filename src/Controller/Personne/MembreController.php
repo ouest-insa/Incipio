@@ -212,6 +212,7 @@ class MembreController extends AbstractController
      * @param RouterInterface $router
      *
      * @return RedirectResponse|Response
+     *
      * @internal param $id
      */
     public function modifier(Request $request, Membre $membre, DocumentManager $documentManager, RouterInterface $router)

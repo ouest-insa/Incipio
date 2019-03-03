@@ -25,24 +25,28 @@ class RoleCommentAcl implements CommentAclInterface
      * @var AuthorizationCheckerInterface
      */
     private $authorizationChecker;
+
     /**
      * The role that will grant create permission for a comment.
      *
      * @var string
      */
     private $createRole;
+
     /**
      * The role that will grant view permission for a comment.
      *
      * @var string
      */
     private $viewRole;
+
     /**
      * The role that will grant edit permission for a comment.
      *
      * @var string
      */
     private $editRole;
+
     /**
      * The role that will grant delete permission for a comment.
      *
@@ -130,8 +134,6 @@ class RoleCommentAcl implements CommentAclInterface
      * Role based Acl does not require setup.
      *
      * @param CommentInterface $comment
-     *
-     * @return void
      */
     public function setDefaultAcl(CommentInterface $comment)
     {
@@ -139,8 +141,6 @@ class RoleCommentAcl implements CommentAclInterface
 
     /**
      * Role based Acl does not require setup.
-     *
-     * @return void
      */
     public function installFallbackAcl()
     {
@@ -148,8 +148,6 @@ class RoleCommentAcl implements CommentAclInterface
 
     /**
      * Role based Acl does not require setup.
-     *
-     * @return void
      */
     public function uninstallFallbackAcl()
     {

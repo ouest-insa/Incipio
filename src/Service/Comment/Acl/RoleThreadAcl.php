@@ -119,8 +119,6 @@ class RoleThreadAcl implements ThreadAclInterface
      * Role based Acl does not require setup.
      *
      * @param ThreadInterface $thread
-     *
-     * @return void
      */
     public function setDefaultAcl(ThreadInterface $thread)
     {
@@ -128,8 +126,6 @@ class RoleThreadAcl implements ThreadAclInterface
 
     /**
      * Role based Acl does not require setup.
-     *
-     * @return void
      */
     public function installFallbackAcl()
     {
@@ -137,8 +133,6 @@ class RoleThreadAcl implements ThreadAclInterface
 
     /**
      * Role based Acl does not require setup.
-     *
-     * @return void
      */
     public function uninstallFallbackAcl()
     {

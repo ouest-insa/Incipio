@@ -7,6 +7,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace App\Form\Comment;
 
 use App\Entity\Comment\Thread;
@@ -25,7 +26,7 @@ class CommentableThreadType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('isCommentable', HiddenType::class, array('property_path' => 'commentable'));
+        $builder->add('isCommentable', HiddenType::class, ['property_path' => 'commentable']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -42,6 +43,7 @@ class CommentableThreadType extends AbstractType
     {
         return 'fos_comment_commentable_thread';
     }
+
     public function getName()
     {
         return $this->getBlockPrefix();

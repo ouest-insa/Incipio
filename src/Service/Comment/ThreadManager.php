@@ -16,7 +16,6 @@ use App\Entity\Comment\ThreadInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Default ORM ThreadManager.

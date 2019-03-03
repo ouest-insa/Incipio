@@ -38,14 +38,14 @@ class EtudeExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            'nbsp' => new \Twig_Filter('nonBreakingSpace', array($this, 'nonBreakingSpace')),
-            'string' => new \Twig_Filter('nonBreakingSpace', array($this, 'toString')),
+            'nbsp' => new \Twig_Filter('nonBreakingSpace', [$this, 'nonBreakingSpace']),
+            'string' => new \Twig_Filter('nonBreakingSpace', [$this, 'toString']),
         ];
     }
 
     public function toString($int)
     {
-        return (string)$int;
+        return (string) $int;
     }
 
     public function nonBreakingSpace($string)

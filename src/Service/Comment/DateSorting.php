@@ -7,6 +7,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace App\Service\Comment;
 
 use App\Entity\Comment\CommentInterface;
@@ -31,6 +32,7 @@ class DateSorting extends AbstractOrderSorting
         if ($a->getCreatedAt() == $b->getCreatedAt()) {
             return 0;
         }
+
         return $a->getCreatedAt() < $b->getCreatedAt() ? -1 : 1;
     }
 }

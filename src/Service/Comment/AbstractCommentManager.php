@@ -32,12 +32,12 @@ abstract class AbstractCommentManager implements CommentManagerInterface
      * Constructor.
      *
      * @param SortingInterface $sorter
-     *
      */
     public function __construct(SortingInterface $sorter)
     {
         $this->sorter = $sorter;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -49,14 +49,17 @@ abstract class AbstractCommentManager implements CommentManagerInterface
 
         return $comment;
     }
+
     /**
      * {@inheritdoc}
      */
     public function findCommentTreeByThread(ThreadInterface $thread, $sorter = null, $depth = null)
     {
         $comments = $this->findCommentsByThread($thread, $depth);
+
         return $this->organiseComments($comments, $this->sorter);
     }
+
     /**
      * {@inheritdoc}
      */
@@ -73,6 +76,7 @@ abstract class AbstractCommentManager implements CommentManagerInterface
         // this->dispatcher->dispatch(Events::COMMENT_POST_PERSIST, $event);
         return true;
     }
+
     /**
      * Organises a flat array of comments into a Tree structure.
      *
@@ -104,6 +108,7 @@ abstract class AbstractCommentManager implements CommentManagerInterface
 
         return $tree;
     }
+
     /**
      * Performs the persistence of a comment.
      *

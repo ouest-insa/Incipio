@@ -7,6 +7,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace App\Service\Comment;
 
 use App\Entity\Comment\Comment;
@@ -15,6 +16,7 @@ use App\Entity\Comment\ThreadInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+
 /**
  * Default ORM CommentManager.
  *
@@ -26,10 +28,12 @@ class CommentManager extends AbstractCommentManager
      * @var EntityManager
      */
     protected $em;
+
     /**
      * @var EntityRepository
      */
     protected $repository;
+
     /**
      * @var string
      */
@@ -38,8 +42,8 @@ class CommentManager extends AbstractCommentManager
     /**
      * Constructor.
      *
-     * @param SortingInterface         $sorter
-     * @param ObjectManager            $em
+     * @param SortingInterface $sorter
+     * @param ObjectManager    $em
      */
     public function __construct(SortingInterface $sorter, ObjectManager $em)
     {
@@ -49,6 +53,7 @@ class CommentManager extends AbstractCommentManager
         $metadata = $em->getClassMetadata(Comment::class);
         $this->class = $metadata->name;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -72,8 +77,10 @@ class CommentManager extends AbstractCommentManager
         if (null !== $sorterAlias) {
             $comments = $this->sorter->sortFlat($comments);
         }
+
         return $comments;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -86,12 +93,14 @@ class CommentManager extends AbstractCommentManager
             ->setParameter('path', "/{$commentId}/");
         $comments = $qb->getQuery()->execute();
         if (!$comments) {
-            return array();
+            return [];
         }
         $sorter = $this->sorter->getSorter($sorter);
         $trimParents = current($comments)->getAncestors();
+
         return $this->organiseComments($comments, $sorter, $trimParents);
     }
+
     /**
      * {@inheritdoc}
      */
@@ -99,6 +108,7 @@ class CommentManager extends AbstractCommentManager
     {
         return $this->repository->find($id);
     }
+
     /**
      * {@inheritdoc}
      */
@@ -106,6 +116,7 @@ class CommentManager extends AbstractCommentManager
     {
         return !$this->em->getUnitOfWork()->isInIdentityMap($comment);
     }
+
     /**
      * {@inheritdoc}
      */
@@ -113,6 +124,7 @@ class CommentManager extends AbstractCommentManager
     {
         return $this->class;
     }
+
     /**
      * Performs persisting of the comment.
      *

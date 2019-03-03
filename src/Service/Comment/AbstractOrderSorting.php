@@ -7,10 +7,11 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace App\Service\Comment;
 
 use App\Entity\Comment\CommentInterface;
-use InvalidArgumentException;
+
 /**
  * Sorts comments by date order.
  *
@@ -19,12 +20,16 @@ use InvalidArgumentException;
 abstract class AbstractOrderSorting implements SortingInterface
 {
     const ASC = 'ASC';
+
     const DESC = 'DESC';
+
     private $order;
+
     public function __construct()
     {
         $this->order = self::ASC;
     }
+
     /**
      * Sorts an array of Tree elements.
      *
@@ -46,9 +51,11 @@ abstract class AbstractOrderSorting implements SortingInterface
                 $branch['children'] = $this->sort($branch['children']);
             }
         }
-        usort($tree, array($this, 'doSort'));
+        usort($tree, [$this, 'doSort']);
+
         return $tree;
     }
+
     /**
      * Compares two arrays from the Comment Tree.
      *
@@ -62,8 +69,10 @@ abstract class AbstractOrderSorting implements SortingInterface
         if (self::ASC == $this->order) {
             return $this->compare($a['comment'], $b['comment']);
         }
+
         return $this->compare($b['comment'], $a['comment']);
     }
+
     /**
      * Sorts a flat array of comments.
      *
@@ -73,9 +82,11 @@ abstract class AbstractOrderSorting implements SortingInterface
      */
     public function sortFlat(array $comments)
     {
-        usort($comments, array($this, 'doFlatSort'));
+        usort($comments, [$this, 'doFlatSort']);
+
         return $comments;
     }
+
     /**
      * Compares two comments from a flat array.
      *
@@ -89,8 +100,10 @@ abstract class AbstractOrderSorting implements SortingInterface
         if (self::ASC == $this->order) {
             return $this->compare($a, $b);
         }
+
         return $this->compare($b, $a);
     }
+
     /**
      * Compares 2 comments. Implement this to create custom sorting options.
      *
