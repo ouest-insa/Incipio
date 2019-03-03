@@ -48,7 +48,7 @@
             <!-- Commentaires sur les études -->
             <div class="tab-pane" id="tab6">
                 {% if etude.thread|default('0') %}
-                    {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': etude.thread.id, 'view': 'flat'} %}
+                    {% include 'Comment/Thread/async.html.twig' with {'id': etude.thread.id, 'view': 'flat'} %}
                 {% endif %}
             </div>
         </div>
