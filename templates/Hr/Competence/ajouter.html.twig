@@ -1,0 +1,19 @@
+{% extends "Hr/layout.html.twig" %}
+
+{% block title %}
+    Ajouter une compétence - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    Ajouter une compétence
+{% endblock %}
+
+{% block breadcrumb_active %}
+    Ajouter une compétence
+{% endblock %}
+
+{% block content_bundle %}
+
+    {% include "Hr/Competence/formulaire.html.twig" %}
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "Project/layout.html.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'suivi.avenant_mission_ajouter' |trans({}, 'project') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    {% include "Project/AvMission/formulaire.html.twig" %}
+
+{% endblock %}

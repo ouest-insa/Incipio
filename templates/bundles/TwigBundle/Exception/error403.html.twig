@@ -1,0 +1,20 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Page interdite{% endblock %}
+
+{% block content %}
+    <section class="content">
+        <div class="error-page">
+            <h2 class="headline text-aqua"> 403</h2>
+
+            <div class="error-content">
+                <h3><i class="fa fa-warning text-aqua"></i>Page interdite</h3>
+
+                <p>
+                    Vous n'avez pas l'autorisation d'accéder à cette page<br>
+                    <a href="{{ path('dashboard_homepage') }}">Retour à l'accueil</a>
+                </p>
+            </div>
+        </div>
+    </section>
+{% endblock %}

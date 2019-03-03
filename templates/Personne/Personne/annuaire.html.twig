@@ -1,0 +1,83 @@
+{# page de visualisation de l'ensemble des personnes inscrites dans l'erp.#}
+
+{% extends "Personne/layout.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+{% endblock %}
+
+{% block title %}
+    {{ 'dashboard.annuaire'|trans({}, 'dashboard') }} {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'dashboard.annuaire'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <ul class="breadcrumb no-margin pull-right">
+        <li class="active">{{ 'dashboard.annuaire'|trans({}, 'dashboard') }}</li>
+    </ul>
+{% endblock %}
+
+{% block content_bundle %}
+    <table class="table table-bordered table-striped dataTable dt-responsive text-left" id="annuaire" role="grid" width="100%">
+        <thead>
+        <tr>
+            <th>{{ 'champs.liste'|trans({}, 'personne') }}</th>
+            <th>{{ 'champs.prenom_nom'|trans({}, 'personne') }}</th>
+            <th>{{ 'champs.mail'|trans({}, 'personne') }}</th>
+            <th>{{ 'champs.mobile'|trans({}, 'personne') }}</th>
+            <th>{{ 'champs.adresse'|trans({}, 'personne') }}</th>
+            {% if is_granted('ROLE_CA') %}
+            <th>{{ 'champs.action'|trans({}, 'personne') }}</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+            {% for personne in personnes if personne.prenom != "Admin" %}
+            <tr>
+                <td>{{ personne.membre ? param('abbr') : personne.employe ? 'annuaire.client'|trans({}, 'personne') : 'annuaire.autre'|trans({}, 'personne') }}</td>
+                <td>{{ personne.prenomNom }}</td>
+                <td>{{ personne.email }}</td>
+                <td>{{ personne.mobile }}</td>
+                <td>{{ personne.adresse }}</td>
+                <td>
+                    {% if is_granted('ROLE_ADMIN') and  personne.membre == null and personne.employe == null %}
+                    <form class="bootbox-confirm inline" id="confirm"
+                          data-content="{{ 'annuaire.confirmation_supprimer_personne'|trans({}, 'personne') }}"
+                          action="{{ path('personne_personne_supprimer', { 'id': personne.id }) }}"
+                          method="post">
+                        <button class="btn btn-danger">{{ 'generique.supprimer'|trans({}, 'personne') }}</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('#annuaire').DataTable({
+                "paging": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "aaSorting": [[1, 'asc']]
+            });
+        });
+    </script>
+{% endblock %}
+

@@ -1,0 +1,117 @@
+{% extends "Treso/layout.html.twig" %}
+
+{% block title %}
+    {% if bv.numero is null %}
+        {{ 'treso.bv_ajout'|trans({}, 'treso') }}
+    {% else %}
+        {{ 'treso.bv_modification'|trans({}, 'treso') }}
+    {% endif %}- {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {% if bv.numero is null %}
+        {{ 'treso.bv_ajout'|trans({}, 'treso') }}
+    {% else %}
+        {{ 'treso.bv_unique_modification'|trans({}, 'treso') }} {{ bv.mandat }} -BV- {{ bv.numero }}
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumb_items %}
+    <li><a href="{{ path('treso_BV_index') }}">{{ 'treso.bv_list'|trans({}, 'treso') }}</a></li>
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {% if bv.numero is null %}
+        {{ 'treso.bv_ajout'|trans({}, 'treso') }}
+    {% else %}
+        {{ 'treso.bv_modification'|trans({}, 'treso') }}
+    {% endif %}
+{% endblock %}
+
+{% block content_bundle %}
+    {{ form_start(form) }}
+    <table class="table table-bordered table-striped standard">
+        <tr>
+            <th>
+                {{ form_label(form.mandat) }}
+                {{ form_errors(form.mandat) }}
+            </th>
+            <td>{{ form_widget(form.mandat) }}</td>
+            <th>
+                {{ form_label(form.numero) }}
+                {{ form_errors(form.numero) }}
+            </th>
+            <td>{{ form_widget(form.numero) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.nombreJEH) }}
+                {{ form_errors(form.nombreJEH) }}
+            </th>
+            <td>{{ form_widget(form.nombreJEH) }}</td>
+            <th>
+                {{ form_label(form.remunerationBruteParJEH) }}
+                {{ form_errors(form.remunerationBruteParJEH) }}
+            </th>
+            <td>{{ form_widget(form.remunerationBruteParJEH) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.numeroVirement) }}
+                {{ form_errors(form.numeroVirement) }}
+            </th>
+            <td>{{ form_widget(form.numeroVirement) }}</td>
+            <th>
+                {{ form_label(form.dateDeVersement) }}
+                {{ form_errors(form.dateDeVersement) }}
+            </th>
+            <td>{{ form_widget(form.dateDeVersement) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.mission) }}
+                {{ form_errors(form.mission) }}
+            </th>
+            <td>{{ form_widget(form.mission) }}</td>
+            <th>
+                {{ form_label(form.typeDeTravail) }}
+                {{ form_errors(form.typeDeTravail) }}
+            </th>
+            <td>{{ form_widget(form.typeDeTravail) }}</td>
+        </tr>
+        <tr>
+            <th colspan="4">{{ 'treso.taux'|trans({}, 'treso') }}</th>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.dateDemission) }}
+                {{ form_errors(form.dateDemission) }}
+            </th>
+            <td colspan="3">{{ form_widget(form.dateDemission) }}</td>
+        </tr>
+    </table>
+
+
+    <div class="row">
+        <div class="col-md-2 col-xs-4">
+            <button type="submit" class="btn btn-success" >{{ 'treso.enregistrer'|trans({}, 'treso') }}</button>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+        {% if bv.numero is not null %}
+            <div class="col-md-2 col-xs-4">
+                <a href="{{ path('treso_BV_supprimer', {'id': bv.id}) }}" class="btn btn-danger">
+                    {{ 'treso.bv_supprimer'|trans({}, 'treso') }}
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}

@@ -1,0 +1,18 @@
+$('body').click(function(e){
+    var Elem = e.target;
+    if (Elem.classList.contains('avancement')){
+        bootbox.prompt("{{ 'suivi.avancement_developpeur'|trans({}, 'project') }} (%) ?", function(result) {
+        if (result !== null) {
+            $.ajax({
+                url: "{{ path('project_mission_avancement', {'id':0}) }}"+$(Elem).data("mission"), {# hack the routing system #}
+                type: "PUT",
+                data: "avancement=" + result,
+                success: function(data){
+                    var bar = $("#avancementBar-"+$(Elem).data("etude"));
+                    bar.css("width",  data + "%");
+                    bar.html(data + "%");
+                }
+            });
+        }
+    })
+}});

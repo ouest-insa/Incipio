@@ -1,0 +1,204 @@
+{% extends "Treso/layout.html.twig" %}
+
+{% block title %}
+    {{ 'treso.note_frais_gestion'|trans({}, 'treso') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'treso.note_frais_editer'|trans({}, 'treso') }}
+{% endblock %}
+
+{% block breadcrumb_items %}
+    <li><a href="{{ path('treso_NoteDeFrais_index') }}">{{ 'treso.note_frais_liste'|trans({}, 'treso') }}</a></li>
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'treso.note_frais_editer'|trans({}, 'treso') }}
+{% endblock %}
+
+{% block content_bundle %}
+    {{ form_start(form) }}
+    <button type="submit" class="btn btn-success">{{ 'treso.note_frais_enregistrer'|trans({}, 'treso') }}</button>
+        <br/><br/>
+        <table class="table table-bordered table-striped standard">
+            <tr>
+                <th>
+                    {{ form_label(form.mandat) }}
+                    {{ form_errors(form.mandat) }}
+                </th>
+                <td>{{ form_widget(form.mandat) }}</td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form_label(form.numero) }}
+                    {{ form_errors(form.numero) }}
+                </th>
+                <td>{{ form_widget(form.numero) }}</td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form_label(form.date) }}
+                    {{ form_errors(form.date) }}
+                </th>
+                <td>{{ form_widget(form.date) }}</td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form_label(form.demandeur) }}
+                    {{ form_errors(form.demandeur) }}
+                </th>
+                <td>{{ form_widget(form.demandeur) }}</td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form_label(form.objet) }}
+                    {{ form_errors(form.objet) }}
+                </th>
+                <td>{{ form_widget(form.objet) }}</td>
+            </tr>
+        </table>
+        <table class="table table-bordered table-striped" id="details"
+               data-prototype="{{ form_widget(form.details.vars.prototype) | e }}">
+            <tr>
+                <th colspan="2"><a href="#" id="addDetail">+</a> {{ 'treso.details'|trans({}, 'treso') }}</th>
+            </tr>
+            {% for detail in form.details %}
+                <tr id="detail">
+                    <td></td>
+                    <td>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    {{ form_label(detail.type) }}
+                                    {{ form_errors(detail.type) }}
+                                </th>
+                                <td>{{ form_widget(detail.type) }}</td>
+                                <th>
+                                    {{ form_label(detail.compte) }}
+                                    {{ form_errors(detail.compte) }}
+                                </th>
+                                <td>{{ form_widget(detail.compte) }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    {{ form_label(detail.description) }}
+                                    {{ form_errors(detail.description) }}
+                                </th>
+                                <td colspan="3">{{ form_widget(detail.description) }}</td>
+                            </tr>
+                            <tr id="prix">
+                                <th>
+                                    {{ form_label(detail.prixHT) }}
+                                    {{ form_errors(detail.prixHT) }}
+                                </th>
+                                <td>{{ form_widget(detail.prixHT) }}</td>
+                                <th>
+                                    {{ form_label(detail.tauxTVA) }}
+                                    {{ form_errors(detail.tauxTVA) }}
+                                </th>
+                                <td>{{ form_widget(detail.tauxTVA) }}</td>
+                            </tr>
+                            <tr id="km">
+                                <th>
+                                    {{ form_label(detail.kilometrage) }}
+                                    {{ form_errors(detail.kilometrage) }}
+                                </th>
+                                <td>{{ form_widget(detail.kilometrage) }}</td>
+                                <th>
+                                    {{ form_label(detail.tauxKm) }}
+                                    {{ form_errors(detail.tauxKm) }}
+                                </th>
+                                <td>{{ form_widget(detail.tauxKm) }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+    <script type="text/javascript">
+        // Récupère le div qui contient la collection de tags
+        var collectionHolderDetails = $('#details');
+        var $addDetailButton = $("#addDetail");
+
+        jQuery(document).ready(function () {
+            var i = 0;
+            var j = 0;
+            $("tr#detail").each(function () {
+                addDeleteButton(this);
+            });
+
+
+            $addDetailButton.on('click', function (e) {
+                // empêche le lien de créer un « # » dans l'URL
+                e.preventDefault();
+
+                // ajoute un nouveau formulaire detail (voir le prochain bloc de code)
+                addTagForm(collectionHolderDetails, i, 'detail');
+                i++;
+            });
+
+        });
+
+
+        function addTagForm(collectionHolder, i, type) {
+            // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
+            var prototype = collectionHolder.attr('data-prototype');
+
+            // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+            // la longueur de la collection courante
+            var newForm = prototype.replace(/__name__/g, collectionHolderDetails.children().first().children().length);
+            newForm = '<tr id="' + type + i + '"><td></td><td>' + newForm + '</td></tr>';
+
+            // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
+            var $newForm = collectionHolder.append(newForm);
+            addDeleteButton($('#' + type + i));
+
+        }
+
+
+        function addDeleteButton($tag) {
+            var $delete = $('<button class="btn" id="myButtonDelete" class="btn">X</button>');
+            $($tag).children().first().append($delete);
+
+            $delete.on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                //CONFIRM confirmation suppression
+                var message = "Êtes vous sûr de vouloir supprimer cette ligne ?";
+                bootbox.confirm(message, function (result) {
+                    if (result) {
+                        $tag.remove();
+                    }
+                });
+            });
+
+        }
+    </script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            var selection = $('select[id$="_type"]');
+            selection.each(
+                    function () {
+                        if ($(this).val() == 1) $(this).closest('.table').find('#km').toggle();
+                        else $(this).closest('.table').find('#prix').toggle();
+                    }
+            );
+
+            selection.change(
+                    function () {
+                        $(this).closest('.table').find('#km').toggle();
+                        $(this).closest('.table').find('#prix').toggle();
+                    });
+        });
+    </script>
+{% endblock %}

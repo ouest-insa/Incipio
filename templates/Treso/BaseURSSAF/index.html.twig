@@ -1,0 +1,57 @@
+{% extends "Treso/layout.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+{% endblock %}
+
+{% block title %}
+    {{ 'treso.base_urssaf_gestion'|trans({}, 'treso') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+    <button type="button" class="btn btn-success"
+            onclick="location.href='{{ path('treso_BaseURSSAF_ajouter') }}';">{{ 'treso.ajouter_base_urssaf'|trans({}, 'treso') }}
+    </button>
+    <table class="display dataTable table table-bordered table-striped dt-responsive" id="listeBase">
+        <thead>
+        <tr>
+            <th>{{ 'treso.action'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.applicable_du'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.applicable_au'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.montant'|trans({}, 'treso') }}</th>
+        </tr>
+        </thead>
+        {% for base in bases %}
+            <tr class="{{ base.dateFin < date() ? 'danger' : 'success' }}">
+                <td><a href="{{ path('treso_BaseURSSAF_modifier', {'id' : base.id }) }}" title="Modifier"><span
+                                class="fa fa-pencil"></span></a></td>
+                <td>{{ base.dateDebut | date('d/m/Y') }}</td>
+                <td>{{ base.dateFin | date('d/m/Y') }}</td>
+                <td>{{ base.baseURSSAF }}&nbsp;€</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('#listeBase').DataTable({
+                "paging": true,
+                "iDisplayLength": 50,
+                "aaSorting": [[1, 'desc']]
+            });
+        });
+    </script>
+{% endblock %}

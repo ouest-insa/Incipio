@@ -1,0 +1,120 @@
+{# If you modify that file. Think to apply the same modifications in formulaire.prototype file. #}
+
+<div class="panel panel-primary" data-role="mission">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 worker">
+                {{ form_label(form.intervenant) }}
+                {{ form_widget(form.intervenant, {'attr': {'class': 'select2-multiple'}}) }}
+                {{ form_errors(form.intervenant) }}
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-xs-12 col-md-8">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+                        {{ form_label(form.debutOm) }}<br>
+                        {{ form_widget(form.debutOm) }}
+                        {{ form_errors(form.debutOm) }}
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+                        {{ form_label(form.finOm) }}<br>
+                        {{ form_widget(form.finOm) }}
+                        {{ form_errors(form.finOm) }}
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+                        {{ form_label(form.pourcentageJunior) }}<br>
+                        {{ form_widget(form.pourcentageJunior) }}
+                        {{ form_errors(form.pourcentageJunior) }}
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+                        {{ form_label(form.referentTechnique) }}<br>
+                        {{ form_widget(form.referentTechnique, {'attr': {'class': 'select2-multiple'}}) }}
+                        {{ form_errors(form.referentTechnique) }}
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+                        {{ form_label(form.version) }}<br>
+                        {{ form_widget(form.version) }}
+                        {{ form_errors(form.version) }}
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+                        {{ form_label(form.dateSignature) }}<br>
+                        {{ form_widget(form.dateSignature) }}
+                        {{ form_errors(form.dateSignature) }}
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+                        {{ form_label(form.signataire1) }}<br>
+                        {{ form_widget(form.signataire1, {'attr': {'class': 'select2-multiple'}}) }}
+                        {{ form_errors(form.signataire1) }}
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 25px">
+                    <div class="col-md-12 col-xs-12">
+                        {{ form_label(form.phases) }}
+                        {{ form_widget(form.phases, {'attr': {'style': 'width:100%'}}) }}
+                        {{ form_errors(form.phases) }}
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <td colspan="4">
+                            <button class="btn btn-primary btn-sm add-another-repartition" type="button">
+                                {{ 'suivi.jeh_ajouter'|trans({}, 'project') }}
+                            </button>
+                            <h4 style="display: inline;">{{ 'suivi.jeh_repartition'|trans({}, 'project') }}</h4>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody class="repartition-list" data-count="{{ form.repartitionsJEH | length }}" data-prototype="
+                        <tr class='repartitions'>
+                            <td>
+                                <table class='table'>
+                                    <tr>
+                                        <th>{{ form_label(form.repartitionsJEH.vars.prototype.nbrJEH) | e }}</th>
+                                        <th>{{ form_label(form.repartitionsJEH.vars.prototype.prixJEH) | e }}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ form_widget(form.repartitionsJEH.vars.prototype.nbrJEH) | e }}</td>
+                                        <td>{{ form_widget(form.repartitionsJEH.vars.prototype.prixJEH) | e }}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    ">
+                    {% for repartitionJEH in form.repartitionsJEH %}
+                        <tr class="repartitions">
+                            <td>
+                                <table class="table">
+                                    <tr>
+                                        <th>{{ form_label(repartitionJEH.nbrJEH) }}</th>
+                                        <th>{{ form_label(repartitionJEH.prixJEH) }}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ form_widget(repartitionJEH.nbrJEH) }}
+                                            {{ form_errors(repartitionJEH.nbrJEH) }}</td>
+
+                                        <td>{{ form_widget(repartitionJEH.prixJEH) }}
+                                            {{ form_errors(repartitionJEH.prixJEH) }}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div><!-- end panel body -->
+</div>

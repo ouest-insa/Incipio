@@ -1,0 +1,32 @@
+{# layout père de suivi bundle #}
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                {% block content_title %}
+                    {{ 'dashboard.gestion_utilisateurs_clients'|trans({}, 'dashboard') }}
+                {% endblock %}
+            </h3>
+
+            {% block breadcrumb %}
+                <ul class="breadcrumb no-margin pull-right">
+                    <li>
+                        {{ 'dashboard.membres_clients'|trans({}, 'dashboard') }}
+                    </li>
+                </ul>
+            {% endblock %}
+
+        </div>
+        <div class="box-body">
+            {# On définit un nouveau block, que les vues du bundle pourront remplir #}
+            {% block content_bundle %}
+            {% endblock %}
+
+        </div>
+        <div class="box-footer"></div>
+    </div>
+
+{% endblock %}

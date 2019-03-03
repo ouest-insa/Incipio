@@ -1,0 +1,50 @@
+{% extends "Publish/layout.html.twig" %}
+
+{% block content_bundle %}
+    <p>Via cette page vous pouvez importer des fichiers provenant d'autres CRM. Choisissez un type de fichier et suivez
+        les instructions.</p>
+    {{ form_start(form, {'action': path('publish_import')}) }}
+        <div class="row">
+            <div class="col-lg-2">
+                {{ form_label(form.import_method) }}
+            </div>
+            <div class="col-lg-8">
+                {{ form_widget(form.import_method) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="result"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                {{ form_label(form.file) }}
+            </div>
+            <div class="col-lg-8">
+                {{ form_widget(form.file) }}
+            </div>
+        </div>
+        {{ form_rest(form) }}
+        <button type="submit" class="btn btn-success">Importer</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $('#form_import_method').on('change', function expectedFormat() {
+            var service_number = $('input[type=radio]:checked').val();
+            $.get("{{ path('publish_import_format', {'service_number': ''}) }}" + service_number, function (data) {
+                var output = '<h4>Fichier attendu : ' + data['file_format'] + '</h4>' +
+                        '<strong>Formattage attendu des colonnes dans le fichier</strong>' +
+                        '<div class="table-responsive"><table class="table table-bordered"><tr>';
+                data['columns_format'].forEach(function (element) {
+                    output = output + '<td>' + element + '</td>';
+                });
+                output = output + '</tr></table></div>';
+                $("#result").empty().html(output);
+            });
+        });
+    </script>
+{% endblock %}

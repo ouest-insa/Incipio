@@ -1,0 +1,86 @@
+{% extends "Publish/layout.html.twig" %}
+
+{% block title %}
+    Uploader un Document Type - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    Uploader un Document Type
+{% endblock %}
+
+{% block content_bundle %}
+
+    {{ form_start(form) }}
+        <table class="table table-bordered table-striped">
+            <tr>
+                <td>{{ form_label(form.template) }}</td>
+                <td>{{ form_widget(form.template,{'attr' : {'onChange':'selectHelper()'} }) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.name) }}</td>
+                <td>
+                    {{ form_widget(form.name) }}
+                    <span id="selectHelperMessage"></span>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">Vérification :</th>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.etude) }}</td>
+                <td>{{ form_widget(form.etude, {'attr': {'style': 'min-width: 300px'}}) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.etudiant) }}</td>
+                <td>{{ form_widget(form.etudiant, {'attr': {'style': 'min-width: 300px'}}) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.verification) }}</td>
+                <td>{{ form_widget(form.verification) }}</td>
+            </tr>
+        </table>
+
+        <input type="submit" class="btn btn-success" value="Uploader"/>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+
+    <script type="text/javascript">
+        var selectHelper = function () {
+
+            var success = false;
+            var fullPath = $("#Mgate_suivibundle_doctypetype_template").val();
+
+            if (fullPath) {
+                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+                var filename = fullPath.substring(startIndex);
+                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                    filename = filename.substring(1);
+                }
+                console.log(filename);
+
+                //pour chaque valeur de la liste,
+                $("#Mgate_suivibundle_doctypetype_name option").each(function () {
+                    var regex = new RegExp($(this).val(), "i");
+
+                    if (regex.test(filename)) { //test si le fichier contient ce pattern
+                        //si oui, pop un message et un bouton pour changer
+                        $("#selectHelperMessage").hide().removeClass().addClass("label label-info")
+                                .text('Le type du document à été modifé d\'après le nom du doctype.').fadeIn(500);
+                        $("#Mgate_suivibundle_doctypetype_name").val($(this).val());
+                        success = true;
+                        return success;
+                    }
+                });
+
+                if (!success) {
+                    $("#selectHelperMessage").hide().removeClass("label-info").addClass("label label-warning").text('Le nom du document type n\'a pas permis de trouver le type du doctype.').slideDown(500);
+                }
+
+            }
+        }
+    </script>
+{% endblock %}

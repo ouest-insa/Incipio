@@ -1,0 +1,107 @@
+{# layout d'accueil pour les études  #}
+
+{% extends "Project/layout.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.accueil'|trans({}, 'project') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            {#% if etudesSuiveur | length %}
+            <li class="active"><a href="#tab1" data-toggle="tab">Etudes à suivre ({{app.user.personne.prenomnom|default('non connecté')}})</a></li>
+            {% endif %#}
+            <li class="active"><a href="#tab2" data-toggle="tab">{{ 'suivi.etudes_negociations'|trans({}, 'project') }}
+                    ({{ etudesEnNegociation | length }})</a></li>
+            <li><a href="#tab3" data-toggle="tab">{{ 'suivi.etudes_en_cours'|trans({}, 'project') }}
+                    ({{ etudesEnCours | length }})</a></li>
+            {% if etudesEnPause | length %}
+                <li><a href="#tab4" data-toggle="tab">{{ 'suivi.etudes_pause'|trans({}, 'project') }}
+                        ({{ etudesEnPause | length }})</a></li>
+            {% endif %}
+            <li><a href="#tab5" data-toggle="tab">{{ 'suivi.etudes_terminees'|trans({}, 'project') }}</a></li>
+            <li><a href="#tab6" data-toggle="tab">{{ 'suivi.etudes_avortees'|trans({}, 'project') }}
+                    <span class="badge badge-default" title="{{ 'suivi.propales_non_abouties_texte'|trans({}, 'project') }}"
+                 data-toggle="tooltip">?</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab2" style="min-height: 400px;">
+            {% include "Project/Etude/Tab/EtudesEnNegociation.html.twig" with  {'etudesEnNegociation':  etudesEnNegociation} %}
+        </div>
+        <div class="tab-pane" id="tab3" style="min-height: 400px;">
+            {% include "Project/Etude/Tab/EtudesEnCours.html.twig" with  {'etudesEnCours':  etudesEnCours} %}
+        </div>
+        {% if etudesEnPause | length %}
+            <div class="tab-pane" id="tab4" style="min-height: 400px;">
+                {% include "Project/Etude/Tab/EtudesEnPause.html.twig" with  {'etudesEnPause':  etudesEnPause} %}
+            </div>
+        {% endif %}
+        <div class="tab-pane" id="tab5" style="min-height: 400px;">
+            &nbsp;{% include "Project/Etude/Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesTermineesParMandat, 'key' : '1'} %}
+        </div>
+        <div class="tab-pane" id="tab6" style="min-height: 400px;">
+            &nbsp;{% include "Project/Etude/Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesAvorteesParMandat, 'key' : '2'} %}
+        </div>
+    </div>
+
+{% endblock %}
+
+    {% block javascript %}
+        {{ parent() }}
+        <script>
+            function getEtudesAsync(stateID, mandat) {
+                $.get(
+                    '{{ path('project_etude_ajax') }}',
+                    {stateID: stateID, mandat: mandat})
+                    .done(function (data) {
+                        $('.panel-body.mandat' + mandat + '.stateID' + stateID).append(data);
+                        console.log(data);
+                    });
+            }
+            
+            $('.accordion-toggle').each(function () {
+                $(this).click(function () {
+                    if ($(this).attr('data-loaded') == 'false') {
+                        $(this).attr('data-loaded', true);
+                        getEtudesAsync($(this).attr('data-stateid'), $(this).attr('data-mandat'));
+                    }
+                });
+            });
+
+            // keep tab opened through refresh
+            $(document).ready(function () {
+                // show active tab on reload
+                if (location.hash !== '') {
+                    var tabSelect = $('a[href="' + location.hash + '"]');
+                    var url = tabSelect.attr('data-url');
+                    var div = $(location.hash);
+                    if (div !== undefined) {
+                        div.load(url, function (result) {
+                            return result
+                        });
+                    }
+                    tabSelect.tab('show');
+                }
+
+                // remember the hash in the URL without jumping
+                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var url = $(this).attr("data-url");
+                    var href = this.hash;
+                    if (history.pushState) {
+                        history.pushState(null, null, '#' + $(e.target).attr('href').substr(1));
+                    } else {
+                        location.hash = '#' + $(e.target).attr('href').substr(1);
+                    }
+                });
+            });
+
+            {# le JS pour modifier l'avancement d'une étude. #}
+            {% include "Project/Etude/Tools/Avancement.js.twig" %}
+
+        </script>
+    {% endblock %}

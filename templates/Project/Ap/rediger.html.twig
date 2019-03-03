@@ -1,0 +1,163 @@
+{% extends "Project/layout.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.ap_rediger'|trans({}, 'project') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'suivi.ap_rediger'|trans({}, 'project') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <!--<a href="{{ path('personne_employe_ajouter', {'id':etude.prospect.id, 'format':'mini'}) }}?KeepThis=true&TB_iframe=true&height=400&width=600" title="Ajouter un signataire" class="thickbox">Ajouter un signataire</a>-->
+
+
+    {{ form_start(form) }}
+    {% form_theme form 'Project/Form/fields.html.twig' %}
+    <table class="table table-bordered table-striped standard">
+        <tr>
+            <th>
+                {{ form_label(form.suiveur) }}
+                {{ form_errors(form.suiveur) }}
+                <div class="badge" title="Liste des personnes ayant exercées au moins 1 mandat" data-toggle="tooltip">
+                    ?
+                </div>
+            </th>
+            <td>{{ form_widget(form.suiveur) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.ap.contactMgate) }}
+                {{ form_errors(form.ap.contactMgate) }}
+            </th>
+            <td>{{ form_widget(form.ap.contactMgate) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.ap.version) }}
+                {{ form_errors(form.ap.version) }}
+            </th>
+            <td>{{ form_widget(form.ap.version) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.ap.signataire1) }}
+                {{ form_errors(form.ap.signataire1) }}
+            </th>
+            <td>{{ form_widget(form.ap.signataire1) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.ap.knownSignataire2) }}
+                {{ form_errors(form.ap.knownSignataire2) }}
+            </th>
+            <td>{{ form_widget(form.ap.knownSignataire2) }}</td>
+        </tr>
+        <tr>
+            <th id="{{ form.ap.newSignataire2.vars.id }}_block" colspan="2"
+                class="success">{{ 'suivi.signataire_client_ajouter'|trans({}, 'project') }}</th>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.ap.newSignataire2.personne.prenom) }}</th>
+            <td>{{ form_widget(form.ap.newSignataire2.personne.prenom) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.ap.newSignataire2.personne.nom) }}</th>
+            <td>{{ form_widget(form.ap.newSignataire2.personne.nom) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.ap.newSignataire2.personne.sexe) }}</th>
+            <td>{{ form_widget(form.ap.newSignataire2.personne.sexe) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.ap.newSignataire2.personne.mobile) }}</th>
+            <td>{{ form_widget(form.ap.newSignataire2.personne.mobile) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.ap.newSignataire2.personne.email) }}</th>
+            <td>{{ form_widget(form.ap.newSignataire2.personne.email) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.ap.newSignataire2.personne.estAbonneNewsletter) }}</th>
+            <td>{{ form_widget(form.ap.newSignataire2.personne.estAbonneNewsletter) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.ap.newSignataire2.personne.emailEstValide) }}</th>
+            <td>{{ form_widget(form.ap.newSignataire2.personne.emailEstValide) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.ap.newSignataire2.poste) }}</th>
+            <td>{{ form_widget(form.ap.newSignataire2.poste) }}</td>
+        </tr>
+        <tr>
+            <th id="{{ form.ap.newSignataire2.vars.id }}_block" colspan="2"
+                class="success">{{ 'suivi.avant_projet'|trans({}, 'project') }}</th>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.ap.signataire2) }}
+                {{ form_errors(form.ap.signataire2) }}
+            </th>
+            <td>{{ form_widget(form.ap.signataire2) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.ap.dateSignature) }}
+                {{ form_errors(form.ap.dateSignature) }}
+            </th>
+            <td>{{ form_widget(form.ap.dateSignature) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.ap.nbrDev) }}
+                {{ form_errors(form.ap.nbrDev) }}
+            </th>
+            <td>{{ form_widget(form.ap.nbrDev) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.fraisDossier) }}
+                {{ form_errors(form.fraisDossier) }}
+            </th>
+            <td>{{ form_widget(form.fraisDossier) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.presentationProjet) }}
+                {{ form_errors(form.presentationProjet) }}
+            </th>
+            <td>{{ form_widget(form.presentationProjet) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.descriptionPrestation) }}
+                {{ form_errors(form.descriptionPrestation) }}
+            </th>
+            <td>{{ form_widget(form.descriptionPrestation) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.competences) }}
+                {{ form_errors(form.competences) }}
+            </th>
+            <td>{{ form_widget(form.competences, {'attr': {'class':'select2-multiple', 'style': 'width: 100%'}}) }}</td>
+        </tr>
+    </table>
+    {{ form_widget(form) }}
+
+    <input type="submit" value="{{ 'suivi.ap_enregistrer'|trans({}, 'project') }}" class="btn btn-success"/>
+    <input type="submit" value="{{ 'suivi.ap_enregistrer_phases_passer'|trans({}, 'project') }}" name="phases"
+           class="btn btn-success"/>
+    {{ form_end(form) }}
+
+{% endblock %}
+
+ {% block javascript %}
+     {{ parent() }}
+     {{ form_javascript(form) }}
+     <script type="text/javascript">
+         $(".select2-multiple").select2({width: '100%'});
+     </script>
+     {% include "Project/DocType/selectOrNew.html.twig" with { known: form.ap.knownSignataire2, knowned: form.ap.signataire2, newed: form.ap.newSignataire2 } %}
+ {% endblock %}

@@ -1,0 +1,38 @@
+<h3>{{ 'etude.etudes'|trans({}, 'personne') }}</h3>
+
+<table class="table table-bordered table-striped dt-responsive text-left" id="etudes">
+    <thead>
+    <tr>
+        <th>{{ 'etude.champs.date_creation'|trans({}, 'personne') }}</th>
+        <th>{{ 'etude.champs.nom'|trans({}, 'personne') }}</th>
+        <th>{{ 'etude.statut.statut'|trans({}, 'personne') }}</th>
+        <th>{{ 'etude.champs.description'|trans({}, 'personne') }}</th>
+        <th>{{ 'etude.champs.prix_HT'|trans({}, 'personne') }}</th>
+        <th>{{ 'etude.champs.JEHs'|trans({}, 'personne') }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for etude in etudes %}
+        <tr>
+            <td>
+                {{ etude.dateCreation|date("d/m/Y") }}
+            </td>
+            <td>
+                <a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a>
+            </td>
+            <td>
+                {{ ( etude.stateID == 4 ?
+                    'etude.statut.terminee'|trans({}, 'personne') : ( etude.stateID == 5 ?
+                    'etude.statut.avortee'|trans({}, 'personne') : ( etude.stateID == 3 ?
+                    'etude.statut.en_pause'|trans({}, 'personne') : ( etude.stateID == 2 ?
+                    'etude.statut.en_cours'|trans({}, 'personne') : 'etude.statut.en_negociation'|trans({}, 'personne')
+                )))) }}
+            </td>
+            <td>{{ etude.description }}</td>
+            <td>{{ etude.montantHT | default('0') }}</td>
+            <td>{{ etude.NbrJEH | default('0') }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+

@@ -1,0 +1,122 @@
+{% extends "Personne/layout.html.twig" %}
+
+{% block title %}
+    {{ 'prospect.affichage_prospect'|trans({}, 'personne') }} {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+{% endblock %}
+
+{% block content_title %}
+    {{ 'prospect.affichage_prospect'|trans({}, 'personne') }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <ul class="breadcrumb no-margin pull-right">
+        <li><a href="{{ path('personne_prospect_homepage') }}">{{ 'prospect.liste_prospect'|trans({}, 'personne') }}</a></li>
+        <li class="active">{{ prospect.nom }}</li>
+    </ul>
+{% endblock %}
+
+{% block content_bundle %}
+    <h2>{{ prospect.nom }}</h2>
+    <em><h4>{{ 'prospect.champs.type'|trans({}, 'personne') }} : {{ prospect.EntiteToString }}</h4></em>
+    <h4>{{ 'prospect.champs.adresse'|trans({}, 'personne') }} : {{ prospect.adresse }}
+        <br>
+        {{ prospect.codePostal }} {{ prospect.ville }}
+    </h4>
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1" data-toggle="tab">{{ 'employe.employes'|trans({}, 'personne') }}</a></li>
+            <li><a href="#tab2" data-toggle="tab">{{ 'etude.etudes'|trans({}, 'personne') }}</a></li>
+            <li><a href="#tab3" data-toggle="tab">{{ 'prospect.liste_diffusion'|trans({}, 'personne') }}</a></li>
+            <li><a href="#tab4" data-toggle="tab">{{ 'prospect.commentaires'|trans({}, 'personne') }}</a></li>
+        </ul>
+        <div class="tab-content">
+            <!-- Liste des employés -->
+            <div class="tab-pane active" id="tab1">
+                {% include "Personne/Prospect/TabVoir/employes.html.twig" %}
+            </div>
+            <!-- Etudes faites avec ce prospect -->
+            <div class="tab-pane" id="tab2" style="min-height:200px;">
+                {% include "Personne/Prospect/TabVoir/etudes.html.twig" %}
+            </div>
+            <!-- Mailing list -->
+            <div class="tab-pane" id="tab3">
+                {% include "Personne/Prospect/TabVoir/mailing.html.twig" %}
+            </div>
+            <!-- commentaires (fos rest) -->
+            <div class="tab-pane" id="tab4">
+                {% include 'Comment/Thread/async.html.twig' with {'id': prospect.thread.id} %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('#employes').dataTable({
+                responsive: true,
+                "searching": false,
+                "bPaginate": false,
+                "bAutoWidth": false,
+                "aaSorting": [[0, 'asc']]
+            });
+        });
+        $(document).ready(function () {
+            $('#etudes').dataTable({
+                responsive: true,
+                "searching": false,
+                "bPaginate": false,
+                "bAutoWidth": false,
+                "aaSorting": [[0, 'asc']]
+            });
+        });
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $($.fn.dataTable.tables(true)).DataTable()
+                .columns.adjust()
+                .responsive.recalc();
+        });
+
+        // keep tab opened through refresh
+        $(document).ready(function () {
+            // show active tab on reload
+            if (location.hash !== '') {
+                var tabSelect = $('a[href="' + location.hash + '"]');
+                var url = tabSelect.attr('data-url');
+                var div = $(location.hash);
+                if (div !== undefined) {
+                    div.load(url, function (result) {
+                        return result
+                    });
+                }
+                tabSelect.tab('show');
+            }
+
+            // remember the hash in the URL without jumping
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var url = $(this).attr("data-url");
+                var href = this.hash;
+                if (history.pushState) {
+                    history.pushState(null, null, '#' + $(e.target).attr('href').substr(1));
+                } else {
+                    location.hash = '#' + $(e.target).attr('href').substr(1);
+                }
+            });
+        });
+    </script>
+{% endblock %}
+

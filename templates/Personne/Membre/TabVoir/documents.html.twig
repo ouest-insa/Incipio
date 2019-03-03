@@ -1,0 +1,47 @@
+                <h4>{{ 'membre.description_documents'|trans({}, 'personne') }} {{ membre.personne.prenomNom }}</h4>
+                <ul class="nav  navbar-nav">
+                    <li>
+                        <a href="{{ path('publish_document_uploadEtudiant', {'id': membre.id}) }}">
+                            <span class="fa fa-pencil"></span> {{ 'membre.ajouter_document'|trans({}, 'personne') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('publish_publiposter', { 'templateName' : 'BA', 'rootName' : 'etudiant', 'rootObject_id' : membre.id}) }}">
+                            <span class="fa fa-user"></span> {{ 'membre.generer_BA'|trans({}, 'personne') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('publish_publiposter', { 'templateName' : 'CE', 'rootName' : 'etudiant', 'rootObject_id' : membre.id}) }}">
+                            <span class="fa fa-paperclip"></span> {{ 'membre.generer_CE'|trans({}, 'personne') }}
+                            <span class="badge badge-default" data-toggle="tooltip"
+                              title="{{ 'etude.doc.CE_tooltip'|trans({}, 'personne') }}">!</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('publish_publiposter', { 'templateName' : 'AC', 'rootName' : 'etudiant', 'rootObject_id' : membre.id}) }}">
+                            <span class="fa fa-lock"></span> {{ 'membre.generer_AC'|trans({}, 'personne') }}
+                        </a>
+                    </li>
+                </ul>
+
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>{{ 'membre.doc.titre'|trans({}, 'personne') }}</th>
+                        <th>{{ 'membre.doc.date_upload'|trans({}, 'personne') }}</th>
+                        <th>{{ 'membre.doc.uploader'|trans({}, 'personne') }}</th>
+                        {% if is_granted('ROLE_CA') %}
+                        <th>{{ 'champs.action'|trans({}, 'personne') }}</th>
+                        {% endif %}
+                    </tr>
+                    {% for relatedDocument in membre.relatedDocuments | reverse %}
+                    {% set doc = relatedDocument.document %}
+                    <tr>
+                        <td><a href="{{ path('publish_document_voir', {'id': doc.id}) }} ">{{ doc.name}}</a></td>
+                        <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s')}}</td>
+                        <td>{{ doc.author ? doc.author.prenomNom }}</td>
+                        {% if is_granted('ROLE_CA') %}
+                        <td><a href="{{ path('publish_document_delete', {'id' : doc.id }) }}"><i class="fa fa-times"></i></a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>

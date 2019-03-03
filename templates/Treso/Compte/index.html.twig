@@ -1,0 +1,54 @@
+{% extends "Treso/layout.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+{% endblock %}
+
+{% block title %}
+    {{ 'treso.comptes_gestion'|trans({}, 'treso') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'treso.gestion_comptable_gestion'|trans({}, 'treso') }}
+{% endblock %}
+
+
+{% block content_bundle %}
+    <a href="{{ path('treso_Compte_ajouter') }}" class="btn btn-success">
+        {{ 'treso.compte_ajouter'|trans({}, 'treso') }}
+    </a>
+    <table class="display dataTable table table-bordered table-striped" id="listeComptes">
+        <thead>
+        <tr>
+            <th>{{ 'treso.numero'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.libelle'|trans({}, 'treso') }}</th>
+        </tr>
+        </thead>
+        {% for compte in comptes %}
+            <tr {% if compte.categorie %}class="success"{% endif %}>
+                <td>{{ compte.numero }}</td>
+                <td><a href="{{ path('treso_Compte_modifier', {'id': compte.id}) }}">{{ compte.libelle }}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('#listeComptes').DataTable({
+                "aaSorting": [[0, 'asc']]
+            });
+        });
+    </script>
+{% endblock %}

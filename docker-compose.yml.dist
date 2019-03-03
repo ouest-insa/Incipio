@@ -3,19 +3,19 @@ version: "2"
 services:
 
     web:
-        build: .
-        environment:
-            # That parameter is set to prod by the auto-install script.
-            # Don't forget to set it manually to prod if you don't use the auto-install script
-            SYMFONY_ENV: dev
-            TECHNICAL_FROM: REPLACE_WITH_YOUR_EMAIL
-            TECHNICAL_TO: REPLACE_WITH_YOUR_EMAIL
-            TECHNICAL_HOST: REPLACE_WITH_YOUR_HOST
+        build:
+            context: .
+            dockerfile: ./docker/web/Dockerfile
+        env_file:
+            - .env
         depends_on:
             - database
             - mailer
         volumes:
-            - .:/app
+            - ./var/documents:/app/var/documents
+            - ./var/key_value_store:/app/var/key_value_store
+            - ./var/sessions:/app/var/sessions
+            - ./var/log:/app/var/log
         restart: "no"
         labels:
             - "traefik.backend=web-jeyser"

@@ -1,0 +1,36 @@
+{% extends "Project/layout.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.av_modifier_un'|trans({}, 'project') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'suivi.av_modifier_un'|trans({}, 'project') }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'suivi.av_modifier_un'|trans({}, 'project') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    {% include 'Project/Av/formulaire.html.twig' %}
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+    <script>
+        $(document).ready(function () {
+            $('input.position').each(function (i) {
+                $(this).val(i);
+            });
+            $('.titrePhase').each(function (i) {
+                $(this).text('Phase n°' + (i + 1));
+            });
+            $(".select2-multiple").select2();
+        });
+
+    </script>
+{% endblock %}

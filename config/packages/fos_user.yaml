@@ -1,0 +1,12 @@
+fos_user:
+    db_driver: orm
+    firewall_name: main # Nom du firewall security.yml
+    user_class: App\Entity\User\User # La classe de l'entité User a modifier
+    service:
+        mailer: fos_user.mailer.twig_swift
+    registration:
+      confirmation:
+        enabled:    true
+    from_email:
+        address:        "%env(TECHNICAL_FROM)%"
+        sender_name:    "%env(TECHNICAL_TO)%"

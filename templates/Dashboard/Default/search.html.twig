@@ -1,0 +1,96 @@
+{% extends "Dashboard/layout.html.twig" %}
+
+{% block title %}
+    Recherche - {{ search }} - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                Résultat de recherche pour “{{ search }}”
+            </h3>
+            <form action="" method="GET">
+                <div class="input-group">
+                    <input type="text" placeholder="Rechercher" name="q" class="form-control input-md" value="{{ search }}">
+                    <div class="input-group-btn">
+                        <button class="btn btn-md btn-primary" type="submit">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% for project in projects %}
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title"><a
+                            href="{{ path('project_etude_voir', {'nom': project.nom}) }}">Etude {{ project.nom }}</a>
+                </h3>
+            </div>
+            <div class="box-body">
+                <p>
+                    <strong>{{ project.dateCreation|date("d/m/Y") }} - {{ project.description }}</strong><br>
+                    {{ project.presentationProjet }} | {{ project.descriptionPrestation }}
+                </p>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        {% if loop.last and loop.length == 10 %}
+            Affichage limité à 10 résultats pour les études.
+        {% endif %}
+    {% endfor %}
+
+    {% for prospect in prospects %}
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <a href="{{ path('personne_prospect_voir', {'id': prospect.id}) }}">Prospect {{ prospect.nom }}</a>
+                </h3>
+            </div>
+            <div class="box-body">
+                <p>
+                    <strong>{{ prospect.getEntiteToString }}</strong><br>
+                    {{ prospect.adresse }} | {{ prospect.codePostal }} | {{ prospect.ville }} | {{ prospect.pays }}
+                </p>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        {% if loop.last and loop.length == 10 %}
+            Affichage limité à 10 résultats pour les prospects.
+        {% endif %}
+    {% endfor %}
+
+    {% for person in people %}
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    {% if person.employe is not null %}
+                    <a href="{{ path('personne_prospect_voir', {'id': person.employe.prospect.id}) }}">Employé {{ person.prenom }} {{ person.nom }}</a>
+                    {% endif %}
+                    {% if person.membre is not null %}
+                        <a href="{{ path('personne_membre_voir', {'id': person.membre.id}) }}">Membre {{ person.prenom }} {{ person.nom }}</a>
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="box-body">
+                <p>
+                    <strong>{{ person.email }}</strong><br>
+                    {%  if person.mobile is not null %}
+                    {{ person.mobile }} |
+                    {% endif %}
+                    {%  if person.fix is not null %}
+                        {{ person.fix }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        {% if loop.last and loop.length == 10 %}
+            Affichage limité à 10 résultats pour les prospects.
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}

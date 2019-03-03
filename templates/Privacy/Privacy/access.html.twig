@@ -1,0 +1,171 @@
+{% extends "Privacy/layout.html.twig" %}
+
+{% block content_title %}
+    {{ 'dashboard.vie_privee'|trans({}, 'dashboard') }} - {{ personne.nomFormel }}
+{% endblock %}
+
+{% block content_bundle %}
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <h4>{{ 'personne.personne'|trans({}, 'personne') }}</h4>
+            <ul>
+                <li>
+                    <strong>Prenom:</strong> {{ personne.prenom }}
+                </li>
+                <li>
+                    <strong>Nom:</strong> {{ personne.nom }}
+                </li>
+                <li>
+                    <strong>Sexe:</strong> {{ personne.sexe }}
+                </li>
+                <li>
+                    <strong>Mobile:</strong> {{ personne.mobile }}
+                </li>
+                <li>
+                    <strong>Fixe:</strong> {{ personne.fix }}
+                </li>
+                <li>
+                    <strong>Email est valide:</strong> {{ personne.emailEstValide }}
+                </li>
+                <li>
+                    <strong>Abonné newsletter:</strong> {{ personne.estAbonneNewsletter }}
+                </li>
+            </ul>
+        </div>
+        {% if personne.membre is not null %}
+            <div class="col-md-6 col-xs-12">
+                <h4>{{ 'membre.membre'|trans({}, 'personne') }}</h4>
+                <ul>
+                    <li>
+                        <strong>Date Convention
+                            Eleve:</strong> {{ personne.membre.dateConventionEleve | date('Y-m-d\TH:i:sO') }}
+                    </li>
+                    <li>
+                        <strong>Identifiant:</strong> {{ personne.membre.identifiant }}
+                    </li>
+                    <li>
+                        <strong>Email etudiant:</strong> {{ personne.membre.emailEMSE }}
+                    </li>
+                    <li>
+                        <strong>Promotion:</strong> {{ personne.membre.promotion }}
+                    </li>
+                    <li>
+                        <strong>Date naissance:</strong> {{ personne.membre.dateDeNaissance | date('Y-m-d\TH:i:sO') }}
+                    </li>
+                    <li>
+                        <strong>Lieu naissance:</strong> {{ personne.membre.lieuDeNaissance }}
+                    </li>
+                    <li>
+                        <strong>Nationalité:</strong> {{ personne.membre.nationalite }}
+                    </li>
+                    <li>
+                        <strong>Format paiement:</strong> {{ personne.membre.formatPaiement }}
+                    </li>
+                    <li>
+                        <strong>Photo URI:</strong> {{ personne.membre.photoURI }}
+                    </li>
+                    <li>
+                        <strong>Securite Sociale:</strong> {{ personne.membre.securiteSociale }}
+                    </li>
+                    <li>
+                        <strong>Missions:</strong>
+                        {% for m in personne.membre.missions %}
+                            <ul>
+                                <li>
+                                    <strong>Etude:</strong> {{ m.etude.nom }}
+                                </li>
+                                <li>
+                                    <strong>Debut:</strong> {{ m.debutOm | date('Y-m-d\TH:i:sO') }}
+                                </li>
+                                <li>
+                                    <strong>Fin:</strong> {{ m.finOm | date('Y-m-d\TH:i:sO') }}
+                                </li>
+                                <li>
+                                    <strong>Pourcentage junior:</strong> {{ m.pourcentageJunior }}
+                                </li>
+                                <li>
+                                    <strong>Remuneration brute:</strong> {{ m.remunerationBrute }}
+                                </li>
+                                <li>
+                                    <strong>Nombre JEH:</strong> {{ m.nbrJEH }}
+                                </li>
+                            </ul>
+                            <hr>
+                        {% endfor %}
+                    </li>
+                    <li>
+                        <strong>Competences:</strong>
+                        <ul>
+                            {% for c in personne.membre.competences %}
+                                <li>{{ c.nom }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Mandats:</strong>
+                        <ul>
+                            {% for mm in personne.membre.mandats %}
+                                <li>Du {{ mm.debutMandat | date('Y-m-d\TH:i:sO') }} au
+                                    {{ mm.finMandat | date('Y-m-d\TH:i:sO') }}: {{ mm.poste.intitule }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+        {% endif %}
+        {% if personne.employe is not null %}
+            <div class="col-md-6 col-xs-12">            
+                <ul>
+                    <li>
+                        <strong>Poste:</strong> {{ personne.employe.poste }}
+                    </li>
+                    <li>
+                        <strong>Employeur:</strong>
+                        <ul>
+                            <li><strong>Nom:</strong> {{ personne.employe.prospect.nom }}</li>
+                            <li><strong>Adresse:</strong> {{ personne.employe.prospect.adresse }}
+                                {{ personne.employe.prospect.ville }}
+                                {{ personne.employe.prospect.codePostal }}
+                                {{ personne.employe.prospect.pays }}
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+        {% if personne.user is not null %}
+            <div class="col-md-6 col-xs-12">
+                <h4>{{ 'user.utilisateur'|trans({}, 'user') }}</h4>
+                <ul>
+                    <li>
+                        <strong>Username:</strong> {{ personne.user.username }}
+                    </li>
+                    <li>
+                        <strong>Username initial:</strong> {{ personne.user.usernameCanonical }}
+                    </li>
+                    <li>
+                        <strong>Email:</strong> {{ personne.user.email }}
+                    </li>
+                    <li>
+                        <strong>Email initial:</strong> {{ personne.user.emailCanonical }}
+                    </li>
+                    <li>
+                        <strong>Compte activé:</strong> {{ personne.user.enabled }}
+                    </li>
+                    <li>
+                        <strong>Dernière connexion:</strong> {{ personne.user.lastLogin | date('Y-m-d\TH:i:sO') }}
+                    </li>
+                    <li>
+                        <strong>Mot de passe demandé le:</strong> {{ personne.user.passwordRequestedAt | date('Y-m-d\TH:i:sO') }}
+                    </li>
+                    <li>
+                        <strong>Roles:</strong> {{ personne.user.roles | join(',') }}
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+

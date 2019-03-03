@@ -1,0 +1,84 @@
+{% extends "User/layout.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+{% endblock %}
+
+{% block title %}    
+    {{ 'user.utilisateurs_lister'|trans({}, 'user') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'user.utilisateurs_lister'|trans({}, 'user') }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'user.utilisateurs_lister'|trans({}, 'user') }}
+{% endblock %}
+
+{% block content_bundle %}
+    <table class="table table-bordered table-striped dataTable dt-responsive text-left" id="listeUser" role="grid" width="100%">
+        <thead>
+        <tr>
+            <th>Nom d'utilisateur</th>
+            <th>Lié à</th>
+            <th>Email du compte</th>
+            <th>Droit</th>
+            <th>Dernière connexion</th>
+            {% if is_granted('ROLE_ADMIN') %}
+                <th>Action</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{% if user.personne %}
+                        {% if user.personne.membre %}
+                            <a href="{{ path('personne_membre_voir', {'id': user.personne.membre.id}) }}">{{ user.personne.prenomNom }}</a>
+                        {% else %}
+                            exception
+                        {% endif %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.rolesDisplay }}</td>
+                <td>{{ user.lastLogin is empty ? "-" : user.lastLogin | date('Y/m/d H:i')}}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td><a href="{{ path('user_modifier', {'id': user.id}) }}">{{ 'user.modifier'|trans({}, 'user') }}</a></td>
+                {% endif %}
+            </tr>
+        {% else %}
+            <li>Pas (encore !) d'utilisateur</li>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('#listeUser').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "responsive": true,
+                "iDisplayLength": 50
+            });
+        });
+    </script>
+{% endblock %}

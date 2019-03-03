@@ -1,99 +1,109 @@
 {
-  "name": "n7consulting/jeyser-crm",
-  "description": "ERP / CRM for Junior-Entreprises",
-  "license": "AGPL-3.0-only",
-  "type": "project",
-  "autoload": {
-    "psr-4": {
-      "": "src/",
-      "Incipio\\": "app/",
-      "Tests\\": "tests/"
+    "name": "n7consulting/jeyser-crm",
+    "description": "ERP / CRM for Junior-Entreprises",
+    "license": "AGPL-3.0-only",
+    "type": "project",
+    "require": {
+        "php": "^7.3",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "doctrine/annotations": "^1.0",
+        "doctrine/doctrine-bundle": "^1.6.10",
+        "doctrine/doctrine-fixtures-bundle": "^3.0",
+        "doctrine/doctrine-migrations-bundle": "^1.3",
+        "easycorp/easyadmin-bundle": "^2.0",
+        "friendsofsymfony/user-bundle": "^2.0",
+        "ob/highcharts-bundle": "~1.2",
+        "phpdocumentor/reflection-docblock": "^3.0|^4.0",
+        "sensio/framework-extra-bundle": "^3.0",
+        "stoakes/form-bundle": "dev-master#f23a3ce3ab185464045924a5cc1dc9b746a0a34a",
+        "symfony/console": "4.2.*",
+        "symfony/dotenv": "4.2.*",
+        "symfony/expression-language": "4.2.*",
+        "symfony/flex": "^1.1",
+        "symfony/framework-bundle": "4.2.*",
+        "symfony/monolog-bundle": "^3.3",
+        "symfony/property-access": "4.2.*",
+        "symfony/property-info": "4.2.*",
+        "symfony/serializer": "4.2.*",
+        "symfony/swiftmailer-bundle": "^3.1",
+        "symfony/twig-bundle": "4.2.*",
+        "symfony/yaml": "4.2.*",
+        "webmozart/json": "dev-master",
+        "webmozart/key-value-store": "^1.0"
     },
-    "classmap": [
-      "app/AppKernel.php",
-      "app/AppCache.php"
-    ]
-  },
-  "require": {
-    "php": ">=7.1",
-    "ext-apcu": "*",
-    "doctrine/doctrine-bundle": "~1.4",
-    "doctrine/doctrine-fixtures-bundle": "~2.3",
-    "doctrine/doctrine-migrations-bundle": "^1.0",
-    "doctrine/orm": "^2.5",
-    "egulias/email-validator": "~1.2",
-    "friendsofsymfony/comment-bundle": "2.1.0",
-    "friendsofsymfony/jsrouting-bundle": "~1.1",
-    "friendsofsymfony/user-bundle": "^2.0",
-    "gedmo/doctrine-extensions": "~2.3",
-    "incenteev/composer-parameter-handler": "~2.0",
-    "easycorp/easyadmin-bundle": "^1.9",
-    "ob/highcharts-bundle": "~1.2",
-    "sensio/distribution-bundle": "^5.0",
-    "sensio/framework-extra-bundle": "^3.0",
-    "stoakes/form-bundle": "^3.0@dev",
-    "stof/doctrine-extensions-bundle": "~1.0",
-    "symfony/assetic-bundle": "~2.3",
-    "symfony/monolog-bundle": "~3.1",
-    "symfony/swiftmailer-bundle": "^2.3",
-    "symfony/symfony": "3.4.*",
-    "twig/extensions": "~1.0",
-    "webmozart/json": "^1.2",
-    "webmozart/key-value-store": "^1.0"
-  },
-  "require-dev": {
-    "behat/behat": "^3.1",
-    "behat/mink": "^1.7",
-    "behat/mink-browserkit-driver": "^1.3.1",
-    "behat/mink-extension": "^2.2",
-    "behat/symfony2-extension": "^2.1",
-    "behatch/contexts": "^2.6",
-    "phpunit/phpunit": "^5.0",
-    "sensio/generator-bundle": "^3.0",
-    "symfony/phpunit-bridge": "^3.0"
-  },
-  "scripts": {
-    "test": "composer test:db",
-    "test:behat": "./vendor/bin/behat ./features/ -f pretty",
-    "test:db": "php bin/console doctrine:schema:validate --ansi",
-    "install:first": [
-      "php bin/console doctrine:migration:migrate -n -v --env=prod --ansi",
-      "php bin/console doctrine:fixtures:load -n --env=prod --ansi"
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php56": "*"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Stoakes/json"
+        }
     ],
-    "clear-cache-prod": [
-      "php bin/console cache:clear --env=prod --no-warmup",
-      "php bin/console cache:warmup --env=prod",
-      "php bin/console doctrine:cache:clear-query",
-      "php bin/console doctrine:cache:clear-metadata"
-    ],
-    "mysql-reload": [
-      "php bin/console doctrine:database:drop --force",
-      "php bin/console doctrine:database:create",
-      "@install:first"
-    ],
-    "symfony-scripts": [
-      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-    ],
-    "post-install-cmd": [
-      "@symfony-scripts"
-    ],
-    "post-update-cmd": [
-      "@symfony-scripts"
-    ]
-  },
-  "extra": {
-    "symfony-app-dir": "app",
-    "symfony-bin-dir": "bin",
-    "symfony-var-dir": "var",
-    "symfony-web-dir": "web",
-    "symfony-tests-dir": "tests",
-    "symfony-assets-install": "relative",
-    "incenteev-parameters": {
-      "file": "app/config/parameters.yml"
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ],
+        "install:first": [
+            "php bin/console doctrine:migration:migrate -n -v --ansi",
+            "php bin/console doctrine:fixtures:load -n --ansi"
+        ],
+        "clear-cache-prod": [
+            "php bin/console cache:clear --env=prod --no-warmup",
+            "php bin/console cache:warmup --env=prod",
+            "php bin/console doctrine:cache:clear-query",
+            "php bin/console doctrine:cache:clear-metadata"
+        ],
+        "mysql-reload": [
+            "php bin/console doctrine:database:drop --force",
+            "php bin/console doctrine:database:create",
+            "@install:first"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "4.2.*"
+        }
+    },
+    "require-dev": {
+        "behat/mink": "dev-master#d5ee350c40baff5f331a05ebdbe1927345c9ac8b",
+        "behat/mink-browserkit-driver": "^1.3",
+        "behat/mink-extension": "^2.3",
+        "behat/symfony2-extension": "^2.1",
+        "behatch/contexts": "^3.2",
+        "symfony/debug-pack": "^1.0"
     }
-  }
 }

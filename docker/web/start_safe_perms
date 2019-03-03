@@ -1,0 +1,26 @@
+#!/bin/bash
+
+##
+# Detect the ownership of the webroot
+# and run apache as that user.
+#
+main() {
+    # Docker for Mac requires a special handling, see https://docs.docker.com/docker-for-mac/osxfs/#/ownership
+    if [[ -n $(mount -t fuse.osxfs | grep /app) ]]; then
+        chown -R www-data:www-data /app 2> /dev/null
+        exec /usr/sbin/apache2ctl "$@"
+        return
+    fi
+
+    owner="www-data"
+    group="www-data"
+
+    chown -R "$owner:$group" /var/lock/apache* /var/log/apache* /var/run/apache*
+    chown -R "$owner:$group" var
+    chown -R "$owner:$group" public/tmp
+    # clean web/tmp folder from exported file
+    rm -f public/tmp/*.json public/tmp/*.png public/tmp/*--*
+    exec /usr/sbin/apache2ctl "$@"
+}
+
+main "$@"

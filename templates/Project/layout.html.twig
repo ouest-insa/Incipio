@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.suivi'|trans({}, 'project') }}
+{% endblock %}
+
+{% block content %}
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                {% block content_title %}
+                    {{ 'suivi.suivi_etude'|trans({}, 'project') }}
+                {% endblock %}
+            </h3>
+
+            {% block breadcrumb %}
+                <ul class="breadcrumb no-margin pull-right">
+                    <li>
+                        <a href="{{ path('project_etude_homepage') }}">{{ 'suivi.suivi_etude'|trans({}, 'project') }}</a>
+                    </li>
+                    {% if etude is defined %}
+                        <li>
+                            <a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.reference(param('namingConvention')) }}</a>
+                        </li>
+                    {% endif %}
+                    {% block breadcrumb_items %}{% endblock %}
+                    <li class="active">
+                        {% block breadcrumb_active %}{% endblock %}
+                    </li>
+                </ul>
+            {% endblock %}
+        </div>
+        <div class="box-body">
+            {# On définit un nouveau block, que les vues du bundle pourront remplir #}
+            {% block content_bundle %}
+            {% endblock %}
+        </div>
+        <div class="box-footer"></div>
+    </div>
+{% endblock %}

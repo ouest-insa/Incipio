@@ -1,0 +1,33 @@
+{% extends "Publish/layout.html.twig" %}
+
+{% block title %}
+    Uploader un document - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    Uploader un document
+{% endblock %}
+
+{% block content_bundle %}
+
+    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+    {% for field in form.children if field.vars.name != "_token" %}
+        <div class="form-group">
+            <div class="col-lg-3 col-xs-4">
+                {{ form_label(field) }}
+                {{ form_errors(field) }}
+            </div>
+            <div class="col-lg-8">
+                {{ form_widget(field, {'attr': {'class': (field is not iterable ? 'form-control': '')}}) }}
+            </div>
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-warning">Mettre en ligne</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}

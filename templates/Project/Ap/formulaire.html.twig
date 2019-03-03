@@ -1,0 +1,9 @@
+{# Formulaire d'ajout d'une étude #}
+
+{{ form_start(form) }}
+
+	{{ form_widget(form) }}
+
+	<input type="submit" value="{{ 'suivi.ap_enregistrer'|trans({}, 'project') }}" class="btn btn-default"/>
+    <input type="submit" value="{{ 'suivi.ap_enregistrer_cc_passer'|trans({}, 'project') }}" name="ap" class="btn btn-info"/>
+{{ form_end(form) }}

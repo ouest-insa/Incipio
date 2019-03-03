@@ -1,0 +1,83 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'fr'
+    app.json_key_value_store.path:  "%kernel.root_dir%/../var/key_value_store/config.json"
+    app.json_stats.path:  "%kernel.root_dir%/../var/key_value_store/stats.json"
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+# Manual dependency injection
+    App\Controller\Dashboard\DashboardController:
+        arguments:
+            $statsStore: "@app.json_stats"
+    App\Controller\Dashboard\AdminController:
+        arguments:
+           $keyValueStore: "@app.json_key_value_store"
+    App\Controller\Project\EtudeController:
+        arguments:
+           $keyValueStore: "@app.json_key_value_store"
+    App\Controller\Publish\GanttController:
+        arguments:
+           $keyValueStore: "@app.json_key_value_store"
+    App\Controller\Publish\TraitementController:
+        arguments:
+            $keyValueStore: "@app.json_key_value_store"
+    App\Controller\Stat\IndicateursController:
+        arguments:
+            $keyValueStore: "@app.json_key_value_store"
+    App\Controller\Treso\FactureController:
+        arguments:
+            $keyValueStore: "@app.json_key_value_store"
+    App\Service\Project\ChartManager:
+        arguments:
+            $keyValueStore: "@app.json_key_value_store"
+    App\Service\Project\EtudeManager:
+        arguments:
+            $keyValueStore: "@app.json_key_value_store"
+    App\Service\Project\EmailEtuManager:
+        arguments:
+            $keyValueStore: "@app.json_key_value_store"
+    App\Service\Publish\DocumentManager:
+        arguments:
+            $juniorId: "%env(JUNIOR_ID)%"
+            $authorizedStorageSize: "%env(AUTHORIZED_STORAGE_SIZE)%"
+
+
+# Services definition & alias
+    FOS\UserBundle\Mailer\MailerInterface: "@fos_user.mailer.twig_swift"
+    app.json_key_value_store:
+        class:        Webmozart\KeyValueStore\JsonFileStore
+        arguments:    ["%app.json_key_value_store.path%"]
+
+    app.json_stats:
+        class:        Webmozart\KeyValueStore\JsonFileStore
+        arguments:    ["%app.json_stats.path%"]
+
+    App\Twig\KeyValueExtension:
+          arguments:
+            - "@app.json_key_value_store"
+          tags:
+              - { name: twig.extension }
+
+    Monolog\Processor\WebProcessor:
+        tags: ['monolog.processor']

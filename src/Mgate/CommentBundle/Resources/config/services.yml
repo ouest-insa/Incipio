@@ -1,8 +1,0 @@
-parameters:
-    Mgate_comment.thread.class: Mgate\CommentBundle\Manager\ThreadManager
-
-services:
-    Mgate_comment.thread:
-        class: "%Mgate_comment.thread.class%"
-        arguments: ['@fos_comment.manager.thread', '@doctrine.orm.entity_manager']
-

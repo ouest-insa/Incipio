@@ -1,0 +1,190 @@
+                <div class="row">
+                    <div class="col-md-5 col-xs-12">
+                        <div class="box box-info box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">{{ membre.personne.nomformel }}</h3>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped table-hover">
+                                    <tr>
+                                        <td colspan="2"><i class="fa fa-phone"></i> {{ membre.personne.mobile }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <i class="fa fa-envelope"></i>
+                                            <a href="mailto:{{ membre.personne.email }}">{{ membre.personne.email }}</a>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-envelope"></i>
+                                            <a href="mailto:{{ membre.emailEMSE }}">{{ membre.emailEMSE }}</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <i class="fa fa-home"></i> : {{ membre.personne.adresse }}<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;{{ membre.personne.codepostal }} {{ membre.personne.ville }} {{ membre.personne.pays }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <i class="fa fa-book"></i> {{ 'champs.promotion'|trans({}, 'personne') }} : {{ membre.promotion }}
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-barcode"></i> {{ 'champs.id'|trans({}, 'personne') }} : {{ membre.identifiant }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5 col-md-offset-1 col-xs-12">
+                        <div class="box box-info box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">{{ 'membre.informations'|trans({}, 'personne') }}</h3>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped table-hover">
+                                    <tr>
+                                        <td colspan="2">
+                                            <span class="badge badge-{{ membre.personne.estAbonneNewsletter ? "success" : "warning" }}">
+                                            {{ membre.personne.estAbonneNewsletter ? 'personne.newsletter_abonne'|trans({}, 'personne') : 'personne.newsletter_non_abonne'|trans({}, 'personne') }}</span>
+                                            <br/>
+                                            <span class="badge badge-{{ membre.personne.emailEstValide ? "success" : "error" }}">
+                                            {{ membre.personne.emailEstValide ? 'personne.mail_valide'|trans({}, 'personne') : 'personne.mail_invalide'|trans({}, 'personne') }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-{{ membre.dateConventionEleve ? "success" : "error" }}">
+                                            {{ 'etude.doc.CE'|trans({}, 'personne') }} {{ membre.dateConventionEleve ? membre.dateConventionEleve | date('d/m/Y') : 'etude.non_signe'|trans({}, 'personne') }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {{ 'membre.naissance_date'|trans({}, 'personne') }} : {{ membre.dateDeNaissance ? membre.dateDeNaissance | date("d/m/Y") }}
+                                        </td>
+                                        <td>{{ 'membre.naissance_lieu'|trans({}, 'personne') }} : {{ membre.lieuDeNaissance }}</td>
+                                        <td colspan="2">{{ 'champs.nationalite'|trans({}, 'personne') }} : {{ membre.nationalite }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'champs.moyen_paiement'|trans({}, 'personne') }} : {{ membre.formatPaiement }}</td>
+                                        <td>{{ 'champs.filiere'|trans({}, 'personne') }} : {{ membre.filiere.nom }}</td>
+                                        <td>{{ 'champs.numero_securite_sociale'|trans({}, 'personne') }} :
+
+                                            {% if is_granted('ROLE_TRESO') or is_granted('ROLE_RGPD') %}
+                                                {{ membre.securiteSociale }}
+                                            {% else %}
+                                                <small>
+                                                    {{ 'membre.securite_sociale_message'|trans({}, 'personne') }}
+                                                </small>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'champs.commentaire'|trans({}, 'personne') }} :</td>
+                                        <td colspan="3">{{ membre.commentaire }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% set i = 0 %}
+                <div class="row">
+                    {% if membre.competences|length > 0 %}
+                    {% set i = i+1 %}
+                    <div class="col-md-5 col-xs-12">
+                        <div class="box box-default box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">{{ 'membre.competences'|trans({}, 'personne') }}</h3>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-hover table-striped">
+                                    {% for c in membre.competences %}
+                                    <a href="{{ path('hr_competence_voir', {'id': c.id}) }}">
+                                    <span class="badge badge-default">{{ c.nom }}</span></a>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if membre.missions|length > 0 %}
+                    {% set i = i+1 %}
+                    <div class="col-md-5 col-xs-12 {% if i is even %}col-md-offset-1{% endif %}">
+                        <div class="box box-default box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">{{ 'membre.missions_realisees'|trans({}, 'personne') }}</h3>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-hover table-striped">
+                                    {% for mission in membre.missions %}
+                                    <tr class="mandats">
+                                        <td><a href="{{ path("project_etude_voir", {'nom' : mission.etude.nom}) }}"
+                                           title="{{ mission.etude.nom }}">{{ mission.etude.reference(param('namingConvention')) }}</a></td>
+                                        <td>{{ 'membre.date_debut'|trans({}, 'personne') }} : {{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }}</td>
+                                        <td>{{ 'membre.date_fin'|trans({}, 'personne') }} : {{ mission.finOm ? mission.finOm  | date("d/m/Y") : "?" }}</td>
+                                        <td>{{ mission.nbrJEH }} JEH - {{ mission.remunerationBrute }} &euro;</td>
+                                        <td>
+                                            <span class="badge badge-{{ "now"|date('Ymd') > mission.etude.dateFin |date('Ymd') ? 'default' : 'success' }}">
+                                                {{ "now"|date('Ymd') > mission.etude.dateFin |date('Ymd') ? 'Passée' : 'En cours' }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if membre.mandats|length > 0 %}
+                    {% set i = i+1 %}
+                    <div class="col-md-5 col-xs-12 {% if i is even %}col-md-offset-1{% endif %}">
+                        <div class="box box-default box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">{{ 'membre.postes_occupes'|trans({}, 'personne') }}</h3>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-hover table-striped">
+                                    {% for mandat in membre.mandats %}
+                                    <tr class="mandats">
+                                        <td colspan="2">{{ mandat.poste.intitule }}</td>
+                                        <td>{{ 'membre.date_debut'|trans({}, 'personne') }} : {{ mandat.debutMandat | date("d/m/Y") }}</td>
+                                        <td>{{ 'membre.date_fin'|trans({}, 'personne') }} : {{ mandat.finMandat | date("d/m/Y") }}</td>
+                                        <td>
+                                            <span class="badge badge-{{ "now"|date('Ymd') > mandat.finMandat |date('Ymd') ? 'default' : 'success' }}">
+                                                {{ "now"|date('Ymd') > mandat.finMandat |date('Ymd') ? 'Alumni' : 'En cours' }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if membre.personne.user is not null %}
+                    {% set i = i+1 %}
+                    <div class="col-md-5 col-xs-12 {% if i is even %}col-md-offset-1{% endif %}">
+                        <div class="box box-default box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">{{ 'membre.permissions'|trans({}, 'personne') }}</h3>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-hover table-striped">
+                                    <tr>
+                                        <td>
+                                            {% for role in membre.personne.user.roles %}
+                                            <span class="badge badge-default">{{ role }}</span>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>

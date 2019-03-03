@@ -1,0 +1,17 @@
+{% extends "Project/layout.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.etude_ajouter'|trans({}, 'project') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'suivi.etude_ajouter'|trans({}, 'project') }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'suivi.etude_ajouter'|trans({}, 'project') }}
+{% endblock %}
+
+{% block content_bundle %}
+    {% include "Project/Etude/formulaire.html.twig" %}
+{% endblock %}

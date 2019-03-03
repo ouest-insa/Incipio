@@ -1,0 +1,30 @@
+{#
+ This file is part of the FOSCommentBundle package.
+ (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
+ This source file is subject to the MIT license that is bundled
+ with this source code in the file LICENSE.
+#}
+
+{% set depth = depth|default(0) %}
+{% set view = view|default('tree') %}
+
+{% if depth == 0 %}
+    {% if is_granted('ROLE_SUIVEUR') %}
+        {{ render(url('fos_comment_new_thread_comments', {"id": thread.id})) }}
+    {% endif %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="fos_comment_thread_commentable pull-right">
+            <button data-url="{{ url('fos_comment_edit_thread_commentable', {'id': thread.id, 'value': not thread.commentable}) }}" class="fos_comment_thread_commentable_action btn btn-warning">
+                {{ (thread.commentable ? 'fos_comment_thread_close' : 'fos_comment_thread_open') | trans({}, 'FOSCommentBundle') }}
+            </button>
+        </div>
+    {% endif %}
+
+    {% set count = thread.numComments %}
+    <h3>{% transchoice count with {'%count%': count} from 'FOSCommentBundle' %}fos_comment_thread_comment_count{% endtranschoice %}</h3>
+{% endif %}
+
+{% for commentinfo in comments %}
+    {% include 'Comment/Thread/comment.html.twig' with { 'children': commentinfo.children, 'comment': commentinfo.comment, 'depth': depth, 'view': view } %}
+{% endfor %}

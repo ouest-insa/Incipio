@@ -1,0 +1,56 @@
+{% extends "Hr/layout.html.twig" %}
+
+{% block title %}Liste des compétences - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #graphHolder {
+            min-width: 100%;
+            height: auto;
+            min-height: 700px;
+            position: relative;
+        }
+    </style>
+{% endblock %}
+
+{% block content_title %}
+    Liste des Compétences
+{% endblock %}
+
+{% block content_bundle %}
+
+    <div class="row">
+        <div class="col-md-3 col-xs-12">
+            <a href="{{ path('hr_competence_ajouter') }}" class="btn btn-info">
+                Ajouter une compétence
+            </a>
+            <br/><br/>
+            <ul>
+                {% for competence in competences %}
+                    <li>
+                        <a href="{{ path('hr_competence_voir', {'id': competence.id}) }}"> {{ competence.nom }} </a>
+                    </li>
+                {% else %}
+                    <li>Pas (encore !) de competences</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-9 col-xs-12">
+            <div id="graphHolder" style="border: 1px solid #e6e6e6;"></div>
+            <div class="well">Détails: <span id="nodeInfos"></span></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/d3/d3.min.js') }}"></script>
+    <script src="{{ asset('js/d3/competencesNet.js') }}"></script>
+    <script src="{{ path('hr_competence_visualiser') }}"></script>
+    <script type="text/javascript">
+        $(function () { //initialisation graph d3.min.js
+            restart();
+        });
+    </script>
+{% endblock %}

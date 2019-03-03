@@ -1,0 +1,133 @@
+{% extends "Project/layout.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.proces_verbal_rediger'|trans({}, 'project') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'suivi.proces_verbal_rediger'|trans({}, 'project') }}
+    {% if type=="pvi" %}
+        {{ 'suivi.intermediaire'|trans({}, 'project') }}
+    {% elseif type=="pvr" %}
+        {{ 'suivi.de_recette'|trans({}, 'project') }}
+    {% endif %}
+{% endblock %}
+
+{% block content_bundle %}
+    {{ form_start(form) }}
+<table class="table table-bordered table-striped standard">
+    <tr>
+        <th>{{ form_label(form[type].signataire1) }} {{ form_errors(form[type].signataire1) }}</th>
+        <td>{{ form_widget(form[type].signataire1) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form[type].knownSignataire2) }} {{ form_errors(form[type].knownSignataire2) }}</th>
+        <td>{{ form_widget(form[type].knownSignataire2) }}</td>
+    </tr>
+    <tr>
+        <th id="{{ form[type].newSignataire2.vars.id }}_block" colspan="2" class="success">
+            {{ 'suivi.signataire_client_ajouter'|trans({}, 'project') }}
+        </th>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].newSignataire2.personne.prenom) }}
+            {{ form_errors(form[type].newSignataire2.personne.prenom) }}
+        </th>
+        <td>{{ form_widget(form[type].newSignataire2.personne.prenom) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].newSignataire2.personne.nom) }}
+            {{ form_errors(form[type].newSignataire2.personne.nom) }}
+        </th>
+        <td>{{ form_widget(form[type].newSignataire2.personne.nom) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].newSignataire2.personne.sexe) }}
+            {{ form_errors(form[type].newSignataire2.personne.sexe) }}
+        </th>
+        <td>{{ form_widget(form[type].newSignataire2.personne.sexe) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].newSignataire2.personne.mobile) }}
+            {{ form_errors(form[type].newSignataire2.personne.mobile) }}
+        </th>
+        <td>{{ form_widget(form[type].newSignataire2.personne.mobile) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].newSignataire2.personne.email) }}
+            {{ form_errors(form[type].newSignataire2.personne.email) }}
+        </th>
+        <td>{{ form_widget(form[type].newSignataire2.personne.email) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].newSignataire2.personne.estAbonneNewsletter) }}
+            {{ form_errors(form[type].newSignataire2.personne.estAbonneNewsletter) }}
+        </th>
+        <td>{{ form_widget(form[type].newSignataire2.personne.estAbonneNewsletter) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].newSignataire2.personne.emailEstValide) }}
+            {{ form_errors(form[type].newSignataire2.personne.emailEstValide) }}
+        </th>
+        <td>{{ form_widget(form[type].newSignataire2.personne.emailEstValide) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].newSignataire2.poste) }}
+            {{ form_errors(form[type].newSignataire2.poste) }}
+        </th>
+        <td>{{ form_widget(form[type].newSignataire2.poste) }}</td>
+    </tr>
+    <tr>
+        <th id="{{ form[type].newSignataire2.vars.id }}_block" colspan="2" class="success">
+            {{ 'suivi.proces_verbal_rediger'|trans({}, 'project') }}
+        </th>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].signataire2) }}
+            {{ form_errors(form[type].signataire2) }}
+        </th>
+        <td>{{ form_widget(form[type].signataire2) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].dateSignature) }}
+            {{ form_errors(form[type].dateSignature) }}
+        </th>
+        <td>{{ form_widget(form[type].dateSignature) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form[type].version) }}
+            {{ form_errors(form[type].version) }}
+        </th>
+        <td>{{ form_widget(form[type].version) }}</td>
+    </tr>
+</table>
+
+    {{ form_widget(form) }}
+    <button type="submit" class="btn btn-success">
+        {{ 'suivi.enregistrer'|trans({}, 'project') }}
+    </button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+    {% if type=="pvi" %}
+        {% include "Project/DocType/selectOrNew.html.twig" with
+        { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 } %}
+    {% elseif type=="pvr" %}
+        {% include "Project/DocType/selectOrNew.html.twig" with
+        { known: form.pvr.knownSignataire2, knowned: form.pvr.signataire2, newed: form.pvr.newSignataire2 } %}
+    {% endif %}
+{% endblock %}

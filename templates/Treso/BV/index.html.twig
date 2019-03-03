@@ -1,0 +1,81 @@
+{% extends "Treso/layout.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+{% endblock %}
+
+{% block title %}
+    {{ 'treso.bv_gestion'|trans({}, 'treso') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'treso.bv_list'|trans({}, 'treso') }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'treso.bv_gestion'|trans({}, 'treso') }}
+{% endblock %}
+
+
+{% block content_bundle %}
+    <div class="nav-tabs-custom">
+        <ul id="myTab" class="nav nav-tabs">
+            <li>
+                <a href="{{ path('treso_BV_ajouter') }}"> <span
+                            class="fa fa-plus"></span> {{ 'treso.bv_add'|trans({}, 'treso') }}</a>
+            </li>
+            <li class="active">
+                <a href="#">{{ 'treso.bv_list'|trans({}, 'treso') }}</a>
+            </li>
+        </ul>
+    </div>
+    <table class="display dataTable table table-bordered table-striped dt-responsive" id="listeBV">
+        <thead>
+        <tr>
+            <th>{{ 'treso.reference'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.date_versement'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.beneficiaire'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.mission'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.remuneration_brute'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.part_junior'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.part_etudiant'|trans({}, 'treso') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for bv in bvs %}
+            <tr>
+                <td><a href="{{ path('treso_BV_voir', {'id' : bv.id }) }}">{{ bv.reference }}</a></td>
+                <td>{{ bv.dateDeVersement | date('d/m/Y') }}</td>
+                <td>{{ bv.mission.intervenant.personne.prenomNom }}</td>
+                <td>{{ bv.mission.reference }}</td>
+                <td style="text-align: right;">{{ (bv.nombreJEH * bv.remunerationBruteParJEH) | number_format(2, ',', ' ') }}
+                    €
+                </td>
+                <td style="text-align: right;">{{ bv.partJunior | number_format(2, ',', ' ') }} €</td>
+                <td style="text-align: right;">{{ bv.partEtudiant | number_format(2, ',', ' ') }} €</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('#listeBV').DataTable({
+                "paging": false,
+                "aaSorting": [[0, 'desc']]
+            });
+        });
+    </script>
+{% endblock %}

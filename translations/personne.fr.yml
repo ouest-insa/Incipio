@@ -1,0 +1,157 @@
+annuaire:
+  annuaire: Annuaire
+  autre: Autre
+  client: Client
+  confirmation_supprimer_personne: Etes-vous sûr de vouloir supprimer définitivement cette personne ?
+champs:
+  abonnement_newsletter: Abonné à la newsletter ?
+  action: Action
+  adresse: Adresse
+  bureau: Bureau
+  code_postal: Code postal
+  commentaire: Commentaire
+  date_naissance: Date de naissance (jj/mm/aaaa)
+  date_signature_CE: Date de signature de la CE
+  filiere: Filière
+  fixe: Fixe
+  id: Identifiant
+  lieu_naissance: Lieu de naissance
+  liste: Liste
+  mail: Email
+  mail_etudiant: Email étudiant
+  mobile: Mobile
+  moyen_paiement: Moyen de paiement
+  nationalite: Nationalité
+  nom: Nom
+  numero_securite_sociale: Numéro de sécurité sociale
+  pays: Pays
+  poste: Poste
+  prenom: Prénom
+  prenom_nom: Nom
+  promotion: Promotion
+  sexe: Sexe
+  validite_mail: Email valide ?
+  ville: Ville
+employe:
+  ajouter_employe: Ajouter un employé
+  ajouter_employe_a: Ajouter un employé à
+  confirmation_supprimer_employe: Etes-vous sûr de vouloir supprimer définitivement cet employé ?
+  employe: Employé
+  employes: Employés
+  liste_employe: Liste des employés
+  modifier_employe: Modifier l'employé
+  supprimer_employe: Supprimer l'employé
+etude:
+  champs:
+    JEHs: JEHs
+    date_creation: Date d'ajout
+    description: Description
+    nom: Nom
+    prix_HT: Montant H.T. (\u20AC)
+  doc:
+    CE: Convention Etudiant
+    CE_abbr: CE
+    CE_tooltip: Depuis la réforme du cadre légal (AGP CNE 2016) il est recommandé de remplacer la CE par un BA comme fourni.
+  etude: Etude
+  etudes: Etudes
+  non_signe: non signé
+  statut:
+    avortee: Avortée
+    en_cours: En cours
+    en_negociation: En négociation
+    en_pause: En pause
+    statut: Statut
+    terminee: Terminée
+filiere:
+  ajouter_filiere: Ajouter une filière
+  champs:
+    description: Description
+    nom: Nom
+  confirmation_supprimer_filiere: Etes-vous sûr de vouloir supprimer définitivement cette filière ?
+  filieres: Filières
+  liste_filiere: Liste des filières
+  liste_filiere_vide: Pas de filières
+  modifier_filiere: Modifier une filière
+  supprimer_filiere: Supprimer la filière
+generique:
+  enregistrer: Enregistrer
+  supprimer: Supprimer
+membre:
+  affichage_membre: Affichage d'un membre
+  ajout_membre: Ajout d'un membre
+  modification_membre: Modification d'un membre
+  ajouter_document: Ajouter un document
+  ajouter_mandat: Ajouter un mandat
+  competences: Compétences
+  confirmation_supprimer_membre: Etes-vous sûr de vouloir supprimer définitivement ce membre ?
+  creer_compte: Ouvrir un compte utilisateur
+  date_debut: Du
+  date_fin: Au
+  description_documents: Documents relatifs à
+  description_liste_impaye: Membres n'ayant pas payé leur cotisation à l'inscription ou dont le moyen de paiement n'est pas renseigné.
+  description_liste_intervenant: Membres ayant déjà réalisé une mission.
+  doc:
+    date_upload: Date d'upload
+    titre: Titre
+    uploader: Mis en ligne par
+  documents: Documents
+  fiche: Fiche
+  generer_AC: Générer un Accord de Confidentialité
+  generer_BA: Générer le Bulletin d'Adhésion
+  generer_CE: Générer une Convention Etudiant
+  informations: Informations
+  intervenant: Intervenant
+  intervenant_declaration: Une déclaration à la préfecture est nécessaire
+  intervenant_interdit: Ne peut être intervenant
+  liste_impaye: Liste des impayés
+  liste_intervenant: Liste des intervenants
+  liste_membre: Liste des membres
+  mail_invalide_creation_compte: Vous devez définir un email valide pour créer un compte utilisateur à ce membre.
+  mandat: Mandat
+  mandats: Mandats
+  membre: Membre
+  missions_realisees: Missions réalisées
+  modifier: Modifier
+  modifier_membre: Modifier le membre
+  naissance_date: Né le
+  naissance_lieu: Né à
+  permissions: Permissions
+  photo: Photo
+  postes_occupes: Postes occupés
+  supprimer_membre: Supprimer le membre
+  securite_sociale_message: >
+    Le numéro de sécurité sociale n'est visible que pour les membres du pôle tréso (ROLE_TRESO) et
+    le responsable RGPD.
+personne:
+  mail_invalide: Email non valide
+  mail_valide: Email valide
+  newsletter_abonne: Abonné à la newsletter
+  newsletter_non_abonne: N'est pas abonné à la newsletter
+  personne: Personne
+poste:
+  ajouter_poste: Ajouter un poste
+  champs:
+    description: Description
+    nom: Intitulé
+  confirmation_supprimer_poste: Etes-vous sûr de vouloir supprimer définitivement ce poste ?
+  liste_poste: Liste des postes
+  liste_poste_vide: Pas de postes
+  modifier_poste: Modifier un poste
+  postes: Postes
+  supprimer_poste: Supprimer le poste
+prospect:
+  affichage_prospect: Affichage d'un prospect
+  ajouter_prospect: Ajouter un prospect
+  champs:
+    adresse: Adresse
+    nom: Nom
+    nombre_employe: Nombre d'employés
+    type: Type de prospect
+  commentaires: Commentaires
+  confirmation_supprimer_prospect: Etes-vous sûr de vouloir supprimer définitivement ce prospect ?
+  description_liste_diffusion: Liste des mails valides, abonnés à la newsletter
+  liste_diffusion: Liste de diffusion
+  liste_prospect: Liste des prospects
+  modifier_prospect: Modifier le prospect
+  supprimer_prospect: Supprimer le prospect
+  type_prospect: Type de prospect

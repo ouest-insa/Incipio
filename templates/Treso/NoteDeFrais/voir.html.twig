@@ -1,0 +1,114 @@
+{% extends "Treso/layout.html.twig" %}
+
+{% block title %}
+    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.mandat }}-NF{{ nf.numero }}-{{ nf.demandeur.membre.identifiant }}- {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.mandat }}-NF{{ nf.numero }}-{{ nf.demandeur.membre.identifiant }}
+{% endblock %}
+
+{% block breadcrumb_items %}
+    <li><a href="{{ path('treso_NoteDeFrais_index') }}">{{ 'treso.note_frais_liste'|trans({}, 'treso') }}</a></li>
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.mandat }}-NF{{ nf.numero }}-{{ nf.demandeur.membre.identifiant }}
+{% endblock %}
+
+{% block content_bundle %}
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>{{ 'treso.date'|trans({}, 'treso') }}</th>
+            <td>{{ nf.date |date('d/m/Y') }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'treso.demandeur'|trans({}, 'treso') }}</th>
+            <td>{{ nf.demandeur.prenomNom }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'treso.objet'|trans({}, 'treso') }}</th>
+            <td>{{ nf.objet | nl2br }}</td>
+        </tr>
+    </table>
+
+
+    <table class="table table-bordered table-striped" style="text-align: right;">
+        <tr>
+            <th colspan="5" class="success">{{ 'treso.depenses_details'|trans({}, 'treso') }}</th>
+        </tr>
+        <tr>
+            <th>{{ 'treso.description'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.prix_ht'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.taux_tva'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.tva'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.prix_ttc'|trans({}, 'treso') }}</th>
+        </tr>
+        {% set totalHT = 0 %}
+        {% set totalTVA = 0 %}
+        {% set totalTTC = 0 %}
+
+        {% for detail in nf.details if detail.type == 1 %}
+            {% set totalHT = totalHT + detail.prixHT %}
+            {% set totalTVA = totalTVA + (detail.prixHT * detail.tauxTVA / 100) %}
+            {% set totalTTC = totalTTC + (detail.prixHT * ( 1 + detail.tauxTVA / 100)) %}
+            <tr>
+                <td>{{ detail.description }} {% if detail.compte %}<span class="badge"
+                                                                         title="{{ detail.compte.libelle }}">{{ detail.compte.numero }}</span>{% endif %}
+                </td>
+                <td>{{ detail.prixHT |number_format(2, ',', ' ') }} €</td>
+                <td>{{ (detail.tauxTVA) |number_format(2, ',', ' ') }} %</td>
+                <td>{{ (detail.prixHT * detail.tauxTVA / 100) |number_format(2, ',', ' ') }} €</td>
+                <td>{{ (detail.prixHT * ( 1 + detail.tauxTVA / 100 )) |number_format(2, ',', ' ') }} €</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th colspan="5" class="success">{{ 'treso.details_frais_kilometriques'|trans({}, 'treso') }}</th>
+        </tr>
+        <tr>
+            <th>{{ 'treso.description'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.nombre_kilometre'|trans({}, 'treso') }}</th>
+            <th colspan="2">{{ 'treso.prix_km'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.prix_total'|trans({}, 'treso') }}</th>
+        </tr>
+        {% for detail in nf.details if detail.type == 2 %}
+            {% set totalHT = totalHT + (detail.kilometrage * detail.tauxKm / 100) %}
+            {% set totalTTC = totalTTC + (detail.kilometrage * detail.tauxKm / 100) %}
+            <tr>
+                <td>{{ detail.description }} {% if detail.compte %}<span class="badge"
+                                                                         title="{{ detail.compte.libelle }}">{{ detail.compte.numero }}</span>{% endif %}
+                </td>
+                <td>{{ detail.kilometrage }} km</td>
+                <td colspan="2">{{ (detail.tauxKm / 100) |number_format(2, ',', ' ') }} €</td>
+                <td>{{ (detail.kilometrage * detail.tauxKm / 100)  |number_format(2, ',', ' ') }} €</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th colspan="5" class="danger">{{ 'treso.total'|trans({}, 'treso') }}</th>
+        </tr>
+        <tr>
+            <td colspan="2">{{ totalHT |number_format(2, ',', ' ') }} € {{ 'treso.ht'|trans({}, 'treso') }}</td>
+            <td colspan="2">{{ totalTVA |number_format(2, ',', ' ') }} € {{ 'treso.de_tva'|trans({}, 'treso') }}</td>
+            <td>{{ totalTTC |number_format(2, ',', ' ') }} € {{ 'treso.ttc'|trans({}, 'treso') }}</td>
+        </tr>
+    </table>
+    <div class="row">
+        <div class="col-md-3 col-xs-4">
+            <a href="{{ path('treso_NoteDeFrais_modifier', {'id': nf.id}) }}" class="btn btn-primary">
+                {{ 'treso.note_frais_modifier'|trans({}, 'treso') }}</a>
+        </div>
+        <div class="col-md-3 col-xs-4">
+            <a type="button" class="btn btn-success"
+               href="{{ path('publish_publiposter', { 'templateName' : constant('\\App\\Controller\\Publish\\TraitementController::DOCTYPE_NOTE_DE_FRAIS') , 'rootName' : constant('\\App\\Controller\\Publish\\TraitementController::ROOTNAME_NOTE_DE_FRAIS'), 'rootObject_id' : nf.id}) }}">
+                {{ 'treso.note_frais_generer'|trans({}, 'treso') }}</a>
+        </div>
+        <div class="col-md-3 col-xs-4">
+            <a href="{{ path('treso_NoteDeFrais_supprimer', {'id': nf.id}) }}" class="btn btn-danger">
+                {{ 'treso.note_frais_supprimer'|trans({}, 'treso') }}
+            </a>
+        </div>
+
+    </div>
+
+{% endblock %}
+

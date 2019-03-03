@@ -1,0 +1,321 @@
+{% extends "Project/layout.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ 'suivi.phases'|trans({}, 'project') }}
+    - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ form.phases | length }} {{ 'suivi.phases'|trans({}, 'project') }}
+{% endblock %}
+
+{% block content_bundle %}
+    {{ form_start(form, {'attr': {'id': 'form'}}) }}
+    {# affiche l'unique champ de la tache : description #}
+    {#{ form_row(form.description) }#}
+
+    <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'project') }}" name="add" class="btn btn-info"/>
+        - <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'project') }}" class="btn btn-default"/></p>
+
+    <div class="row">
+        <div class="col-md-12">
+        <div class="table-responsive" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}"">
+
+            <table class="table table-striped" id="phases">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>{{ 'suivi.groupe'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.details'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.titre'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.jeh_nombre'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.prix_jeh'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.date_debut'|trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.delai_jour'|trans({}, 'project') }}</th>
+                </tr>
+                </thead>
+                <tbody id="phases">
+                {% for phase in form.phases %}
+                    <tr class="phase" id="phase-{{ loop.index }}">
+                        <td style="width: 120px">
+                            <div class="btn-group"></div>
+                            <span class="titrePhase"></span> {{ form_widget(phase.position) }}
+                        </td>
+                        <td>
+                            {{ form_widget(phase.groupe, {'attr': {'style': 'width: 100%'}}) }}<br>
+                            <div class="details-{{ loop.index }}" style="display: none">
+                                {{ form_widget(phase.objectif, {'attr': {'cols': '15', 'rows': '5', 'class': 'form-control'}}) }}<br>
+                                {{ form_widget(phase.methodo, {'attr': {'cols': '15', 'rows': '5', 'class': 'form-control'}}) }}
+                            </div>
+                        </td>
+                        <td>
+                            <button class="details-btn btn btn-sm btn-info" onclick="showDetails({{ loop.index }})"
+                                    type="button">+
+                            </button>
+                        </td>
+                        <td style="width: 300px">
+                            {{ form_widget(phase.titre, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(phase.titre) }}
+                        </td>
+                        <td>
+                            {{ form_widget(phase.nbrJEH, {'attr': {'class': 'form-control nbrJEH'}}) }}
+                            {{ form_errors(phase.nbrJEH) }}
+                        </td>
+                        <td>
+                            {{ form_widget(phase.prixJEH, {'attr': {'class': 'form-control prixJEH'}}) }}
+                            {{ form_errors(phase.prixJEH) }}
+                        </td>
+                        <td>
+                            {{ form_widget(phase.dateDebut, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(phase.dateDebut) }}
+                        </td>
+                        <td>
+                            {{ form_widget(phase.delai, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(phase.delai) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"></td>
+                    <td id="totalNbrJEH"></td>
+                    <td id="totalPrixJEH"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            <br/>
+            {{ form_rest(form) }}
+        </div>
+        </div>
+    </div>
+    <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'project') }}" name="add" class="btn btn-info"/>
+        - <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'project') }}" class="btn btn-default"/></p>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+
+    <script type="text/javascript">
+
+        /**
+         * Gestion de l'affichage des objectifs et de la méthodologie
+         */
+        var details = []; //est ce que les champs des details sont visibles ?
+        function showDetails(num) {
+            if (details[num] == undefined) {
+                details[num] = false;
+            }
+            //on affiche les colonnes .details
+            $(".details-" + num).each(function () {
+                if (!details[num]) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+            details[num] = !details[num];
+            return false;
+        }
+
+        /**
+         * Gestion de la mise a jour des totaux (nombre de JEH, prix)
+         */
+        var evaluateTotal = function () {
+            var totalJEH = 0;
+            var totalPrix = 0;
+            $(".phase").each(function () {
+                var tempJEH = parseInt($(this).find(".nbrJEH").val());
+                if (!isNaN(tempJEH)) {
+                    totalJEH += tempJEH;
+                }
+                tempPrix = tempJEH * parseInt($(this).find(".prixJEH").val());
+                if (!isNaN(tempPrix)) {
+                    totalPrix += tempPrix;
+                }
+            });
+            //ajout d'une ligne contenant les totaux.
+            $("#totalNbrJEH").text(totalJEH + " JEH");
+            $("#totalPrixJEH").html(totalPrix + " &euro;");
+        };
+        $("#form").change(evaluateTotal);
+
+
+        // Recupere le div qui contient la collection de tags
+        var collectionHolder = $('#phases');
+
+        function updateOrder() {
+            $('input.position').each(function (i) {
+                $(this).val(i);
+            });
+            $('.titrePhase').each(function (i) {
+                $(this).text('n°' + (i + 1));
+            });
+        }
+
+        function updatePrix() {
+            var prix = 0;
+            var phase = 0;
+
+            $('input.nbrJEH').each(function (i1) {
+                phase = parseInt($(this).val());
+
+                $('input.prixJEH').each(function (i2) {
+                    if (i1 == i2)
+                        phase *= parseInt($(this).val());
+                });
+                if (!isNaN(phase)) {
+                    prix += phase;
+                    $('.prixPhase' + i1).text(phase);
+                }
+            });
+
+            $('.prix').text(prix);
+        }
+
+        function updateNbrJEH() {
+            var nbrJEH = 0;
+
+            $('input.nbrJEH').each(function (i) {
+                if (!isNaN(parseInt($(this).val())))
+                    nbrJEH += parseInt($(this).val());
+            });
+
+            $('.nbrJEH').text(nbrJEH);
+        }
+
+        var isDirty = false;
+
+        jQuery(document).ready(function () {
+
+            evaluateTotal();
+            updateOrder();
+            updatePrix();
+            updateNbrJEH();
+
+            //Verification avant de quitter
+            $(':input').change(function () {
+                if (!isDirty) {
+                    isDirty = true;
+                }
+            });
+            $(window).bind('beforeunload', function () {
+                if (isDirty)
+                    return "Do you really want to leave now?";
+            });
+            $('form').submit(function () {
+                isDirty = false;
+                return true;
+            });
+
+            //Rajout des boutons (X, up, down) pour les phases
+            collectionHolder.find('.phase').each(function () {
+                addPhaseBouton($(this));
+            });
+
+            //Ajouter le drag and drop
+            {# $("#phases").dragsort({ dragSelector: "li", dragBetween: true, dragEnd: updateOrder, placeHolderTemplate: "<div class='col-md-6'></div>" }); #}
+            collectionHolder.sortable({
+                // limitons les deplacements sur l'axe des ordonnees, ce sera plus propre
+
+                // Il faut cliquer sur cet element pour pouvoir initier le drag'n'drop
+                //handle: '.sort-button',
+
+                // Creons un joli trou style lors des deplacements
+                //placeholder: 'ui-state-highlight',
+                //forcePlaceholderSize: true,
+
+                // Cette fonction permet a  notre ligne de conserver son formatage lors du deplacement
+                // Pas vraiment utile, mais plus agreable
+                helper: function (e, tr) {
+                    var $originals = tr.children();
+                    var $helper = tr.clone();
+                    $helper.children().each(function (index) {
+                        // Set helper cell sizes to match the original sizes
+                        $(this).width($originals.eq(index).width())
+                    });
+                    return $helper;
+                },
+
+                // La fonction appele quand un element change de position
+                // C'est le code vraiment utile, en fait
+                update: function () {
+                    updateOrder();
+                }
+
+            });
+
+
+            $('input.nbrJEH').each(function () {
+                $(this).change(function () {
+                    updatePrix();
+                    updateNbrJEH();
+                });
+            });
+
+            $('input.prixJEH').each(function () {
+                $(this).change(function () {
+                    updatePrix();
+                });
+            });
+
+            $('#myButtonUpdate').on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                updatePrix();
+                updateNbrJEH();
+            });
+
+
+        });
+
+        function addPhaseBouton($tagFormLi) {
+            var $delete = $('<button id="myButtonDelete" class="btn btn-xs">X</button>');
+            var $up = $('<button id="myButtonUp" class="btn btn-xs">▲</button>');
+            var $down = $('<button id="myButtonDown" class="btn btn-xs">▼</button>');
+            $tagFormLi.children().first().append($delete);
+            $tagFormLi.children().first().append($up);
+            $tagFormLi.children().first().append($down);
+
+            $delete.on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                //CONFIRM confirmation suppression
+                var message = "Êtes vous sûr de vouloir supprimer cette phase ?";
+                bootbox.confirm(message, function (result) {
+                    if (result) {
+                        // remove the li for the tag form
+                        $tagFormLi.remove();
+                        updateOrder();
+                        updatePrix();
+                        updateNbrJEH();
+                    }
+                });
+            });
+
+            $up.on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                $tagFormLi.prev().before($tagFormLi);
+                updateOrder();
+            });
+            $down.on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                $tagFormLi.next().after($tagFormLi);
+                updateOrder();
+            });
+        }
+
+    </script>
+
+
+{% endblock %}

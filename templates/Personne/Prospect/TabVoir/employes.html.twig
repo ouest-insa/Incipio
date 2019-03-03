@@ -1,0 +1,48 @@
+<h3>{{ 'employe.liste_employe'|trans({}, 'personne') }}</h3>
+
+<table class="table table-bordered table-striped dt-responsive text-left" id="employes">
+    <thead>
+        <tr>
+            <th>{{ 'champs.prenom_nom'|trans({}, 'personne') }}</th>
+            <th>{{ 'champs.mail'|trans({}, 'personne') }}</th>
+            <th>{{ 'champs.fixe'|trans({}, 'personne') }}</th>
+            <th>{{ 'champs.mobile'|trans({}, 'personne') }}</th>
+            <th>{{ 'champs.poste'|trans({}, 'personne') }}</th>
+            <th>{{ 'champs.adresse'|trans({}, 'personne') }}/{{ 'champs.bureau'|trans({}, 'personne') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for employe in prospect.employes %}
+            <tr>
+                <td>
+                    <a href="{{ path('personne_employe_modifier', {'id': employe.id}) }}">
+                        {{ employe.personne.nom | title }} {{ employe.personne.prenom }}
+                    </a>
+                </td>
+                <td title="{{ employe.personne.emailEstValide ? (employe.personne.estAbonneNewsletter ? 'personne.newsletter_abonne'|trans({}, 'personne') : 'personne.newsletter_non_abonne'|trans({}, 'personne') ) : 'personne.mail_invalide'|trans({}, 'personne') }}"
+                    class="{{ employe.personne.emailEstValide ? (employe.personne.estAbonneNewsletter ? "success" : "warning") : "error" }}">{{ employe.personne.email }}</td>
+                <td>{{ employe.personne.fix }}</td>
+                <td>{{ employe.personne.mobile }}</td>
+                <td>{{ employe.poste }}</td>
+                <td>
+                    {{ employe.personne.adresse }}<br/>
+                    {{ employe.personne.codePostal }} {{ employe.personne.ville }}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-md-4 col-xs-6">
+        <a href="{{ path('personne_employe_ajouter', {'id': prospect.id}) }}" class="btn btn-primary">
+            {{ 'employe.ajouter_employe'|trans({}, 'personne') }}
+        </a>
+    </div>
+    <div class="col-md-4 col-xs-6">
+        <a href="{{ path('personne_prospect_modifier', {'id': prospect.id}) }}" class="btn btn-warning">
+            {{ 'prospect.modifier_prospect'|trans({}, 'personne') }}
+        </a>
+    </div>
+</div>
+

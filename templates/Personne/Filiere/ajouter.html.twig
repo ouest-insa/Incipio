@@ -1,0 +1,44 @@
+{% extends "Personne/layout.html.twig" %}
+
+{% block title %}
+    {{ 'filiere.ajouter_filiere'|trans({}, 'personne') }} {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'filiere.ajouter_filiere'|trans({}, 'personne') }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <ul class="breadcrumb no-margin pull-right">
+        <li><a href="{{ path('personne_poste_homepage') }}">{{ 'dashboard.postes_filieres'|trans({}, 'dashboard') }}</a></li>
+        <li class="active">{{ 'filiere.ajouter_filiere'|trans({}, 'personne') }}</li>
+    </ul>
+{% endblock %}
+
+{% block content_bundle %}
+    <div class="table-responsive content">
+        {{ form_start(form) }}
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>{{ form_label(form.nom) }}</th>
+                <td>{{ form_widget(form.nom) }} {{ form_errors(form.nom) }}</td>
+            </tr>
+            <tr>
+                <th>{{ form_label(form.description) }}</th>
+                <td>{{ form_widget(form.description) }} {{ form_errors(form.description) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="row">
+                        <div class="col-md-2 col-xs-4">
+                            <button type="submit" class="btn btn-success">{{ 'generique.enregistrer'|trans({}, 'personne') }}</button>
+                            {{ form_rest(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+               </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
