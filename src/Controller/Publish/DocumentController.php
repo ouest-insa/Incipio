@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -57,15 +58,16 @@ class DocumentController extends AbstractController
      * @Security("has_role('ROLE_CA')")
      * @Route(name="publish_document_voir", path="/Documents/show/{id}", methods={"GET","HEAD"})
      *
-     * @param Document $documentType (ParamConverter) The document to be downloaded
+     * @param Document        $documentType (ParamConverter) The document to be downloaded
+     * @param KernelInterface $kernel
      *
      * @return BinaryFileResponse
      *
      * @throws \Exception
      */
-    public function voir(Document $documentType)
+    public function voir(Document $documentType, KernelInterface $kernel)
     {
-        $documentStoragePath = $this->get('kernel')->getRootDir() . '' . Document::DOCUMENT_STORAGE_ROOT;
+        $documentStoragePath = $kernel->getRootDir() . '' . Document::DOCUMENT_STORAGE_ROOT;
         if (file_exists($documentStoragePath . '/' . $documentType->getPath())) {
             $response = new BinaryFileResponse($documentStoragePath . '/' . $documentType->getPath());
             $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
@@ -83,16 +85,20 @@ class DocumentController extends AbstractController
      * @param Request                $request
      * @param Etude                  $etude
      * @param EtudePermissionChecker $permChecker
+     * @param DocumentManager        $documentManager
+     * @param KernelInterface        $kernel
      *
      * @return Response
      */
-    public function uploadEtude(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function uploadEtude(Request $request, Etude $etude, EtudePermissionChecker $permChecker,
+                                DocumentManager $documentManager,
+                                KernelInterface $kernel)
     {
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle !');
         }
 
-        if (!$response = $this->upload($request, false, ['etude' => $etude])) {
+        if (!$response = $this->upload($request, false, ['etude' => $etude], $documentManager, $kernel)) {
             $this->addFlash('success', 'Document mis en ligne');
 
             return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
@@ -105,16 +111,18 @@ class DocumentController extends AbstractController
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="publish_document_uploadEtudiant", path="/Documents/Upload/Etudiant/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Request $request
-     * @param Membre  $membre
+     * @param Request         $request
+     * @param Membre          $membre
+     * @param DocumentManager $documentManager
+     * @param KernelInterface $kernel
      *
      * @return bool|RedirectResponse|Response
      */
-    public function uploadEtudiant(Request $request, Membre $membre)
+    public function uploadEtudiant(Request $request, Membre $membre, DocumentManager $documentManager, KernelInterface $kernel)
     {
         $options['etudiant'] = $membre;
 
-        if (!$response = $this->upload($request, false, $options)) {
+        if (!$response = $this->upload($request, false, $options, $documentManager, $kernel)) {
             $this->addFlash('success', 'Document mis en ligne');
 
             return $this->redirectToRoute('personne_membre_voir', ['id' => $membre->getId()]);
@@ -140,13 +148,15 @@ class DocumentController extends AbstractController
      * @Security("has_role('ROLE_ADMIN')")
      * @Route(name="publish_document_uploadDoctype", path="/Documents/Upload/Doctype", methods={"GET","HEAD","POST"})
      *
-     * @param Request $request
+     * @param Request         $request
+     * @param DocumentManager $documentManager
+     * @param KernelInterface $kernel
      *
      * @return Response
      */
-    public function uploadDoctype(Request $request)
+    public function uploadDoctype(Request $request, DocumentManager $documentManager, KernelInterface $kernel)
     {
-        if (!$response = $this->upload($request, true)) {
+        if (!$response = $this->upload($request, true, [], $documentManager, $kernel)) {
             // Si tout est ok
             return $this->redirectToRoute('publish_documenttype_index');
         } else {
@@ -158,14 +168,15 @@ class DocumentController extends AbstractController
      * @Security("has_role('ROLE_CA')")
      * @Route(name="publish_document_delete", path="/Documents/Supprimer/{id}", methods={"GET","HEAD","POST"})
      *
-     * @param Document $doc
+     * @param Document        $doc
+     * @param KernelInterface $kernel
      *
      * @return Response
      */
-    public function delete(Document $doc)
+    public function delete(Document $doc, KernelInterface $kernel)
     {
         $em = $this->getDoctrine()->getManager();
-        $doc->setRootDir($this->get('kernel')->getRootDir());
+        $doc->setRootDir($kernel->getRootDir());
 
         if ($doc->getRelation()) { // Cascade sucks
             $relation = $doc->getRelation()->setDocument();
@@ -180,10 +191,11 @@ class DocumentController extends AbstractController
         return $this->redirectToRoute('publish_documenttype_index');
     }
 
-    private function upload(Request $request, $deleteIfExist = false, $options = [], DocumentManager $documentManager)
+    private function upload(Request $request, $deleteIfExist = false, $options = [], DocumentManager $documentManager,
+                            KernelInterface $kernel)
     {
         $document = new Document();
-        $document->setRootDir($this->get('kernel')->getRootDir());
+        $document->setRootDir($kernel->getRootDir());
         if (count($options)) {
             $relatedDocument = new RelatedDocument();
             $relatedDocument->setDocument($document);

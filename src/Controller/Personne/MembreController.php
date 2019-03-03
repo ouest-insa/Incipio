@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 
 class MembreController extends AbstractController
 {
@@ -126,10 +127,12 @@ class MembreController extends AbstractController
      * @param Request         $request
      * @param DocumentManager $documentManager
      * @param EmailEtuManager $emailEtuManager
+     * @param RouterInterface $router
      *
      * @return RedirectResponse|Response
      */
-    public function ajouter(Request $request, DocumentManager $documentManager, EmailEtuManager $emailEtuManager)
+    public function ajouter(Request $request, DocumentManager $documentManager, EmailEtuManager $emailEtuManager,
+                            RouterInterface $router)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -168,8 +171,8 @@ class MembreController extends AbstractController
                     if ($photoUpload) {
                         $document = $documentManager->uploadDocumentFromFile($photoUpload, $authorizedMIMEType, $name,
                             $photoInformation, true);
-                        $membre->setPhotoURI($this->get('router')
-                            ->generate('publish_document_voir', ['id' => $document->getId()]));
+                        $membre->setPhotoURI($router->generate('publish_document_voir',
+                            ['id' => $document->getId()]));
                     }
                 }
 
@@ -206,12 +209,12 @@ class MembreController extends AbstractController
      * @param Request         $request
      * @param Membre          $membre
      * @param DocumentManager $documentManager
+     * @param RouterInterface $router
      *
      * @return RedirectResponse|Response
-     *
      * @internal param $id
      */
-    public function modifier(Request $request, Membre $membre, DocumentManager $documentManager)
+    public function modifier(Request $request, Membre $membre, DocumentManager $documentManager, RouterInterface $router)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -236,8 +239,8 @@ class MembreController extends AbstractController
                     if ($photoUpload) {
                         $document = $documentManager->uploadDocumentFromFile($photoUpload, $authorizedMIMEType, $name,
                             $photoInformation, true);
-                        $membre->setPhotoURI($this->get('router')
-                            ->generate('publish_document_voir', ['id' => $document->getId()]));
+                        $membre->setPhotoURI($router->generate('publish_document_voir',
+                            ['id' => $document->getId()]));
                     }
                 }
 

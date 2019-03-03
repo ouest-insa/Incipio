@@ -27,9 +27,18 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class FactureController extends AbstractController
 {
+
+    public $keyValueStore;
+
+    public function __construct(KeyValueStore $keyValueStore)
+    {
+        $this->keyValueStore = $keyValueStore;
+    }
+
     /**
      * @Security("has_role('ROLE_TRESO')")
      * @Route(name="treso_Facture_index", path="/Tresorerie/Factures", methods={"GET","HEAD"})
@@ -205,16 +214,15 @@ class FactureController extends AbstractController
      */
     private function createFacture(ObjectManager $em, ?Etude $etude, ConversionLettreFormatter $formatter)
     {
-        $keyValueStore = $this->get('app.json_key_value_store');
-        if (!$keyValueStore->exists('tva')) {
+        if (!$this->keyValueStore->exists('tva')) {
             throw new \RuntimeException('Le paramètres tva n\'est pas disponible.');
         }
-        $tauxTVA = 100 * $keyValueStore->get('tva'); // former value: 20, tva is stored as 0.2 in key-value store
+        $tauxTVA = 100 * $this->keyValueStore->get('tva'); // former value: 20, tva is stored as 0.2 in key-value store
         $compteEtude = 705000;
         $compteFrais = 708500;
         $compteAcompte = 419100;
-        if ($keyValueStore->exists('namingConvention')) {
-            $namingConvention = $keyValueStore->get('namingConvention');
+        if ($this->keyValueStore->exists('namingConvention')) {
+            $namingConvention = $this->keyValueStore->get('namingConvention');
         } else {
             $namingConvention = 'id';
         }

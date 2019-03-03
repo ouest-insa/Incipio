@@ -10,15 +10,15 @@ Feature: Related documents
     And I attach the file "composer.json" to "Fichier"
     And I press "Mettre en ligne"
     Then I should see "Document mis en ligne"
-    And the url should match "/personne/membre/1"
+    And the url should match "/membres/voir/1"
 
   @dropSchema
   Scenario: I can delete a member with related document
     Given I am logged in as "admin"
-    Given I am on "/personne/membre/1"
+    Given I am on "/membres/1"
     Then I should see "composer.json"
-    Given I am on "/personne/membre/modifier/1"
+    Given I am on "/membres/modifier/1"
     And I press "Supprimer le membre"
     Then the response status code should be 200
-    And the url should match "/personne/membre"
+    And the url should match "/membres"
     And I should see "Membre supprimé"

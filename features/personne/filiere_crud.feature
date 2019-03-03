@@ -28,7 +28,7 @@ Feature: Filiere
     Then the response status code should be 200
     When I fill in "Nom" with "Testing science"
     And I press "Enregistrer"
-    Then the url should match "/personne/poste"
+    Then the url should match "/poste"
     And I should see "Filière modifiée"
     And I should see "Testing science"
 
@@ -38,7 +38,7 @@ Feature: Filiere
     Then the response status code should be 200
     And I press "Supprimer la filière"
     Then the url should match "/poste"
-    And I should see "Impossible de supprimer une filiere ayant des membres."
+    And I should see "Impossible de supprimer une filière ayant des membres."
 
   Scenario Outline: Users without ROLE_ADMIN can't access Filiere module
     Given I am logged in as "<user>"

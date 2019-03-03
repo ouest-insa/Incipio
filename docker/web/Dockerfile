@@ -53,7 +53,7 @@ RUN /usr/bin/composer.sh \
 # Add dependencies (before app to make a better cache usage)
 WORKDIR /app
 COPY ./composer.json ./composer.lock /app/
-RUN mkdir -p var/cache var/logs var/sessions \
+RUN mkdir -p var/cache var/logs var/sessions public/tmp \
     # Install dependencies
     && composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest \
     && composer clear-cache
@@ -63,6 +63,6 @@ COPY ./ /app
 RUN composer dump-autoload --classmap-authoritative --no-dev \
     && composer run-script --no-dev post-install-cmd \
     # Fixes permissions issues in non-dev mode
-    && chown -R www-data . var/cache var/logs var/sessions
+    && chown -R www-data . var/cache var/logs var/sessions public/tmp
 
 CMD ["/app/docker/web/start.sh"]

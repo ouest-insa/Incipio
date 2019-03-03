@@ -107,10 +107,12 @@ class FeatureContext extends MinkContext implements Context
     public function afterStep(AfterStepScope $event)
     {
         if (!$event->getTestResult()->isPassed()) {
-            echo $this->getSession()->getCurrentUrl() . "\n\n-------";
-            echo substr($this->getSession()->getPage()->getContent(), 100, 200); // the title of the page
-            echo "\n\n------";
-            echo substr($this->getSession()->getPage()->getContent(), 13500, 15000);
+            echo $this->getSession()->getCurrentUrl() . "\n-------";
+            if (preg_match('/aside(.*?)footer/', $this->getSession()->getPage()->getContent(), $match) == 1) {
+                echo $match[1];
+            } else {
+              echo $this->getSession()->getPage()->getContent();
+            }
         }
     }
 
@@ -133,7 +135,7 @@ class FeatureContext extends MinkContext implements Context
     {
         $doctrine = $this->getContainer()->get('doctrine');
 
-        $repository = $doctrine->getRepository('Mgate\EtudeBundle\Entity\Etude');
+        $repository = $doctrine->getRepository(\App\Entity\Project\Etude::class);
 
         $etude = $repository->findOneBy([
             'nom' => $name,
@@ -148,7 +150,7 @@ class FeatureContext extends MinkContext implements Context
     public function theUserIsActive($username)
     {
         $doctrine = $this->getContainer()->get('doctrine');
-        $repository = $doctrine->getRepository('Mgate\UserBundle\Entity\User');
+        $repository = $doctrine->getRepository(\App\Entity\User\User::class);
 
         $user = $repository->findOneBy([
             'username' => $username,

@@ -23,7 +23,7 @@ class Document
 {
     const DOCUMENT_STORAGE_ROOT = '/../var/documents'; //document storage root on kernerl->getrootdir() path.
 
-    const DOCUMENT_TMP_FOLDER = '/../web/tmp'; // tmp folder in web directory on kernerl->getrootdir() path.
+    const DOCUMENT_TMP_FOLDER = '/../public/tmp'; // tmp folder in web directory on kernerl->getrootdir() path.
 
     /**
      * @ORM\Id

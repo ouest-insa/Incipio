@@ -2,7 +2,7 @@ Feature: Default Doctypes
   The provided doctypes can be published out of the box.
 
   @dropSchema
-  Scenario: Empty scenario t drop schema
+  Scenario: Empty scenario to drop schema
     Given I am logged in as "admin"
 
   @createSchema

@@ -10,12 +10,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 /**
  * Class GetGanttController.
  */
 class GanttController extends AbstractController
 {
+    public $keyValueStore;
+
+    public function __construct(KeyValueStore $keyValueStore)
+    {
+        $this->keyValueStore = $keyValueStore;
+    }
+
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="publish_getgantt", path="/Documents/GetGantt/{id}/{width}", methods={"GET","HEAD"}, requirements={"width": "\d+"}, defaults={"width": "960"})
@@ -37,8 +45,8 @@ class GanttController extends AbstractController
 
         /** Handle naming conventions for files. (To have a single usable version for Mgate & N7 Consulting) */
         $name = $etude->getId();
-        if ($this->get('app.json_key_value_store')->exists('namingConvention')) {
-            $naming_convention = $this->get('app.json_key_value_store')->get('namingConvention');
+        if ($this->keyValueStore->exists('namingConvention')) {
+            $naming_convention = $this->keyValueStore->get('namingConvention');
 
             /* Ensure $name should not contains any space character, otherwise gantt export error.*/
             if (false !== strpos($etude->getReference($naming_convention), ' ')) {

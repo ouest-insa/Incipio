@@ -36,10 +36,16 @@ services:
     App\Controller\Project\EtudeController:
         arguments:
            $keyValueStore: "@app.json_key_value_store"
+    App\Controller\Publish\GanttController:
+        arguments:
+           $keyValueStore: "@app.json_key_value_store"
     App\Controller\Publish\TraitementController:
         arguments:
             $keyValueStore: "@app.json_key_value_store"
     App\Controller\Stat\IndicateursController:
+        arguments:
+            $keyValueStore: "@app.json_key_value_store"
+    App\Controller\Treso\FactureController:
         arguments:
             $keyValueStore: "@app.json_key_value_store"
     App\Service\Project\ChartManager:

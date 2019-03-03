@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class TraitementController extends AbstractController
@@ -118,18 +118,19 @@ class TraitementController extends AbstractController
 
     private $permChecker;
 
-    private $twig;
+    private $twigEnvironment;
 
     private $keyValueStore;
 
     private $kernel;
 
     public function __construct(ChartManager $chartManager, EtudePermissionChecker $permChecker,
-                                EngineInterface $twig, KeyValueStore $keyValueStore, KernelInterface $kernel)
+                                Environment $twigEnvironment,
+                                KeyValueStore $keyValueStore, KernelInterface $kernel)
     {
         $this->chartManager = $chartManager;
         $this->permChecker = $permChecker;
-        $this->twig = $twig;
+        $this->twigEnvironment = $twigEnvironment;
         $this->keyValueStore = $keyValueStore;
         $this->kernel = $kernel;
     }
@@ -148,7 +149,7 @@ class TraitementController extends AbstractController
     {
         $this->publipostage($templateName, $rootName, $rootObject_id);
 
-        return $this->telechargerAction();
+        return $this->telecharger();
     }
 
     private function publipostage($templateName, $rootName, $rootObject_id, $debug = false)
@@ -394,9 +395,10 @@ class TraitementController extends AbstractController
         $templatesXML = $this->getDocxContent($templateFullPath); //récup contenu XML
         $templatesXMLTraite = [];
 
-        foreach ($templatesXML as $templateName => $templateXML) {
-            $templateXML = $this->twig->render($templateXML, [$rootName => $rootObject]);
-            $this->arrayPushAssoc($templatesXMLTraite, $templateName, $templateXML);
+        foreach ($templatesXML as $templateName => $toTemplateItem) {
+            $XMLTemplate = $this->twigEnvironment->createTemplate($toTemplateItem);
+            $templatedXML = $XMLTemplate->render([$rootName => $rootObject]);
+            $this->arrayPushAssoc($templatesXMLTraite, $templateName, $templatedXML);
         }
 
         return $templatesXMLTraite;

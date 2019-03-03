@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 
 class BVController extends AbstractController
 {
@@ -54,12 +55,13 @@ class BVController extends AbstractController
      * @Route(name="treso_BV_ajouter", path="/Tresorerie/BV/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
      * @Route(name="treso_BV_modifier", path="/Tresorerie/BV/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
      *
-     * @param Request $request
-     * @param $id
+     * @param Request         $request
+     * @param                 $id
+     * @param RouterInterface $router
      *
      * @return RedirectResponse|Response
      */
-    public function modifier(Request $request, $id)
+    public function modifier(Request $request, $id, RouterInterface $router)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -82,7 +84,7 @@ class BVController extends AbstractController
                 }
                 if (null === $charges) {
                     $this->addFlash('danger', 'Il n\'y a aucune cotisation Urssaf définie pour cette période. 
-                    Pour ajouter des cotisations URSSAF : ' . $this->get('router')->generate('treso_CotisationURSSAF_index') . '.');
+                    Pour ajouter des cotisations URSSAF : ' . $router->generate('treso_CotisationURSSAF_index') . '.');
 
                     return $this->redirectToRoute('treso_BV_index');
                 }
@@ -90,7 +92,7 @@ class BVController extends AbstractController
                 $baseURSSAF = $em->getRepository(BaseURSSAF::class)->findByDate($bv->getDateDemission());
                 if (null === $baseURSSAF) {
                     $this->addFlash('danger', 'Il n\'y a aucune base Urssaf définie pour cette période. 
-                    Pour ajouter une base URSSAF : ' . $this->get('router')->generate('treso_BaseURSSAF_index') . '.');
+                    Pour ajouter une base URSSAF : ' . $router->generate('treso_BaseURSSAF_index') . '.');
 
                     return $this->redirectToRoute('treso_BV_index');
                 }

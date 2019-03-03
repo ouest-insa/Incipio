@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class EtudeController extends AbstractController
@@ -260,10 +261,11 @@ class EtudeController extends AbstractController
      * @param Request                $request
      * @param Etude                  $etude
      * @param EtudePermissionChecker $permChecker
+     * @param ValidatorInterface     $validator
      *
      * @return RedirectResponse|Response
      */
-    public function modifier(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
+    public function modifier(Request $request, Etude $etude, EtudePermissionChecker $permChecker, ValidatorInterface $validator)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -300,7 +302,7 @@ class EtudeController extends AbstractController
                     return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
                 }
             } else {
-                $errors = $this->get('validator')->validate($etude);
+                $errors = $validator->validate($etude);
                 foreach ($errors as $error) {
                     $this->addFlash('danger', $error->getPropertyPath() . ' : ' . $error->getMessage());
                 }

@@ -54,7 +54,7 @@ class DocumentManager
     {
         $this->em = $em;
         $this->junior_id = $juniorId;
-        $this->junior_authorizedStorageSize = $authorizedStorageSize;
+        $this->junior_authorizedStorageSize = $authorizedStorageSize ?? 512000;
         $this->tokenStorage = $tokenStorage;
         $this->kernel = $kernel;
     }
@@ -161,14 +161,14 @@ class DocumentManager
         $document->setRootDir($this->kernel->getRootDir());
 
         // Authorized Storage Size Overflow
-        $totalSize = $document->getSize() + $this->getRepository()->getTotalSize();
+        $totalSize = $document->getSize() + $this->em->getRepository(Document::class)->getTotalSize();
         if ($totalSize > $this->junior_authorizedStorageSize) {
             throw new UploadException('Vous n\'avez plus d\'espace disponible ! Vous pouvez en demander plus à dsi@n7consulting.fr.');
         }
 
         // Delete every document with the same name
         if ($deleteIfExist) {
-            $docs = $this->getRepository()->findBy(['name' => $document->getName()]);
+            $docs = $this->em->getRepository(Document::class)->findBy(['name' => $document->getName()]);
             foreach ($docs as $doc) {
                 if ($doc->getRelation()) {
                     $relation = $doc->getRelation();
