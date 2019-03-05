@@ -1,5 +1,5 @@
 .skin-yellow .main-header .navbar {
-    background-color: #003d80;
+    background-color: #323044;
 }
 .skin-yellow .main-header .navbar .nav>li>a, .skin-yellow .main-header .navbar .nav>li>.loading {
     color: #fff;
@@ -25,7 +25,7 @@
     color: #fff;
 }
 .skin-yellow .main-header .navbar .sidebar-toggle:hover {
-    background-color: #01172f;
+    background-color: #323044;
 }
 @media (max-width:767px) {
     .skin-yellow .main-header .navbar .dropdown-menu li.divider {
@@ -37,13 +37,13 @@
     }
 }
 .skin-yellow .main-header .logo {
-     background-color: #01172f;
+     background-color: #1f1e2c;
      color: #fff;
      border-bottom: 0 solid transparent;
 }
 
 .skin-yellow .main-header .logo:hover {
-    background-color: #00002f;
+    background-color: #0f0e15;
 }
 .skin-yellow .main-header li.user-header {
     background-color: #f39c12;
@@ -67,7 +67,7 @@
 .skin-yellow .sidebar-menu>li:hover>a, .skin-yellow .sidebar-menu>li.active>a {
     color: #fff;
     background: #1e282c;
-    border-left-color: #003d80;
+    border-left-color: #323044;
 }
 .skin-yellow .sidebar-menu>li>.treeview-menu {
     margin: 0 1px;
@@ -238,13 +238,13 @@
 /*Custom for ouest-insa*/
 .logo-lg{
     background-image: url(/img/logo-blanc-80.png);
-    background-size: 160px;
+    background-size: 200px;
     background-repeat: no-repeat;
     background-position: center; 
     text-indent: -9999px;
 }
 .logo-mini{
-    background-image: url(/img/logo-small-80.png);
+    background-image: url(/img/logo-small.png);
     background-size: 40px;
     background-repeat: no-repeat;
     background-position: center; 
