@@ -18,8 +18,7 @@ class ImportController extends Controller
      *
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response Display an upload form for a csv resources from other crm.
-     *                                                    Display an upload form for a csv resources from other crm
+     * @return \Symfony\Component\HttpFoundation\Response display an upload form for a csv resources from other crm
      */
     public function indexAction(Request $request)
     {
@@ -47,7 +46,11 @@ class ImportController extends Controller
 
                 $results = $siajeImporter->run($file);
 
-                $request->getSession()->getFlashBag()->add('success', 'Document importé. ' . $results['inserted_projects'] . ' études créées, ' . $results['inserted_prospects'] . ' prospects créés');
+                if (!array_key_exists('error', $results) || '' == $results['error']) {
+                    $this->addFlash('success', 'Document importé. ' . $results['inserted_projects'] . ' études créées, ' . $results['inserted_prospects'] . ' prospects créés');
+                } else {
+                    $this->addFlash('danger', $results['error']);
+                }
 
                 return $this->redirectToRoute('Mgate_publi_import');
             }
@@ -59,15 +62,15 @@ class ImportController extends Controller
     /**
      * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param $number integer id of service as stated in $this::AVAILABLE_FORMATS
+     * @param $serviceName integer id of service as stated in $this::AVAILABLE_FORMATS
      * Return an html snippet of how csv should be formatted to match import
      *
      * @return JsonResponse an array containing expected headers
      */
-    public function ajaxExpectedFormatAction($service_number)
+    public function ajaxExpectedFormatAction($serviceName)
     {
-        if ($service_number < count($this::AVAILABLE_FORMATS)) {
-            if ('Siaje Etudes' == $this::AVAILABLE_FORMATS[$service_number]) {
+        if (in_array($serviceName, self::AVAILABLE_FORMATS)) {
+            if ('Siaje Etudes' == $serviceName) {
                 $siajeImporter = $this->get('Mgate.import.siaje_etude');
 
                 return new JsonResponse($siajeImporter->expectedFormat());

@@ -30,6 +30,7 @@ class SiajeEtudeImporter extends CsvImporter implements FileImporterInterface
     public function __construct(EntityManager $entityManager)
     {
         $this->em = $entityManager;
+        $this->expectedFormat = self::EXPECTED_FORMAT;
     }
 
     /**
@@ -39,18 +40,20 @@ class SiajeEtudeImporter extends CsvImporter implements FileImporterInterface
      */
     public function expectedFormat()
     {
-        return ['file_format' => 'csv', 'columns_format' => self::EXPECTED_FORMAT];
+        return ['file_format' => 'csv', 'columns_format' => $this->expectedFormat];
     }
 
     /**
      * @param UploadedFile $file resources file contzaining data to import
      *
-     * @return mixed Process Import.
-     *               Process Import
+     * @return mixed process Import
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function run(UploadedFile $file)
     {
-        if ('txt' == $file->guessExtension()) {
+        if (true || 'txt' == $file->guessExtension()) {
             //csv is seen as text/plain
 
             $i = 1;
@@ -78,15 +81,19 @@ class SiajeEtudeImporter extends CsvImporter implements FileImporterInterface
                             } else {
                                 $e->setStateID(self::SIAJE_AVAILABLE_STATE['Contact initial']);
                             }
-                            $e->setAcompte(true);
-                            if (null !== $this->readArray($data, 'Acompte')) {
-                                $rate = explode(',', $this->readArray($data, 'Acompte')); //acompte is a percentage such as "30,00%".
+                            $acompte = $this->readArray($data, 'Acompte');
+                            if (null !== $acompte) {
+                                $e->setAcompte(true);
+                                $rate = explode(',', $acompte); //acompte is a percentage such as "30,00%".
                                 $e->setPourcentageAcompte($rate['0'] / 100);
                             }
-                            $e->setFraisDossier($this->readArray($data, 'Frais de dossier HT'));
+                            $frais = $this->readArray($data, 'Frais de dossier HT');
+                            if (null !== $frais) {
+                                $frais = explode(',', $frais); //acompte is a percentage such as "30,00%".
+                                $e->setFraisDossier($frais[0]);
+                            }
                             $e->setPresentationProjet('Etude importée depuis Siaje');
                             $e->setDescriptionPrestation($this->readArray($data, 'Domaine de compétence'));
-                            $e->setPourcentageAcompte($this->readArray($data, 'Acompte'));
                             $this->em->persist($e);
 
                             /* Prospect management */
@@ -230,9 +237,9 @@ class SiajeEtudeImporter extends CsvImporter implements FileImporterInterface
                 $this->em->flush();
             }
 
-            return ['inserted_projects' => $inserted_projects, 'inserted_prospects' => $inserted_prospects];
+            return ['inserted_projects' => $inserted_projects, 'inserted_prospects' => $inserted_prospects, 'error' => ''];
         }
 
-        return ['inserted_projects' => 0, 'inserted_prospects' => 0];
+        return ['inserted_projects' => 0, 'inserted_prospects' => 0, 'error' => 'Format invalide. csv (vu comme txt) attendu, ' . $file->guessExtension() . ' fourni.'];
     }
 }
