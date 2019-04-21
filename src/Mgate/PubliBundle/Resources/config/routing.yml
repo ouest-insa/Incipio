@@ -76,7 +76,7 @@ Mgate_publi_import:
     methods:  [GET, HEAD, POST]
 
 Mgate_publi_import_format:
-    path: /Documents/import/format/{service_number}
+    path: /Documents/import/format/{serviceName}
     defaults: {_controller: MgatePubliBundle:Import:ajaxExpectedFormat}
     methods:  [GET, HEAD]
 

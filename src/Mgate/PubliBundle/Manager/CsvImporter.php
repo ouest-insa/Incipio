@@ -13,20 +13,22 @@ namespace Mgate\PubliBundle\Manager;
  */
 class CsvImporter
 {
+    protected $expectedFormat;
+
     /**
      * @param $row array a csv row
-     * @param $columnName string a value of EXPECTED_FORMAT
+     * @param $columnName string a value of $this->expectedFormat
      * Enables to read a siaje export csv row with string index instead of numeric indexes
      * @param bool $clean should string be cleaned (from upper case to ucwords) ? Can be used when the value is in upper case and should be formatted in a more standard way
      *
      * @return string
      *
-     * @throws \Exception if a $columnName is not available into EXPECTED_FORMAT
+     * @throws \Exception if a $columnName is not available into $this->expectedFormat
      */
     protected function readArray($row, $columnName, $clean = false)
     {
-        if (in_array($columnName, self::EXPECTED_FORMAT)) {
-            $result = $row[array_search($columnName, self::EXPECTED_FORMAT)];
+        if (in_array($columnName, $this->expectedFormat)) {
+            $result = $row[array_search($columnName, $this->expectedFormat)];
             if ($clean) {
                 return utf8_encode(ucwords(strtolower($result)));
             } else {
@@ -41,6 +43,8 @@ class CsvImporter
      * @param $date string representing a date
      *
      * @return \DateTime|null
+     *
+     * @throws \Exception
      */
     protected function dateManager($date)
     {
