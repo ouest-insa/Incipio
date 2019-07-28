@@ -16,6 +16,8 @@ services:
             - ./var/key_value_store:/app/var/key_value_store
             - ./var/sessions:/app/var/sessions
             - ./var/log:/app/var/log
+            # Uncomment following line when in dev
+            # - .:/app
         restart: "no"
         labels:
             - "traefik.backend=web-jeyser"
