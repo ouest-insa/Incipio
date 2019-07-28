@@ -3,6 +3,7 @@ FROM php:7.3-apache
 # PHP extensions
 ENV APCU_VERSION 5.1.11
 ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV OPENSSL_CONF /etc/ssl/
 RUN buildDeps=" \
         libicu-dev \
         zlib1g-dev \
@@ -13,7 +14,7 @@ RUN buildDeps=" \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         $buildDeps \
-        libicu57 \
+        libicu63 \
         zlib1g \
         libzip4 \
         git \
