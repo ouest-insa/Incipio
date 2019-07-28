@@ -543,7 +543,7 @@ class Etude
             case 'AV':
                 return $this->getAvs()->get($key);
             case 'RM':
-                if ($key == -1) {
+                if (-1 == $key) {
                     return null;
                 } else {
                     return $this->getMissions()->get($key);

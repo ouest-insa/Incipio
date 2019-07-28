@@ -139,9 +139,9 @@ class TraitementController extends AbstractController
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="publish_publiposter", path="/Documents/Publiposter/{templateName}/{rootName}/{rootObject_id}", methods={"GET","HEAD","POST"}, requirements={"rootObject_id": "\d+", "rootName": "\w+", "templateName": "\w+"})
      *
-     * @param   $templateName
-     * @param   $rootName
-     * @param   $rootObject_id
+     * @param $templateName
+     * @param $rootName
+     * @param $rootObject_id
      *
      * @return RedirectResponse|Response
      */
@@ -250,7 +250,7 @@ class TraitementController extends AbstractController
         if (isset($isDM) && $isDM) {
             $refDocx = preg_replace('#RM#', 'DM', $refDocx);
         }
-        $repertoire = $this->kernel->getRootDir() . '' . Document::DOCUMENT_TMP_FOLDER; // tmp folder in web directory
+        $repertoire = $this->kernel->getProjectDir() . '' . Document::DOCUMENT_TMP_FOLDER; // tmp folder in web directory
         $idDocx = $refDocx . '-' . ((int) strtotime('now') + rand());
         copy($chemin, $repertoire . '/' . $idDocx);
         $zip = new \ZipArchive();
@@ -308,7 +308,7 @@ class TraitementController extends AbstractController
             $idDocx = $this->idDocx;
             $refDocx = $this->refDocx;
 
-            $templateName = $this->kernel->getRootDir() . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $idDocx;
+            $templateName = $this->kernel->getProjectDir() . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $idDocx;
 
             $response = new Response();
             $response->headers->set('Content-Type',
@@ -346,7 +346,7 @@ class TraitementController extends AbstractController
         if (!$documenttype = $em->getRepository(Document::class)->findOneBy(['name' => $doc])) {
             throw $this->createNotFoundException('Le doctype ' . $doc . ' n\'existe pas... C\'est bien balo');
         } else {
-            $chemin = $this->kernel->getRootDir() . '' . Document::DOCUMENT_STORAGE_ROOT . '/' . $documenttype->getPath();
+            $chemin = $this->kernel->getProjectDir() . '' . Document::DOCUMENT_STORAGE_ROOT . '/' . $documenttype->getPath();
         }
 
         return $chemin;
@@ -657,11 +657,11 @@ class TraitementController extends AbstractController
                 $doc->setAuthor($personne)
                     ->setName($data['name'])
                     ->setFile($file);
-                $doc->setRootDir($this->kernel->getRootDir());
+                $doc->setProjectDir($this->kernel->getProjectDir());
                 $em->persist($doc);
                 $docs = $em->getRepository(Document::class)->findBy(['name' => $doc->getName()]);
                 foreach ($docs as $doc) {
-                    $doc->setRootDir($this->kernel->getRootDir());
+                    $doc->setProjectDir($this->kernel->getProjectDir());
                     $em->remove($doc);
                 }
                 $em->flush();

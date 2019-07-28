@@ -55,3 +55,4 @@ We are using Jeyser for our business, thus we try to keep as secure as it could 
 issue, mail us at dsi[at]n7consulting.fr. 
 
 If you are encountering a bug, raise an issue on Github, and we would be glad to fix it as quick as we can.
+

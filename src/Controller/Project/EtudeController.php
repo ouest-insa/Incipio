@@ -56,10 +56,11 @@ class EtudeController extends AbstractController
      * @Route(name="project_etude_homepage", path="/suivi/", methods={"GET","HEAD"})
      *
      * @param EtudeManager $etudeManager
+     * @param string       $roleVoirConfidentiel role required to access confidential projects, injected by DI
      *
      * @return Response
      */
-    public function index(EtudeManager $etudeManager)
+    public function index(EtudeManager $etudeManager, string $roleVoirConfidentiel)
     {
         $MANDAT_MAX = $etudeManager->getMaxMandat();
         $MANDAT_MIN = $etudeManager->getMinMandat();
@@ -98,6 +99,7 @@ class EtudeController extends AbstractController
             'etudesAvorteesParMandat' => $etudesAvorteesParMandat,
             'anneeCreation' => $anneeCreation,
             'mandatMax' => $MANDAT_MAX,
+            'role_voir_confidentiel' => $roleVoirConfidentiel,
         ]);
     }
 
@@ -106,10 +108,11 @@ class EtudeController extends AbstractController
      * @Route(name="project_etude_ajax", path="/suivi/get", methods={"GET","HEAD"})
      *
      * @param Request $request
+     * @param string  $roleVoirConfidentiel role required to access confidential projects, injected by DI
      *
      * @return Response
      */
-    public function getEtudesAsync(Request $request)
+    public function getEtudesAsync(Request $request, string $roleVoirConfidentiel)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -123,15 +126,22 @@ class EtudeController extends AbstractController
                 ], ['num' => 'DESC']);
 
                 if (self::STATE_ID_TERMINEE == $stateID) {
-                    return $this->render('Project/Etude/Tab/EtudesTerminees.html.twig', ['etudes' => $etudes]);
+                    return $this->render('Project/Etude/Tab/EtudesTerminees.html.twig', [
+                        'etudes' => $etudes,
+                        'role_voir_confidentiel' => $roleVoirConfidentiel,
+                    ]);
                 } elseif (self::STATE_ID_AVORTEE == $stateID) {
-                    return $this->render('Project/Etude/Tab/EtudesAvortees.html.twig', ['etudes' => $etudes]);
+                    return $this->render('Project/Etude/Tab/EtudesAvortees.html.twig', [
+                        'etudes' => $etudes,
+                        'role_voir_confidentiel' => $roleVoirConfidentiel,
+                    ]);
                 }
             }
         }
 
         return $this->render('Project/Etude/Tab/EtudesAvortees.html.twig', [
             'etudes' => null,
+            'role_voir_confidentiel' => $roleVoirConfidentiel,
         ]);
     }
 

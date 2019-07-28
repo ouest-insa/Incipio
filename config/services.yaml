@@ -13,6 +13,10 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind: # Define value for variable parameters injection.
+            $roleVoirConfidentiel: '%env(ROLE_VOIR_CONFIDENTIEL)%'
+            $keyValueStore: "@app.json_key_value_store"
+            $statsStore: "@app.json_stats"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -27,36 +31,6 @@ services:
         tags: ['controller.service_arguments']
 
 # Manual dependency injection
-    App\Controller\Dashboard\DashboardController:
-        arguments:
-            $statsStore: "@app.json_stats"
-    App\Controller\Dashboard\AdminController:
-        arguments:
-           $keyValueStore: "@app.json_key_value_store"
-    App\Controller\Project\EtudeController:
-        arguments:
-           $keyValueStore: "@app.json_key_value_store"
-    App\Controller\Publish\GanttController:
-        arguments:
-           $keyValueStore: "@app.json_key_value_store"
-    App\Controller\Publish\TraitementController:
-        arguments:
-            $keyValueStore: "@app.json_key_value_store"
-    App\Controller\Stat\IndicateursController:
-        arguments:
-            $keyValueStore: "@app.json_key_value_store"
-    App\Controller\Treso\FactureController:
-        arguments:
-            $keyValueStore: "@app.json_key_value_store"
-    App\Service\Project\ChartManager:
-        arguments:
-            $keyValueStore: "@app.json_key_value_store"
-    App\Service\Project\EtudeManager:
-        arguments:
-            $keyValueStore: "@app.json_key_value_store"
-    App\Service\Project\EmailEtuManager:
-        arguments:
-            $keyValueStore: "@app.json_key_value_store"
     App\Service\Publish\DocumentManager:
         arguments:
             $juniorId: "%env(JUNIOR_ID)%"
