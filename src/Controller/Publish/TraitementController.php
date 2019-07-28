@@ -139,9 +139,9 @@ class TraitementController extends AbstractController
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="publish_publiposter", path="/Documents/Publiposter/{templateName}/{rootName}/{rootObject_id}", methods={"GET","HEAD","POST"}, requirements={"rootObject_id": "\d+", "rootName": "\w+", "templateName": "\w+"})
      *
-     * @param   $templateName
-     * @param   $rootName
-     * @param   $rootObject_id
+     * @param $templateName
+     * @param $rootName
+     * @param $rootObject_id
      *
      * @return RedirectResponse|Response
      */

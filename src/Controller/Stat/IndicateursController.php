@@ -18,7 +18,6 @@ use App\Entity\Personne\Membre;
 use App\Entity\Project\Cc;
 use App\Entity\Project\Etude;
 use App\Entity\Project\Mission;
-use App\Entity\Stat\Indicateur;
 use App\Entity\Treso\BV;
 use App\Entity\Treso\NoteDeFrais;
 use App\Service\Project\EtudeManager;
