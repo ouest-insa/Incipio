@@ -13,13 +13,13 @@ namespace App\Service\Project;
 
 use App\Entity\Project\DocType;
 use App\Entity\Project\Etude;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 class DocTypeManager /*extends \Twig_Extension*/
 {
     protected $em;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }

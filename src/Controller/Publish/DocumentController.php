@@ -67,7 +67,7 @@ class DocumentController extends AbstractController
      */
     public function voir(Document $documentType, KernelInterface $kernel)
     {
-        $documentStoragePath = $kernel->getRootDir() . '' . Document::DOCUMENT_STORAGE_ROOT;
+        $documentStoragePath = $kernel->getProjectDir() . '' . Document::DOCUMENT_STORAGE_ROOT;
         if (file_exists($documentStoragePath . '/' . $documentType->getPath())) {
             $response = new BinaryFileResponse($documentStoragePath . '/' . $documentType->getPath());
             $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
@@ -176,7 +176,7 @@ class DocumentController extends AbstractController
     public function delete(Document $doc, KernelInterface $kernel)
     {
         $em = $this->getDoctrine()->getManager();
-        $doc->setRootDir($kernel->getRootDir());
+        $doc->setProjectDir($kernel->getProjectDir());
 
         if ($doc->getRelation()) { // Cascade sucks
             $relation = $doc->getRelation()->setDocument();
@@ -195,7 +195,7 @@ class DocumentController extends AbstractController
                             KernelInterface $kernel)
     {
         $document = new Document();
-        $document->setRootDir($kernel->getRootDir());
+        $document->setProjectDir($kernel->getProjectDir());
         if (count($options)) {
             $relatedDocument = new RelatedDocument();
             $relatedDocument->setDocument($document);

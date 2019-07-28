@@ -3,11 +3,13 @@
 namespace App\Controller\Publish;
 
 use App\Entity\Project\Etude;
+use App\Entity\Publish\Document;
 use App\Service\Project\ChartManager;
 use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
@@ -34,10 +36,12 @@ class GanttController extends AbstractController
      * @param bool                   $debug
      * @param EtudePermissionChecker $permChecker
      * @param ChartManager           $chartManager
+     * @param KernelInterface        $kernel
      *
      * @return Response a png of project gantt chart
      */
-    public function getGantt(Etude $etude, $width = 960, $debug = false, EtudePermissionChecker $permChecker, ChartManager $chartManager)
+    public function getGantt(Etude $etude, EtudePermissionChecker $permChecker,
+                             ChartManager $chartManager, KernelInterface $kernel, $width = 960, $debug = false)
     {
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
@@ -56,7 +60,8 @@ class GanttController extends AbstractController
 
         //Gantt
         $ob = $chartManager->getGantt($etude, 'gantt');
-        $chartManager->exportGantt($ob, 'gantt' . $name, $width);
+        $filename = 'gantt' . $name;
+        $chartManager->exportGantt($ob, $filename, $width);
 
         $response = new Response();
         $response->headers->set('Content-Type', 'image/png');
@@ -65,7 +70,8 @@ class GanttController extends AbstractController
         $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         $response->headers->set('Expires', 0);
 
-        $response->setContent(file_get_contents('tmp/gantt' . $name . '.png'));
+        $gantPath = $kernel->getProjectDir() . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $filename . '.png';
+        $response->setContent(file_get_contents($gantPath));
 
         return $response;
     }

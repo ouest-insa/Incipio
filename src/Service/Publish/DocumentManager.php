@@ -158,7 +158,7 @@ class DocumentManager
         // Store each Junior documents in a distinct subdirectory
         $juniorId = $this->junior_id;
         $document->setSubdirectory($juniorId);
-        $document->setRootDir($this->kernel->getRootDir());
+        $document->setProjectDir($this->kernel->getProjectDir());
 
         // Authorized Storage Size Overflow
         $totalSize = $document->getSize() + $this->em->getRepository(Document::class)->getTotalSize();

@@ -21,9 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Document
 {
-    const DOCUMENT_STORAGE_ROOT = '/../var/documents'; //document storage root on kernerl->getrootdir() path.
+    const DOCUMENT_STORAGE_ROOT = '/var/documents'; //document storage root on kernerl->getProjectDir() path.
 
-    const DOCUMENT_TMP_FOLDER = '/../public/tmp'; // tmp folder in web directory on kernerl->getrootdir() path.
+    const DOCUMENT_TMP_FOLDER = '/public/tmp'; // tmp folder in web directory on kernerl->getProjectDir() path.
 
     /**
      * @ORM\Id
@@ -72,7 +72,7 @@ class Document
      * @Assert\NotBlank
      * Defined on creation.
      */
-    private $rootDir;
+    private $projectDir;
 
     /**
      * @var UploadedFile
@@ -90,8 +90,8 @@ class Document
      */
     public function getAbsolutePath()
     {
-        if (!empty($this->rootDir)) {
-            return $this->rootDir . '' . self::DOCUMENT_STORAGE_ROOT . '/' . $this->path;
+        if (!empty($this->projectDir)) {
+            return $this->projectDir . '' . self::DOCUMENT_STORAGE_ROOT . '/' . $this->path;
         }
     }
 
@@ -120,15 +120,15 @@ class Document
             return;
         }
 
-        if (empty($this->rootDir)) {
-            throw new \Exception('$this->rootDir is undefined');
+        if (empty($this->projectDir)) {
+            throw new \Exception('$this->projectDir is undefined');
         }
 
         // if there is an error when moving the file, an exception will
         // be automatically thrown by move(). This will properly prevent
         // the entity from being persisted to the database on error
         // moving file into /data
-        $this->file->move($this->rootDir . '' . self::DOCUMENT_STORAGE_ROOT, $this->path);
+        $this->file->move($this->projectDir . '' . self::DOCUMENT_STORAGE_ROOT, $this->path);
         unset($this->file);
     }
 
@@ -322,19 +322,19 @@ class Document
     /**
      * @return string
      */
-    public function getRootDir()
+    public function getProjectDir()
     {
-        return $this->rootDir;
+        return $this->projectDir;
     }
 
     /**
-     * @param string $rootDir
+     * @param string $projectDir
      *
      * @return Document
      */
-    public function setRootDir($rootDir)
+    public function setProjectDir($projectDir)
     {
-        $this->rootDir = $rootDir;
+        $this->projectDir = $projectDir;
 
         return $this;
     }

@@ -32,7 +32,7 @@ class ChartManager /*extends \Twig_Extension*/
 
     protected $namingConvention;
 
-    protected $rootDir;
+    protected $projectDir;
 
     private const SIX_MONTHS = 15724800;
 
@@ -47,7 +47,7 @@ class ChartManager /*extends \Twig_Extension*/
         } else {
             $this->namingConvention = 'id';
         }
-        $this->rootDir = $kernel->getRootDir();
+        $this->projectDir = $kernel->getProjectDir();
     }
 
     public function getGantt(Etude $etude, $type)
@@ -233,8 +233,8 @@ class ChartManager /*extends \Twig_Extension*/
         $logger = $this->logger;
 
         // Create the file
-        $chemin = $this->rootDir . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $filename . '.json';
-        $destination = $this->rootDir . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $filename . '.png';
+        $chemin = $this->projectDir . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $filename . '.json';
+        $destination = $this->projectDir . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $filename . '.png';
 
         $render = $ob->render();
 
@@ -262,7 +262,7 @@ class ChartManager /*extends \Twig_Extension*/
             return false;
         }
 
-        $cmd = 'phantomjs js/highcharts-convert.js -infile ' . $chemin . ' -outfile ' . $destination . ' -width ' . $width . ' -constr Chart';
+        $cmd = 'phantomjs ' . $this->projectDir . '/public/js/highcharts-convert.js -infile ' . $chemin . ' -outfile ' . $destination . ' -width ' . $width . ' -constr Chart';
         $output = shell_exec($cmd);
         //l'execution de la commande affiche des messages de fonctionnement. On ne retient que la 3eme ligne (celle de la destination quand tout fonctionne bien).
         //Highcharts.options.parsed Highcharts.customCode.parsed tmp/gantt411ENS.png
