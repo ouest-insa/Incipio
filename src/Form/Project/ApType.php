@@ -13,7 +13,7 @@ namespace App\Form\Project;
 
 use App\Entity\Hr\Competence;
 use App\Entity\Personne\Personne;
-use App\Entity\Project\Ap;
+use App\Entity\Project\Etude;
 use App\Repository\Personne\PersonneRepository;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -68,7 +68,7 @@ class ApType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Ap::class,
+            'data_class' => Etude::class,
             'prospect' => '',
         ]);
     }
