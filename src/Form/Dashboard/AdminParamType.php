@@ -22,7 +22,7 @@ class AdminParamType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $fields = $this->em->getRepository(AdminParam::class)->find([], ['priority' => 'desc']);
+        $fields = $this->em->getRepository(AdminParam::class)->findBy([], ['priority' => 'desc']);
 
         foreach ($fields as $field) {
             /* @var $field AdminParam */
