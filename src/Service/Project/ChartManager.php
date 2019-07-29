@@ -170,8 +170,7 @@ class ChartManager /*extends \Twig_Extension*/
                     $naissance = clone $debut;
                 }
                 /** @var \DateTime $fin */
-                $fin = clone $debut;
-                $fin->add(new \DateInterval('P' . $phase->getDelai() . 'D'));
+                $fin = $phase->getDateFin();
                 if ($mort <= $fin) {
                     $mort = clone $fin;
                 }
