@@ -51,6 +51,7 @@ class DocumentController extends AbstractController
         return $this->render('Publish/Document/index.html.twig', [
             'docs' => $entities,
             'totalSize' => $totalSize,
+            'authorizedStorageSize' => getenv('AUTHORIZED_STORAGE_SIZE')
         ]);
     }
 
