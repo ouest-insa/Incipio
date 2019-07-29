@@ -5,3 +5,4 @@ twig:
     globals:
         technical_to: '%env(TECHNICAL_TO)%'
         authorizedStorageSize: "%env(AUTHORIZED_STORAGE_SIZE)%"
+    form_themes: ['form/form_errors.html.twig']
