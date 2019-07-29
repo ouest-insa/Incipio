@@ -83,6 +83,12 @@
             "php bin/console doctrine:cache:clear-query",
             "php bin/console doctrine:cache:clear-metadata"
         ],
+        "clear-cache-dev": [
+            "php bin/console cache:clear --env=dev --no-warmup",
+            "php bin/console cache:warmup --env=dev",
+            "php bin/console doctrine:cache:clear-query",
+            "php bin/console doctrine:cache:clear-metadata"
+        ],
         "mysql-reload": [
             "php bin/console doctrine:database:drop --force",
             "php bin/console doctrine:database:create",
@@ -104,6 +110,7 @@
         "behat/mink-extension": "^2.3",
         "behat/symfony2-extension": "^2.1",
         "behatch/contexts": "^3.2",
-        "symfony/debug-pack": "^1.0"
+        "symfony/debug-pack": "^1.0",
+        "symfony/maker-bundle": "^1.12"
     }
 }
