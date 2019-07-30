@@ -152,20 +152,24 @@ class UserController extends AbstractController
             if ($create_user_form->isValid()) {
                 if ($personne->getUser()) {
                     $this->addFlash('error', 'Un utilisateur est déjà liée à cette personne !');
-                    return $this->redirectToRoute('personne_membre_voir', ["id" => $personne->getId()]);
+
+                    return $this->redirectToRoute('personne_membre_voir', ['id' => $personne->getId()]);
                 }
                 if (!$personne->getEmail()) {
                     $this->addFlash('error', "L'utilisateur n'a pas d'email valide !");
-                    return $this->redirectToRoute('personne_membre_voir', ["id" => $personne->getId()]);
+
+                    return $this->redirectToRoute('personne_membre_voir', ['id' => $personne->getId()]);
                 }
                 if ($userManager->findUserByEmail($personne->getEmail())) {
-                    $this->addFlash('error', "Un autre utilisateur utilise déjà cet email !");
-                    return $this->redirectToRoute('personne_membre_voir', ["id" => $personne->getId()]);
+                    $this->addFlash('error', 'Un autre utilisateur utilise déjà cet email !');
+
+                    return $this->redirectToRoute('personne_membre_voir', ['id' => $personne->getId()]);
                 }
                 $userName = $this->enMinusculeSansAccent($personne->getPrenom() . '.' . $personne->getNom());
-                if($userManager->findUserByUsername($userName)){
+                if ($userManager->findUserByUsername($userName)) {
                     $this->addFlash('error', 'Un compte utilisateur existe déjà avec ce couple nom/prénom');
-                    return $this->redirectToRoute('personne_membre_voir', ["id" => $personne->getId()]);
+
+                    return $this->redirectToRoute('personne_membre_voir', ['id' => $personne->getId()]);
                 }
                 $temporaryPassword = md5(mt_rand());
                 $token = sha1(uniqid(mt_rand(), true));

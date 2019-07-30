@@ -127,9 +127,10 @@ class Phase
     {
         if ($this->dateDebut) {
             $date = clone $this->dateDebut;
-            if(null !== $this->delai){
-                $date->modify(($this->delai > 0 ? "+" : "-") . ' ' . ($this->delai > 0 ? $this->delai : -$this->delai) . ' day');
+            if (null !== $this->delai) {
+                $date->modify(($this->delai > 0 ? '+' : '-') . ' ' . ($this->delai > 0 ? $this->delai : -$this->delai) . ' day');
             }
+
             return $date;
         } else {
             return new \DateTime('now');
