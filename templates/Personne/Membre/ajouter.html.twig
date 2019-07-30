@@ -11,7 +11,7 @@
 {% block breadcrumb %}
     <ul class="breadcrumb no-margin pull-right">
         <li><a href="{{ path('personne_membre_homepage') }}">{{ 'membre.liste_membre'|trans({}, 'personne') }}</a></li>
-        {% if form.vars.value.personne is not none %}
+        {% if form.vars.value.id is not none %}
             <li>
                 <a href="{{ path('personne_membre_voir', {'id': form.vars.value.id}) }}">
                     {{ form.vars.value.personne.prenomNom }}
