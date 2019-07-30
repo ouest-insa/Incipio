@@ -175,7 +175,7 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="project_etude_ajouter", path="/suivi/etude/ajouter", methods={"GET","HEAD","POST"})
+     * @Route(name="project_etude_ajouter", path="/suivi/etude/add", methods={"GET","HEAD","POST"})
      *
      * @param Request      $request
      * @param EtudeManager $etudeManager
@@ -203,7 +203,7 @@ class EtudeController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                if ((!$etude->isKnownProspect() && !$etude->getNewProspect()) || !$etude->getProspect()) {
+                if ((!$etude->isKnownProspect() && !$etude->getNewProspect()) || ($etude->isKnownProspect() && !$etude->getProspect())) {
                     $this->addFlash('danger', 'Vous devez définir un prospect');
 
                     return $this->render('Project/Etude/ajouter.html.twig', ['form' => $form->createView()]);

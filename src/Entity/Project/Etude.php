@@ -1559,7 +1559,7 @@ class Etude
             6 => 'Réseaux des élèves',
             7 => 'Contact spontané',
             8 => 'Ancien client',
-            9 => 'Dev\'Co N7C',
+            9 => 'Dev\'Co',
             10 => 'Partenariat JE',
             11 => 'Autre',
         ];
