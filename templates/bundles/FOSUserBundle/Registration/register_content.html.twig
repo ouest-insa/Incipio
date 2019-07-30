@@ -2,19 +2,30 @@
 
 {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register form-signin', 'role': 'form', 'style': 'text-align: center;' } }) }}
 
-<img src="{{ param('logo') }}" width="300"/>
 <h2 class="form-signin-heading">Inscription</h2>
-
-
+{{ form_errors(form.username) }}
 {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder' : 'Login' } } ) }}
-    {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder' : 'Email' } } ) }}
+{{ form_errors(form.email) }}
+{{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder' : 'Email' } } ) }}
 <br>
+{{ form_errors(form.plainPassword.first) }}
+{{ form_errors(form.plainPassword.second) }}
 {{ form_label(form.plainPassword.first ) }}
-    {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control'} } ) }}
-    {{ form_label(form.plainPassword.second ) }}
-    {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control'} } ) }}
-<button class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit"
+{{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control'} } ) }}
+{{ form_label(form.plainPassword.second ) }}
+{{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control'} } ) }}
+<button class="btn btn-lg btn-success btn-block" type="submit" id="_submit" name="_submit"
         value="">{{ 'registration.submit'|trans }}</button>
+<a class="btn" href="{{ path('fos_user_security_login') }}">Se connecter</a>
 
 {{ form_rest(form) }}
 {{ form_end(form) }}
+
+{#<h2 class="form-heading">Inscription</h2>
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+
+    {{ form_widget(form) }}
+
+<button class="btn btn-lg btn-success btn-block" type="submit" id="_submit" name="_submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}">{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}</button>
+
+{{ form_end(form) }}#}
