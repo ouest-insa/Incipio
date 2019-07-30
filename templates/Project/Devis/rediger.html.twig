@@ -1,0 +1,26 @@
+{% extends "Project/layout.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.devis_modifier'|trans({}, 'project') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'suivi.devis_rediger'|trans({}, 'project') }}
+{% endblock %}
+
+{% block content_bundle %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ '/app/src/Controller/Project/DevisController.php'|file_link(0) }}">src/Controller/Project/DevisController.php</a></code></li>
+        <li>Your template at <code><a href="{{ '/app/templates/Project/Devis/rediger.html.twig'|file_link(0) }}">templates/project/devis/index.html.twig</a></code></li>
+    </ul>
+</div>
+{% endblock %}

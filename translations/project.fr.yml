@@ -53,7 +53,7 @@ suivi:
   cc_liste: Liste des Convention Client
   cc_modifier: Modifier une Convention Client
   cc_modifier_la: Modifier la Convention Client
-  cc_rediger: Rediger la Convention Client
+  cc_rediger: Rédiger la Convention Client
   client: Client
   client_contact_ajouter: Ajouter un nouveau contact du client
   commentaire: Commentaire
@@ -92,6 +92,9 @@ suivi:
   description: Description
   details: Détails
   developpeurs: Developpeurs
+  devis: devis
+  devis_rediger: Rédiger un Devis
+  devis_modifier: Modifier un Devis
   dm: DM
   document: Document
   document_ajouter: Ajouter un document
@@ -227,7 +230,7 @@ suivi:
   pvi: PVI
   pvi_ajouter_un: Ajouter un PVI
   pvr: PVR
-  pvr_rediger: Rediger le PVR
+  pvr_rediger: Rédiger le PVR
   raison: Raison
   realisateurs_capable_de: Les réalisateurs de cette étude devront donc être capables de
   recapitulatif: Récapitulatif
@@ -236,7 +239,7 @@ suivi:
   recu_encaisse: Reçu / Encaissé
   redaction_generation: Rédaction et Génération
   redige: Rédigé
-  rediger: Rediger
+  rediger: Rédiger
   reference: Référence
   relu: Relu
   repartitions_jeh_gestion: Gestion des Répartions JEH (à venir)

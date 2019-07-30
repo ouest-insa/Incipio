@@ -212,6 +212,14 @@ class Etude
     private $cc;
 
     /**
+     * @var Devis
+     *
+     * @ORM\OneToOne(targetEntity="Devis", inversedBy="etude", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $devis;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Treso\Facture", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $factures;
@@ -1713,6 +1721,23 @@ class Etude
     public function getCompetences()
     {
         return $this->competences;
+    }
+
+    public function getDevis(): ?Devis
+    {
+        return $this->devis;
+    }
+
+    public function setDevis(Devis $devis): self
+    {
+        $this->devis = $devis;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $devis->getEtude()) {
+            $devis->setEtude($this);
+        }
+
+        return $this;
     }
 
     public function __toString()

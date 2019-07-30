@@ -11,8 +11,10 @@
 
 namespace App\Controller\Project;
 
+use App\Controller\Publish\TraitementController;
 use App\Entity\Project\ClientContact;
 use App\Entity\Project\Etude;
+use App\Entity\Publish\Document;
 use App\Entity\User\User;
 use App\Form\Project\EtudeType;
 use App\Form\Project\SuiviEtudeType;
@@ -255,12 +257,15 @@ class EtudeController extends AbstractController
 
         $formSuivi = $this->createForm(SuiviEtudeType::class, $etude);
 
+        $useDevis = null !== $em->getRepository(Document::class)->findOneBy(['name' => TraitementController::DOCTYPE_DEVIS]);
+
         return $this->render('Project/Etude/voir.html.twig', [
             'etude' => $etude,
             'formSuivi' => $formSuivi->createView(),
             'chart' => $ob,
             'clientContacts' => $clientContacts,
             /* 'delete_form' => $deleteForm->createView(),  */
+            'useDevis' => $useDevis
         ]);
     }
 

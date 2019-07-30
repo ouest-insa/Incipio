@@ -1,19 +1,10 @@
 <?php
 
-/*
- * This file is part of the Incipio package.
- *
- * (c) Florian Lefevre
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller\Project;
 
-use App\Entity\Project\Cc;
+use App\Entity\Project\Devis;
 use App\Entity\Project\Etude;
-use App\Form\Project\CcType;
+use App\Form\Project\DevisType;
 use App\Service\Project\DocTypeManager;
 use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -24,11 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class CcController extends AbstractController
+class DevisController extends AbstractController
 {
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="project_cc_rediger", path="/suivi/cc/rediger/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="project_devis_rediger", path="/suivi/devis/rediger/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude          etude which CC should belong to
@@ -45,27 +36,30 @@ class CcController extends AbstractController
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
 
-        if (!$cc = $etude->getCc()) {
-            $cc = new Cc();
-            $etude->setCc($cc);
+        if (!$devis = $etude->getDevis()) {
+            $devis = new Devis();
+            $etude->setDevis($devis);
         }
 
-        $form = $this->createForm(CcType::class, $etude, ['prospect' => $etude->getProspect()]);
+        $form = $this->createForm(DevisType::class, $etude/*, ['prospect' => $etude->getProspect()]*/);
 
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                $docTypeManager->checkSaveNewEmploye($etude->getCc());
+                $docTypeManager->checkSaveNewEmploye($etude->getDevis());
                 $em->flush();
 
                 return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
         }
 
-        return $this->render('Project/Cc/rediger.html.twig', [
+        /*return $this->render('Project/Devis/rediger.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
+        ]);*/
+        return $this->render('Project/Devis/rediger.html.twig', [
+            'controller_name' => 'DevisController',
         ]);
     }
 }
