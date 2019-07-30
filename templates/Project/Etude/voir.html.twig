@@ -8,7 +8,7 @@
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#tab1" data-toggle="tab">{{ 'suivi.recapitulatif'|trans({}, 'project') }}</a></li>
-            <li><a href="#tab2" data-toggle="tab">{{ 'suivi.phases'|trans({}, 'project') }}</a></li>
+            <li><a href="#tab2" data-toggle="tab">{{ 'suivi.phases'|trans({}, 'project') |capitalize}}</a></li>
             <li><a href="#tab3" data-toggle="tab">{{ 'suivi.redaction_generation'|trans({}, 'project') }}</a></li>
             {% if is_granted('ROLE_CA') %}
                 <li><a href="#tab4" data-toggle="tab">{{ 'suivi.suivi'|trans({}, 'project') }}</a></li>
