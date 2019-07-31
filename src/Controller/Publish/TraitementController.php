@@ -440,7 +440,7 @@ class TraitementController extends AbstractController
     {
         $oldSec = 86400; // = 1 Jours
         clearstatcache();
-        $glob = glob('tmp/*');
+        $glob = glob($this->kernel->getProjectDir() . Document::DOCUMENT_TMP_FOLDER . '/*');
         if (false !== $glob) {
             foreach ($glob as $filename) {
                 if (filemtime($filename) + $oldSec < time()) {
@@ -590,8 +590,8 @@ class TraitementController extends AbstractController
                 $file = $data['template'];
                 $filename = sha1(uniqid(mt_rand(), true));
                 $filename .= '.' . $file->guessExtension();
-                $file->move('tmp/', $filename);
-                $docxFullPath = 'tmp/' . $filename;
+                $file->move($this->kernel->getProjectDir() . Document::DOCUMENT_TMP_FOLDER, $filename);
+                $docxFullPath = $this->kernel->getProjectDir() . Document::DOCUMENT_TMP_FOLDER . '/' . $filename;
 
                 // Extraction des infos XML
                 $templatesXML = $this->getDocxContent($docxFullPath);
