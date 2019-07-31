@@ -17,12 +17,12 @@
     </nav>
     <div class="tab-content">
     <div class="tab-pane active" id="groupes">
-        <div class="list-group">
-            <a class="list-group-item list-group-item-action" href="{{ path('project_groupes_modifier', {'id': etude.id}) }}" style="color: #3c8dbc;">
-                <span class="fa fa-pencil"></span> {{ 'suivi.groupes_modifier'|trans({}, 'project') }} <span class="badge badge-primary badge-pill">{{ etude.groupes | length }}</span>
+        <div class="btn-group" role="group">
+            <a class="btn btn-default" href="{{ path('project_groupes_modifier', {'id': etude.id}) }}" style="color: #3c8dbc;">
+                <span class="fa fa-pencil"></span> {{ 'suivi.groupes_modifier'|trans({}, 'project') }}
             </a>
-            <a class="list-group-item list-group-item-action" href="{{ path('project_phases_modifier', {'id': etude.id}) }}" style="color: #3c8dbc;">
-                <span class="fa fa-pencil"></span> {{ 'suivi.phases_modifier'|trans({}, 'project') }} <span class="badge badge-primary badge-pill">{{ etude.phases | length }}</span>
+            <a class="btn btn-default" href="{{ path('project_phases_modifier', {'id': etude.id}) }}" style="color: #3c8dbc;">
+                <span class="fa fa-pencil"></span> {{ 'suivi.phases_modifier'|trans({}, 'project') }}
             </a>
         </div>
         {% if etude.groupes | length == 0 %}
