@@ -22,7 +22,6 @@
 
     <!-- GESTION ASSOCIATIVE -->
     {% if is_granted('ROLE_SUIVEUR') %}
-
         <li>
             <a href="#">
                 <i class="icon-mini fa fa-book"></i>
@@ -220,7 +219,7 @@
 
     <!-- PILOTAGE DE LA J.E. -->
     {% if is_granted('ROLE_CA') %}
-        <li class="">
+        <li>
             <a href="#">
                 <i class="icon-mini fa fa-paper-plane"></i>
                 <span class="nav-label">{{ 'dashboard.pilotage_je'| trans }}</span>
