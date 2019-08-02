@@ -36,7 +36,7 @@
                     {% for relatedDocument in membre.relatedDocuments | reverse %}
                     {% set doc = relatedDocument.document %}
                     <tr>
-                        <td><a href="{{ path('publish_document_voir', {'id': doc.id}) }} ">{{ doc.name}}</a></td>
+                        <td><a href="{{ path('publish_document_voir', {'id': doc.id}) }} ">{{ doc.name}}.{{ doc.extention }}</a></td>
                         <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s')}}</td>
                         <td>{{ doc.author ? doc.author.prenomNom }}</td>
                         {% if is_granted('ROLE_CA') %}

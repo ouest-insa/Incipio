@@ -157,6 +157,12 @@ class Document
         return $this;
     }
 
+    public function getExtention(){
+        return pathinfo($this->getPath(), PATHINFO_EXTENSION);
+    }
+
+
+
     /** auto generated methods */
 
     /**

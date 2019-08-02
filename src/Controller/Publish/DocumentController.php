@@ -61,15 +61,18 @@ class DocumentController extends AbstractController
      * @param Document        $documentType (ParamConverter) The document to be downloaded
      * @param KernelInterface $kernel
      *
-     * @return BinaryFileResponse
+     * @return Response
      *
      * @throws \Exception
      */
     public function voir(Document $documentType, KernelInterface $kernel)
     {
         $documentStoragePath = $kernel->getProjectDir() . '' . Document::DOCUMENT_STORAGE_ROOT;
+        $documentTmpPath = $kernel->getProjectDir() . '' . Document::DOCUMENT_TMP_FOLDER;
         if (file_exists($documentStoragePath . '/' . $documentType->getPath())) {
-            $response = new BinaryFileResponse($documentStoragePath . '/' . $documentType->getPath());
+            //Renommage du fichier envoyé
+            copy($documentStoragePath . '/' . $documentType->getPath(), $documentTmpPath . '/' . $documentType->getName() . '.' . $documentType->getExtention());
+            $response = new BinaryFileResponse($documentTmpPath . '/' . $documentType->getName() . '.' . $documentType->getExtention());
             $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
 
             return $response;
