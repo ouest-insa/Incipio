@@ -136,7 +136,7 @@ class PrivacyController extends AbstractController
 
     private function export(Personne $personne, SerializerInterface $serializer)
     {
-        $data = $serializer->serialize($personne, null, ['groups' => ['gdpr']]);
+        $data = $serializer->serialize($personne, 'json', ['groups' => ['gdpr']]);
 
         $response = new JsonResponse($data);
         $response->headers->set('Cache-Control', 'private');
