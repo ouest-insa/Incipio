@@ -1,10 +1,10 @@
                 <div class="row">
-                    <div class="col-md-5 col-xs-12">
+                    <div class="col-md-6 col-xs-12">
                         <div class="box box-info box-solid">
                             <div class="box-header with-border">
                                 <h3 class="box-title">{{ membre.personne.nomformel }}</h3>
                             </div>
-                            <div class="box-body">
+                            <div class="box-body table-responsive">
                                 <table class="table table-striped table-hover">
                                     <tr>
                                         <td colspan="2"><i class="fa fa-phone"></i> {{ membre.personne.mobile }}</td>
@@ -38,12 +38,12 @@
                         </div>
                     </div>
 
-                    <div class="col-md-5 col-md-offset-1 col-xs-12">
+                    <div class="col-md-6 col-xs-12">
                         <div class="box box-info box-solid">
                             <div class="box-header with-border">
                                 <h3 class="box-title">{{ 'membre.informations'|trans({}, 'personne') }}</h3>
                             </div>
-                            <div class="box-body">
+                            <div class="box-body table-responsive">
                                 <table class="table table-striped table-hover">
                                     <tr>
                                         <td colspan="2">
@@ -89,64 +89,15 @@
                     </div>
                 </div>
 
-                {% set i = 0 %}
                 <div class="row">
-                    {% if membre.competences|length > 0 %}
-                    {% set i = i+1 %}
-                    <div class="col-md-5 col-xs-12">
-                        <div class="box box-default box-solid">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">{{ 'membre.competences'|trans({}, 'personne') }}</h3>
-                            </div>
-                            <div class="box-body">
-                                <table class="table table-hover table-striped">
-                                    {% for c in membre.competences %}
-                                    <a href="{{ path('hr_competence_voir', {'id': c.id}) }}">
-                                    <span class="badge badge-default">{{ c.nom }}</span></a>
-                                    {% endfor %}
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
 
-                    {% if membre.missions|length > 0 %}
-                    {% set i = i+1 %}
-                    <div class="col-md-5 col-xs-12 {% if i is even %}col-md-offset-1{% endif %}">
-                        <div class="box box-default box-solid">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">{{ 'membre.missions_realisees'|trans({}, 'personne') }}</h3>
-                            </div>
-                            <div class="box-body">
-                                <table class="table table-hover table-striped">
-                                    {% for mission in membre.missions %}
-                                    <tr class="mandats">
-                                        <td><a href="{{ path("project_etude_voir", {'nom' : mission.etude.nom}) }}"
-                                           title="{{ mission.etude.nom }}">{{ mission.etude.reference(param('namingConvention')) }}</a></td>
-                                        <td>{{ 'membre.date_debut'|trans({}, 'personne') }} : {{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }}</td>
-                                        <td>{{ 'membre.date_fin'|trans({}, 'personne') }} : {{ mission.finOm ? mission.finOm  | date("d/m/Y") : "?" }}</td>
-                                        <td>{{ mission.nbrJEH }} JEH - {{ mission.remunerationBrute }} &euro;</td>
-                                        <td>
-                                            <span class="badge badge-{{ "now"|date('Ymd') > mission.etude.dateFin |date('Ymd') ? 'default' : 'success' }}">
-                                                {{ "now"|date('Ymd') > mission.etude.dateFin |date('Ymd') ? 'Passée' : 'En cours' }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    {% if membre.mandats|length > 0 %}
-                    {% set i = i+1 %}
-                    <div class="col-md-5 col-xs-12 {% if i is even %}col-md-offset-1{% endif %}">
+                    <div class="col-md-6 col-xs-12">
+                        {% if membre.mandats|length > 0 %}
                         <div class="box box-default box-solid">
                             <div class="box-header with-border">
                                 <h3 class="box-title">{{ 'membre.postes_occupes'|trans({}, 'personne') }}</h3>
                             </div>
-                            <div class="box-body">
+                            <div class="box-body table-responsive">
                                 <table class="table table-hover table-striped">
                                     {% for mandat in membre.mandats %}
                                     <tr class="mandats">
@@ -163,28 +114,69 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
-                    {% endif %}
+                        {% endif %}
 
-                    {% if membre.personne.user is not null %}
-                    {% set i = i+1 %}
-                    <div class="col-md-5 col-xs-12 {% if i is even %}col-md-offset-1{% endif %}">
-                        <div class="box box-default box-solid">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">{{ 'membre.permissions'|trans({}, 'personne') }}</h3>
+                        {% if membre.personne.user is not null %}
+                            <div class="box box-default box-solid">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">{{ 'membre.permissions'|trans({}, 'personne') }}</h3>
+                                </div>
+                                <div class="box-body">
+                                    <table class="table table-hover table-striped">
+                                        <tr>
+                                            <td>
+                                                {% for role in membre.personne.user.roles %}
+                                                    <span class="badge badge-default">{{ role }}</span>
+                                                {% endfor %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="box-body">
-                                <table class="table table-hover table-striped">
-                                    <tr>
-                                        <td>
-                                            {% for role in membre.personne.user.roles %}
-                                            <span class="badge badge-default">{{ role }}</span>
-                                            {% endfor %}
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
+
+                    <div class="col-md-6 col-xs-12">
+                        {% if membre.competences|length > 0 %}
+                            <div class="box box-default box-solid">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">{{ 'membre.competences'|trans({}, 'personne') }}</h3>
+                                </div>
+                                <div class="box-body">
+                                    <table class="table table-hover table-striped">
+                                        {% for c in membre.competences %}
+                                            <a href="{{ path('hr_competence_voir', {'id': c.id}) }}">
+                                                <span class="badge badge-default">{{ c.nom }}</span></a>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if membre.missions|length > 0 %}
+                            <div class="box box-default box-solid">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">{{ 'membre.missions_realisees'|trans({}, 'personne') }}</h3>
+                                </div>
+                                <div class="box-body table-responsive">
+                                    <table class="table table-hover table-striped">
+                                        {% for mission in membre.missions %}
+                                            <tr class="mandats">
+                                                <td><a href="{{ path("project_etude_voir", {'nom' : mission.etude.nom}) }}"
+                                                       title="{{ mission.etude.nom }}">{{ mission.etude.reference(param('namingConvention')) }}</a></td>
+                                                <td>{{ 'membre.date_debut'|trans({}, 'personne') }} : {{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }}</td>
+                                                <td>{{ 'membre.date_fin'|trans({}, 'personne') }} : {{ mission.finOm ? mission.finOm  | date("d/m/Y") : "?" }}</td>
+                                                <td>{{ mission.nbrJEH }} JEH - {{ mission.remunerationBrute }} &euro;</td>
+                                                <td>
+                                        <span class="badge badge-{{ "now"|date('Ymd') > mission.etude.dateFin |date('Ymd') ? 'default' : 'success' }}">
+                                            {{ "now"|date('Ymd') > mission.etude.dateFin |date('Ymd') ? 'Passée' : 'En cours' }}
+                                        </span>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>

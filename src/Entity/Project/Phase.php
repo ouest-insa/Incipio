@@ -127,7 +127,9 @@ class Phase
     {
         if ($this->dateDebut) {
             $date = clone $this->dateDebut;
-            $date->modify('+ ' . (null !== $this->delai ? $this->delai : 0) . ' day');
+            if (null !== $this->delai) {
+                $date->modify(($this->delai > 0 ? '+' : '-') . ' ' . ($this->delai > 0 ? $this->delai : -$this->delai) . ' day');
+            }
 
             return $date;
         } else {

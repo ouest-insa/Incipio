@@ -9,6 +9,10 @@
     {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ form.phases | length }} {{ 'suivi.phases'|trans({}, 'project') }}
 {% endblock %}
 
+{% block breadcrumb_active %}
+    {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ 'suivi.phases'|trans({}, 'project') }}
+{% endblock %}
+
 {% block content_bundle %}
     {{ form_start(form, {'attr': {'id': 'form'}}) }}
     {# affiche l'unique champ de la tache : description #}

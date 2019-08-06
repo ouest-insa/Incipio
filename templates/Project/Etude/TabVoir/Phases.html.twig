@@ -9,7 +9,7 @@
         </div>
         <div class="collapse navbar-collapse navbar-phase">
             <ul class="nav  navbar-nav">
-                <li><a href="#groupes" data-toggle="tab" class="active"><span class="fa fa-list-alt"></span> {{ 'suivi.phases'|trans({}, 'project') }}</a></li>
+                <li><a href="#groupes" data-toggle="tab" class="active"><span class="fa fa-list-alt"></span> {{ 'suivi.phases'|trans({}, 'project') |capitalize }}</a></li>
                 <li><a href="#delai" data-toggle="tab"><span class="fa fa-dashboard"></span> {{ 'suivi.delai'|trans({}, 'project') }}</a></li>
                 <li><a href="#budget" data-toggle="tab"><span class="fa fa-euro"></span> {{ 'suivi.budget'|trans({}, 'project') }}</a></li>
             </ul>
@@ -17,10 +17,14 @@
     </nav>
     <div class="tab-content">
     <div class="tab-pane active" id="groupes">
-        <ul class="list-unstyled">
-            <li><a href="{{ path('project_groupes_modifier', {'id': etude.id}) }}">{{ 'suivi.groupes_modifier'|trans({}, 'project') }}</a></li>
-            <li><a href="{{ path('project_phases_modifier', {'id': etude.id}) }}">{{ 'suivi.phases_modifier'|trans({}, 'project') }}</a></li>
-        </ul>
+        <div class="btn-group" role="group">
+            <a class="btn btn-default" href="{{ path('project_groupes_modifier', {'id': etude.id}) }}" style="color: #3c8dbc;">
+                <span class="fa fa-pencil"></span> {{ 'suivi.groupes_modifier'|trans({}, 'project') }}
+            </a>
+            <a class="btn btn-default" href="{{ path('project_phases_modifier', {'id': etude.id}) }}" style="color: #3c8dbc;">
+                <span class="fa fa-pencil"></span> {{ 'suivi.phases_modifier'|trans({}, 'project') }}
+            </a>
+        </div>
         {% if etude.groupes | length == 0 %}
             <div class="alert alert-warning">{{ 'suivi.groupes_phases_aucun_etude'|trans({}, 'project') }}</div>
         {% endif %}
@@ -36,7 +40,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <span class="label label-info">{{ 'suivi.phase'|trans({}, 'project') }} n°{{ loop.index }}</span>&nbsp;
+                                        <span class="label label-info">{{ 'suivi.phase'|trans({}, 'project') |capitalize }} n°{{ loop.index }}</span>&nbsp;
                                     </td>
                                     <td>
                                         <h3 class="inline">{{ groupe.titre | upper }}</h3>

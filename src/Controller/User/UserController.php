@@ -151,12 +151,26 @@ class UserController extends AbstractController
 
             if ($create_user_form->isValid()) {
                 if ($personne->getUser()) {
-                    throw new \Exception('Un utilisateur est déjà liée à cette personne !');
+                    $this->addFlash('error', 'Un utilisateur est déjà liée à cette personne !');
+
+                    return $this->redirectToRoute('personne_membre_voir', ['id' => $personne->getId()]);
                 }
                 if (!$personne->getEmail()) {
-                    throw new \Exception("l'utilisateur n'a pas d'email valide !");
-                }
+                    $this->addFlash('error', "L'utilisateur n'a pas d'email valide !");
 
+                    return $this->redirectToRoute('personne_membre_voir', ['id' => $personne->getId()]);
+                }
+                if ($userManager->findUserByEmail($personne->getEmail())) {
+                    $this->addFlash('error', 'Un autre utilisateur utilise déjà cet email !');
+
+                    return $this->redirectToRoute('personne_membre_voir', ['id' => $personne->getId()]);
+                }
+                $userName = $this->enMinusculeSansAccent($personne->getPrenom() . '.' . $personne->getNom());
+                if ($userManager->findUserByUsername($userName)) {
+                    $this->addFlash('error', 'Un compte utilisateur existe déjà avec ce couple nom/prénom');
+
+                    return $this->redirectToRoute('personne_membre_voir', ['id' => $personne->getId()]);
+                }
                 $temporaryPassword = md5(mt_rand());
                 $token = sha1(uniqid(mt_rand(), true));
 
@@ -168,7 +182,7 @@ class UserController extends AbstractController
                 // Utilisateur à confirmer
                 $user->setEnabled(false);
                 $user->setConfirmationToken($token);
-                $user->setUsername($this->enMinusculeSansAccent($personne->getPrenom() . '.' . $personne->getNom()));
+                $user->setUsername($userName);
 
                 $userManager->updateUser($user); // Pas besoin de faire un flush (ça le fait tout seul)
 

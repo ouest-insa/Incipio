@@ -197,10 +197,10 @@ suivi:
   objet: Objet
   oui: Oui
   panneau_controle: Panneau de controle
-  phase: Phase
+  phase: phase
   phase_ajouter: Ajouter une phase
   phase_pas_encore: Pas (encore !) de phase
-  phases: Phases
+  phases: phases
   phases_concernees: Phases concernées
   phases_enregistrer: Enregistrer les phases
   phases_gestion: Gestion des Phases (à venir)
