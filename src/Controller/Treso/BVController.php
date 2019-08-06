@@ -38,19 +38,6 @@ class BVController extends AbstractController
     }
 
     /**
-     * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="treso_BV_voir", path="/Tresorerie/BV/Voir/{id}", methods={"GET","HEAD"})
-     *
-     * @param BV $bv
-     *
-     * @return Response
-     */
-    public function voir(BV $bv)
-    {
-        return $this->render('Treso/BV/voir.html.twig', ['bv' => $bv]);
-    }
-
-    /**
      * @Security("has_role('ROLE_TRESO', 'ROLE_SUIVEUR')")
      * @Route(name="treso_BV_ajouter", path="/Tresorerie/BV/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
      * @Route(name="treso_BV_modifier", path="/Tresorerie/BV/Modifier/{id}", methods={"GET","HEAD","POST"}, requirements={"id": "\d+"})
@@ -60,6 +47,8 @@ class BVController extends AbstractController
      * @param RouterInterface $router
      *
      * @return RedirectResponse|Response
+     *
+     * @throws \Exception
      */
     public function modifier(Request $request, $id, RouterInterface $router)
     {
@@ -111,6 +100,19 @@ class BVController extends AbstractController
             'form' => $form->createView(),
             'bv' => $bv,
         ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="treso_BV_voir", path="/Tresorerie/BV/{id}", methods={"GET","HEAD"})
+     *
+     * @param BV $bv
+     *
+     * @return Response
+     */
+    public function voir(BV $bv)
+    {
+        return $this->render('Treso/BV/voir.html.twig', ['bv' => $bv]);
     }
 
     /**
