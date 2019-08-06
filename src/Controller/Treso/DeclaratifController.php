@@ -49,6 +49,7 @@ class DeclaratifController extends AbstractController
      * @param bool    $trimestriel
      *
      * @return Response
+     *
      * @throws \Exception
      */
     public function tva(Request $request, $year, $month, bool $trimestriel)
@@ -235,6 +236,12 @@ class DeclaratifController extends AbstractController
      */
     public function brc(Request $request, $year, $month)
     {
+        if ('' === $year || '' === $month) {
+            $date = new \DateTime('now');
+            $month = $date->format('m');
+            $year = $date->format('Y');
+        }
+
         $em = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder(['message' => 'Date'])
             ->add(
@@ -255,12 +262,6 @@ class DeclaratifController extends AbstractController
             return $this->redirectToRoute('treso_Declaratif_BRC', ['year' => $date->format('Y'),
                 'month' => $date->format('m'),
             ]);
-        }
-
-        if (null === $year || null === $month) {
-            $date = new \DateTime('now');
-            $month = $date->format('m');
-            $year = $date->format('Y');
         }
 
         $bvs = $em->getRepository(BV::class)->findAllByMonth($month, $year);
