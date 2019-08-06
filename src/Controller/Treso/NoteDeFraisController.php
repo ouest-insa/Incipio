@@ -76,6 +76,7 @@ class NoteDeFraisController extends AbstractController
 
         return $this->render('Treso/NoteDeFrais/modifier.html.twig', [
             'form' => $form->createView(),
+            'nf' => $nf,
         ]);
     }
 

@@ -1,11 +1,19 @@
 {% extends "Treso/layout.html.twig" %}
 
 {% block title %}
-    {{ 'treso.note_frais_gestion'|trans({}, 'treso') }} - {{ parent() }}
+    {% if nf.numero is null %}
+        {{ 'treso.note_frais_ajouter'|trans({}, 'treso') }}
+    {% else %}
+        {{ 'treso.note_frais_editer'|trans({}, 'treso') }}
+    {% endif %}- {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'treso.note_frais_editer'|trans({}, 'treso') }}
+    {% if nf.numero is null %}
+        {{ 'treso.note_frais_ajouter'|trans({}, 'treso') }}
+    {% else %}
+        {{ 'treso.note_frais_editer'|trans({}, 'treso') }}
+    {% endif %}
 {% endblock %}
 
 {% block breadcrumb_items %}
@@ -13,7 +21,11 @@
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ 'treso.note_frais_editer'|trans({}, 'treso') }}
+    {% if nf.numero is null %}
+        {{ 'treso.note_frais_ajouter'|trans({}, 'treso') }}
+    {% else %}
+        {{ 'treso.note_frais_editer'|trans({}, 'treso') }}
+    {% endif %}
 {% endblock %}
 
 {% block content_bundle %}

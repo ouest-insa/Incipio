@@ -93,6 +93,7 @@ class FactureController extends AbstractController
         }
 
         return $this->render('Treso/Facture/modifier.html.twig', [
+            'facture' => $facture,
             'form' => $form->createView(),
         ]);
     }
