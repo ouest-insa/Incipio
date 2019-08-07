@@ -1,7 +1,7 @@
 {% extends "Treso/layout.html.twig" %}
 
 {% block title %}
-    {{ 'treso.note_frais_gestion'|trans({}, 'treso') }} - {{ parent() }}
+    {{ 'treso.note_frais_liste'|trans({}, 'treso') }} - {{ parent() }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -12,11 +12,11 @@
 {% endblock %}
 
 {% block content_title %}
-    {{ 'treso.note_frais_gestion'|trans({}, 'treso') }}
+    {{ 'treso.note_frais_liste'|trans({}, 'treso') }}
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ 'treso.note_frais_gestion'|trans({}, 'treso') }}
+    {{ 'treso.note_frais_liste'|trans({}, 'treso') }}
 {% endblock %}
 
 {% block content_bundle %}
@@ -27,7 +27,7 @@
                             class="fa fa-plus"></span> {{ 'treso.note_frais_ajouter'|trans({}, 'treso') }}</a>
             </li>
             <li class="active">
-                <a href="#">{{ 'treso.note_frais_gestion'|trans({}, 'treso') }}</a>
+                <a href="#">{{ 'treso.note_frais_liste'|trans({}, 'treso') }}</a>
             </li>
         </ul>
     </div>

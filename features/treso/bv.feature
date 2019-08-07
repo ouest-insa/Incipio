@@ -47,7 +47,7 @@ Feature: Bulletin de versement
 
   Scenario: I can export a Bv with a fresh new install
     Given I am logged in as "admin"
-    When I go to "/Tresorerie/BV/Voir/1"
+    When I go to "/Tresorerie/BV/1"
     Then I should see "Générer le BV"
     And the response status code should be 200
     Given I am on "/Documents/Publiposter/BV/bv/1"

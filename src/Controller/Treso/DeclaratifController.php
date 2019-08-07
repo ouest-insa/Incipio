@@ -49,9 +49,19 @@ class DeclaratifController extends AbstractController
      * @param bool    $trimestriel
      *
      * @return Response
+     *
+     * @throws \Exception
      */
     public function tva(Request $request, $year, $month, bool $trimestriel)
     {
+        // In case no date is specified, take current month
+        if ('' === $year || '' === $month) {
+            $date = new \DateTime('now');
+            $month = $date->format('m');
+            $year = $date->format('Y');
+        } else { // rebuil a valid \Datetime
+            $date = new \DateTime($year . '-' . $month . '-01');
+        }
         setlocale(LC_TIME, 'fra_fra');
         /** Date Management form */
         $form = $this->createFormBuilder(['message' => 'Date'])
@@ -77,15 +87,6 @@ class DeclaratifController extends AbstractController
                 'month' => $date->format('m'),
                 'trimestriel' => $data['trimestriel'],
             ]);
-        }
-
-        /* Case no date specified: take current month */
-        if (null === $year || null === $month) {
-            $date = new \DateTime('now');
-            $month = $date->format('m');
-            $year = $date->format('Y');
-        } else { // rebuil a valid \Datetime
-            $date = new \DateTime($year . '-' . $month . '-01');
         }
 
         $tvaCollectee = [];
@@ -230,9 +231,17 @@ class DeclaratifController extends AbstractController
      * @param null    $month
      *
      * @return RedirectResponse|Response
+     *
+     * @throws \Exception
      */
     public function brc(Request $request, $year, $month)
     {
+        if ('' === $year || '' === $month) {
+            $date = new \DateTime('now');
+            $month = $date->format('m');
+            $year = $date->format('Y');
+        }
+
         $em = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder(['message' => 'Date'])
             ->add(
@@ -253,12 +262,6 @@ class DeclaratifController extends AbstractController
             return $this->redirectToRoute('treso_Declaratif_BRC', ['year' => $date->format('Y'),
                 'month' => $date->format('m'),
             ]);
-        }
-
-        if (null === $year || null === $month) {
-            $date = new \DateTime('now');
-            $month = $date->format('m');
-            $year = $date->format('Y');
         }
 
         $bvs = $em->getRepository(BV::class)->findAllByMonth($month, $year);

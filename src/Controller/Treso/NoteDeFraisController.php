@@ -36,26 +36,15 @@ class NoteDeFraisController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="treso_NoteDeFrais_voir", path="/Tresorerie/NoteDeFrais/{id}", methods={"GET","HEAD"})
-     *
-     * @param NoteDeFrais $nf
-     *
-     * @return Response
-     */
-    public function voir(NoteDeFrais $nf)
-    {
-        return $this->render('Treso/NoteDeFrais/voir.html.twig', ['nf' => $nf]);
-    }
-
-    /**
-     * @Security("has_role('ROLE_TRESO')")
      * @Route(name="treso_NoteDeFrais_ajouter", path="/Tresorerie/NoteDeFrais/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1"})
      * @Route(name="treso_NoteDeFrais_modifier", path="/Tresorerie/NoteDeFrais/Modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
-     * @param $id
+     * @param         $id
      *
      * @return RedirectResponse|Response
+     *
+     * @throws \Exception
      */
     public function modifier(Request $request, $id)
     {
@@ -87,7 +76,21 @@ class NoteDeFraisController extends AbstractController
 
         return $this->render('Treso/NoteDeFrais/modifier.html.twig', [
             'form' => $form->createView(),
+            'nf' => $nf,
         ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="treso_NoteDeFrais_voir", path="/Tresorerie/NoteDeFrais/{id}", methods={"GET","HEAD"})
+     *
+     * @param NoteDeFrais $nf
+     *
+     * @return Response
+     */
+    public function voir(NoteDeFrais $nf)
+    {
+        return $this->render('Treso/NoteDeFrais/voir.html.twig', ['nf' => $nf]);
     }
 
     /**

@@ -52,24 +52,7 @@ class FactureController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="treso_Facture_voir", path="/Tresorerie/Facture/{id}", methods={"GET","HEAD"})
-     *
-     * @param Facture $facture
-     *
-     * @return Response
-     */
-    public function voir(Facture $facture)
-    {
-        $deleteForm = $this->createDeleteForm($facture);
-
-        return $this->render('Treso/Facture/voir.html.twig', ['facture' => $facture,
-                                                              'delete_form' => $deleteForm->createView(),
-        ]);
-    }
-
-    /**
-     * @Security("has_role('ROLE_TRESO')")
-     * @Route(name="treso_Facture_ajouter", path="/Tresorerie/Facture/Ajouter/{id}", methods={"GET","HEAD","POST"}, defaults={"id": ""})
+     * @Route(name="treso_Facture_ajouter", path="/Tresorerie/Facture/Ajouter", methods={"GET","HEAD","POST"})
      *
      * @param Request                   $request   Http request
      * @param Etude                     $etude     Etude to which the Facture will be added
@@ -110,7 +93,25 @@ class FactureController extends AbstractController
         }
 
         return $this->render('Treso/Facture/modifier.html.twig', [
+            'facture' => $facture,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_TRESO')")
+     * @Route(name="treso_Facture_voir", path="/Tresorerie/Facture/{id}", methods={"GET","HEAD"})
+     *
+     * @param Facture $facture
+     *
+     * @return Response
+     */
+    public function voir(Facture $facture)
+    {
+        $deleteForm = $this->createDeleteForm($facture);
+
+        return $this->render('Treso/Facture/voir.html.twig', ['facture' => $facture,
+                                                              'delete_form' => $deleteForm->createView(),
         ]);
     }
 

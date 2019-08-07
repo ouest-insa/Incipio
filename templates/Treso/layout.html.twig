@@ -2,7 +2,7 @@
 {% extends "base.html.twig" %}
 
 {% block title %}
-    {{ 'treso.tresorerie'|trans({}, 'treso') }} - {{ parent() }}
+    {{ 'treso.tresorerie'|trans({}, 'treso') }} {{ parent() }}
 {% endblock %}
 
 {% block content %}
@@ -28,7 +28,6 @@
             {# On définit un nouveau block, que les vues du bundle pourront remplir #}
             {% block content_bundle %}
             {% endblock %}
-
         </div>
         <div class="box-footer"></div>
     </div>

@@ -1,18 +1,26 @@
 {% extends "Treso/layout.html.twig" %}
 
 {% block title %}
-    {{ 'treso.facture_modifier'|trans({}, 'treso') }} - {{ parent() }}
+    {% if facture.numero is null %}
+        {{ 'treso.facture_ajouter'|trans({}, 'treso') }}
+    {% else %}
+        {{ 'treso.facture_modifier'|trans({}, 'treso') }}
+    {% endif %}- {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'treso.facture_modifier_la'|trans({}, 'treso') }} {{ form.vars.data.reference }}
+    {% if facture.numero is null %}
+        {{ 'treso.facture_ajouter'|trans({}, 'treso') }}
+    {% else %}
+        {{ 'treso.facture_modifier'|trans({}, 'treso') }}
+    {% endif %} {{ form.vars.data.reference }}
 {% endblock %}
 
 {% block breadcrumb_items %}
     <li>
         <a href="{{ path('treso_Facture_index') }}">{{ 'treso.factures_liste'|trans({}, 'treso') }}</a>
     </li>
-    {% if facture is defined %}
+    {% if facture.numero is not null %}
         <li>
             <a href="{{ path('treso_Facture_voir', {'id': facture.id}) }}">
                 {{ 'treso.facture'|trans({}, 'treso') }} {{ facture.reference }}
@@ -22,11 +30,15 @@
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ 'treso.facture_modifier'|trans({}, 'treso') }}
+    {% if facture.numero is null %}
+        {{ 'treso.facture_ajouter'|trans({}, 'treso') }}
+    {% else %}
+        {{ 'treso.facture_modifier'|trans({}, 'treso') }}
+    {% endif %}
 {% endblock %}
 
 {% block content_bundle %}
-    {% if is_granted('ROLE_ADMIN') and facture is defined %}
+    {% if is_granted('ROLE_ADMIN') and facture.numero is not null %}
         <div class="pull-right">
             {{ form_start(delete_form,{'attr': {'class': 'bootbox-confirm',
                 'data-content':('treso.facture_supprimer_confirm'|trans({}, 'treso')) }}) }}
