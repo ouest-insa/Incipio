@@ -12,9 +12,8 @@ treso:
   bv: Bulletin de versement
   bv_add: Ajouter un BV
   bv_ajout: Ajout d'un BV
-  bv_gestion: Gestion des BV
-  bv_list: Liste des BV
-  bv_list_retour: Retour à la liste des BV
+  bv_liste: Liste des BV
+  bv_liste_retour: Retour à la liste des BV
   bv_modification: Modification d'un BV
   bv_modifier: Modifier le BV
   bv_reference: Référence du BV
@@ -60,7 +59,6 @@ treso:
   facture_supprimer_confirm: Etes-vous sûr de vouloir supprimer définitivement cette facture ?
   facture_vente: Facture de Vente
   facture_émise: Facture émise
-  factures_gestion: Gestion des factures
   factures_liste: Liste des factures
   gestion_comptable_gestion: Gestion des comptes comptables
   ht: HT
@@ -91,7 +89,6 @@ treso:
   note_frais_editer: Editer une note de frais
   note_frais_enregistrer: Enregistrer la Note de Frais
   note_frais_generer: Générer la Note de Frais
-  note_frais_gestion: Gestion des notes de frais
   note_frais_liste: Liste des notes de frais
   note_frais_modifier: Modifier la Note de Frais
   note_frais_supprimer: Supprimer la Note de Frais

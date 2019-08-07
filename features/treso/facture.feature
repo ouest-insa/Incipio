@@ -6,7 +6,7 @@ Feature: Facture
     Given I am logged in as "admin"
     When I go to "/Tresorerie/Factures"
     Then the response status code should be 200
-    Then I should see "Gestion des factures"
+    Then I should see "Liste des factures"
     And I should see "Ajouter une Facture"
 
   Scenario: I can create a new Facture

@@ -8,15 +8,15 @@
 {% endblock %}
 
 {% block title %}
-    {{ 'treso.bv_gestion'|trans({}, 'treso') }} - {{ parent() }}
+    {{ 'treso.bv_liste'|trans({}, 'treso') }} - {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'treso.bv_list'|trans({}, 'treso') }}
+    {{ 'treso.bv_liste'|trans({}, 'treso') }}
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ 'treso.bv_gestion'|trans({}, 'treso') }}
+    {{ 'treso.bv_liste'|trans({}, 'treso') }}
 {% endblock %}
 
 
@@ -28,7 +28,7 @@
                             class="fa fa-plus"></span> {{ 'treso.bv_add'|trans({}, 'treso') }}</a>
             </li>
             <li class="active">
-                <a href="#">{{ 'treso.bv_list'|trans({}, 'treso') }}</a>
+                <a href="#">{{ 'treso.bv_liste'|trans({}, 'treso') }}</a>
             </li>
         </ul>
     </div>

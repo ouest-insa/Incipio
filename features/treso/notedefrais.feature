@@ -6,7 +6,7 @@ Feature: Note de Frais
     Given I am logged in as "admin"
     When I go to "/Tresorerie/NoteDeFrais"
     Then the response status code should be 200
-    Then I should see "Gestion des notes de frais"
+    Then I should see "Liste des notes de frais"
     And I should see "Ajouter une note de frais"
 
   Scenario: I can create a new Note de Frais
