@@ -7,7 +7,8 @@ dashboard:
   annuaire_global: Annuaire global
   autres: Autres
   bordereau_cotisations: Bordereau Récapitulatif des Cotisations
-  bvs: BVs
+  brc: BRC
+  bv: BV
   charges: Charges
   compte_utilisateur: Compte d'Utilisateur
   comptes: Comptes
@@ -46,7 +47,7 @@ dashboard:
   membres_clients: Membres & clients
   membres_lister: Lister les membres
   motdepasse_modifier: Modifier mon mot de pas
-  nfs: NFs
+  nf: NF
   parameters: Paramètres
   particpants_voir: Voir les participants
   pilotage_je: Pilotage de la J.E.
