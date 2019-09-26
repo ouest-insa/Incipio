@@ -47,7 +47,7 @@ etude:
     date_creation: Date d'ajout
     description: Description
     nom: Nom
-    prix_HT: Montant H.T. (\u20AC)
+    prix_HT: Montant H.T. (€)
   doc:
     CE: Convention Etudiant
     CE_abbr: CE
