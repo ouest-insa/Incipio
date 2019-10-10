@@ -117,9 +117,20 @@ class TraitementController extends AbstractController
 
     const REG_FILE_EXT = "#\.(jpg|png|jpeg)#i";
 
-    private $idDocx;
+    /**
+     * ID du document temporaire venant d'être traité
+     */
+    private $idDoc;
 
-    private $refDocx;
+    /**
+     * nom du document traité puis téléchargé
+     */
+    private $refDoc;
+
+    /**
+     * format du fichier (docx ou odt)
+     */
+    private $format;
 
     private $chartManager;
 
@@ -236,10 +247,17 @@ class TraitementController extends AbstractController
         }
 
         $chemin = $this->getDoctypeAbsolutePathFromName($templateName, $debug);
+        $tmp = explode(".", $chemin);
+        $format = end($tmp);
+
+        $f =  'word/';
+        if($this->isOpenDocument($format)){
+            $f = '';
+        }
 
         $templatesXMLtraite = $this->traiterTemplates($chemin, $rootName, $rootObject);
 
-        //SI DM on prend la ref de RM et ont remplace RM par DM
+        //Si DM on prend la ref de RM et ont remplace RM par DM
         if (self::DOCTYPE_DESCRIPTIF_MISSION == $templateName) {
             $templateName = 'RM';
             $isDM = true;
@@ -253,33 +271,33 @@ class TraitementController extends AbstractController
             }
             if (!$debug) {
                 //avoid collision with references using / or other characters.
-                $refDocx = $rootObject->getReference($namingConvention) . '-' . $templateName . '-';
+                $refDoc = $rootObject->getReference($namingConvention) . '-' . $templateName . '-';
             } else {
-                $refDocx = '';
+                $refDoc = '';
             }
         } elseif (self::ROOTNAME_ETUDIANT == $rootName) {
-            $refDocx = $templateName . '-' . $rootObject->getIdentifiant();
+            $refDoc = $templateName . '-' . $rootObject->getIdentifiant();
         } elseif (self::ROOTNAME_FACTURE == $rootName) {
-            $refDocx = $rootObject->getReference();
+            $refDoc = $rootObject->getReference();
         } elseif (self::ROOTNAME_NOTE_DE_FRAIS == $rootName) {
-            $refDocx = $rootObject->getReference();
+            $refDoc = $rootObject->getReference();
         } elseif (self::ROOTNAME_PROCES_VERBAL == $rootName) {
-            $refDocx = $rootObject->getReference();
+            $refDoc = $rootObject->getReference();
         } elseif (self::ROOTNAME_AVENANT == $rootName) {
-            $refDocx = $templateName . $rootObject->getReference();
+            $refDoc = $templateName . $rootObject->getReference();
         } else {
-            $refDocx = $templateName . '-UNREF';
+            $refDoc = $templateName . '-UNREF';
         }
 
         //On remplace DM par RM si DM
         if (isset($isDM) && $isDM) {
-            $refDocx = preg_replace('#RM#', 'DM', $refDocx);
+            $refDoc = preg_replace('#RM#', 'DM', $refDoc);
         }
-        $repertoire = $this->kernel->getProjectDir() . '' . Document::DOCUMENT_TMP_FOLDER; // tmp folder in web directory
-        $idDocx = $refDocx . '-' . ((int) strtotime('now') + rand());
-        copy($chemin, $repertoire . '/' . $idDocx);
+        $repertoireTmp = $this->kernel->getProjectDir() . '' . Document::DOCUMENT_TMP_FOLDER; // tmp folder in web directory
+        $idDoc = $refDoc . '-' . ((int) strtotime('now') + rand());
+        copy($chemin, "$repertoireTmp/$idDoc");
         $zip = new \ZipArchive();
-        $zip->open($repertoire . '/' . $idDocx);
+        $zip->open("$repertoireTmp/$idDoc");
 
         /*
          * TRAITEMENT INSERT IMAGE
@@ -288,36 +306,39 @@ class TraitementController extends AbstractController
         //Gantt
         if ('AP' == $templateName || (isset($isDM) && $isDM)) {
             $ob = $this->chartManager->getGantt($rootObject, $templateName);
-            if ($this->chartManager->exportGantt($ob, $idDocx)) {
+            if ($this->chartManager->exportGantt($ob, $idDoc)) {
                 $image = [];
-                $image['fileLocation'] = "$repertoire/$idDocx.png";
-                $info = getimagesize("$repertoire/$idDocx.png");
+                $image['fileLocation'] = "$repertoireTmp/$idDoc.png";
+                $info = getimagesize("$repertoireTmp/$idDoc.png");
                 $image['width'] = $info[0];
                 $image['height'] = $info[1];
                 $images['imageVARganttAP'] = $image;
             }
         }
 
-        //Intégration temporaire
-        $imagesInDocx = $this->traiterImages($templatesXMLtraite, $images);
-        foreach ($imagesInDocx as $image) {
-            $zip->deleteName('word/media/' . $image[2]);
-            $zip->addFile($repertoire . '/' . $idDocx . '.png', 'word/media/' . $image[2]);
+        //Intégration temporaire.
+        if(!$this->isOpenDocument($format)){
+            $imagesInDocx = $this->traiterImages($templatesXMLtraite, $images);
+            foreach ($imagesInDocx as $image) {
+                $zip->deleteName('word/media/' . $image[2]);
+                $zip->addFile("$repertoireTmp/$idDoc.png", 'word/media/' . $image[2]);
+            }
         }
         /*****/
 
         $zip = new \ZipArchive();
-        $zip->open($repertoire . '/' . $idDocx);
+        $zip->open("$repertoireTmp/$idDoc");
 
         foreach ($templatesXMLtraite as $templateXMLName => $templateXMLContent) {
-            $zip->deleteName('word/' . $templateXMLName);
-            $zip->addFromString('word/' . $templateXMLName, $templateXMLContent);
+            $zip->deleteName($f . $templateXMLName);
+            $zip->addFromString($f . $templateXMLName, $templateXMLContent);
         }
 
         $zip->close();
 
-        $this->idDocx = $idDocx;
-        $this->refDocx = $refDocx;
+        $this->idDoc = $idDoc;
+        $this->refDoc = $refDoc;
+        $this->format = $format;
 
         return true;
     }
@@ -329,17 +350,25 @@ class TraitementController extends AbstractController
     public function telecharger()
     {
         $this->purge();
-        if (isset($this->idDocx) && isset($this->refDocx)) {
-            $idDocx = $this->idDocx;
-            $refDocx = $this->refDocx;
-
-            $templateName = $this->kernel->getProjectDir() . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $idDocx;
+        if (isset($this->idDoc) && isset($this->refDoc) && isset($this->format)) {
+            $templateName = $this->kernel->getProjectDir() . '' . Document::DOCUMENT_TMP_FOLDER . '/' . $this->idDoc;
 
             $response = new Response();
-            $response->headers->set('Content-Type',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            switch ($this->format){
+                case 'odt':
+                    $response->headers->set('Content-Type',
+                        'application/vnd.oasis.opendocument.text');
+                    break;
+                case 'ods':
+                    $response->headers->set('Content-Type',
+                        'application/vnd.oasis.opendocument.spreadsheet');
+                    break;
+                default:
+                    $response->headers->set('Content-Type',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            }
             $response->headers->set('Content-Length', filesize($templateName));
-            $response->headers->set('Content-disposition', 'attachment; filename="' . $refDocx . '.docx"');
+            $response->headers->set('Content-disposition', 'attachment; filename="' . $this->refDoc . '.' . $this->format);
             $response->headers->set('Pragma', 'no-cache');
             $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
             $response->headers->set('Expires', 0);
@@ -377,23 +406,34 @@ class TraitementController extends AbstractController
         return $chemin;
     }
 
-    //Prendre tous les fichiers dans word
-    private function getDocxContent($docxFullPath)
+    /**
+     * Prendre tous les fichiers XML dans le document
+     * @param $docxFullPath chemin vers le document
+     * @return array Association des noms de fichier dans word/ avec leur contenu
+     */
+    private function getDocContent($docFullPath)
     {
+        $tmp = explode(".", $docFullPath);
+        $format = end($tmp);
+
         $zip = new \ZipArchive();
         $templateXML = [];
-        if (true === $zip->open($docxFullPath)) {
+        if (true === $zip->open($docFullPath)) {
             for ($i = 0; $i < $zip->numFiles; ++$i) {
                 $name = $zip->getNameIndex($i);
-                if ((strstr($name, 'document') || strstr($name, 'header') || strstr($name, 'footer')) && !strstr($name,
-                        'rels')
-                ) {
-                    $this->arrayPushAssoc($templateXML, str_replace('word/', '', $name), $zip->getFromIndex($i));
+                if ($this->isOpenDocument($format)) {
+                    if (strstr($name, 'content')) {
+                        $this->arrayPushAssoc($templateXML, $name, $zip->getFromIndex($i));
+                    }
+                } else {
+                    if ((strstr($name, 'document') || strstr($name, 'header') || strstr($name, 'footer'))
+                        && !strstr($name, 'rels')) {
+                        $this->arrayPushAssoc($templateXML, str_replace('word/', '', $name), $zip->getFromIndex($i));
+                    }
                 }
             }
             $zip->close();
         }
-
         return $templateXML;
     }
 
@@ -417,7 +457,7 @@ class TraitementController extends AbstractController
 
     private function traiterTemplates($templateFullPath, $rootName, $rootObject)
     {
-        $templatesXML = $this->getDocxContent($templateFullPath); //récup contenu XML
+        $templatesXML = $this->getDocContent($templateFullPath); //récup contenu XML
         $templatesXMLTraite = [];
 
         foreach ($templatesXML as $templateName => $toTemplateItem) {
@@ -478,7 +518,7 @@ class TraitementController extends AbstractController
     /**
      * Traitement des champs (Nettoyage XML).
      */
-    private function cleanDocxFields(&$templateXML)
+    private function cleanDocFields(&$templateXML)
     {
         $fields = [];
         preg_match_all(self::REG_CHECK_FIELDS, $templateXML, $fields);
@@ -489,6 +529,7 @@ class TraitementController extends AbstractController
             $field = preg_replace('#’#', '\'', $field);
             $field = preg_replace('#«#', '"', $field);
             $field = preg_replace('#»#', '"', $field);
+            $field = preg_replace('#&apos;#', '"', $field);
             $field = preg_replace(self::REG_XML_NODE_IDENTIFICATOR, '', $field);
             if ($field == strtoupper($field)) {
                 $field = strtolower($field);
@@ -616,15 +657,15 @@ class TraitementController extends AbstractController
                 $filename = sha1(uniqid(mt_rand(), true));
                 $filename .= '.' . $file->guessExtension();
                 $file->move('tmp/', $filename);
-                $docxFullPath = 'tmp/' . $filename;
+                $docFullPath = 'tmp/' . $filename;
 
                 // Extraction des infos XML
-                $templatesXML = $this->getDocxContent($docxFullPath);
-                $relationship = $this->getDocxRelationShip($docxFullPath);
+                $templatesXML = $this->getDocContent($docFullPath);
+                $relationship = $this->getDocxRelationShip($docFullPath);
                 // Nettoyage des XML
                 $templatesXMLTraite = [];
                 foreach ($templatesXML as $templateName => $templateXML) {
-                    $this->cleanDocxFields($templateXML);
+                    $this->cleanDocFields($templateXML);
                     $this->cleanDocxTableRow($templateXML);
                     $this->cleanDocxParagraph($templateXML);
                     $this->linkDocxImages($templateXML, $relationship);
@@ -633,11 +674,16 @@ class TraitementController extends AbstractController
 
                 // Enregistrement dans le fichier temporaire
                 $zip = new \ZipArchive();
-                $zip->open($docxFullPath);
+                $zip->open($docFullPath);
 
+                $f =  'word/';
+                $tmp = explode(".", $filename);
+                if($this->isOpenDocument(end($tmp))){
+                    $f = '';
+                }
                 foreach ($templatesXMLTraite as $templateXMLName => $templateXMLContent) {
-                    $zip->deleteName('word/' . $templateXMLName);
-                    $zip->addFromString('word/' . $templateXMLName, $templateXMLContent);
+                    $zip->deleteName($f . $templateXMLName);
+                    $zip->addFromString($f . $templateXMLName, $templateXMLContent);
                 }
                 $zip->close();
 
@@ -651,7 +697,7 @@ class TraitementController extends AbstractController
                         self::DOCTYPE_CONVENTION_CLIENT == $data['name'] ||
                         self::DOCTYPE_CONVENTION_ETUDE == $data['name'] ||
                         self::DOCTYPE_SUIVI_ETUDE == $data['name']) &&
-                    $data['verification'] && $this->publipostage($docxFullPath, self::ROOTNAME_ETUDE, $etude->getId(),
+                    $data['verification'] && $this->publipostage($docFullPath, self::ROOTNAME_ETUDE, $etude->getId(),
                         true)
                 ) {
                     $session->getFlashBag()->add('success', 'Le template a été vérifié, il ne contient pas d\'erreur');
@@ -667,7 +713,7 @@ class TraitementController extends AbstractController
                 // Vérification du template (document étudiant)
                 if ($etudiant && (self::DOCTYPE_CONVENTION_ETUDIANT == $data['name'] ||
                         self::DOCTYPE_DECLARATION_ETUDIANT_ETR == $data['name']) &&
-                    $data['verification'] && $this->publipostage($docxFullPath, self::ROOTNAME_ETUDIANT,
+                    $data['verification'] && $this->publipostage($docFullPath, self::ROOTNAME_ETUDIANT,
                         $etudiant->getId(), true)
                 ) {
                     $session->getFlashBag()->add('success', 'Le template a été vérifié, il ne contient pas d\'erreur');
@@ -677,7 +723,7 @@ class TraitementController extends AbstractController
                 $em = $this->getDoctrine()->getManager();
                 $user = $this->getUser();
                 $personne = $user->getPersonne();
-                $file = new File($docxFullPath);
+                $file = new File($docFullPath);
 
                 $doc = new Document();
                 $doc->setAuthor($personne)
@@ -701,5 +747,13 @@ class TraitementController extends AbstractController
         return $this->render('Publish/DocType/upload.html.twig',
             ['form' => $form->createView()]
         );
+    }
+
+    /**
+     * @param $format format du fichier
+     * @return bool le document est de type OpenDocument
+     */
+    private function isOpenDocument($format){
+        return $format === 'odt' || $format === 'ods';
     }
 }
