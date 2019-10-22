@@ -1,0 +1,9 @@
+signature:
+  generer_ta_signature: Générer ta signature
+  nom: Nom
+  mailperso: Mail personnel
+  mobile: Mobile
+  pole: Pôle
+  prenom: Prénom
+  signature: Signature
+  title: Génère ta propre signature
