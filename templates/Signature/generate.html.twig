@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="application-name" content="Jeyser CRM" />
+        <title>Génération de signature - Jeyser CRM</title>
+        <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+        <link rel="apple-touch-icon" href="/jeyser-icon-192x192.png"/>
+        <link rel="manifest" href="/manifest.json"/>
+        <link async="" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">   
+    </head>
+
+    <body>
+        <div id="oi_signature_screen">
+            <div class="oi_logo">
+                <img src="/img/oi_logo.png">
+            </div>
+
+            <div class="oi_content">
+                <span class="oi_highlight" id="name">{{ app.request.get('nom') }}</span> • <em id="pole">{{ app.request.get('pole') }}</em><br>
+                <span class="oi_highlight"><i class="fa fa-phone"></i></span> (+33) (0)2 23 23 85 72 • <span class="oi_highlight"><i class="fa fa-mobile"></i></span> <em id="mobile">{{ app.request.get('mobile') }}</em><br>
+                <span class="oi_highlight"><i class="fa fa-briefcase"></i></span><strong> Ouest INSA</strong> • Vos projets d'aujourd'hui par les ingénieurs de demain<br>
+                <span class="oi_highlight"><i class="fa fa-envelope"></i></span> <em id="mail">{{ app.request.get('mail') }}</em> • <span class="oi_highlight"><i class="fa fa-globe"></i></span> www.ouest-insa.fr<br>
+            </div>
+            <br style="clear: both;">
+        </div>
+
+        <style>
+            #oi_signature_screen {
+                margin: 0px;
+                width: 560px;
+                background-color: #ffffffff;
+                padding: 10px;
+            }
+            .oi_logo {
+                float: left;
+                max-width: 120px;
+                max-height: 68px;
+            }
+            .oi_logo img {
+                width: 100%;
+            }
+            .oi_content {
+                float: left;
+                margin: 0px 0px 0px 10px;
+                padding-left: 10px;
+                border-left: 4px #323044 solid;
+                font-family: 'Helvetica', 'Arial';
+                font-size: 12px;
+                line-height: 17px;
+                color: #555;
+
+            }
+            .oi_highlight {
+                font-weight: bold;
+                color: #323044;
+            }
+            .oi_content em{
+                font-style: normal;
+            }
+        </style>
+        <script type="text/javascript" src="/js/html2canvas.min.js"></script>
+        <script type="text/javascript">
+            html2canvas(document.querySelector("#oi_signature_screen")).then(canvas => {
+                //document.body.appendChild(canvas);
+                var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
+                var a = document.createElement('a');
+                a.href = image;
+                a.download = 'signature.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                document.getElementById("oi_signature_screen").style.display = 'none';
+            });
+        </script>
+    </body>
+</html>

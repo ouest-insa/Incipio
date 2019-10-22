@@ -1,0 +1,200 @@
+{% extends "Signature/layout.html.twig" %}
+
+{% block content_title %}
+    {{ 'signature.title'|trans({}, 'signature') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="custom-col">
+            <div class="oi_signature_border">
+                <div id="oi_signature_screen">
+                    <div class="oi_logo">
+                        <img src="/img/oi_logo.png" alt="logo de Ouest-INSA">
+                    </div>
+
+                    <div class="oi_content">
+                        <span class="oi_highlight" id="name"></span> • <em id="pole"></em><br>
+                        <span class="oi_highlight"><i class="fa fa-phone"></i></span> (+33) (0)2 23 23 85 72 • <span class="oi_highlight"><i class="fa fa-mobile"></i></span> <em id="mobile"></em><br>
+                        <span class="oi_highlight"><i class="fa fa-briefcase"></i></span><strong> Ouest INSA</strong> • Vos projets d'aujourd'hui par les ingénieurs de demain<br>
+                        <span class="oi_highlight"><i class="fa fa-envelope"></i></span> <em id="mail"></em> • <span class="oi_highlight"><i class="fa fa-globe"></i></span> www.ouest-insa.fr<br>
+                    </div>
+                    <br style="clear: both;">
+
+                </div>
+            </div>
+                <form class="signature-form" action="{{ path('OuestINSA_signature_generate') }}" method="get" target="_blank">
+                    {% set array = app.user|split('.', 2) %}
+                    {{ 'signature.prenom'|trans({}, 'signature') }} {{ 'signature.nom'|trans({}, 'signature') }} : <input class="form-control" name="nom" placeholder="Prénom Nom" id="nameInput" onchange="update();"  onpaste="this.onchange();" oninput="this.onchange();" type="text" value="{{ attribute(array,0) | capitalize }}{% if array |length >= 2 %} {{ attribute(array,1) | capitalize }}{% endif %}"><br>
+                    {{ 'signature.pole'|trans({}, 'signature') }} : <input class="form-control" name="pole" placeholder="Pôle SI" id="poleInput" onchange="update();" onpaste="this.onchange();" oninput="this.onchange();" type="text"><br>
+                    {{ 'signature.mobile'|trans({}, 'signature') }} : <input class="form-control" name="mobile" placeholder="(+33) (0)6 00 00 00 00" id="mobileInput" onchange="update();" onpaste="this.onchange();" oninput="this.onchange();" type="text"><br>
+                    {{ 'signature.mailperso'|trans({}, 'signature') }} : <input class="form-control" name="mail" placeholder="prenom.nom@ouest-insa.fr" id="mailInput" onchange="update();" onpaste="this.onchange();" oninput="this.onchange();" type="text" value="{{ app.user}}@ouest-insa.fr"><br>
+                    <input type="submit" class="btn btn-info" value="{{ 'signature.generer_ta_signature'|trans({}, 'signature') }}">
+                </form>
+            </div>
+    </div>    
+</div>
+
+<div id="css-xnjket" style="visibility: hidden;">
+	<a onclick="closeSignature()"  class="css-1htfbdm" id="closeCross">
+		<img src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjZmZmZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0xOSA2LjQxTDE3LjU5IDUgMTIgMTAuNTkgNi40MSA1IDUgNi40MSAxMC41OSAxMiA1IDE3LjU5IDYuNDEgMTkgMTIgMTMuNDEgMTcuNTkgMTkgMTkgMTcuNTkgMTMuNDEgMTJ6Ii8+CiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+Cjwvc3ZnPgo=">
+	</a>
+	<div id="canvas-parent">
+
+	</div>
+</div>
+
+<style>/* Couleurs logo Ouest-INSA : 6FC7D8 1E4093 */
+	.custom-col {                    		
+        width: 560px;
+	}
+
+	.oi_signature_border {                    		
+        border: 1px solid black;
+        margin: -1px;
+        margin-bottom: -1px;    
+        margin-bottom: 10px;
+	}
+
+    #oi_signature_screen {
+        margin: 0px;
+        width: 560px;
+        background-color: #ffffffff;
+        padding: 10px;
+    }
+    .oi_logo {
+        float: left;
+        max-width: 120px;
+        max-height: 68px;
+     }
+     .oi_logo img {
+         width: 100%;
+     }
+     .oi_content {
+        float: left;
+        margin: 0px 0px 0px 10px;
+        padding-left: 10px;
+        border-left: 4px #323044 solid;
+        font-family: 'Helvetica', 'Arial';
+        font-size: 12px;
+        line-height: 17px;
+        color: #555;
+
+    }
+    .oi_highlight {
+        font-weight: bold;
+        color: #323044;
+    }
+    .oi_content em{
+        font-style: normal;
+    }
+
+
+    #css-xnjket{
+    	background: rgba(0, 0, 0, 0.5) none repeat scroll 0% 0%;
+		position: fixed;
+		top: 0px;
+		left: 0px;
+		z-index: 99999998;
+		width: 100%;
+		height: 100%;
+    }
+
+	.css-1htfbdm {
+	    position: absolute;
+	    right: 20px;
+	    top: 20px;
+	    max-width: 100%;
+	    margin-left: 0;
+	    margin-right: 0;
+	    margin-top: 0;
+	    padding-bottom: 0;
+	    padding-left: 0;
+	    padding-right: 0;
+	    padding-top: 0;
+	    margin-bottom: 1.5rem;
+	    cursor: pointer;
+	}
+	#canvas-parent{
+ 	    position: fixed;
+	    opacity: 1;
+	    z-index: 99999999;
+	    transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s, opacity 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s, -webkit-transform 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s;
+	    padding: 0;
+	    margin: auto;
+	    display: block;
+	    width: 570px;
+	    height: 88px;
+	    position: absolute;
+	    top: 0;
+	    bottom: 0;
+	    left: 0;
+	    right: 0;
+	}    
+</style>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        var fields = new Array(
+            document.getElementById("name"),
+            document.getElementById("pole"),
+            document.getElementById("mobile"),
+            document.getElementById("mail")
+        );
+        var inputs = new Array(
+            document.getElementById("nameInput"),
+            document.getElementById("poleInput"),
+            document.getElementById("mobileInput"),
+            document.getElementById("mailInput")
+        );
+
+        update();
+        function update(){
+            for(var i = 0; i < 4; i++){
+                fields[i].textContent = inputs[i].value;
+            }
+        }
+
+        /*function generate(){
+            var element = document.getElementById("canvas-parent");
+            while (element.firstChild) {
+                element.removeChild(element.firstChild);
+            }
+
+            html2canvas(document.querySelector("#oi_signature_screen")).then(function(canvas) {
+                document.getElementById("canvas-parent").appendChild(canvas);
+            });
+            document.getElementById("css-xnjket").style.visibility = "visible";            
+        }
+
+        function closeSignature(){
+            document.getElementById("css-xnjket").style.visibility = "hidden"; 
+        }
+
+        jQuery(document).ready(function () {
+            $('.btn-info').on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                var clipRect = document.querySelector("#oi_signature_screen").getBoundingClientRect();
+                page.clipRect = {
+                    top:    clipRect.top,
+                    left:   clipRect.left,
+                    width:  clipRect.width,
+                    height: clipRect.height
+                };
+                page.render('capture.png');
+            });
+
+            $('#closeCross').on('click', function (e) {
+                e.preventDefault();
+            });
+        });*/
+    </script>
+    <script type="text/javascript" src="/js/html2canvas.min.js"></script>
+{% endblock %}
