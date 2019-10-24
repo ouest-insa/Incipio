@@ -12,6 +12,21 @@
 {% set activeRM = (( activeAP or activeCC ) ? "in" : "") %}
 {% set activeFA = (( activeAP and activeCC ) ? "in" : "") %}
 
+<nav class="navbar" role="navigation">
+    <div class="navbar-header">
+        <span class="navbar-brand titre" data-toggle="collapse" data-target="#deivs">{{ 'suivi.devis'|trans({}, 'project') }}</span>
+    </div>
+    <div class="collapse navbar-collapse navbar-devis">
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('publish_publiposter',
+                    { 'templateName' : constant('\\App\\Controller\\Publish\\TraitementController::DOCTYPE_DEVIS'),
+                        'rootName' : constant('\\App\\Controller\\Publish\\TraitementController::ROOTNAME_ETUDE'),
+                        'rootObject_id' : etude.id}) }}">
+                    <span class="fa fa-arrow-circle-down"></span> {{ 'suivi.generer'|trans({}, 'project') }}</a></li>
+        </ul>
+    </div>
+</nav>
+
 {% if (not etude.ceActive) or etude.ap is not none %}
 <nav class="navbar" role="navigation">
     <div class="navbar-header">
