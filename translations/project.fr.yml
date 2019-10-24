@@ -102,6 +102,7 @@ suivi:
   description: Description
   details: Détails
   developpeurs: Developpeurs
+  devis: Devis
   dm: DM
   document: Document
   document_ajouter: Ajouter un document
