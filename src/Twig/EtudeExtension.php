@@ -286,6 +286,20 @@ class EtudeExtension extends \Twig_Extension
             }
         }
 
+        /*************************************************************************************
+         * Vérification du montant des frais de dossier variables - Spécifique à Ouest INSA  *
+         *************************************************************************************/
+        $fraisDossier = $etude->getFraisDossier();
+        $montantJEHHT = $etude->getMontantJEHHT();
+        $palliers = [0, 300, 400, 800, 2000, 4000, 8000, 10000, 15000, 20000, 999999999];
+        $frais = [60, 90, 100, 110, 120, 130, 140, 150, 170, 200];
+        for($i = 0; $i < count($palliers)-1; $i++){
+            if ($montantJEHHT > $palliers[$i] && $montantJEHHT <= $palliers[$i+1] && $fraisDossier != $frais[$i]) {
+                $error = ['titre' => 'Frais de dossier', 'message' => "Il semblerait que vous n'appliquez pas les frais de dossier variable. Ils deveraient être de " . $frais[$i] . "€"];
+                array_push($errors, $error);
+            }
+        }
+
         return $errors;
     }
 
