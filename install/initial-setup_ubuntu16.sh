@@ -26,6 +26,7 @@ read email
 cp docker-compose.yml.dist docker-compose.yml
 sed -i "s/restart: \"no\"/restart: \"always\"/g" docker-compose.yml
 sed -i "s/REPLACE_WITH_YOUR_EMAIL/$email/g" docker-compose.yml
+sed -i "s/REPLACE_WITH_YOUR_HOST/$subdomain/g" docker-compose.yml
 
 cp .env.dist .env
 sed -i "s/REPLACE_WITH_YOUR_HOST/$subdomain/g" .env
