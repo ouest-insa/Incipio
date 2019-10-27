@@ -101,7 +101,7 @@ class DocumentController extends AbstractController
         if (!$response = $this->upload($request, false, ['etude' => $etude], $documentManager, $kernel)) {
             $this->addFlash('success', 'Document mis en ligne');
 
-            return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+            return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab5']);
         }
 
         return $response;
@@ -125,7 +125,7 @@ class DocumentController extends AbstractController
         if (!$response = $this->upload($request, false, $options, $documentManager, $kernel)) {
             $this->addFlash('success', 'Document mis en ligne');
 
-            return $this->redirectToRoute('personne_membre_voir', ['id' => $membre->getId()]);
+            return $this->redirectToRoute('personne_membre_voir', ['id' => $membre->getId(), '_fragment' => 'tab2']);
         }
 
         return $response;

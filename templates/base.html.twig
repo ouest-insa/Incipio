@@ -148,6 +148,48 @@ along with Incipio as the file LICENSE.  If not, see <http://www.gnu.org/license
         });
         $(".loading").hide();
     </script>
+
+    <script>
+        $(function () {
+            function stripTrailingSlash(str) {
+                if (str.substr(-1) === '/') {
+                    return str.substr(0, str.length - 1);
+                }
+                return str;
+            }
+
+            function addActiveClass(element){
+                if(element.is("li")){
+                    element.addClass('active');
+                    addActiveClass(element.parent().parent());
+                }
+            }
+
+            let url = window.location.href;
+            let activePage = stripTrailingSlash(url);
+            let linkFound = false;
+            $('.sidebar-menu li a').each(function () {
+                let currentLink = stripTrailingSlash($(this).attr('href'));
+                if (activePage.endsWith(currentLink)) {
+                        addActiveClass($(this).parent());
+                        linkFound = true;
+                }
+            });
+            if(!linkFound){ // Less sensitive match
+                $('.sidebar-menu li a').each(function () {
+                    if(!linkFound){
+                        let currentLink = stripTrailingSlash($(this).attr('href'));
+                        if (activePage.indexOf(currentLink) !== -1) {
+                            addActiveClass($(this).parent());
+                            linkFound = true;
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+    {% if param('gaTracking') is not null %}
     <!-- GOOGLE ANALYTICS -->
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -159,7 +201,7 @@ along with Incipio as the file LICENSE.  If not, see <http://www.gnu.org/license
         ga('send', 'pageview');
 
     </script>
-
+    {% endif %}
 {% endblock %}
 
 </body>
