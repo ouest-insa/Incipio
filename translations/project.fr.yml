@@ -211,7 +211,7 @@ suivi:
   prix: Prix
   prix_ht: Prix H.T
   prix_jeh: Prix JEH
-  prix_jeh_ht: Prix JEH HT Facturé (\u20AC)
+  prix_jeh_ht: Prix JEH HT Facturé (€)
   proces_verbal: Procès verbal
   proces_verbal_afficher: Affichage d'un PV
   proces_verbal_ajouter: Ajouter un Procès-Verbal
