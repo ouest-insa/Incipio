@@ -55,7 +55,7 @@ RUN /usr/bin/composer.sh \
 WORKDIR /app
 ARG APP_ENV=prod
 COPY ./composer.json ./composer.lock /app/
-RUN mkdir -p var/cache var/logs var/sessions public/tmp \
+RUN mkdir -p var/cache var/sessions public/tmp \
     # Install dependencies
     && composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest \
     && composer clear-cache
@@ -64,6 +64,6 @@ RUN mkdir -p var/cache var/logs var/sessions public/tmp \
 COPY ./ /app
 RUN composer dump-autoload --classmap-authoritative --no-dev \
     # Fixes permissions issues in non-dev mode
-    && chown -R www-data . var/cache var/logs var/sessions public/tmp
+    && chown -R www-data . var/cache var/sessions public/tmp
 
 CMD ["/app/docker/web/start.sh"]
