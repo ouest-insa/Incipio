@@ -15,10 +15,4 @@
 
 {% block content_bundle %}
     {% include "Project/Etude/formulaire.html.twig" %}
-    <br/>
-    <form class="bootbox-confirm inline" data-content="{{ 'suivi.etude_supprimer_confirm'|trans({}, 'project') }} ?"
-          action="{{ path('project_etude_supprimer', { 'nom': etude.nom }) }}" method="post">
-        {{ form_widget(delete_form) }}
-        <button class="btn btn-danger">{{ 'suivi.etude_supprimer'|trans({}, 'project') }}</button>
-    </form>
 {% endblock %}

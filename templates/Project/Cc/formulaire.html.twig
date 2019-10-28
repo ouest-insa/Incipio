@@ -2,78 +2,127 @@
 
 {{ form_start(form) }}
 
-	<table class="table table-bordered table-striped standard">
-	<tr>
-		<th>{{ form_label(form.cc.version) }}</th>
+<table class="table table-bordered table-striped standard">
+    <tr>
+        <th>
+            {{ form_label(form.cc.version) }}
+            {{ form_errors(form.cc.version) }}
+        </th>
         <td>{{ form_widget(form.cc.version) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.cc.signataire1) }}</th>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.signataire1) }}
+            {{ form_errors(form.cc.signataire1) }}
+        </th>
         <td>{{ form_widget(form.cc.signataire1) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.cc.knownSignataire2) }}</th>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.knownSignataire2) }}
+            {{ form_errors(form.cc.knownSignataire2) }}
+        </th>
         <td>{{ form_widget(form.cc.knownSignataire2) }}</td>
-	</tr>
-	<tr>
-		<th id="{{ form.cc.newSignataire2.vars.id }}_block" colspan="2" class="success">{{ 'suivi.signataire_client_ajouter'|trans({}, 'project') }}</th>
     </tr>
-	<tr>
-		<th>{{ form_label(form.cc.newSignataire2.personne.prenom) }}</th>
-		<td>{{ form_widget(form.cc.newSignataire2.personne.prenom) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.cc.newSignataire2.personne.nom) }}</th>
-		<td>{{ form_widget(form.cc.newSignataire2.personne.nom) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.cc.newSignataire2.personne.sexe) }}</th>
-		<td>{{ form_widget(form.cc.newSignataire2.personne.sexe) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.cc.newSignataire2.personne.mobile) }}</th>
-		<td>{{ form_widget(form.cc.newSignataire2.personne.mobile) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.cc.newSignataire2.personne.email) }}</th>
-		<td>{{ form_widget(form.cc.newSignataire2.personne.email) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.cc.newSignataire2.personne.estAbonneNewsletter) }}</th>
-		<td>{{ form_widget(form.cc.newSignataire2.personne.estAbonneNewsletter) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.cc.newSignataire2.personne.emailEstValide) }}</th>
-		<td>{{ form_widget(form.cc.newSignataire2.personne.emailEstValide) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.cc.newSignataire2.poste) }}</th>
-		<td>{{ form_widget(form.cc.newSignataire2.poste) }}</td>
-	</tr>
-	<tr>
-		<th id="{{ form.cc.newSignataire2.vars.id }}_block" colspan="2" class="success">{{ 'suivi.cc'|trans({}, 'project') }}</th>
+    <tr>
+        <th id="{{ form.cc.newSignataire2.vars.id }}_block" colspan="2"
+            class="success">{{ 'suivi.signataire_client_ajouter'|trans({}, 'project') }}
+        </th>
     </tr>
-	<tr>
-		<th>{{ form_label(form.cc.signataire2) }}</th>
+    <tr>
+        <th>
+            {{ form_label(form.cc.newSignataire2.personne.prenom) }}
+            {{ form_errors(form.cc.newSignataire2.personne.prenom) }}
+        </th>
+        <td>{{ form_widget(form.cc.newSignataire2.personne.prenom) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.newSignataire2.personne.nom) }}
+            {{ form_errors(form.cc.newSignataire2.personne.nom) }}
+        </th>
+        <td>{{ form_widget(form.cc.newSignataire2.personne.nom) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.newSignataire2.personne.sexe) }}
+            {{ form_errors(form.cc.newSignataire2.personne.sexe) }}
+        </th>
+        <td>{{ form_widget(form.cc.newSignataire2.personne.sexe) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.newSignataire2.personne.mobile) }}
+            {{ form_errors(form.cc.newSignataire2.personne.mobile) }}
+        </th>
+        <td>{{ form_widget(form.cc.newSignataire2.personne.mobile) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.newSignataire2.personne.email) }}
+            {{ form_errors(form.cc.newSignataire2.personne.email) }}
+        </th>
+        <td>{{ form_widget(form.cc.newSignataire2.personne.email) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.newSignataire2.personne.estAbonneNewsletter) }}
+            {{ form_errors(form.cc.newSignataire2.personne.estAbonneNewsletter) }}
+        </th>
+        <td>{{ form_widget(form.cc.newSignataire2.personne.estAbonneNewsletter) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.newSignataire2.personne.emailEstValide) }}
+            {{ form_errors(form.cc.newSignataire2.personne.emailEstValide) }}
+        </th>
+        <td>{{ form_widget(form.cc.newSignataire2.personne.emailEstValide) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.newSignataire2.poste) }}
+            {{ form_errors(form.cc.newSignataire2.poste) }}
+        </th>
+        <td>{{ form_widget(form.cc.newSignataire2.poste) }}</td>
+    </tr>
+    <tr>
+        <th id="{{ form.cc.newSignataire2.vars.id }}_block" colspan="2"
+            class="success">{{ 'suivi.cc'|trans({}, 'project') }}
+        </th>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.signataire2) }}
+            {{ form_errors(form.cc.signataire2) }}
+        </th>
         <td>{{ form_widget(form.cc.signataire2) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.cc.dateSignature) }}</th>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cc.dateSignature) }}
+            {{ form_errors(form.cc.dateSignature) }}
+        </th>
         <td>{{ form_widget(form.cc.dateSignature) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.acompte) }}</th>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.acompte) }}
+            {{ form_errors(form.acompte) }}
+        </th>
         <td>{{ form_widget(form.acompte) }}</td>
-	</tr>
-	<tr>
-		<th>{{ form_label(form.pourcentageAcompte) }}</th>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.pourcentageAcompte) }}
+            {{ form_errors(form.pourcentageAcompte) }}
+        </th>
         <td>{{ form_widget(form.pourcentageAcompte) }}</td>
-	</tr>
-	</table>
+    </tr>
+</table>
 
-	{{ form_widget(form) }}
+{{ form_widget(form) }}
 
-	<input type="submit" value="{{ 'suivi.cc_enregistrer'|trans({}, 'project') }}" class="btn"/>
-        <input type="submit" value="{{ 'suivi.cc_enregistrer_pvi_passer'|trans({}, 'project') }}" name="pvi" id="pvi" class="btn"/>
+<input type="submit" value="{{ 'suivi.cc_enregistrer'|trans({}, 'project') }}" class="btn"/>
+<input type="submit" value="{{ 'suivi.cc_enregistrer_pvi_passer'|trans({}, 'project') }}" name="pvi" id="pvi"
+       class="btn"/>
 {{ form_end(form) }}
-<br>

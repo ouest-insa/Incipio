@@ -13,6 +13,7 @@ namespace App\Form\Project;
 
 use App\Entity\Project\Ap;
 use App\Entity\Project\Cc;
+use App\Entity\Project\Ce;
 use App\Entity\Project\Etude;
 use App\Entity\Project\ProcesVerbal;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType as GenemuDateType;
@@ -41,7 +42,8 @@ class SuiviEtudeType extends AbstractType
             ->add('stateDescription', TextareaType::class,
                 ['label' => 'Problèmes', 'required' => false, 'attr' => ['cols' => '100%', 'rows' => 5]])
             ->add('ap', DocTypeSuiviType::class, ['label' => 'Avant-Projet', 'data_class' => Ap::class])
-            ->add('cc', DocTypeSuiviType::class, ['label' => 'Convention Client', 'data_class' => Cc::class]);
+            ->add('cc', DocTypeSuiviType::class, ['label' => 'Convention Client', 'data_class' => Cc::class])
+            ->add('ce', DocTypeSuiviType::class, ['label' => 'Convention Etude', 'data_class' => Ce::class]);
 
         $builder->add('missions', CollectionType::class, [
             'entry_type' => DocTypeSuiviType::class,

@@ -44,6 +44,8 @@ class TraitementController extends AbstractController
 
     const DOCTYPE_CONVENTION_CLIENT = 'CC';
 
+    const DOCTYPE_CONVENTION_ETUDE = 'CETUDE'; // backward compatibility CETUDE to keep CE (Convention Etudiant) as CE
+
     const DOCTYPE_FACTURE_ACOMTE = 'FA';
 
     const DOCTYPE_FACTURE_INTERMEDIAIRE = 'FI';
@@ -624,6 +626,7 @@ class TraitementController extends AbstractController
                 // Vérification du template (document étude)
                 if ($etude && (self::DOCTYPE_AVANT_PROJET == $data['name'] ||
                         self::DOCTYPE_CONVENTION_CLIENT == $data['name'] ||
+                        self::DOCTYPE_CONVENTION_ETUDE == $data['name'] ||
                         self::DOCTYPE_SUIVI_ETUDE == $data['name']) &&
                     $data['verification'] && $this->publipostage($docxFullPath, self::ROOTNAME_ETUDE, $etude->getId(),
                         true)
