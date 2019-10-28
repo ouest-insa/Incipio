@@ -30,13 +30,15 @@ class Ap extends DocType
     private $id;
 
     /**
+     * @var Etude
+     *
      * @ORM\OneToOne(targetEntity="Etude", mappedBy="ap")
      * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     protected $etude;
 
-    /** nombre de developpeur estimé
-     * @var int
+    /**
+     * @var int nombre de developpeur estimé
      *
      * @ORM\Column(name="nbrDev", type="integer", nullable=true)
      */

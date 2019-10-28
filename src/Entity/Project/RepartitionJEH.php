@@ -31,23 +31,29 @@ class RepartitionJEH
     private $id;
 
     /**
+     * @var Mission
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Project\Mission", inversedBy="repartitionsJEH")
      */
     private $mission;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="nombreJEH", type="integer", nullable=true)
      */
     private $nbrJEH;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="prixJEH", type="integer", nullable=true)
      */
     private $prixJEH;
 
     /**
+     * @var AvMission
+     *
      * @ORM\ManyToOne(targetEntity="AvMission", inversedBy="nouvelleRepartition")
      */
     private $avMission;

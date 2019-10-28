@@ -30,12 +30,14 @@ class DomaineCompetence
     private $id;
 
     /**
+     * @var Etude
+     *
      * @ORM\OneToMany(targetEntity="Etude", mappedBy="domaineCompetence")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
 
-    /** nombre de developpeur estimé
+    /**
      * @var string
      *
      * @ORM\Column(name="nom", type="text", nullable=false)

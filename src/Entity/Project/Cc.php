@@ -29,6 +29,8 @@ class Cc extends DocType
     private $id;
 
     /**
+     * @var Etude
+     *
      * @ORM\OneToOne(targetEntity="Etude", mappedBy="cc")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */

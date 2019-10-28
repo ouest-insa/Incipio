@@ -37,43 +37,48 @@ class Av extends DocType
     private $id;
 
     /**
+     * @var Etude
+     *
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="avs", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
 
     /**
+     * @var int
+     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="differentielDelai", type="integer", nullable=false,  options={"default"=0})
-     *
-     * @var int
      */
     private $differentielDelai;
 
     /**
+     * @var string
+     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="objet", type="text", nullable=false)
-     *
-     * @var string
      */
     private $objet;
 
     /**
      * @var AvMission
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\Project\AvMission", mappedBy="avenant", cascade={"persist","remove"})
      */
     private $avenantsMissions;
 
     /**
      * @var array
+     *
      * @ORM\Column(name="clauses", type="array")
      */
     private $clauses;
 
     /**
      * @var ArrayCollection phase differentiel
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\Project\Phase", mappedBy="avenant", cascade={"persist", "remove"})
      */
     private $phases;

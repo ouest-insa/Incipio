@@ -31,6 +31,8 @@ class AvMission extends DocType
     private $id;
 
     /**
+     * @var Etude
+     *
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="avMissions", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -38,6 +40,7 @@ class AvMission extends DocType
 
     /**
      * @var Mission
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Project\Mission")
      */
     private $mission;
@@ -50,6 +53,7 @@ class AvMission extends DocType
 
     /**
      * @var int
+     *
      * @Assert\NotBlank()
      * @ORM\Column(name="nouveauPourcentage", type="integer")
      */
@@ -57,12 +61,15 @@ class AvMission extends DocType
 
     /**
      * @var int
+     *
      * @Assert\NotBlank()
      * @ORM\Column(name="differentielDelai", type="integer")
      */
     private $differentielDelai;
 
     /**
+     * @var Av
+     *
      * @ORM\ManyToOne(targetEntity="Av", inversedBy="avenantsMissions")
      */
     private $avenant;
