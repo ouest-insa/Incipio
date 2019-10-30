@@ -148,6 +148,14 @@ class Etude
      */
     private $auditType;
 
+    /**
+     * @var bool est-ce que l'étude utilise la CE ? Ce booléen sert à forcer
+     *           l'affichage de la CC et de l'AP si définit à false ou null
+     *
+     * @ORM\Column(name="ceActive", type="boolean", nullable=true)
+     */
+    private $ceActive;
+
     /************************
      *    ORM DEFINITIONS
      ************************
@@ -196,7 +204,7 @@ class Etude
     private $suivis;
 
     /**
-     * @var Ap
+     * @var Ap Avant projet
      *
      * @ORM\OneToOne(targetEntity="Ap", inversedBy="etude", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="SET NULL")
@@ -204,12 +212,20 @@ class Etude
     private $ap;
 
     /**
-     * @var Cc
+     * @var Cc Convention Client
      *
      * @ORM\OneToOne(targetEntity="Cc", inversedBy="etude", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $cc;
+
+    /**
+     * @var Ce
+     *
+     * @ORM\OneToOne(targetEntity="Ce", inversedBy="etude", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $ce;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Treso\Facture", mappedBy="etude", cascade={"persist", "remove"})
@@ -426,23 +442,27 @@ class Etude
      */
     public function getDateLancement()
     {
+        if ($this->ce) {// Réel
+            return $this->ce->getDateSignature();
+        }
         if ($this->cc) { // Réel
             return $this->cc->getDateSignature();
-        } else { // Théorique
-            $dateDebut = [];
-            $phases = $this->phases;
-            foreach ($phases as $phase) {
-                if (null !== $phase->getDateDebut()) {
-                    array_push($dateDebut, $phase->getDateDebut());
-                }
-            }
-
-            if (count($dateDebut) > 0) {
-                return min($dateDebut);
-            }
-
-            return null;
         }
+
+        // Théorique
+        $dateDebut = [];
+        $phases = $this->phases;
+        foreach ($phases as $phase) {
+            if (null !== $phase->getDateDebut()) {
+                array_push($dateDebut, $phase->getDateDebut());
+            }
+        }
+
+        if (count($dateDebut) > 0) {
+            return min($dateDebut);
+        }
+
+        return null;
     }
 
     /**
@@ -1038,7 +1058,7 @@ class Etude
      *
      * @return Etude
      */
-    public function setAp(Ap $ap = null)
+    public function setAp(?Ap $ap = null)
     {
         if (null !== $ap) {
             $ap->setEtude($this);
@@ -1100,7 +1120,7 @@ class Etude
      *
      * @return Etude
      */
-    public function setCc(Cc $cc = null)
+    public function setCc(?Cc $cc = null)
     {
         if (null !== $cc) {
             $cc->setEtude($this);
@@ -1119,6 +1139,34 @@ class Etude
     public function getCc()
     {
         return $this->cc;
+    }
+
+    /**
+     * Set ce.
+     *
+     * @param Ce $ce
+     *
+     * @return Etude
+     */
+    public function setCe(?Ce $ce = null)
+    {
+        if (null !== $ce) {
+            $ce->setEtude($this);
+        }
+
+        $this->ce = $ce;
+
+        return $this;
+    }
+
+    /**
+     * Get ce.
+     *
+     * @return Ce
+     */
+    public function getCe()
+    {
+        return $this->ce;
     }
 
     /**
@@ -1483,6 +1531,30 @@ class Etude
     public function getConfidentiel()
     {
         return $this->confidentiel;
+    }
+
+    /**
+     * Set if CE is active.
+     *
+     * @param bool|null $ceActive
+     *
+     * @return Etude
+     */
+    public function setCeActive(?bool $ceActive)
+    {
+        $this->ceActive = $ceActive;
+
+        return $this;
+    }
+
+    /**
+     * Get if CE is active.
+     *
+     * @return bool
+     */
+    public function getCeActive()
+    {
+        return $this->ceActive;
     }
 
     /**

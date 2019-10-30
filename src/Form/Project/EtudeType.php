@@ -17,10 +17,10 @@ use App\Entity\Project\DomaineCompetence;
 use App\Entity\Project\Etude;
 use App\Form\Personne\ProspectType;
 use App\Repository\Personne\PersonneRepository;
+use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2ChoiceType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -73,6 +73,12 @@ class EtudeType extends AbstractType
                 'attr' => ['title' => 'suivi.etude_form.confidentialite_tooltip'],
                 'required' => false,
             ])
+            ->add('ceActive', CheckboxType::class, [
+                'label' => 'suivi.etude_form.ce_active',
+                'translation_domain' => 'project',
+                'attr' => ['title' => 'suivi.etude_form.confidentialite_tooltip'],
+                'required' => false,
+            ])
             ->add('suiveur', Select2EntityType::class, [
                 'label' => 'suivi.etude_form.suiveur_projet',
                 'translation_domain' => 'project',
@@ -100,7 +106,7 @@ class EtudeType extends AbstractType
                 'translation_domain' => 'project',
                 'required' => false,
             ])
-            ->add('sourceDeProspection', ChoiceType::class, [
+            ->add('sourceDeProspection', Select2ChoiceType::class, [
                 'choices' => array_flip(Etude::getSourceDeProspectionChoice()),
                 'label' => 'suivi.etude_form.source_prospection',
                 'translation_domain' => 'project',

@@ -31,6 +31,8 @@ class Suivi
     private $id;
 
     /**
+     * @var Etude
+     *
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="suivis", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */

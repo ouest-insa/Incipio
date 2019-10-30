@@ -1,4 +1,4 @@
-{{ form_start(form) }}
+{{ form_start(form, {'attr': {'id': 'project_etudetype'}}) }}
 {% form_theme form 'Project/Form/fields.html.twig' %}
 <table class="table table-bordered table-striped standard">
     <tr>
@@ -67,6 +67,14 @@
         <td>{{ form_widget(form.confidentiel) }}</td>
     </tr>
     <tr>
+        <th>
+            {{ form_label(form.ceActive) }} {{ form_errors(form.ceActive) }}
+            <span class="badge badge-default" data-toggle="tooltip"
+                  title="{{ 'suivi.etude_form.ce_active_tooltip'|trans({}, 'project') }}">?</span>
+        </th>
+        <td>{{ form_widget(form.ceActive) }}</td>
+    </tr>
+    <tr>
         <th>{{ form_label(form.suiveur) }} {{ form_errors(form.suiveur) }}</th>
         <td>{{ form_widget(form.suiveur) }}</td>
     </tr>
@@ -80,17 +88,31 @@
     </tr>
     <tr>
         <th>{{ form_label(form.sourceDeProspection) }} {{ form_errors(form.sourceDeProspection) }}</th>
-        <td>{{ form_widget(form.sourceDeProspection) }}</td>
+        <td>{{ form_widget(form.sourceDeProspection, {'attr': {'class': 'select2'}}) }}</td>
     </tr>
 </table>
 
 {{ form_widget(form) }}
 
-<input type="submit" value="{{ 'suivi.etude_enregistrer'|trans({}, 'project') }}" class="btn btn-success"/>
-<input type="submit" value="{{ 'suivi.etude_enregistrer_passer_ap'|trans({}, 'project') }}" name="ap" id="ap"
-       class="btn btn-success"/>
-
 {{ form_end(form) }}
+
+
+<div class="row">
+    <div class="col-md-3 col-xs-6">
+        <button type="submit" form="project_etudetype" class="btn btn-success">
+            {{ 'suivi.etude_enregistrer'|trans({}, 'project') }}
+        </button>
+    </div>
+    {% if delete_form is defined %}
+        <div class="col-md-3 col-md-offset-3 col-xs-6">
+            <form class="bootbox-confirm inline" data-content="{{ 'suivi.etude_supprimer_confirm'|trans({}, 'project') }} ?"
+                  action="{{ path('project_etude_supprimer', { 'nom': etude.nom }) }}" method="post">
+                {{ form_widget(delete_form) }}
+                <button class="btn btn-danger">{{ 'suivi.etude_supprimer'|trans({}, 'project') }}</button>
+            </form>
+        </div>
+    {% endif %}
+</div>
 
 {{ form_javascript(form) }}
 {% include "Project/DocType/selectOrNew.html.twig" with { known: form.knownProspect, knowned: form.prospect, newed: form.newProspect } %}

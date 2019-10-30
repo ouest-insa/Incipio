@@ -25,6 +25,7 @@ class Mission extends DocType
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -33,18 +34,23 @@ class Mission extends DocType
 
     /**
      * @var Etude
+     *
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="missions", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
 
     /**
+     * @var Membre
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Membre")
      * @ORM\JoinColumn(nullable=true)
      */
     private $referentTechnique;
 
     /**
+     * @var Membre
+     *
      * @Assert\NotNull()
      * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Membre", inversedBy="missions", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
@@ -87,6 +93,7 @@ class Mission extends DocType
 
     /**
      * @var RepartitionJEH
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\Project\RepartitionJEH", mappedBy="mission",  cascade="all",
      *                                                                        orphanRemoval=true, fetch="EAGER")
      */
@@ -94,6 +101,7 @@ class Mission extends DocType
 
     /**
      * @var Phase
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\Project\Phase", mappedBy="mission", cascade={"merge"})
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */

@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Ap extends DocType
+class Ce extends DocType
 {
     /**
      * @var int
@@ -32,23 +32,25 @@ class Ap extends DocType
     /**
      * @var Etude
      *
-     * @ORM\OneToOne(targetEntity="Etude", mappedBy="ap")
-     * @ORM\JoinColumn(nullable=false, onDelete="cascade")
+     * @ORM\OneToOne(targetEntity="Etude", mappedBy="ce")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     protected $etude;
 
-    /**
-     * @var int nombre de developpeur estimé
+    /** nombre de developpeur estimé
+     * @var int
      *
      * @ORM\Column(name="nbrDev", type="integer", nullable=true)
      */
     private $nbrDev;
 
     /**
+     * @var Personne
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne")
      * @ORM\JoinColumn(nullable=true)
      */
-    protected $contactMgate;
+    protected $contact;
 
     /**
      * @var bool
@@ -56,6 +58,14 @@ class Ap extends DocType
      * @ORM\Column(name="deonto", type="boolean", nullable=true)
      */
     private $deonto;
+
+    public function getReference()
+    {
+        return $this->etude->getReference() . '/' . (null !== $this->getDateSignature() ? $this->getDateSignature()
+                ->format('Y') : '') . '/CE/' . $this->getVersion();
+    }
+
+    /** auto-generated methods */
 
     /**
      * Get id.
@@ -67,18 +77,12 @@ class Ap extends DocType
         return $this->id;
     }
 
-    public function getReference()
-    {
-        return $this->getEtude()->getReference() . '/' . (null !== $this->getDateSignature() ?
-                $this->getDateSignature()->format('Y') : '') . '/PM/' . $this->getVersion();
-    }
-
     /**
      * Set etude.
      *
      * @param Etude $etude
      *
-     * @return Ap
+     * @return Ce
      */
     public function setEtude(Etude $etude = null)
     {
@@ -97,12 +101,17 @@ class Ap extends DocType
         return $this->etude;
     }
 
+    public function __toString()
+    {
+        return $this->etude->getReference() . '/CE/';
+    }
+
     /**
      * Set nbrDev.
      *
      * @param int $nbrDev
      *
-     * @return Ap
+     * @return Ce
      */
     public function setNbrDev($nbrDev)
     {
@@ -124,25 +133,25 @@ class Ap extends DocType
     /**
      * Set contactMgate.
      *
-     * @param Personne $contactMgate
+     * @param Personne $contact
      *
-     * @return Ap
+     * @return Ce
      */
-    public function setContactMgate(Personne $contactMgate = null)
+    public function setContact(Personne $contact = null)
     {
-        $this->contactMgate = $contactMgate;
+        $this->contact = $contact;
 
         return $this;
     }
 
     /**
-     * Get contactMgate.
+     * Get contact.
      *
      * @return Personne
      */
-    public function getContactMgate()
+    public function getContact()
     {
-        return $this->contactMgate;
+        return $this->contact;
     }
 
     /**
@@ -150,7 +159,7 @@ class Ap extends DocType
      *
      * @param bool $deonto
      *
-     * @return Ap
+     * @return Ce
      */
     public function setDeonto($deonto)
     {
@@ -167,10 +176,5 @@ class Ap extends DocType
     public function getDeonto()
     {
         return $this->deonto;
-    }
-
-    public function __toString()
-    {
-        return 'PM ' . $this->id;
     }
 }

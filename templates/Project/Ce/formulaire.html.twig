@@ -1,0 +1,8 @@
+{# Formulaire d'ajout d'une étude #}
+
+{{ form_start(form) }}
+
+	{{ form_widget(form) }}
+
+	<input type="submit" value="{{ 'suivi.ce_enregistrer'|trans({}, 'project') }}" class="btn btn-default"/>
+{{ form_end(form) }}

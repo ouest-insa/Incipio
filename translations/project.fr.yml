@@ -54,6 +54,9 @@ suivi:
   cc_modifier: Modifier une Convention Client
   cc_modifier_la: Modifier la Convention Client
   cc_rediger: Rediger la Convention Client
+  ce_enregistrer: Enregistrer la CE
+  ce_enregistrer_phases_passer: Enregistrer la CE et passer aux Phases
+  ce_rediger: Rediger la Convention Etude
   client: Client
   client_contact_ajouter: Ajouter un nouveau contact du client
   commentaire: Commentaire
@@ -76,7 +79,8 @@ suivi:
   contacts_clients_resume: Résumé des autres contacts clients
   contenu: Contenu
   controle_qualite: Contrôle qualité
-  convention_client: Convention client
+  convention_client: Convention Client
+  convention_etude: Convention Etude
   creation: Création
   date: Date
   date_debut: Date de Debut
@@ -123,6 +127,8 @@ suivi:
   etude_etat: Etat de l'étude
   etude_form:
     client_bdd: Le client existe-t-il déjà dans la base de donnée ?
+    ce_active: Utiliser la CE ?
+    ce_active_tooltip: Décochez cette case si vous souhaitez utiliser les anciens documents AP & CC.
     confidentialite: Confidentialité ?
     confidentialite_tooltip: Si l'étude est confidentielle, elle ne sera visible que par vous et les membres du CA.
     domaine_competence: Domaine de compétence

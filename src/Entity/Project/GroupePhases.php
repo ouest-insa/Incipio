@@ -31,6 +31,8 @@ class GroupePhases
     private $id;
 
     /**
+     * @var Etude
+     *
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="groupes", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -38,6 +40,7 @@ class GroupePhases
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
      * @ORM\Column(name="titre", type="string", length=255)
      */

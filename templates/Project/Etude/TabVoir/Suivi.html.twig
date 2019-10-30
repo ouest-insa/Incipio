@@ -61,7 +61,7 @@
             <th>{{ 'suivi.recu_encaisse'|trans({}, 'project') }}</th>
         </tr>
         <!-- AVANT PROJET -->
-        <tr class="docTabRow">
+            <tr class="docTabRow {{ (not etude.ceActive) or etude.ap is not none ? "": "hidden" }}">
             <th>{{ 'suivi.avant_projet'|trans({}, 'project') }}</th>
             <td class="state">{{ 'suivi.incomplet'|trans({}, 'project') }}</td>
             <td>{{ form_widget(formSuivi.ap.redige) }}</td>
@@ -71,13 +71,22 @@
 
         </tr>
         <!-- CONVENTION CLIENT-->
-        <tr class="docTabRow">
+        <tr class="docTabRow {{ (not etude.ceActive) or etude.cc is not none ? "": "hidden" }}">
             <th>{{ 'suivi.convention_client'|trans({}, 'project') }}</th>
             <td class="state">{{ 'suivi.incomplet'|trans({}, 'project') }}</td>
             <td>{{ form_widget(formSuivi.cc.redige) }}</td>
             <td>{{ form_widget(formSuivi.cc.relu) }}</td>
             <td>{{ form_widget(formSuivi.cc.envoye) }}</td>
             <td>{{ form_widget(formSuivi.cc.receptionne) }}</td>
+        </tr>
+        <!-- CONVENTION ETUDE-->
+            <tr class="docTabRow {{ etude.ceActive or etude.ce is not none ? "": "hidden" }}">
+            <th>{{ 'suivi.convention_etude'|trans({}, 'project') }}</th>
+            <td class="state">{{ 'suivi.incomplet'|trans({}, 'project') }}</td>
+            <td>{{ form_widget(formSuivi.ce.redige) }}</td>
+            <td>{{ form_widget(formSuivi.ce.relu) }}</td>
+            <td>{{ form_widget(formSuivi.ce.envoye) }}</td>
+            <td>{{ form_widget(formSuivi.ce.receptionne) }}</td>
         </tr>
 
         <!--RECAPITULATIFS DE MISSION-->

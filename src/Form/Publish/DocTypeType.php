@@ -40,6 +40,7 @@ class DocTypeType extends AbstractType
                     'Devis' => TraitementController::DOCTYPE_DEVIS,
                     'Avant-Projet' => TraitementController::DOCTYPE_AVANT_PROJET,
                     'Convention Client' => TraitementController::DOCTYPE_CONVENTION_CLIENT,
+                    'Convention Etude' => TraitementController::DOCTYPE_CONVENTION_ETUDE,
                     'Récapitulatif de mission' => TraitementController::DOCTYPE_RECAPITULATIF_MISSION,
                     'Descriptif de mission' => TraitementController::DOCTYPE_DESCRIPTIF_MISSION,
                     'Fiche de suivi d\'étude' => TraitementController::DOCTYPE_SUIVI_ETUDE,

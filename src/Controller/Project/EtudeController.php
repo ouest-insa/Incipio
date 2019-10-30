@@ -122,7 +122,7 @@ class EtudeController extends AbstractController
 
             if (!empty($mandat) && !empty($stateID)) { // works because state & mandat > 0
                 $etudes = $em->getRepository(Etude::class)->findBy(['stateID' => $stateID,
-                                                                                'mandat' => $mandat,
+                                                                    'mandat' => $mandat,
                 ], ['num' => 'DESC']);
 
                 if (self::STATE_ID_TERMINEE == $stateID) {
@@ -190,6 +190,7 @@ class EtudeController extends AbstractController
         $etude->setNum($etudeManager->getNouveauNumero());
         $etude->setFraisDossier($etudeManager->getDefaultFraisDossier());
         $etude->setPourcentageAcompte($etudeManager->getDefaultPourcentageAcompte());
+        $etude->setCeActive(true);
 
         $user = $this->getUser();
         if (is_object($user) && $user instanceof User) {
@@ -275,7 +276,8 @@ class EtudeController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifier(Request $request, Etude $etude, EtudePermissionChecker $permChecker, ValidatorInterface $validator)
+    public function modifier(Request $request, Etude $etude, EtudePermissionChecker $permChecker,
+                             ValidatorInterface $validator)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -306,11 +308,7 @@ class EtudeController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Etude modifiée');
 
-                if ($request->get('ap')) {
-                    return $this->redirectToRoute('project_ap_rediger', ['id' => $etude->getId()]);
-                } else {
-                    return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
-                }
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
             } else {
                 $errors = $validator->validate($etude);
                 foreach ($errors as $error) {
@@ -507,20 +505,34 @@ class EtudeController extends AbstractController
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle');
         }
+        // hack around AP, CC & CE stats, to avoid this to create empty object when one of the status is set.
+        // and empty AP or CC mess with CE management (because an Etude has mostly either AP+CC or CE)
+        $ap = null !== $etude->getAp();
+        $cc = null !== $etude->getCc();
+        $ce = null !== $etude->getCe();
 
         $formSuivi = $this->createForm(SuiviEtudeType::class, $etude);
-        if ('POST' !== $request->getMethod()) {
-            return new JsonResponse(['responseCode' => 405, 'msg' => 'Method Not Allowed']);
-        }
         $formSuivi->handleRequest($request);
 
         if (!$formSuivi->isValid()) {
-            return new JsonResponse(['responseCode' => 412, 'msg' => 'Erreur:' . $formSuivi->getErrors(true, false)]);
+            return new JsonResponse(['responseCode' => Response::HTTP_PRECONDITION_FAILED,
+                                     'msg' => 'Erreur:' . $formSuivi->getErrors(true, false),
+            ]);
+        }
+        if (!$ap) {
+            $etude->setAp(null);
+        }
+        if (!$cc) {
+            $etude->setCc(null);
+        }
+        if (!$ce) {
+            $etude->setCe(null);
         }
         $em->persist($etude);
         $em->flush();
 
-        return new JsonResponse(['responseCode' => 200, 'msg' => 'ok']); //make sure it has the correct content type
+        return new JsonResponse(['responseCode' => Response::HTTP_OK, 'msg' => 'ok',
+        ]); //make sure it has the correct content type
     }
 
     /**
@@ -553,7 +565,7 @@ class EtudeController extends AbstractController
 
         //Etudes En Négociation : stateID = 1
         $etudesDisplayList = $em->getRepository(Etude::class)->getTwoStates([self::STATE_ID_EN_NEGOCIATION,
-                                                                                         self::STATE_ID_EN_COURS,
+                                                                             self::STATE_ID_EN_COURS,
         ], ['mandat' => 'ASC', 'num' => 'ASC']);
 
         if (!in_array($etude, $etudesDisplayList)) {

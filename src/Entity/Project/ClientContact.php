@@ -31,12 +31,16 @@ class ClientContact
     private $id;
 
     /**
+     * @var Etude
+     *
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="clientContacts", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
 
-    /** , inversedBy="clientContacts", cascade={"persist"}
+    /**
+     * @var Personne
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -50,6 +54,8 @@ class ClientContact
     private $date;
 
     /**
+     * @var Thread
+     *
      * @ORM\OneToOne(targetEntity="App\Entity\Comment\Thread",cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -57,18 +63,21 @@ class ClientContact
 
     /**
      * @var string
+     *
      * @ORM\Column(name="objet", type="text",nullable=true)
      */
     private $objet;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="contenu", type="text",nullable=true)
      */
     private $contenu;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="moyenContact", type="text",nullable=true)
      */
     private $moyenContact;

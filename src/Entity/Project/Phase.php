@@ -30,6 +30,8 @@ class Phase
     private $id;
 
     /**
+     * @var Etude
+     *
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="phases", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
