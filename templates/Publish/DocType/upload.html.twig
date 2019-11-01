@@ -13,11 +13,17 @@
     {{ form_start(form) }}
         <table class="table table-bordered table-striped">
             <tr>
-                <td>{{ form_label(form.template) }}</td>
+                <td>
+                    {{ form_label(form.template) }}
+                    {{ form_errors(form.template) }}
+                </td>
                 <td>{{ form_widget(form.template,{'attr' : {'onChange':'selectHelper()'} }) }}</td>
             </tr>
             <tr>
-                <td>{{ form_label(form.name) }}</td>
+                <td>
+                    {{ form_label(form.name) }}
+                    {{ form_errors(form.name) }}
+                </td>
                 <td>
                     {{ form_widget(form.name) }}
                     <span id="selectHelperMessage"></span>
@@ -27,15 +33,24 @@
                 <th colspan="2">Vérification :</th>
             </tr>
             <tr>
-                <td>{{ form_label(form.etude) }}</td>
+                <td>
+                    {{ form_label(form.etude) }}
+                    {{ form_errors(form.etude) }}
+                </td>
                 <td>{{ form_widget(form.etude, {'attr': {'style': 'min-width: 300px'}}) }}</td>
             </tr>
             <tr>
-                <td>{{ form_label(form.etudiant) }}</td>
+                <td>
+                    {{ form_label(form.etudiant) }}
+                    {{ form_errors(form.etudiant) }}
+                </td>
                 <td>{{ form_widget(form.etudiant, {'attr': {'style': 'min-width: 300px'}}) }}</td>
             </tr>
             <tr>
-                <td>{{ form_label(form.verification) }}</td>
+                <td>
+                    {{ form_label(form.verification) }}
+                    {{ form_errors(form.verification) }}
+                </td>
                 <td>{{ form_widget(form.verification) }}</td>
             </tr>
         </table>
