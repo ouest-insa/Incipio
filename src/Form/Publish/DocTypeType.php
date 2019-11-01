@@ -14,10 +14,10 @@ namespace App\Form\Publish;
 use App\Controller\Publish\TraitementController;
 use App\Entity\Personne\Membre;
 use App\Entity\Project\Etude;
+use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2ChoiceType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,7 +26,7 @@ class DocTypeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', ChoiceType::class, [
+        $builder->add('name', Select2ChoiceType::class, [
             'required' => true,
             'label' => 'Document Type',
             'choices' => [
