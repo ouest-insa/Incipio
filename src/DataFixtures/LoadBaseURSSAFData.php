@@ -23,24 +23,24 @@ class LoadBaseURSSAFData extends Fixture
     public function load(ObjectManager $manager)
     {
         $base = [
+            2019 => 40.12,
+            2018 => 39.54,
             2017 => 39.04,
             2016 => 38.68,
             2015 => 38.44,
             2014 => 38.12,
             2013 => 37.72,
             2012 => 36.88,
-            2011 => 36,
+            2011 => 36.00,
             2010 => 35.44,
             2009 => 34.84,
             2008 => 33.76,
             2007 => 33.08,
         ];
-        for ($y = 2009; $y < 2018; ++$y) {
+        foreach ($base as $y => $b) {
             $baseURSSAF = new BaseURSSAF();
-            if (array_key_exists($y, $base)) {
-                $baseURSSAF->setBaseURSSAF($base[$y])->setDateDebut(new \DateTime("$y-01-01"))->setDateFin(new \DateTime("$y-12-31"));
-                $manager->persist($baseURSSAF);
-            }
+            $baseURSSAF->setBaseURSSAF($b)->setDateDebut(new \DateTime("$y-01-01"))->setDateFin(new \DateTime("$y-12-31"));
+            $manager->persist($baseURSSAF);
         }
         if (!$manager->getRepository(BaseURSSAF::class)->findBy([
             'dateDebut' => $baseURSSAF->getDateDebut(),
