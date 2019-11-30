@@ -40,7 +40,7 @@
                         <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s')}}</td>
                         <td>{{ doc.author ? doc.author.prenomNom }}</td>
                         {% if is_granted('ROLE_CA') %}
-                        <td><a href="{{ path('publish_document_delete', {'id' : doc.id }) }}"><i class="fa fa-times"></i></a></td>
+                        <td><a href="{{ path('publish_document_delete', {'id' : doc.id }) }}"><i class="fa fa-times text-danger"></i></a></td>
                         {% endif %}
                     </tr>
                     {% endfor %}
