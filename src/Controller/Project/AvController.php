@@ -56,7 +56,7 @@ class AvController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Avenant enregistré');
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -98,7 +98,7 @@ class AvController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Avenant enregistré');
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }

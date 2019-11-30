@@ -44,6 +44,7 @@ class DocTypeType extends AbstractType
                     'Récapitulatif de mission' => TraitementController::DOCTYPE_RECAPITULATIF_MISSION,
                     'Descriptif de mission' => TraitementController::DOCTYPE_DESCRIPTIF_MISSION,
                     'Fiche de suivi d\'étude' => TraitementController::DOCTYPE_SUIVI_ETUDE,
+                    'Avenant' => TraitementController::DOCTYPE_AVENANT,
                 ],
                 'Trésorerie' => [
                     'Facture d\'acompte' => TraitementController::DOCTYPE_FACTURE_ACOMTE,

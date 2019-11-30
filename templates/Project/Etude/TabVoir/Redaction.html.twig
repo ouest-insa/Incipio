@@ -406,12 +406,23 @@
 <div id="avs" class="collapse">
     <table class="table table-bordered table-striped">
         <tr>
-            <th>{{ 'suivi.avenant'|trans({}, 'project') }}</th>
+            <th colspan="2">{{ 'suivi.avenant'|trans({}, 'project') }}</th>
             <th>{{ 'suivi.date_signature'|trans({}, 'project') }}</th>
             <th>{{ 'suivi.type'|trans({}, 'project') }}</th>
         </tr>
         {% for av in etude.avs %}
             <tr>
+                <td>
+                    <a title="{{ 'suivi.modifier'|trans({}, 'project') }}"
+                       href="{{ path('project_av_modifier', {'id': av.id}) }}"><span
+                                class="fa fa-pencil"></span></a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a title="{{ 'suivi.telecharger'|trans({}, 'project') }}" href="{{ path('publish_publiposter',
+                    { 'templateName' : constant('\\App\\Controller\\Publish\\TraitementController::DOCTYPE_AVENANT'),
+                        'rootName' : constant('\\App\\Controller\\Publish\\TraitementController::ROOTNAME_AVENANT'),
+                        'rootObject_id' : av.id}) }}">
+                    <span class="fa fa-arrow-circle-down"></span></a>
+                </td>
                 <td>
                     <a href="{{ path('project_av_modifier', {'id': av.id}) }}">{{ 'suivi.avenant'|trans({}, 'project') }}
                         n°{{ av.id }}</a></td>

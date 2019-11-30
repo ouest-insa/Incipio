@@ -15,6 +15,7 @@ use App\Entity\Personne\Membre;
 use App\Entity\Project\Etude;
 use App\Entity\Project\Mission;
 use App\Entity\Project\ProcesVerbal;
+use App\Entity\Project\Av;
 use App\Entity\Publish\Document;
 use App\Entity\Treso\BV;
 use App\Entity\Treso\Facture;
@@ -72,6 +73,8 @@ class TraitementController extends AbstractController
 
     const DOCTYPE_BULLETIN_DE_VERSEMENT = 'BV';
 
+    const DOCTYPE_AVENANT = 'AV';
+
     const ROOTNAME_ETUDE = 'etude';
 
     const ROOTNAME_PROCES_VERBAL = 'pvr';
@@ -85,6 +88,8 @@ class TraitementController extends AbstractController
     const ROOTNAME_FACTURE = 'facture';
 
     const ROOTNAME_BULLETIN_DE_VERSEMENT = 'bv';
+
+    const ROOTNAME_AVENANT = 'av';
 
     // On considère que les TAG ont déjà été nettoyé du XML
     const REG_REPEAT_LINE = "#(<w:tr(?:(?!w:tr\s).)*?)(\{\%\s*TRfor[^\%]*\%\})(.*?)(\{\%\s*endforTR\s*\%\})(.*?</w:tr>)#";
@@ -207,6 +212,16 @@ class TraitementController extends AbstractController
                 break;
             case self::ROOTNAME_PROCES_VERBAL:
                 if (!$rootObject = $em->getRepository(ProcesVerbal::class)->find($rootObject_id)) {
+                    throw $errorRootObjectNotFound;
+                }
+                if ($rootObject->getEtude() &&
+                    $this->permChecker->confidentielRefus($rootObject->getEtude(), $this->getUser())
+                ) {
+                    throw $errorEtudeConfidentielle;
+                }
+                break;
+            case self::ROOTNAME_AVENANT:
+                if (!$rootObject = $em->getRepository(Av::class)->find($rootObject_id)) {
                     throw $errorRootObjectNotFound;
                 }
                 if ($rootObject->getEtude() &&
