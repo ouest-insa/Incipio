@@ -1,11 +1,11 @@
 {% extends "Treso/layout.html.twig" %}
 
 {% block title %}
-    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.mandat }}-NF{{ nf.numero }}-{{ nf.demandeur.membre.identifiant }}- {{ parent() }}
+    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.reference }}- {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.mandat }}-NF{{ nf.numero }}-{{ nf.demandeur.membre.identifiant }}
+    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.reference }}
 {% endblock %}
 
 {% block breadcrumb_items %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.mandat }}-NF{{ nf.numero }}-{{ nf.demandeur.membre.identifiant }}
+    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.reference }}
 {% endblock %}
 
 {% block content_bundle %}

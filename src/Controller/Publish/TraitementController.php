@@ -245,7 +245,7 @@ class TraitementController extends AbstractController
             $isDM = true;
         }
 
-        if ('etude' == $rootName && $rootObject->getReference()) {
+        if (self::ROOTNAME_ETUDE == $rootName && $rootObject->getReference()) {
             if ($this->keyValueStore->exists('namingConvention')) {
                 $namingConvention = $this->keyValueStore->get('namingConvention');
             } else {
@@ -257,10 +257,18 @@ class TraitementController extends AbstractController
             } else {
                 $refDocx = '';
             }
-        } elseif ('etudiant' == $rootName) {
+        } elseif (self::ROOTNAME_ETUDIANT == $rootName) {
             $refDocx = $templateName . '-' . $rootObject->getIdentifiant();
+        } elseif (self::ROOTNAME_FACTURE == $rootName) {
+            $refDocx = $rootObject->getReference();
+        } elseif (self::ROOTNAME_NOTE_DE_FRAIS == $rootName) {
+            $refDocx = $rootObject->getReference();
+        } elseif (self::ROOTNAME_PROCES_VERBAL == $rootName) {
+            $refDocx = $rootObject->getReference();
+        } elseif (self::ROOTNAME_AVENANT == $rootName) {
+            $refDocx = $templateName . $rootObject->getReference();
         } else {
-            $refDocx = 'UNREF';
+            $refDocx = $templateName . '-UNREF';
         }
 
         //On remplace DM par RM si DM

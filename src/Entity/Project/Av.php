@@ -95,6 +95,11 @@ class Av extends DocType
         return array_flip(self::CLAUSES_CHOICES);
     }
 
+    public function getReference()
+    {
+        return $this->id . '-' . $this->etude->getReference('nom');
+    }
+
     /** auto-generated methods */
 
     /**
