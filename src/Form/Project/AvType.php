@@ -23,10 +23,15 @@ class AvType extends DocTypeType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('differentielDelai', IntegerType::class, [
+        $builder
+            ->add('numero', IntegerType::class, [
+                'label' => 'Numéro de l\'avenant',
+                'required' => true,
+            ])
+            ->add('differentielDelai', IntegerType::class, [
             'label' => 'Modification du Délai (+/- x jours)',
             'required' => true,
-        ])
+            ])
             ->add('objet', TextareaType::class, [
                 'label' => 'Exposer les causes de l’Avenant',
                 'required' => true,

@@ -83,6 +83,13 @@ class Av extends DocType
      */
     private $phases;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $numero;
+
     public function __construct()
     {
         parent::__construct();
@@ -97,7 +104,7 @@ class Av extends DocType
 
     public function getReference()
     {
-        return $this->id . '-' . $this->etude->getReference('nom');
+        return $this->numero . '-' . $this->etude->getReference('nom');
     }
 
     /** auto-generated methods */
@@ -279,5 +286,17 @@ class Av extends DocType
     public function __toString()
     {
         return $this->etude->getReference() . '/AV/' . $this->getId();
+    }
+
+    public function getNumero()
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(int $numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
     }
 }
