@@ -30,17 +30,17 @@
             </tr>
             <tr>
                 <td>
-                    {% for personne in personnes if personne.employe and personne.emailestvalide and personne.estabonnenewsletter and personne.email %}
+                    {% for personne in personnes | filter(personne => personne.employe and personne.emailestvalide and personne.estabonnenewsletter  and personne.email) %}
                     {{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />
                     {% endfor %}
                 </td>
                 <td>
-                    {% for personne in personnes if personne.membre and personne.emailestvalide and personne.estabonnenewsletter and  personne.email %}
+                    {% for personne in personnes | filter(personne => personne.membre and personne.emailestvalide and personne.estabonnenewsletter and  personne.email) %}
                     {{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />
                     {% endfor %}
                 </td>
                 <td>
-                    {% for personne in personnes if personne.membre and personne.emailestvalide and personne.estabonnenewsletter  %}
+                    {% for personne in personnes | filter(personne => personne.membre and personne.emailestvalide and personne.estabonnenewsletter)  %}
                     {{personne.prenomNom }} &lt;{{ personne.membre.emailEMSE }}&gt;;<br />
                     {% endfor %}
                 </td>
@@ -52,17 +52,17 @@
             </tr>
             <tr>
                 <td>
-                    {% for personne in personnes if personne.employe and personne.email and personne.emailestvalide %}
+                    {% for personne in personnes | filter(personne => personne.employe and personne.email and personne.emailestvalide) %}
                     {{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />
                     {% endfor %}
                 </td>
                 <td>
-                    {% for personne in personnes if personne.membre and personne.email and personne.emailestvalide %}
+                    {% for personne in personnes | filter(personne => personne.membre and personne.email and personne.emailestvalide) %}
                     {{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />
                     {% endfor %}
                 </td>
                 <td>
-                    {% for personne in personnes if personne.membre %}
+                    {% for personne in personnes | filter(personne => personne.membre) %}
                     {{personne.prenomNom }} &lt;{{ personne.membre.emailEMSE }}&gt;;<br />
                     {% endfor %}
                 </td>

@@ -26,27 +26,28 @@
 {% block content_bundle %}
     <table class="table table-bordered table-striped dataTable dt-responsive text-left" id="annuaire" role="grid" width="100%">
         <thead>
-        <tr>
-            <th>{{ 'champs.liste'|trans({}, 'personne') }}</th>
-            <th>{{ 'champs.prenom_nom'|trans({}, 'personne') }}</th>
-            <th>{{ 'champs.mail'|trans({}, 'personne') }}</th>
-            <th>{{ 'champs.mobile'|trans({}, 'personne') }}</th>
-            <th>{{ 'champs.adresse'|trans({}, 'personne') }}</th>
-            {% if is_granted('ROLE_CA') %}
-            <th>{{ 'champs.action'|trans({}, 'personne') }}</th>
-            {% endif %}
-        </tr>
+            <tr>
+                <th>{{ 'champs.liste'|trans({}, 'personne') }}</th>
+                <th>{{ 'champs.prenom_nom'|trans({}, 'personne') }}</th>
+                <th>{{ 'champs.mail'|trans({}, 'personne') }}</th>
+                <th>{{ 'champs.mobile'|trans({}, 'personne') }}</th>
+                <th>{{ 'champs.adresse'|trans({}, 'personne') }}</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                <th>{{ 'champs.action'|trans({}, 'personne') }}</th>
+                {% endif %}
+            </tr>
         </thead>
         <tbody>
-            {% for personne in personnes if personne.prenom != "Admin" %}
+            {% for personne in personnes | filter(personne => personne.prenom != "Admin") %}
             <tr>
                 <td>{{ personne.membre ? param('abbr') : personne.employe ? 'annuaire.client'|trans({}, 'personne') : 'annuaire.autre'|trans({}, 'personne') }}</td>
                 <td>{{ personne.prenomNom }}</td>
                 <td>{{ personne.email }}</td>
                 <td>{{ personne.mobile }}</td>
                 <td>{{ personne.adresse }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
                 <td>
-                    {% if is_granted('ROLE_ADMIN') and  personne.membre == null and personne.employe == null %}
+                    {%  if personne.membre == null and personne.employe == null %}
                     <form class="bootbox-confirm inline" id="confirm"
                           data-content="{{ 'annuaire.confirmation_supprimer_personne'|trans({}, 'personne') }}"
                           action="{{ path('personne_personne_supprimer', { 'id': personne.id }) }}"
@@ -55,6 +56,7 @@
                     </form>
                     {% endif %}
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

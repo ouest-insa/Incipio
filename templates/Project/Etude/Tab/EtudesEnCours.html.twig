@@ -61,7 +61,7 @@
     <tbody>
 
 
-    {% for etude in etudesEnCours if not confidentielRefus(etude, app.user, is_granted(role_voir_confidentiel)) %}
+    {% for etude in etudesEnCours | filter(etude => not confidentielRefus(etude, app.user, is_granted(role_voir_confidentiel))) %}
         <tr>
             <td>
                 <div>
@@ -188,7 +188,7 @@
             <td>
                 {% set dernierContact = 0 %}
                 {% set contactId = 0 %}
-                {% for contact in etude.clientContacts if (dernierContact |date("U") <= contact.date |date("U")) %}
+                {% for contact in etude.clientContacts | filter(etude => dernierContact |date("U") <= contact.date |date("U")) %}
                     {% set dernierContact = contact.date %}
                     {% set contactId = contact.id %}
                 {% endfor %}
