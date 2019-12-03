@@ -55,7 +55,7 @@ class AvMissionController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Avenant de mission ajouté');
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
@@ -94,7 +94,7 @@ class AvMissionController extends AbstractController
             if ($form->isValid()) {
                 $em->flush();
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
         }
         $deleteForm = $this->createDeleteForm($avmission);
@@ -135,7 +135,7 @@ class AvMissionController extends AbstractController
             $this->addFlash('success', 'Avenant au RM supprimé');
         }
 
-        return $this->redirectToRoute('project_etude_voir', ['nom' => $av->getEtude()->getNom()]);
+        return $this->redirectToRoute('project_etude_voir', ['nom' => $av->getEtude()->getNom(), '_fragment' => 'tab3']);
     }
 
     private function createDeleteForm(AvMission $contact)
