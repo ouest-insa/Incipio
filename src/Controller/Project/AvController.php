@@ -17,6 +17,7 @@ use App\Form\Project\AvType;
 use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,6 +91,8 @@ class AvController extends AbstractController
 
         $form = $this->createForm(AvType::class, $av, ['prospect' => $av->getEtude()->getProspect()]);
 
+        $deleteForm = $this->createDeleteForm($av->getId());
+
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
 
@@ -105,8 +108,50 @@ class AvController extends AbstractController
 
         return $this->render('Project/Av/modifier.html.twig', [
             'form' => $form->createView(),
+            'delete_form' => $deleteForm->createView(),
             'etude' => $etude,
             'av' => $av,
         ]);
+    }
+
+
+    /**
+     * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="project_av_supprimer", path="/suivi/av/supprimer/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @param Request                $request
+     * @param ProcesVerbal           $procesVerbal
+     * @param EtudePermissionChecker $permChecker
+     *
+     * @return RedirectResponse
+     */
+    public function delete(Request $request, Av $av, EtudePermissionChecker $permChecker)
+    {
+        $form = $this->createDeleteForm($av->getId());
+        $form->handleRequest($request);
+        $etude = $av->getEtude();
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            if ($permChecker->confidentielRefus($etude, $this->getUser())) {
+                throw new AccessDeniedException('Cette étude est confidentielle');
+            }
+
+            $em->remove($av);
+            $em->flush();
+            $this->addFlash('success', 'Avenant supprimé');
+        } else {
+            $this->addFlash('danger', 'Le formulaire contient des erreurs.');
+        }
+
+        return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+    }
+
+    private function createDeleteForm($id_av)
+    {
+        return $this->createFormBuilder(['id' => $id_av])
+            ->add('id', HiddenType::class)
+            ->getForm();
     }
 }

@@ -40,6 +40,8 @@ suivi:
   avenant_mission_supprimer: Supprimer l'avenant au Récapitulatif de Mission
   avenant_mission_supprimer_confirm: Etes-vous sûr de vouloir supprimer définitivement cet avenant au RM ?
   avenant_modifier: Modifier l'Avenant
+  avenant_supprimer: Supprimer l'Avenant
+  avenant_supprimer_confirmation: Êtes-vous sûr de vouloir supprimer définitivement cet avenant ?
   avenants: Avenants
   avenants_clients: Avenants clients
   avenants_mission: Avenants de Mission
