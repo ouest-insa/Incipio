@@ -11,7 +11,10 @@
 
 namespace App\Service\Publish;
 
-class TwigExtensionManager extends \Twig_Extension
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+
+class TwigExtensionManager extends AbstractExtension
 {
     public function getName()
     {
@@ -27,11 +30,11 @@ class TwigExtensionManager extends \Twig_Extension
     public function getFilters()
     {
         return [
-            'nl2wbr' => new \Twig_Filter('nl2wbr', [$this, 'nl2wbr']),
-            'money' => new \Twig_Filter('money', [$this, 'money']),
-            'nbrToLetters' => new \Twig_Filter('nbrToLetters', [$this, 'nbrToLetters']),
-            'liaison' => new \Twig_Filter('liaison', [$this, 'liaison']),
-            'pluriel' => new \Twig_Filter('pluriel', [$this, 'pluriel']),
+            'nl2wbr' => new TwigFilter('nl2wbr', [$this, 'nl2wbr']),
+            'money' => new TwigFilter('money', [$this, 'money']),
+            'nbrToLetters' => new TwigFilter('nbrToLetters', [$this, 'nbrToLetters']),
+            'liaison' => new TwigFilter('liaison', [$this, 'liaison']),
+            'pluriel' => new TwigFilter('pluriel', [$this, 'pluriel']),
         ];
     }
 
