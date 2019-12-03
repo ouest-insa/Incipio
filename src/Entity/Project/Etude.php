@@ -44,11 +44,12 @@ class Etude
 
     public const ETUDE_STATE_AVORTEE = 5;
 
-    public const ETUDE_STATE_ARRAY = [self::ETUDE_STATE_NEGOCIATION => 'En négociation',
-        self::ETUDE_STATE_COURS => 'En cours',
-        self::ETUDE_STATE_PAUSE => 'En pause',
-        self::ETUDE_STATE_CLOTUREE => 'Cloturée',
-        self::ETUDE_STATE_AVORTEE => 'Avortée',
+    public const ETUDE_STATE_ARRAY = [
+        self::ETUDE_STATE_NEGOCIATION => 'suivi.en_negociation',
+        self::ETUDE_STATE_COURS => 'suivi.en_cours',
+        self::ETUDE_STATE_PAUSE => 'suivi.en_pause',
+        self::ETUDE_STATE_CLOTUREE => 'suivi.cloturee',
+        self::ETUDE_STATE_AVORTEE => 'suivi.avortee',
     ];
 
     /**
