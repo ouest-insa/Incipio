@@ -118,7 +118,7 @@ class NoteDeFrais implements TresoDetailableInterface
     public function getReference()
     {
         return $this->mandat . '-NF'
-            . sprintf("%03d", $this->getNumero())
+            . sprintf('%03d', $this->getNumero())
             . ($this->getDemandeur()->getMembre()->getIdentifiant() ? '-' . $this->getDemandeur()->getMembre()->getIdentifiant() : '');
     }
 

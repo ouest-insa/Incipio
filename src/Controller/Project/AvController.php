@@ -114,7 +114,6 @@ class AvController extends AbstractController
         ]);
     }
 
-
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="project_av_supprimer", path="/suivi/av/supprimer/{id}", methods={"GET","HEAD","POST"})
