@@ -32,6 +32,7 @@ suivi:
   avenant_ajouter: Ajouter un avenant
   avenant_enregistrer: Enregistrer l'avenant
   avenant_liste: Liste des avenants
+  avenant_mission: Avenant de Mission
   avenant_mission_ajouter: Ajouter un avenant au Récapitulatif de Mission
   avenant_mission_ajouter_un: Ajouter un avenant de mission
   avenant_mission_enregistrer: Enregistrer l'avenant au Récapitulatif de Mission

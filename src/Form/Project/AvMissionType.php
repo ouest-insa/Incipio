@@ -19,7 +19,8 @@ class AvMissionType extends DocTypeType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nouveauPourcentage', null, ['label' => 'Nouveau pourcentage'])
+        $builder->add('numero', null, ['label' => 'Numéro'])
+            ->add('nouveauPourcentage', null, ['label' => 'Nouveau pourcentage'])
             ->add('differentielDelai', null, ['label' => 'Différentiel délai']);
 
         DocTypeType::buildForm($builder, $options);

@@ -74,6 +74,13 @@ class AvMission extends DocType
      */
     private $avenant;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $numero;
+
     public function __toString()
     {
         return 'AvMission ' . $this->id;
@@ -250,5 +257,17 @@ class AvMission extends DocType
     public function getEtude()
     {
         return $this->etude;
+    }
+
+    public function getNumero()
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(int $numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
     }
 }

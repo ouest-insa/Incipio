@@ -462,8 +462,8 @@
         {% for av in etude.avMissions %}
             <tr>
                 <td>
-                    <a href="{{ path('project_avmission_modifier', {'id': av.id}) }}">{{ 'suivi.avenant'|trans({}, 'project') }}
-                        n°{{ av.id }}</a></td>
+                    <a href="{{ path('project_avmission_modifier', {'id': av.id}) }}">{{ 'suivi.avenant_mission'|trans({}, 'project') }}
+                        n°{{ av.numero }}</a></td>
                 <td>{{ av.dateSignature ? av.dateSignature | date('d/m/Y') }}</td>
                 <td>-</td>
                 <td>{{ av.differentielDelai }}</td>
