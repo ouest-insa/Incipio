@@ -44,7 +44,7 @@
                 </td>
                 <td>{{ (doc.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
                 <td><a href="{{ path('publish_document_delete', {'id' : doc.id }) }}"><i
-                                class="fa fa-times"></i></a></td>
+                                class="fa fa-times text-danger"></i></a></td>
             </tr>
         {% endfor %}
     </table>

@@ -19,8 +19,12 @@
                         <a href="{{ path('project_etude_homepage') }}">{{ 'suivi.suivi_etude'|trans({}, 'project') }}</a>
                     </li>
                     {% if etude is defined %}
+                        {# La variable tab est utilisée par les pages enfants pour rediriger l'utilisateur sur l'onglet initial #}
+                        {% if tab is not defined %}
+                            {% set tab='tab1' %}
+                        {% endif %}
                         <li>
-                            <a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.reference(param('namingConvention')) }}</a>
+                            <a href="{{ path('project_etude_voir', {'nom': etude.nom, '_fragment': tab}) }}">{{ etude.reference(param('namingConvention')) }}</a>
                         </li>
                     {% endif %}
                     {% block breadcrumb_items %}{% endblock %}

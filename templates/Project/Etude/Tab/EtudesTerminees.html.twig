@@ -34,7 +34,7 @@
     </thead>
     <tbody>
 
-    {% for etude in etudes if not confidentielRefus(etude, app.user, is_granted(role_voir_confidentiel)) %}
+    {% for etude in etudes | filter(etude => not confidentielRefus(etude, app.user, is_granted(role_voir_confidentiel))) %}
         <tr>
             <td><i id="commentaire" class="fa fa-search" data-title="{{ etude.id }}" data-content="0"></i></td>
             <td>

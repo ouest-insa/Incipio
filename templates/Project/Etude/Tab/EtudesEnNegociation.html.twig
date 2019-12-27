@@ -41,7 +41,7 @@
  	 <tbody>
 
 
-        {% for etude in etudesEnNegociation if not confidentielRefus(etude, app.user, is_granted('ROLE_CA'))%}
+        {% for etude in etudesEnNegociation | filter(etude => not confidentielRefus(etude, app.user, is_granted('ROLE_CA'))) %}
     <tr>
         <td><div>
                 <a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a>

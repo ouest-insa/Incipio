@@ -1,11 +1,11 @@
 {% extends "Treso/layout.html.twig" %}
 
 {% block title %}
-    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.mandat }}-NF{{ nf.numero }}-{{ nf.demandeur.membre.identifiant }}- {{ parent() }}
+    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.reference }}- {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.mandat }}-NF{{ nf.numero }}-{{ nf.demandeur.membre.identifiant }}
+    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.reference }}
 {% endblock %}
 
 {% block breadcrumb_items %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.mandat }}-NF{{ nf.numero }}-{{ nf.demandeur.membre.identifiant }}
+    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.reference }}
 {% endblock %}
 
 {% block content_bundle %}
@@ -48,7 +48,7 @@
         {% set totalTVA = 0 %}
         {% set totalTTC = 0 %}
 
-        {% for detail in nf.details if detail.type == 1 %}
+        {% for detail in nf.details | filter(detail => detail.type == 1) %}
             {% set totalHT = totalHT + detail.prixHT %}
             {% set totalTVA = totalTVA + (detail.prixHT * detail.tauxTVA / 100) %}
             {% set totalTTC = totalTTC + (detail.prixHT * ( 1 + detail.tauxTVA / 100)) %}
@@ -71,7 +71,7 @@
             <th colspan="2">{{ 'treso.prix_km'|trans({}, 'treso') }}</th>
             <th>{{ 'treso.prix_total'|trans({}, 'treso') }}</th>
         </tr>
-        {% for detail in nf.details if detail.type == 2 %}
+        {% for detail in nf.details | filter(detail => detail.type == 2) %}
             {% set totalHT = totalHT + (detail.kilometrage * detail.tauxKm / 100) %}
             {% set totalTTC = totalTTC + (detail.kilometrage * detail.tauxKm / 100) %}
             <tr>

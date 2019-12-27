@@ -32,7 +32,7 @@
     </tr>
     </thead>
     <tbody>
-    {% for etude in etudesEnPause if not confidentielRefus(etude, app.user, is_granted(role_voir_confidentiel)) %}
+    {% for etude in etudesEnPause | filter(etude => not confidentielRefus(etude, app.user, is_granted(role_voir_confidentiel))) %}
         <tr>
             <td>
                 <div>

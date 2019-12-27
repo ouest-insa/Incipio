@@ -1,5 +1,7 @@
 {% extends "Project/layout.html.twig" %}
 
+{% set tab= "tab2" %}
+
 {% block title %}
     {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ 'suivi.phases'|trans({}, 'project') }}
     - {{ parent() }}
@@ -23,7 +25,7 @@
 
     <div class="row">
         <div class="col-md-12">
-        <div class="table-responsive" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}"">
+        <div class="table-responsive" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}">
 
             <table class="table table-striped" id="phases">
                 <thead>

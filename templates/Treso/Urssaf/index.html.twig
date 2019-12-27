@@ -78,7 +78,7 @@
                 <td>
                     {% set totalJEH = 0 %}
                     {% set totalRem = 0 %}
-                    {% for repartition in rm.repartitionsJEH if repartition %}
+                    {% for repartition in rm.repartitionsJEH | filter(repartition => repartition) %}
                         {% set totalJEH = totalJEH + repartition.nbrJEH %}
                         {% set totalRem = totalRem + repartition.nbrJEH * repartition.prixJEH * (1-rm.pourcentageJunior) %}
                         <div>Repartition n°{{ loop.index }} : {{ repartition.nbrJEH }}
