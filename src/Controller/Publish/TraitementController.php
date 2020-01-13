@@ -276,17 +276,17 @@ class TraitementController extends AbstractController
                 $refDoc = '';
             }
         } elseif (self::ROOTNAME_ETUDIANT == $rootName) {
-            $refDocx = $templateName . '-' . $rootObject->getIdentifiant();
+            $refDoc = $templateName . '-' . $rootObject->getIdentifiant();
         } elseif (self::ROOTNAME_FACTURE == $rootName) {
-            $refDocx = $rootObject->getReference();
+            $refDoc = $rootObject->getReference();
         } elseif (self::ROOTNAME_NOTE_DE_FRAIS == $rootName) {
-            $refDocx = $rootObject->getReference();
+            $refDoc = $rootObject->getReference();
         } elseif (self::ROOTNAME_PROCES_VERBAL == $rootName) {
-            $refDocx = $rootObject->getReference();
+            $refDoc = $rootObject->getReference();
         } elseif (self::ROOTNAME_AVENANT == $rootName) {
-            $refDocx = $templateName . $rootObject->getReference();
+            $refDoc = $templateName . $rootObject->getReference();
         } else {
-            $refDocx = $templateName . '-UNREF';
+            $refDoc = $templateName . '-UNREF';
         }
         /*dump($rootName);
         dump($refDoc);
