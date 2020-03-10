@@ -19,7 +19,7 @@ suivi:
   au: Au
   aucune: Aucune
   auditee: Auditée
-  audité_le: Audité le
+  auditée_le: Auditée le
   autre: autre
   av_ajouter_un: Ajouter un Avenant
   av_modifier_un: Modifier un Avenant
@@ -32,6 +32,7 @@ suivi:
   avenant_ajouter: Ajouter un avenant
   avenant_enregistrer: Enregistrer l'avenant
   avenant_liste: Liste des avenants
+  avenant_mission: Avenant de Mission
   avenant_mission_ajouter: Ajouter un avenant au Récapitulatif de Mission
   avenant_mission_ajouter_un: Ajouter un avenant de mission
   avenant_mission_enregistrer: Enregistrer l'avenant au Récapitulatif de Mission
@@ -40,9 +41,12 @@ suivi:
   avenant_mission_supprimer: Supprimer l'avenant au Récapitulatif de Mission
   avenant_mission_supprimer_confirm: Etes-vous sûr de vouloir supprimer définitivement cet avenant au RM ?
   avenant_modifier: Modifier l'Avenant
+  avenant_supprimer: Supprimer l'Avenant
+  avenant_supprimer_confirmation: Êtes-vous sûr de vouloir supprimer définitivement cet avenant ?
   avenants: Avenants
   avenants_clients: Avenants clients
   avenants_mission: Avenants de Mission
+  avortee: Avortée
   budget: Budget
   bv: BV
   capacite_intervenants: Capacité des intervenants
@@ -57,6 +61,7 @@ suivi:
   ce_enregistrer: Enregistrer la CE
   ce_enregistrer_phases_passer: Enregistrer la CE et passer aux Phases
   ce_rediger: Rediger la Convention Etude
+  cloturee: Cloturée
   client: Client
   client_contact_ajouter: Ajouter un nouveau contact du client
   commentaire: Commentaire
@@ -92,6 +97,7 @@ suivi:
   dejai_jours: Delai (Jours)
   delai: Délai
   delai_jour: Délai (Jours)
+  deontologique: déontologique
   dernier_contact: Dernier Contact
   description: Description
   details: Détails
@@ -101,6 +107,7 @@ suivi:
   document: Document
   document_ajouter: Ajouter un document
   documents_etude: Document relatif à l'étude
+  document_type: Document Type
   domaine: Domaine
   domaine_competence: Domaine de compétence
   domaines_competences_affichage: Affichage des domaines de compétences
@@ -110,11 +117,12 @@ suivi:
   employe_ajouter: Ajouter un employé
   en_cours: En cours
   en_negociation: En négociation
+  en_pause: En pause
   enregistrer: Enregistrer
   envoye: Envoyé
   errors: Errors
-  etat: Etat
-  etat_avenant: Etat Sur avenant
+  etat: État
+  etat_avenant: État Sur avenant
   etude:
     cree_le: créée le
     etude: Etude
@@ -125,7 +133,7 @@ suivi:
   etude_ajouter: Ajouter une étude
   etude_enregistrer: Enregistrer l'étude
   etude_enregistrer_passer_ap: Enregistrer l'étude et passer à l'AP
-  etude_etat: Etat de l'étude
+  etude_etat: État de l'étude
   etude_form:
     client_bdd: Le client existe-t-il déjà dans la base de donnée ?
     ce_active: Utiliser la CE ?
@@ -156,6 +164,7 @@ suivi:
   etudes_negociations: Etudes en Négociation
   etudes_pause: Etudes en Pause
   etudes_terminees: Etudes Terminées
+  exhaustive: Exhaustive
   fa: FA
   facture_ajouter: Ajouter une facture
   factures: Factures
@@ -199,6 +208,7 @@ suivi:
   montant_total_ht: Montant Total H.T.
   nombre_dev_estime: Nombre de dev. estimé
   non: Non
+  non_auditee: Non auditée
   objectif: Objectif
   objectifs: Objectifs
   objet: Objet
@@ -219,6 +229,7 @@ suivi:
   prix_ht: Prix H.T
   prix_jeh: Prix JEH
   prix_jeh_ht: Prix JEH HT Facturé (€)
+  problemes: Problèmes
   proces_verbal: Procès verbal
   proces_verbal_afficher: Affichage d'un PV
   proces_verbal_ajouter: Ajouter un Procès-Verbal

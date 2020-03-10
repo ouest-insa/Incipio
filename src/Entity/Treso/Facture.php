@@ -146,7 +146,8 @@ class Facture implements TresoDetailableInterface
 
     public function getReference()
     {
-        return $this->exercice . '-' . ($this->type > 1 ? 'FV' : 'FA') . '-' . sprintf('%1$02d', $this->numero);
+        return 'FA_' . $this->exercice . $this->dateEmission->format('m') . sprintf('%1$02d', $this->numero);
+        // return $this->exercice . '-' . ($this->type > 1 ? 'FV' : 'FA') . '-' . sprintf('%1$02d', $this->numero);
     }
 
     public function getMontantHT()

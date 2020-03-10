@@ -63,6 +63,8 @@ class FactureController extends AbstractController
     public function ajouter(Request $request, ?Etude $etude, ConversionLettreFormatter $formatter)
     {
         $em = $this->getDoctrine()->getManager();
+        if (!$etude)
+            $etude = $em->getRepository(Etude::class)->findOneBy(['id' => $_GET['id']]);
 
         $facture = $this->createFacture($em, $etude, $formatter);
         $form = $this->createForm(FactureType::class, $facture);

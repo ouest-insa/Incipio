@@ -47,8 +47,7 @@
             <tr>
                 <td>{{ nf.date | date('d/m/Y') }}</td>
                 <td>
-                    <a href="{{ path('treso_NoteDeFrais_voir', {'id': nf.id}) }}">{{ nf.mandat }}
-                        -NF{{ "%2d" | format(nf.numero) }}-{{ nf.demandeur.membre.identifiant }}</a>
+                    <a href="{{ path('treso_NoteDeFrais_voir', {'id': nf.id}) }}">{{ nf.reference }}</a>
                 </td>
                 <td>{{ nf.demandeur.prenomNom }}</td>
                 <td>{{ nf.objet | nl2br }}</td>

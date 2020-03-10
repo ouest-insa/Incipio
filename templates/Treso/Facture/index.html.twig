@@ -49,7 +49,7 @@
                     <th>{{ 'treso.statut'|trans({}, 'treso') }}</th>
                 </tr>
                 </thead>
-                {% for facture in factures if facture.type == 1 %}
+                {% for facture in factures | filter(facture => facture.type == 1) %}
                     {% set delai = (((facture.dateVersement ? facture.dateVersement |date('U') : 'now' | date('U')) - facture.dateEmission| date('U')) / 86400 ) |round %}
                     <tr class="{{ facture.dateVersement ? 'success' : ( delai > 31 ? 'danger' : 'warning') }}">
                         <td>{{ facture.dateEmission | date('d/m/Y') }}</td>
@@ -80,7 +80,7 @@
                 </tr>
                 </thead>
                 {% set totalDelai = 0 %}
-                {% for facture in factures if facture.type > 1 %}
+                {% for facture in factures | filter(facture => facture.type > 1) %}
                     {% set delai = (((facture.dateVersement ? facture.dateVersement |date('U') : 'now' | date('U')) - facture.dateEmission| date('U')) / 86400 ) |round %}
                     {% set totalDelai = delai + totalDelai %}
                     <tr class="{{ facture.dateVersement ? 'success' : ( delai > 31 ? 'danger' : 'warning') }}">

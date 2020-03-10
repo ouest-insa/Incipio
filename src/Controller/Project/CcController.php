@@ -59,7 +59,7 @@ class CcController extends AbstractController
                 $docTypeManager->checkSaveNewEmploye($etude->getCc());
                 $em->flush();
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
         }
 

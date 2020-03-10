@@ -66,7 +66,7 @@ class ApController extends AbstractController
                     return $this->redirectToRoute('project_phases_modifier', ['id' => $etude->getId()]);
                 }
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }

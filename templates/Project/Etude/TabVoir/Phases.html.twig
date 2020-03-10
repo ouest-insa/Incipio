@@ -84,7 +84,7 @@
 
         {# running through unaffected phases once to count them and avoid display "ungrouped phases" header if there aren't#}
         {% set nonAffectees = 0 %}
-	{% for phase in etude.phases if (attribute(groupedPhases, (phase.position)) | default(1) != 0) %}
+	    {% for phase in etude.phases | filter(phase => attribute(groupedPhases, (phase.position)) | default(1) != 0) %}
             {% set nonAffectees = nonAffectees +1 %}
         {% endfor %}
 	
@@ -111,7 +111,7 @@
             <tbody>
             {% set nombreJEH = 0 %}
             {% set prixGroupe = 0 %}
-            {% for phase in etude.phases if (attribute(groupedPhases, (phase.position)) | default(1) != 0) %}
+            {% for phase in etude.phases | filter(phase => attribute(groupedPhases, (phase.position)) | default(1) != 0) %}
                 {% set groupedPhases = groupedPhases | merge({ (phase.position) :  0}) %}
                 {% set nombreJEH = nombreJEH + phase.nbrJEH %}
                 {% set prixGroupe = prixGroupe + phase.nbrJEH*phase.prixJEH %}
@@ -202,7 +202,7 @@
             {% set totalGlobal = totalGlobal + total %}
             {% set nbJEH = 0 %}
             {% set total = 0 %}
-            {% for phase in etude.phases if (attribute(groupedPhases, (phase.position)) | default(1) != 0) %}
+            {% for phase in etude.phases | filter(phase => attribute(groupedPhases, (phase.position)) | default(1) != 0) %}
                 {% set nbJEH = nbJEH + phase.nbrJEH %}
                 {% set total = total + phase.nbrJEH * phase.prixJEH %}
                 <tr>

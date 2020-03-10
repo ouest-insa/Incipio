@@ -63,7 +63,7 @@ class ProcesVerbalController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'PV ajouté');
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
         }
 
@@ -109,7 +109,7 @@ class ProcesVerbalController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'PV modifié');
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
         }
 
@@ -160,7 +160,7 @@ class ProcesVerbalController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'PV rédigé');
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
         }
 
@@ -199,7 +199,7 @@ class ProcesVerbalController extends AbstractController
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
-        return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+        return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
     }
 
     private function createDeleteForm($id_pv)

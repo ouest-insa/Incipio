@@ -59,7 +59,7 @@ class CeController extends AbstractController
                 $docTypeManager->checkSaveNewEmploye($etude->getCe());
                 $em->flush();
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab3']);
             }
         }
 

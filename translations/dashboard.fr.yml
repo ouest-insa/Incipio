@@ -61,12 +61,13 @@ dashboard:
   prospection: Prospection
   prospects_voir: Voir les prospects
   pseudo_modifier: Modifier mon pseudo
-  rechercher: Search...
+  rechercher: Rechercher...
   rh_competences: RH & compétences
   saisie_informations: Saisie des informations
   signature: Signature
   suivi_etudes: Suivi d'Etude
   tableaux_suivi: Tableaux de Suivi
+  template: Template
   tresorerie: Trésorerie
   vie_privee: Vie privée
   vie_privee_gestion: Gestion de la vie privée

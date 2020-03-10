@@ -28,7 +28,7 @@
                     <ul class="dropdown-menu">
                         <li class="nav-header"><i
                                     class="fa fa-unchecked"></i> {{ 'suivi.en_negociation'|trans({}, 'project') }}</li>
-                        {% for etude in etudesDisplayList if etude.stateID == STATE_ID_EN_NEGOCIATION %}
+                        {% for etude in etudesDisplayList | filter(etude => etude.stateID == STATE_ID_EN_NEGOCIATION) %}
                             <li><a href="{{ path('project_vu_ca', {'id': etude.id}) }}"><i
                                             class="fa fa-minus"></i> {{ etude.reference(param('namingConvention')) }}
                                 </a></li>
@@ -36,7 +36,7 @@
                         <li class="divider"></li>
                         <li class="nav-header"><i class="fa fa-check"></i> {{ 'suivi.en_cours'|trans({}, 'project') }}
                         </li>
-                        {% for etude in etudesDisplayList if etude.stateID == STATE_ID_EN_COURS %}
+                        {% for etude in etudesDisplayList | filter(etude => etude.stateID == STATE_ID_EN_COURS) %}
                             <li><a href="{{ path('project_vu_ca', {'id': etude.id}) }}"><i
                                             class="fa fa-minus"></i> {{ etude.reference(param('namingConvention')) }}
                                 </a></li>

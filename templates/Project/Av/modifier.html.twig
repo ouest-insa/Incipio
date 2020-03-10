@@ -1,5 +1,7 @@
 {% extends "Project/layout.html.twig" %}
 
+{% set tab= "tab3" %}
+
 {% block title %}
     {{ 'suivi.av_modifier_un'|trans({}, 'project') }} - {{ parent() }}
 {% endblock %}
@@ -15,6 +17,14 @@
 {% block content_bundle %}
 
     {% include 'Project/Av/formulaire.html.twig' %}
+
+    <br>
+
+    <form class="bootbox-confirm" data-content="{{ 'suivi.avenant_supprimer_confirmation'|trans({}, 'project') }}"
+          action="{{ path('project_av_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+        {{ form_widget(delete_form) }}
+        <button class="btn btn-danger">{{ 'suivi.avenant_supprimer'|trans({}, 'project') }}</button>
+    </form>
 
 {% endblock %}
 

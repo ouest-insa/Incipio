@@ -12,6 +12,7 @@
 namespace App\Controller\Publish;
 
 use App\Entity\Personne\Membre;
+use App\Entity\Project\Av;
 use App\Entity\Project\Etude;
 use App\Entity\Project\Mission;
 use App\Entity\Project\ProcesVerbal;
@@ -74,6 +75,8 @@ class TraitementController extends AbstractController
 
     const DOCTYPE_BULLETIN_DE_VERSEMENT = 'BV';
 
+    const DOCTYPE_AVENANT = 'AV';
+
     const ROOTNAME_ETUDE = 'etude';
 
     const ROOTNAME_PROCES_VERBAL = 'pvr';
@@ -87,6 +90,8 @@ class TraitementController extends AbstractController
     const ROOTNAME_FACTURE = 'facture';
 
     const ROOTNAME_BULLETIN_DE_VERSEMENT = 'bv';
+
+    const ROOTNAME_AVENANT = 'av';
 
     // On considère que les TAG ont déjà été nettoyé du XML
     const REG_REPEAT_LINE = "#(<w:tr(?:(?!w:tr\s).)*?)(\{\%\s*TRfor[^\%]*\%\})(.*?)(\{\%\s*endforTR\s*\%\})(.*?</w:tr>)#";
@@ -228,6 +233,16 @@ class TraitementController extends AbstractController
                     throw $errorEtudeConfidentielle;
                 }
                 break;
+            case self::ROOTNAME_AVENANT:
+                if (!$rootObject = $em->getRepository(Av::class)->find($rootObject_id)) {
+                    throw $errorRootObjectNotFound;
+                }
+                if ($rootObject->getEtude() &&
+                    $this->permChecker->confidentielRefus($rootObject->getEtude(), $this->getUser())
+                ) {
+                    throw $errorEtudeConfidentielle;
+                }
+                break;
             default:
                 throw $this->createNotFoundException('Publipostage invalide ! Pas de bol...');
                 break;
@@ -250,7 +265,7 @@ class TraitementController extends AbstractController
             $isDM = true;
         }
 
-        if ('etude' == $rootName && $rootObject->getReference()) {
+        if (self::ROOTNAME_ETUDE == $rootName && $rootObject->getReference()) {
             if ($this->keyValueStore->exists('namingConvention')) {
                 $namingConvention = $this->keyValueStore->get('namingConvention');
             } else {
@@ -262,10 +277,19 @@ class TraitementController extends AbstractController
             } else {
                 $refDoc = '';
             }
-        } elseif ('etudiant' == $rootName) {
+
+        } elseif (self::ROOTNAME_ETUDIANT == $rootName) {
             $refDoc = $templateName . '-' . $rootObject->getIdentifiant();
+        } elseif (self::ROOTNAME_FACTURE == $rootName) {
+            $refDoc = $rootObject->getReference();
+        } elseif (self::ROOTNAME_NOTE_DE_FRAIS == $rootName) {
+            $refDoc = $rootObject->getReference();
+        } elseif (self::ROOTNAME_PROCES_VERBAL == $rootName) {
+            $refDoc = $rootObject->getReference();
+        } elseif (self::ROOTNAME_AVENANT == $rootName) {
+            $refDoc = $templateName . $rootObject->getReference();
         } else {
-            $refDoc = 'UNREF';
+            $refDoc = $templateName . '-UNREF';
         }
         /*dump($rootName);
         dump($refDoc);
