@@ -35,13 +35,6 @@
         <table class="table table-bordered table-striped standard">
             <tr>
                 <th>
-                    {{ form_label(form.mandat) }}
-                    {{ form_errors(form.mandat) }}
-                </th>
-                <td>{{ form_widget(form.mandat) }}</td>
-            </tr>
-            <tr>
-                <th>
                     {{ form_label(form.numero) }}
                     {{ form_errors(form.numero) }}
                 </th>
@@ -63,11 +56,29 @@
             </tr>
             <tr>
                 <th>
+                    {{ form_label(form.typeNF) }}
+                    {{ form_errors(form.typeNF) }}
+                </th>
+                <td>{{ form_widget(form.typeNF) }}</td>
+            </tr>
+            <tr>
+                <th>
                     {{ form_label(form.objet) }}
                     {{ form_errors(form.objet) }}
                 </th>
                 <td>{{ form_widget(form.objet) }}</td>
             </tr>
+
+
+
+
+
+
+        </table>
+
+
+
+    <!-- {#
         </table>
         <table class="table table-bordered table-striped" id="details"
                data-prototype="{{ form_widget(form.details.vars.prototype) | e }}">
@@ -126,8 +137,8 @@
                     </td>
                 </tr>
             {% endfor %}
-        </table>
-
+        </table>#}
+    -->
         {{ form_widget(form) }}
     {{ form_end(form) }}
 {% endblock %}
@@ -198,19 +209,20 @@
 
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
-            var selection = $('select[id$="_type"]');
+            var selection = $('select[id$="_typeNF"]'); //on récupère le typeNF de l'objet NoteDeFrais
             selection.each(
-                    function () {
-                        if ($(this).val() == 1) $(this).closest('.table').find('#km').toggle();
-                        else $(this).closest('.table').find('#prix').toggle();
-                    }
+                function () {
+                    console.log('>> ' + $(this).val());
+
+                }
             );
 
             selection.change(
-                    function () {
-                        $(this).closest('.table').find('#km').toggle();
-                        $(this).closest('.table').find('#prix').toggle();
-                    });
+                function () {
+                    console.log('>> ' + $(this).val());
+                }
+            );
         });
     </script>
+
 {% endblock %}

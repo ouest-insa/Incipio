@@ -215,20 +215,42 @@
 
         }
     </script>
+
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
             var selection = $('select[id$="_type"]');
             selection.each(
                 function () {
-                    if ($(this).val() < 4) $(this).closest('.table').find('#{{ form.montantADeduire.vars.id }}').hide();
-                    else $(this).closest('.table').find('#{{ form.montantADeduire.vars.id }}').show();
-                });
+                    if ($(this).val() < 4) {
+                        $(this)
+                        .closest('.table')
+                        .find('#{{ form.montantADeduire.vars.id }}')
+                        .hide();
+                    } else {
+                        $(this)
+                        .closest('.table')
+                        .find('#{{ form.montantADeduire.vars.id }}')
+                        .show();
+                    }
+                }
+            );
 
             selection.change(
                 function () {
-                    if ($(this).val() < 4) $(this).closest('.table').find('#{{ form.montantADeduire.vars.id }}').hide();
-                    else $(this).closest('.table').find('#{{ form.montantADeduire.vars.id }}').show();
-                });
+                    if ($(this).val() < 4) {
+                        $(this)
+                        .closest('.table')
+                        .find('#{{ form.montantADeduire.vars.id }}')
+                        .hide();
+                    } else {
+                        $(this)
+                        .closest('.table')
+                        .find('#{{ form.montantADeduire.vars.id }}')
+                        .show();
+                    }
+                }
+            );
         });
     </script>
+
 {% endblock %}

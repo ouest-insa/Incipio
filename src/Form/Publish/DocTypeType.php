@@ -49,6 +49,7 @@ class DocTypeType extends AbstractType
                     'Facture d\'acompte' => TraitementController::DOCTYPE_FACTURE_ACOMTE,
                     'Facture intermédiaire' => TraitementController::DOCTYPE_FACTURE_INTERMEDIAIRE,
                     'Facture de solde' => TraitementController::DOCTYPE_FACTURE_SOLDE,
+                    'Facture d\'achat (hors étude)' => TraitementController::DOCTYPE_FACTURE_NOT_ETUDE,
                     'Procès verbal de recette intermédiaire' => TraitementController::DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE,
                     'Procès verbal de recette final' => TraitementController::DOCTYPE_PROCES_VERBAL_FINAL,
                     'Note de Frais' => TraitementController::DOCTYPE_NOTE_DE_FRAIS,

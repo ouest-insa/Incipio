@@ -55,11 +55,11 @@ class NoteDeFrais implements TresoDetailableInterface
     private $mandat;
 
     /**
-     * @var int
+     * @var string
      *
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="numero", type="integer", nullable=false)
+     * @ORM\Column(name="numero", type="string", length=50, nullable=false)
      */
     private $numero;
 
@@ -78,6 +78,15 @@ class NoteDeFrais implements TresoDetailableInterface
      * @ORM\OneToMany(targetEntity="NoteDeFraisDetail", mappedBy="noteDeFrais", cascade={"persist", "detach", "remove"}, orphanRemoval=true)
      */
     private $details;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     *
+     * @ORM\Column(name="typeNF", type="string", length=50, nullable=false)
+     */
+    private $typeNF;
 
     /**
      * @Assert\NotNull()
@@ -235,8 +244,30 @@ class NoteDeFrais implements TresoDetailableInterface
      */
     public function setMandat($mandat)
     {
-        $this->mandat = $mandat;
+        $this->mandat = 2020; //TODO à changer : c'est vraiment dégeulasse de hardcoder ça
+        return $this;
+    }
 
+    /**
+     * Get typeNF.
+     *
+     * @return string
+     */
+    public function getTypeNF()
+    {
+        return $this->typeNF;
+    }
+
+    /**
+     * Set mandat.
+     *
+     * @param string $typeNF
+     *
+     * @return NoteDeFrais
+     */
+    public function setTypeNF($typeNF)
+    {
+        $this->typeNF = $typeNF;
         return $this;
     }
 
@@ -260,7 +291,6 @@ class NoteDeFrais implements TresoDetailableInterface
     public function setNumero($numero)
     {
         $this->numero = $numero;
-
         return $this;
     }
 

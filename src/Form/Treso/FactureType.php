@@ -27,18 +27,27 @@ class FactureType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('exercice', IntegerType::class, ['label' => 'Exercice Comptable', 'required' => true])
-            ->add('numero', IntegerType::class, ['label' => 'Numéro de la Facture', 'required' => true])
-            ->add('type', ChoiceType::class, ['choices' => array_flip(Facture::getTypeChoices()),
-                                              'required' => true,
+        $builder
+            ->add('exercice', IntegerType::class, [
+                'label' => 'Exercice Comptable',
+                'required' => true
             ])
-            ->add('objet', TextareaType::class,
-                ['label' => 'Objet de la Facture',
+            ->add('numero', IntegerType::class, [
+                'label' => 'Numéro de la Facture',
+                'required' => true
+            ])
+            ->add('type', ChoiceType::class, [
+                'choices' => array_flip(Facture::getTypeChoices()),
                  'required' => true,
-                 'attr' => [
-                     'cols' => '100%',
-                     'rows' => 5,
-                 ],
+            ])
+
+            ->add('objet', TextareaType::class, [
+                    'label' => 'Objet de la Facture',
+                    'required' => true,
+                    'attr' => [
+                        'cols' => '100%',
+                        'rows' => 5,
+                    ],
                 ]
             )
             ->add('details', CollectionType::class, [
@@ -48,17 +57,30 @@ class FactureType extends AbstractType
                 'prototype' => true,
                 'by_reference' => false,
             ])
+
             ->add('beneficiaire', Select2EntityType::class, [
                 'class' => Prospect::class,
                 'choice_label' => 'nom',
                 'required' => true,
                 'label' => 'Facture émise pour/par',
             ])
-            ->add('montantADeduire', FactureDetailType::class, ['label' => 'Montant à déduire', 'required' => true])
-            ->add('dateEmission', DateType::class,
-                ['label' => 'Date d\'émission', 'required' => true, 'widget' => 'single_text'])
-            ->add('dateVersement', DateType::class,
-                ['label' => 'Date de versement', 'required' => false, 'widget' => 'single_text']);
+
+            ->add('montantADeduire', FactureDetailType::class, [
+                'label' => 'Montant à déduire',
+                'required' => true,
+            ])
+
+            ->add('dateEmission', DateType::class, [
+                'label' => 'Date d\'émission',
+                'required' => true,
+                'widget' => 'single_text',
+            ])
+
+            ->add('dateVersement', DateType::class, [
+                'label' => 'Date de versement',
+                'required' => false,
+                'widget' => 'single_text'
+            ]);
     }
 
     public function getBlockPrefix()

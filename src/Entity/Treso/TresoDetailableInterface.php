@@ -2,6 +2,8 @@
 
 namespace App\Entity\Treso;
 
+use DateTime;
+
 /**
  * Common interface for Facture and NoteDeFrais which shares one model:
  *  - One main object.
@@ -15,7 +17,7 @@ interface TresoDetailableInterface
     public function getDetails();
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDate();
 
