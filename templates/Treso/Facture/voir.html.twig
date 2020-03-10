@@ -117,7 +117,7 @@
             </div>
         {% endif %}
 
-        {% if is_granted('ROLE_ADMIN') %}
+        {% if is_granted('ROLE_TRESO') %}
             <div class="col-md-3 col-xs-6">
                 {{ form_start(delete_form,{'attr': {'class': 'bootbox-confirm',
                     'data-content':('treso.facture_supprimer_confirm'|trans({}, 'treso')) }}) }}

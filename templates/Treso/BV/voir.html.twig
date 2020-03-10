@@ -158,7 +158,7 @@
             </div>
         {% endif %}
 
-        {% if is_granted('ROLE_ADMIN') %}
+        {% if is_granted('ROLE_TRESO') %}
             <div class="col-md-3 col-xs-6">
                 <a href="{{ path('treso_BV_supprimer', {'id': bv.id}) }}" class="btn btn-danger">
                     {{ 'treso.bv_supprimer'|trans({}, 'treso') }}
