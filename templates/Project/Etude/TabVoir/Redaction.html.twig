@@ -291,13 +291,11 @@
                                 'rootObject_id' : facture.id}) }}#">
                             <span class="fa fa-arrow-circle-down"></span>
                         </a>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            &nbsp;&nbsp;&nbsp;
-                            <a title="{{ 'suivi.supprimer'|trans({}, 'project') }}"
-                               href="{{ path('treso_Facture_modifier', { 'id': facture.id }) }}">
-                                <span class="fa fa-times"></span>
-                            </a>
-                        {% endif %}
+                        &nbsp;&nbsp;&nbsp;
+                        <a title="{{ 'suivi.supprimer'|trans({}, 'project') }}"
+                            href="{{ path('treso_Facture_modifier', { 'id': facture.id }) }}">
+                            <span class="fa fa-times"></span>
+                        </a>
                     {% endif %}
                 </td>
                 <td>

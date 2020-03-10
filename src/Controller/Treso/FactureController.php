@@ -163,7 +163,7 @@ class FactureController extends AbstractController
     }
 
     /**
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_TRESO')")
      * @Route(name="treso_Facture_supprimer", path="/Tresorerie/Facture/Supprimer/{id}", methods={"DELETE"})
      *
      * @param Facture $facture
