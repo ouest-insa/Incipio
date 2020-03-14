@@ -30,115 +30,121 @@
 
 {% block content_bundle %}
     {{ form_start(form) }}
-    <button type="submit" class="btn btn-success">{{ 'treso.note_frais_enregistrer'|trans({}, 'treso') }}</button>
-        <br/><br/>
-        <table class="table table-bordered table-striped standard">
+    <button type="submit" class="btn btn-success">
+        {{ 'treso.note_frais_enregistrer'|trans({}, 'treso') }}
+    </button>
+    <br/><br/>
+    <table class="table table-bordered table-striped standard">
+        <tr>
+            <th>
+                {{ form_label(form.numero) }}
+                {{ form_errors(form.numero) }}
+            </th>
+            <td>{{ form_widget(form.numero) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.date) }}
+                {{ form_errors(form.date) }}
+            </th>
+            <td>{{ form_widget(form.date) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.demandeur) }}
+                {{ form_errors(form.demandeur) }}
+            </th>
+            <td>{{ form_widget(form.demandeur) }}</td>
+        </tr>
+        <tr>
+            <th>
+                {{ form_label(form.objet) }}
+                {{ form_errors(form.objet) }}
+            </th>
+            <td>{{ form_widget(form.objet) }}</td>
+        </tr>
+
+       <!-- <table class="table">-->
             <tr>
                 <th>
-                    {{ form_label(form.numero) }}
-                    {{ form_errors(form.numero) }}
+                    {{ form_label(form.details|first.type) }}
+                    {{ form_errors(form.details|first.type) }}
                 </th>
-                <td>{{ form_widget(form.numero) }}</td>
+                <td>{{ form_widget(form.details|first.type) }}</td>
+                <th>
+                    {{ form_label(form.details|first.compte) }}
+                    {{ form_errors(form.details|first.compte) }}
+                </th>
+                <td>{{ form_widget(form.details|first.compte) }}</td>
             </tr>
             <tr>
                 <th>
-                    {{ form_label(form.date) }}
-                    {{ form_errors(form.date) }}
+                    {{ form_label(form.details|first.description) }}
+                    {{ form_errors(form.details|first.description) }}
                 </th>
-                <td>{{ form_widget(form.date) }}</td>
+                <td colspan="3">{{ form_widget(form.details|first.description) }}</td>
             </tr>
-            <tr>
+            <tr id="prix">
                 <th>
-                    {{ form_label(form.demandeur) }}
-                    {{ form_errors(form.demandeur) }}
+                    {{ form_label(form.details|first.prixHT) }}
+                    {{ form_errors(form.details|first.prixHT) }}
                 </th>
-                <td>{{ form_widget(form.demandeur) }}</td>
-            </tr>
-            <tr>
+                <td>{{ form_widget(form.details|first.prixHT) }}</td>
                 <th>
-                    {{ form_label(form.typeNF) }}
-                    {{ form_errors(form.typeNF) }}
+                    {{ form_label(form.details|first.tauxTVA) }}
+                    {{ form_errors(form.details|first.tauxTVA) }}
                 </th>
-                <td>{{ form_widget(form.typeNF) }}</td>
+                <td>{{ form_widget(form.details|first.tauxTVA) }}</td>
             </tr>
-            <tr>
+            <tr id="km">
                 <th>
-                    {{ form_label(form.objet) }}
-                    {{ form_errors(form.objet) }}
+                    {{ form_label(form.details|first.kilometrage) }}
+                    {{ form_errors(form.details|first.kilometrage) }}
                 </th>
-                <td>{{ form_widget(form.objet) }}</td>
+                <td>{{ form_widget(form.details|first.kilometrage) }}</td>
+                <th>
+                    {{ form_label(form.details|first.tauxKm) }}
+                    {{ form_errors(form.details|first.tauxKm) }}
+                </th>
+                <td>{{ form_widget(form.details|first.tauxKm) }}</td>
             </tr>
+        <!--</table>-->
 
+    {#{% for detail in form.details %}
 
-
-
-
+        {% endfor %}#}
+        {% if form.details|length == 0 %}
+            <th>
+                Erreur : aucun NFDetail !
+            </th>
+        {% endif %}
+        {% if form.details|length > 1 %}
+            <th>
+                Erreur : trop de NFDetails !
+            </th>
+        {% endif %}
 
         </table>
-
-
-
-    <!-- {#
-        </table>
-        <table class="table table-bordered table-striped" id="details"
-               data-prototype="{{ form_widget(form.details.vars.prototype) | e }}">
+    {#
+        <table class="table table-bordered table-striped" id="details" data-prototype="{{ form_widget(form.details.vars.prototype) | e }}">
             <tr>
                 <th colspan="2"><a href="#" id="addDetail">+</a> {{ 'treso.details'|trans({}, 'treso') }}</th>
             </tr>
-            {% for detail in form.details %}
+
                 <tr id="detail">
                     <td></td>
                     <td>
-                        <table class="table">
-                            <tr>
-                                <th>
-                                    {{ form_label(detail.type) }}
-                                    {{ form_errors(detail.type) }}
-                                </th>
-                                <td>{{ form_widget(detail.type) }}</td>
-                                <th>
-                                    {{ form_label(detail.compte) }}
-                                    {{ form_errors(detail.compte) }}
-                                </th>
-                                <td>{{ form_widget(detail.compte) }}</td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    {{ form_label(detail.description) }}
-                                    {{ form_errors(detail.description) }}
-                                </th>
-                                <td colspan="3">{{ form_widget(detail.description) }}</td>
-                            </tr>
-                            <tr id="prix">
-                                <th>
-                                    {{ form_label(detail.prixHT) }}
-                                    {{ form_errors(detail.prixHT) }}
-                                </th>
-                                <td>{{ form_widget(detail.prixHT) }}</td>
-                                <th>
-                                    {{ form_label(detail.tauxTVA) }}
-                                    {{ form_errors(detail.tauxTVA) }}
-                                </th>
-                                <td>{{ form_widget(detail.tauxTVA) }}</td>
-                            </tr>
-                            <tr id="km">
-                                <th>
-                                    {{ form_label(detail.kilometrage) }}
-                                    {{ form_errors(detail.kilometrage) }}
-                                </th>
-                                <td>{{ form_widget(detail.kilometrage) }}</td>
-                                <th>
-                                    {{ form_label(detail.tauxKm) }}
-                                    {{ form_errors(detail.tauxKm) }}
-                                </th>
-                                <td>{{ form_widget(detail.tauxKm) }}</td>
-                            </tr>
-                        </table>
+
                     </td>
                 </tr>
             {% endfor %}
-        </table>#}
-    -->
+        </table>
+
+
+
+            </table>
+            #}
+
         {{ form_widget(form) }}
     {{ form_end(form) }}
 {% endblock %}
@@ -209,10 +215,9 @@
 
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
-            var selection = $('select[id$="_typeNF"]'); //on récupère le typeNF de l'objet NoteDeFrais
+            var selection = $('select[id$="_type"]'); //on récupère le type de l'objet NoteDeFraisDetails
             selection.each(
                 function () {
-                    console.log('>> ' + $(this).val());
 
                 }
             );
@@ -220,6 +225,15 @@
             selection.change(
                 function () {
                     console.log('>> ' + $(this).val());
+                    if($(this).val() == 1) {
+                        console.log('> Mode classique');
+                        $(this).closest('.table').find('#{{ form.details|first.kilometrage.vars.id }}').hide();
+                        $(this).closest('.table').find('#{{ form.details|first.tauxKm.vars.id }}').hide();
+                    } else if ($(this).val() == 2) {
+                        console.log('> Mode kilométrique');
+                        $(this).closest('.table').find('#{{ form.details|first.kilometrage.vars.id }}').show();
+                        $(this).closest('.table').find('#{{ form.details|first.tauxKm.vars.id }}').show();
+                    }
                 }
             );
         });

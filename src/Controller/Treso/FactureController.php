@@ -18,7 +18,10 @@ use App\Entity\Treso\Facture;
 use App\Entity\Treso\FactureDetail;
 use App\Form\Treso\FactureType;
 use App\Service\Publish\ConversionLettreFormatter;
+use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
+use Exception;
+use RuntimeException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -54,17 +57,20 @@ class FactureController extends AbstractController
      * @Security("has_role('ROLE_TRESO')")
      * @Route(name="treso_Facture_ajouter", path="/Tresorerie/Facture/Ajouter", methods={"GET","HEAD","POST"})
      *
-     * @param Request                   $request   Http request
-     * @param Etude                     $etude     Etude to which the Facture will be added
+     * @param Request $request Http request
+     * @param Etude $etude Etude to which the Facture will be added
      * @param ConversionLettreFormatter $formatter
      *
      * @return RedirectResponse|Response
+     * @throws Exception
      */
     public function ajouter(Request $request, ?Etude $etude, ConversionLettreFormatter $formatter)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$etude)
-            $etude = $em->getRepository(Etude::class)->findOneBy(['id' => $_GET['id']]);
+            $etude = $em
+                ->getRepository(Etude::class)
+                ->findOneBy(['id' => $_GET['id']]);
 
         $facture = $this->createFacture($em, $etude, $formatter);
         $form = $this->createForm(FactureType::class, $facture);
@@ -208,16 +214,17 @@ class FactureController extends AbstractController
     /**
      * Returns a well formatted facture, according to current Etude state.
      *
-     * @param ObjectManager             $em
-     * @param Etude                     $etude
+     * @param ObjectManager $em
+     * @param Etude $etude
      * @param ConversionLettreFormatter $formatter
      *
      * @return Facture
+     * @throws Exception
      */
     private function createFacture(ObjectManager $em, ?Etude $etude, ConversionLettreFormatter $formatter)
     {
         if (!$this->keyValueStore->exists('tva')) {
-            throw new \RuntimeException('Le paramètres tva n\'est pas disponible.');
+            throw new RuntimeException('Le paramètres tva n\'est pas disponible.');
         }
         $tauxTVA = 100 * $this->keyValueStore->get('tva'); // former value: 20, tva is stored as 0.2 in key-value store
         $compteEtude = 705000;
@@ -229,7 +236,7 @@ class FactureController extends AbstractController
             $namingConvention = 'id';
         }
         $facture = new Facture();
-        $now = new \DateTime('now');
+        $now = new DateTime('now');
         $facture->setDateEmission($now);
 
         if ($etude) {

@@ -20,6 +20,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,20 +29,21 @@ class NoteDeFraisType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options) //https://openclassrooms.com/forum/sujet/symfony-3-form-dynamique-selon-choicetype
     {
         $builder
+
             ->add('numero', TextType::class, [
                 'label' => 'Numéro de la Note de Frais',
                 'required' => true,
             ])
 
-            ->add('objet', TextareaType::class,
-                ['label' => 'Objet de la Note de Frais',
+            ->add('objet', TextareaType::class, [
+                'label' => 'Objet de la Note de Frais',
                  'required' => true,
                  'attr' => [
                      'cols' => '100%',
                      'rows' => 5,
                  ],
-                ]
-            )
+            ])
+
             ->add('demandeur', Select2EntityType::class, [
                 'label' => 'Demandeur',
                 'class' => Personne::class,
@@ -52,19 +54,18 @@ class NoteDeFraisType extends AbstractType
                 'required' => true,
             ])
 
+            ->add('details', CollectionType::class, [
+                'entry_type' => NoteDeFraisDetailType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false,
+            ])
+
             ->add('date', DateType::class, [
                 'label' => 'Date',
                 'required' => true,
                 'widget' => 'single_text',
-            ])
-
-            ->add('typeNF', ChoiceType::class, [
-                'label' => 'Type de dépense',
-                'choices' => [
-                    'Classique' => true,
-                    'Kilométrique' => true,
-                ],
-                'required' => true,
             ]);
     }
 

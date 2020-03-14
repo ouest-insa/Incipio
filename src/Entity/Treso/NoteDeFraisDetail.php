@@ -20,6 +20,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class NoteDeFraisDetail implements TresoDetailInterface
 {
+
+    public const TYPE_NF_CLASSIQUE = 1;
+    public const TYPE_NF_KILOMETRIQUE = 2;
+
     /**
      * @var int
      *
@@ -92,8 +96,10 @@ class NoteDeFraisDetail implements TresoDetailInterface
     // Perso
     public static function getTypeChoices()
     {
-        return [1 => 'Classique',
-            2 => 'Kilométrique', ];
+        return [
+            self::TYPE_NF_CLASSIQUE => 'Classique',
+            self::TYPE_NF_KILOMETRIQUE => 'Kilométrique'
+        ];
     }
 
     public function getMontantHT()

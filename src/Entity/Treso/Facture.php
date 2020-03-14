@@ -14,7 +14,9 @@ namespace App\Entity\Treso;
 use App\Controller\Publish\TraitementController;
 use App\Entity\Personne\Prospect;
 use App\Entity\Project\Etude;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -92,7 +94,7 @@ class Facture implements TresoDetailableInterface
     private $type;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Assert\NotBlank()
      *
@@ -101,7 +103,7 @@ class Facture implements TresoDetailableInterface
     private $dateEmission;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="dateVersement", type="date", nullable=true)
      */
@@ -190,7 +192,7 @@ class Facture implements TresoDetailableInterface
             3 => TraitementController::DOCTYPE_FACTURE_ACOMTE,
             4 => TraitementController::DOCTYPE_FACTURE_INTERMEDIAIRE,
             5 => TraitementController::DOCTYPE_FACTURE_SOLDE,
-            6 => TraitementController::DOCTYPE_FACTURE_NOTE_ETUDE
+            6 => TraitementController::DOCTYPE_FACTURE_NOT_ETUDE
         ];
         return $type[$this->type];
     }
@@ -318,7 +320,7 @@ class Facture implements TresoDetailableInterface
     /**
      * Set dateEmission.
      *
-     * @param \DateTime $dateEmission
+     * @param DateTime $dateEmission
      *
      * @return Facture
      */
@@ -332,7 +334,7 @@ class Facture implements TresoDetailableInterface
     /**
      * Get dateEmission.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateEmission()
     {
@@ -342,7 +344,7 @@ class Facture implements TresoDetailableInterface
     /**
      * Set dateVersement.
      *
-     * @param \DateTime $dateVersement
+     * @param DateTime $dateVersement
      *
      * @return Facture
      */
@@ -356,7 +358,7 @@ class Facture implements TresoDetailableInterface
     /**
      * Get dateVersement.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateVersement()
     {
@@ -391,7 +393,7 @@ class Facture implements TresoDetailableInterface
     /**
      * Get details.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getDetails()
     {

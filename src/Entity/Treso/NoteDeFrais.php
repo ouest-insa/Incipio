@@ -13,6 +13,7 @@ namespace App\Entity\Treso;
 
 use App\Entity\Personne\Personne;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -80,15 +81,6 @@ class NoteDeFrais implements TresoDetailableInterface
     private $details;
 
     /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     *
-     * @ORM\Column(name="typeNF", type="string", length=50, nullable=false)
-     */
-    private $typeNF;
-
-    /**
      * @Assert\NotNull()
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne")
@@ -151,6 +143,9 @@ class NoteDeFrais implements TresoDetailableInterface
     public function __construct()
     {
         $this->details = new ArrayCollection();
+        $this->details->add(new NoteDeFraisDetail());
+        //Edition mars 2020 (ROSAZ) : On considère que les NF n'auront plus que 1 type : kilométrique ou classique.
+        //J'ai volontairement laissé les NFD en array pour une éventuelle modifitcation ultérieure.
     }
 
     /**
@@ -186,8 +181,9 @@ class NoteDeFrais implements TresoDetailableInterface
      */
     public function addDetail(NoteDeFraisDetail $details)
     {
-        $this->details[] = $details;
-
+        //$this->details[] = $details; //Edition mars 2020 : voir plus haut.
+        $this->details = new ArrayCollection();
+        $this->details->add($details);
         return $this;
     }
 
@@ -196,16 +192,17 @@ class NoteDeFrais implements TresoDetailableInterface
      *
      * @param NoteDeFraisDetail $details
      */
+
     public function removeDetail(NoteDeFraisDetail $details)
     {
-        $this->details->removeElement($details);
-        $details->setNoteDeFrais();
+       // $this->details->removeElement($details); //Edition mars 2020 : voir plus haut.
+       // $details->setNoteDeFrais();
     }
 
     /**
      * Get details.
      *
-     * @return \Doctrine\Common\Collections\Collection|NoteDeFraisDetail[]
+     * @return Collection|NoteDeFraisDetail[]
      */
     public function getDetails()
     {
@@ -246,29 +243,6 @@ class NoteDeFrais implements TresoDetailableInterface
     public function setMandat($mandat)
     {
         $this->mandat = 2020; //TODO à changer : c'est vraiment dégeulasse de hardcoder ça
-        return $this;
-    }
-
-    /**
-     * Get typeNF.
-     *
-     * @return string
-     */
-    public function getTypeNF()
-    {
-        return $this->typeNF;
-    }
-
-    /**
-     * Set mandat.
-     *
-     * @param string $typeNF
-     *
-     * @return NoteDeFrais
-     */
-    public function setTypeNF($typeNF)
-    {
-        $this->typeNF = $typeNF;
         return $this;
     }
 
