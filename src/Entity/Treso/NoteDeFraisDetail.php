@@ -18,11 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table()
  * @ORM\Entity
  */
-class NoteDeFraisDetail implements TresoDetailInterface
-{
-
-    public const TYPE_NF_CLASSIQUE = 1;
-    public const TYPE_NF_KILOMETRIQUE = 2;
+class NoteDeFraisDetail implements TresoDetailInterface {
 
     /**
      * @var int
@@ -46,7 +42,7 @@ class NoteDeFraisDetail implements TresoDetailInterface
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    private $description;
+    private $description = "";
 
     /**
      * @var float
@@ -97,8 +93,8 @@ class NoteDeFraisDetail implements TresoDetailInterface
     public static function getTypeChoices()
     {
         return [
-            self::TYPE_NF_CLASSIQUE => 'Classique',
-            self::TYPE_NF_KILOMETRIQUE => 'Kilométrique'
+            1 => 'Classique',
+            2 => 'Kilométrique'
         ];
     }
 

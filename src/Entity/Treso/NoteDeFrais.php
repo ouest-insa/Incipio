@@ -12,6 +12,7 @@
 namespace App\Entity\Treso;
 
 use App\Entity\Personne\Personne;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,8 +27,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"mandat", "numero"})})
  * @ORM\Entity(repositoryClass="App\Repository\Treso\NoteDeFraisRepository")
  */
-class NoteDeFrais implements TresoDetailableInterface
-{
+class NoteDeFrais implements TresoDetailableInterface {
+
+    public const NF_TO_NORMAL = 1;
+    public const NF_TO_TRESORIER = 2;
+    public const NF_TO_PRESIDENT = 3;
+
     /**
      * @var int
      *
@@ -38,7 +43,7 @@ class NoteDeFrais implements TresoDetailableInterface
     private $id;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Assert\NotBlank()
      *
@@ -63,6 +68,15 @@ class NoteDeFrais implements TresoDetailableInterface
      * @ORM\Column(name="numero", type="string", length=50, nullable=false)
      */
     private $numero;
+
+    /**
+     * @var int
+     *
+     * @Assert\NotBlank()
+     *
+     * @ORM\Column(name="adressedTo", type="smallint", nullable=false)
+     */
+    private $adressedTo;
 
     /**
      * @var string
@@ -282,7 +296,7 @@ class NoteDeFrais implements TresoDetailableInterface
     /**
      * Set date.
      *
-     * @param \DateTime $date
+     * @param DateTime $date
      *
      * @return NoteDeFrais
      */
@@ -296,10 +310,30 @@ class NoteDeFrais implements TresoDetailableInterface
     /**
      * Get date.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Get adressedTo
+     * @return int
+     */
+    public function getAdressedTo()
+    {
+        return $this->adressedTo;
+    }
+
+    /**
+     * Set adressedTo
+     * @param int $adressedTo
+     * @return NoteDeFrais
+     */
+    public function setAdressedTo(int $adressedTo)
+    {
+        $this->adressedTo = $adressedTo;
+        return $this;
     }
 }

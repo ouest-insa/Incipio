@@ -38,9 +38,8 @@ class FactureType extends AbstractType
             ])
             ->add('type', ChoiceType::class, [
                 'choices' => array_flip(Facture::getTypeChoices()),
-                 'required' => true,
+                'required' => true,
             ])
-
             ->add('objet', TextareaType::class, [
                     'label' => 'Objet de la Facture',
                     'required' => true,

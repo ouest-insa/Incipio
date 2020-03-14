@@ -44,6 +44,16 @@ class NoteDeFraisType extends AbstractType
                  ],
             ])
 
+            ->add('adressedTo', ChoiceType::class, [
+                'label' => 'Rôle du demandeur',
+                'choices' => [
+                    'Membre' => NoteDeFrais::NF_TO_NORMAL,
+                    'Trésorier' =>NoteDeFrais::NF_TO_TRESORIER,
+                    'Président' =>NoteDeFrais::NF_TO_PRESIDENT
+                ],
+                'required' => true
+            ])
+
             ->add('demandeur', Select2EntityType::class, [
                 'label' => 'Demandeur',
                 'class' => Personne::class,

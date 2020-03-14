@@ -49,12 +49,17 @@
             </th>
             <td>{{ form_widget(form.date) }}</td>
         </tr>
-        <tr>
+        <tr id="demandeur">
             <th>
                 {{ form_label(form.demandeur) }}
                 {{ form_errors(form.demandeur) }}
             </th>
             <td>{{ form_widget(form.demandeur) }}</td>
+            <th>
+                {{ form_label(form.adressedTo) }}
+                {{ form_errors(form.adressedTo) }}
+            </th>
+            <td>{{ form_widget(form.adressedTo) }}</td>
         </tr>
         <tr>
             <th>
@@ -64,55 +69,15 @@
             <td>{{ form_widget(form.objet) }}</td>
         </tr>
 
-       <!-- <table class="table">-->
-            <tr>
-                <th>
-                    {{ form_label(form.details|first.type) }}
-                    {{ form_errors(form.details|first.type) }}
-                </th>
-                <td>{{ form_widget(form.details|first.type) }}</td>
-                <th>
-                    {{ form_label(form.details|first.compte) }}
-                    {{ form_errors(form.details|first.compte) }}
-                </th>
-                <td>{{ form_widget(form.details|first.compte) }}</td>
-            </tr>
-            <tr>
-                <th>
-                    {{ form_label(form.details|first.description) }}
-                    {{ form_errors(form.details|first.description) }}
-                </th>
-                <td colspan="3">{{ form_widget(form.details|first.description) }}</td>
-            </tr>
-            <tr id="prix">
-                <th>
-                    {{ form_label(form.details|first.prixHT) }}
-                    {{ form_errors(form.details|first.prixHT) }}
-                </th>
-                <td>{{ form_widget(form.details|first.prixHT) }}</td>
-                <th>
-                    {{ form_label(form.details|first.tauxTVA) }}
-                    {{ form_errors(form.details|first.tauxTVA) }}
-                </th>
-                <td>{{ form_widget(form.details|first.tauxTVA) }}</td>
-            </tr>
-            <tr id="km">
-                <th>
-                    {{ form_label(form.details|first.kilometrage) }}
-                    {{ form_errors(form.details|first.kilometrage) }}
-                </th>
-                <td>{{ form_widget(form.details|first.kilometrage) }}</td>
-                <th>
-                    {{ form_label(form.details|first.tauxKm) }}
-                    {{ form_errors(form.details|first.tauxKm) }}
-                </th>
-                <td>{{ form_widget(form.details|first.tauxKm) }}</td>
-            </tr>
-        <!--</table>-->
+        <tr>
+            <th>
+                {{ form_label(form.details|first.type) }}
+                {{ form_errors(form.details|first.type) }}
+            </th>
+            <td>{{ form_widget(form.details|first.type) }}</td>
+        </tr>
 
-    {#{% for detail in form.details %}
 
-        {% endfor %}#}
         {% if form.details|length == 0 %}
             <th>
                 Erreur : aucun NFDetail !
@@ -125,25 +90,36 @@
         {% endif %}
 
         </table>
-    {#
-        <table class="table table-bordered table-striped" id="details" data-prototype="{{ form_widget(form.details.vars.prototype) | e }}">
-            <tr>
-                <th colspan="2"><a href="#" id="addDetail">+</a> {{ 'treso.details'|trans({}, 'treso') }}</th>
-            </tr>
 
-                <tr id="detail">
-                    <td></td>
-                    <td>
+    <table class="table table-bordered table-striped standard" id="tableClassique">
+        <tr id="prix">
+            <th>
+                {{ form_label(form.details|first.prixHT) }}
+                {{ form_errors(form.details|first.prixHT) }}
+            </th>
+            <td>{{ form_widget(form.details|first.prixHT) }}</td>
+            <th>
+                {{ form_label(form.details|first.tauxTVA) }}
+                {{ form_errors(form.details|first.tauxTVA) }}
+            </th>
+            <td>{{ form_widget(form.details|first.tauxTVA) }}</td>
+        </tr>
+    </table>
 
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-
-
-
-            </table>
-            #}
+    <table class="table table-bordered table-striped standard" id="tableKm">
+        <tr id="km">
+            <th>
+                {{ form_label(form.details|first.kilometrage) }}
+                {{ form_errors(form.details|first.kilometrage) }}
+            </th>
+            <td>{{ form_widget(form.details|first.kilometrage) }}</td>
+            <th>
+                {{ form_label(form.details|first.tauxKm) }}
+                {{ form_errors(form.details|first.tauxKm) }}
+            </th>
+            <td>{{ form_widget(form.details|first.tauxKm) }}</td>
+        </tr>
+    </table>
 
         {{ form_widget(form) }}
     {{ form_end(form) }}
@@ -215,27 +191,29 @@
 
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
-            var selection = $('select[id$="_type"]'); //on récupère le type de l'objet NoteDeFraisDetails
+            const selection = $('select[id$="_type"]');
+
             selection.each(
                 function () {
-
+                    switchFormat($(this).val());
                 }
             );
 
             selection.change(
                 function () {
-                    console.log('>> ' + $(this).val());
-                    if($(this).val() == 1) {
-                        console.log('> Mode classique');
-                        $(this).closest('.table').find('#{{ form.details|first.kilometrage.vars.id }}').hide();
-                        $(this).closest('.table').find('#{{ form.details|first.tauxKm.vars.id }}').hide();
-                    } else if ($(this).val() == 2) {
-                        console.log('> Mode kilométrique');
-                        $(this).closest('.table').find('#{{ form.details|first.kilometrage.vars.id }}').show();
-                        $(this).closest('.table').find('#{{ form.details|first.tauxKm.vars.id }}').show();
-                    }
+                    switchFormat($(this).val());
                 }
             );
+
+            function switchFormat(switchValue) {
+                if(switchValue == 1) {
+                    document.getElementById('tableKm').style.visibility = "hidden";
+                    document.getElementById('tableClassique').style.visibility = "visible";
+                } else if (switchValue == 2) {
+                    document.getElementById('tableKm').style.visibility = "visible";
+                    document.getElementById('tableClassique').style.visibility = "hidden";
+                }
+            }
         });
     </script>
 

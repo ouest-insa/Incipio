@@ -28,14 +28,6 @@ class NoteDeFraisDetailType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('description', TextareaType::class, [
-                'label' => 'Description de la dépense',
-                 'attr' => [
-                     'cols' => '100%',
-                     'rows' => 5,
-                 ],
-                'required' => true
-            ])
             ->add('prixHT', MoneyType::class, [
                 'label' => 'Prix H.T.',
                 'required' => false
@@ -53,9 +45,11 @@ class NoteDeFraisDetailType extends AbstractType
                 'required' => false
             ])
             ->add('type', ChoiceType::class, [
+                'label' => 'Type de la note',
                 'choices' => array_flip(NoteDeFraisDetail::getTypeChoices()),
                 'required' => true
-            ])
+            ]);
+        /*
             ->add('compte', Select2EntityType::class, [
                 'class' => Compte::class,
                 'choice_label' => 'libelle',
@@ -65,7 +59,16 @@ class NoteDeFraisDetailType extends AbstractType
                     'allowClear' => true
                 ],
                 'required' => false
+            ])
+            ->add('description', TextareaType::class, [
+                'label' => 'Description de la dépense',
+                'attr' => [
+                    'cols' => '100%',
+                    'rows' => 5,
+                ],
+                'required' => true
             ]);
+        */
     }
 
     public function getBlockPrefix()
