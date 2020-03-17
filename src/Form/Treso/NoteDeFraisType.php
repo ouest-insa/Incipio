@@ -21,6 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -30,6 +31,11 @@ class NoteDeFraisType extends AbstractType
     {
         $builder
 
+            ->add('mandat', IntegerType::class, [
+                'label' => 'Mandat',
+                'required' => true,
+            ])
+
             ->add('numero', TextType::class, [
                 'label' => 'Numéro de la Note de Frais',
                 'required' => true,
@@ -37,19 +43,19 @@ class NoteDeFraisType extends AbstractType
 
             ->add('objet', TextareaType::class, [
                 'label' => 'Objet de la Note de Frais',
-                 'required' => true,
                  'attr' => [
                      'cols' => '100%',
                      'rows' => 5,
                  ],
+                'required' => true,
             ])
 
             ->add('adressedTo', ChoiceType::class, [
                 'label' => 'Rôle du demandeur',
                 'choices' => [
                     'Membre' => NoteDeFrais::NF_TO_NORMAL,
-                    'Trésorier' =>NoteDeFrais::NF_TO_TRESORIER,
-                    'Président' =>NoteDeFrais::NF_TO_PRESIDENT
+                    'Trésorier' => NoteDeFrais::NF_TO_TRESORIER,
+                    'Président' => NoteDeFrais::NF_TO_PRESIDENT
                 ],
                 'required' => true
             ])

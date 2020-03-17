@@ -12,6 +12,7 @@
 namespace App\Entity\Treso;
 
 use Doctrine\ORM\Mapping as ORM;
+use ErrorException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -38,9 +39,7 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     /**
      * @var string
      *
-     * @Assert\NotBlank()
-     *
-     * @ORM\Column(name="description", type="text", nullable=false)
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description = "";
 
@@ -54,7 +53,7 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     /**
      * @var float
      *
-     * @ORM\Column(name="tauxTVA", type="decimal", precision=6, scale=2, nullable=true)
+     * @ORM\Column(name="tauxTVA", type="decimal", precision=6, scale=2, nullable=true, options={"default" : 20})
      */
     private $tauxTVA;
 
@@ -77,7 +76,7 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     /**
      * @var float
      *
-     * @ORM\Column(name="tauxKm", type="integer", nullable=true)
+     * @ORM\Column(name="tauxKm", type="integer", nullable=true, options={"default" : 14})
      */
     private $tauxKm;
 
@@ -96,6 +95,19 @@ class NoteDeFraisDetail implements TresoDetailInterface {
             1 => 'Classique',
             2 => 'Kilométrique'
         ];
+    }
+
+    /**
+     * @return string
+     * @throws ErrorException
+     */
+    public function getStringType() {
+        if($this->type == 1)
+            return 'Classique';
+        elseif ($this->type == 2)
+            return 'Kilométrique';
+        else
+            throw new ErrorException("La note de frais n'est ni classique ni kilométrique.");
     }
 
     public function getMontantHT()
@@ -143,7 +155,6 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     public function setDescription($description)
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -167,7 +178,6 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     public function setPrixHT($prixHT)
     {
         $this->prixHT = $prixHT;
-
         return $this;
     }
 
@@ -191,7 +201,6 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     public function setTauxTVA($tauxTVA)
     {
         $this->tauxTVA = $tauxTVA;
-
         return $this;
     }
 
@@ -215,7 +224,6 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     public function setType($type)
     {
         $this->type = $type;
-
         return $this;
     }
 
@@ -239,7 +247,6 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     public function setKilometrage($kilometrage)
     {
         $this->kilometrage = $kilometrage;
-
         return $this;
     }
 
@@ -263,7 +270,6 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     public function setTauxKm($tauxKm)
     {
         $this->tauxKm = $tauxKm;
-
         return $this;
     }
 
@@ -287,7 +293,6 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     public function setNoteDeFrais(NoteDeFrais $noteDeFrais = null)
     {
         $this->noteDeFrais = $noteDeFrais;
-
         return $this;
     }
 
@@ -311,7 +316,6 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     public function setCompte(Compte $compte = null)
     {
         $this->compte = $compte;
-
         return $this;
     }
 

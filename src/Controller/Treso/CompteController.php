@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CompteController extends AbstractController
@@ -37,6 +38,9 @@ class CompteController extends AbstractController
      * @Security("has_role('ROLE_TRESO')")
      * @Route(name="treso_Compte_ajouter", path="/Tresorerie/Compte/Ajouter", methods={"GET","HEAD","POST"}, defaults={"id": "-1", "etude_id": "-1"})
      * @Route(name="treso_Compte_modifier", path="/Tresorerie/Compte/Modifier/{id}", methods={"GET","HEAD","POST"})
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse|Response
      */
     public function modifier(Request $request, $id)
     {

@@ -37,6 +37,13 @@
     <table class="table table-bordered table-striped standard">
         <tr>
             <th>
+                {{ form_label(form.mandat) }}
+                {{ form_errors(form.mandat) }}
+            </th>
+            <td>{{ form_widget(form.mandat, {value : 2020}) }}</td>
+        </tr>
+        <tr>
+            <th>
                 {{ form_label(form.numero) }}
                 {{ form_errors(form.numero) }}
             </th>
@@ -55,6 +62,8 @@
                 {{ form_errors(form.demandeur) }}
             </th>
             <td>{{ form_widget(form.demandeur) }}</td>
+        </tr>
+        <tr>
             <th>
                 {{ form_label(form.adressedTo) }}
                 {{ form_errors(form.adressedTo) }}
@@ -102,7 +111,7 @@
                 {{ form_label(form.details|first.tauxTVA) }}
                 {{ form_errors(form.details|first.tauxTVA) }}
             </th>
-            <td>{{ form_widget(form.details|first.tauxTVA) }}</td>
+            <td>{{ form_widget(form.details|first.tauxTVA, {value : 20}) }}</td>
         </tr>
     </table>
 
@@ -117,7 +126,7 @@
                 {{ form_label(form.details|first.tauxKm) }}
                 {{ form_errors(form.details|first.tauxKm) }}
             </th>
-            <td>{{ form_widget(form.details|first.tauxKm) }}</td>
+            <td>{{ form_widget(form.details|first.tauxKm, {value : 14}) }}</td>
         </tr>
     </table>
 

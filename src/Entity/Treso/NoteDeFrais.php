@@ -47,7 +47,7 @@ class NoteDeFrais implements TresoDetailableInterface {
      *
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="date", type="date",nullable=false)
+     * @ORM\Column(name="date", type="date", nullable=false)
      */
     private $date;
 
@@ -233,7 +233,6 @@ class NoteDeFrais implements TresoDetailableInterface {
     public function setDemandeur(Personne $demandeur = null)
     {
         $this->demandeur = $demandeur;
-
         return $this;
     }
 
@@ -256,7 +255,7 @@ class NoteDeFrais implements TresoDetailableInterface {
      */
     public function setMandat($mandat)
     {
-        $this->mandat = 2020; //TODO à changer : c'est vraiment dégeulasse de hardcoder ça
+        $this->mandat = $mandat;
         return $this;
     }
 

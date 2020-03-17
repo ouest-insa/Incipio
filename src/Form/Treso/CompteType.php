@@ -22,15 +22,19 @@ class CompteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('libelle', TextType::class,
-            ['label' => 'Libellé du compte',
-             'required' => true,
-            ]
-        )
-            ->add('numero', TextType::class,
-                ['label' => 'Numéro de compte', 'required' => true, 'attr' => ['maxlength' => 6]])
-            ->add('categorie', CheckboxType::class, ['label' => 'Est utilisé comme catégorie ? ',
-                                                     'required' => false,
+        $builder
+            ->add('libelle', TextType::class, [
+            'label' => 'Libellé du compte',
+                'required' => true,
+            ])
+            ->add('numero', TextType::class, [
+                'label' => 'Numéro de compte',
+                'required' => true,
+                'attr' => ['maxlength' => 6]
+            ])
+            ->add('categorie', CheckboxType::class, [
+                'label' => 'Est utilisé comme catégorie ? ',
+                'required' => false,
             ]);
     }
 

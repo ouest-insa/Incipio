@@ -13,6 +13,8 @@ namespace App\Controller\Treso;
 
 use App\Entity\Treso\NoteDeFrais;
 use App\Form\Treso\NoteDeFraisType;
+use DateTime;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -44,7 +46,7 @@ class NoteDeFraisController extends AbstractController
      *
      * @return RedirectResponse|Response
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function modifier(Request $request, $id)
     {
@@ -52,7 +54,7 @@ class NoteDeFraisController extends AbstractController
 
         if (!$nf = $em->getRepository(NoteDeFrais::class)->find($id)) {
             $nf = new NoteDeFrais();
-            $now = new \DateTime('now');
+            $now = new DateTime('now');
             $nf->setDate($now);
         }
 
@@ -60,6 +62,9 @@ class NoteDeFraisController extends AbstractController
 
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
+
+            //if($nf->getMandat() == null)
+            //    $nf = $nf->setMandat(2020); //Tentative pour forcer une valeur par défault : non concluant. La valeur est bien passée mais le isValid l'ignore.
 
             if ($form->isValid()) {
                 foreach ($nf->getDetails() as $nfd) {

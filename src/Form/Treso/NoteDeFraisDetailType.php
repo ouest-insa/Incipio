@@ -11,15 +11,12 @@
 
 namespace App\Form\Treso;
 
-use App\Entity\Treso\Compte;
 use App\Entity\Treso\NoteDeFraisDetail;
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -34,6 +31,7 @@ class NoteDeFraisDetailType extends AbstractType
             ])
             ->add('tauxTVA', NumberType::class, [
                 'label' => 'Taux TVA (%)',
+                'empty_data' => 20,
                 'required' => false
             ])
             ->add('kilometrage', IntegerType::class, [
@@ -47,7 +45,6 @@ class NoteDeFraisDetailType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'label' => 'Type de la note',
                 'choices' => array_flip(NoteDeFraisDetail::getTypeChoices()),
-                'required' => true
             ]);
         /*
             ->add('compte', Select2EntityType::class, [
