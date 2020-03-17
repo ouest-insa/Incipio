@@ -41,10 +41,10 @@ treso:
   deductible: déductible
   delai: Délai
   demandeur: Demandeur
-  depenses_details: Détails des dépenses
+  depenses_details: Note de frais classique
   description: Description
   details: Détails
-  details_frais_kilometriques: Détails des frais kilométrique
+  details_frais_kilometriques: Note de frais kilométrique
   enregistrer: Enregistrer
   est_deductible: Est déductible ?
   etudiant: Etudiant
@@ -128,3 +128,7 @@ treso:
   tva_collecte: TVA Collectée
   tva_declaration: Déclaration de la TVA
   tva_deductible: TVA Deductible
+  type: Type
+  type_kilometrique: Kilométrique
+  type_classique: Classique
+  type_inconnu: Inconnu

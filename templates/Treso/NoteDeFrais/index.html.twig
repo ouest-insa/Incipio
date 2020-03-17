@@ -35,6 +35,7 @@
         <tr>
             <th>{{ 'treso.date'|trans({}, 'treso') }}</th>
             <th>{{ 'treso.reference'|trans({}, 'treso') }}</th>
+            <th>{{ 'treso.type'|trans({}, 'treso') }}</th>
             <th>{{ 'treso.demandeur'|trans({}, 'treso') }}</th>
             <th>{{ 'treso.objet'|trans({}, 'treso') }}</th>
             <th>{{ 'treso.montant_ht'|trans({}, 'treso') }}</th>
@@ -47,6 +48,15 @@
                 <td>{{ nf.date | date('d/m/Y') }}</td>
                 <td>
                     <a href="{{ path('treso_NoteDeFrais_voir', {'id': nf.id}) }}">{{ nf.reference }}</a>
+                </td>
+                <td>
+                    {% if nf.details|first.type == 1 %}
+                        {{ 'treso.type_classique'|trans({}, 'treso') }}
+                    {% elseif nf.details|first.type == 2 %}
+                        {{ 'treso.type_kilometrique'|trans({}, 'treso') }}
+                    {% else %}
+                        {{ 'treso.type_inconnu'|trans({}, 'treso') }}
+                    {% endif %}
                 </td>
                 <td>{{ nf.demandeur.prenomNom }}</td>
                 <td>{{ nf.objet | nl2br }}</td>
