@@ -61,12 +61,22 @@
             <tr>
                 <th>{{ 'treso.nombre_kilometre'|trans({}, 'treso') }}</th>
                 <th>{{ 'treso.prix_km'|trans({}, 'treso') }}</th>
+                {% if detail.peageHT > 0 %}
+                    <th>{{ 'treso.peages_ht'|trans({}, 'treso') }}</th>
+                    <th>{{ 'treso.tva'|trans({}, 'treso') }}</th>
+                    <th>{{ 'treso.peages_tva'|trans({}, 'treso') }}</th>
+                {% endif %}
                 <th>{{ 'treso.prix_total'|trans({}, 'treso') }}</th>
             </tr>
             <tr>
                 <td>{{ detail.kilometrage }} km</td>
                 <td>{{ (detail.tauxKm / 100) |number_format(2, ',', ' ') }} €</td>
-                <td bgcolor="#ff6347" style="font-size: 16px;">{{ (detail.kilometrage * detail.tauxKm / 100)  |number_format(2, ',', ' ') }} €</td>
+                {% if detail.peageHT > 0 %}
+                    <td>{{ detail.peageHT }} €</td>
+                    <td>{{ detail.tvaPeages |number_format(2, ',', ' ') }} %</td>
+                    <td>{{ detail.montantTVA }} €</td>
+                {% endif %}
+                <td bgcolor="#ff6347" style="font-size: 16px;">{{ (detail.montantTTC)  |number_format(2, ',', ' ') }} €</td>
             </tr>
 
         {% else %}

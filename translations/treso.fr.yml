@@ -82,7 +82,7 @@ treso:
   nombre_jeh: Nombre de jours-étude homme
   nombre_jeh_etude: Nombre de JEH de l'étude
   nombre_jeh_etudiant: Nombre de JEH pour l'étudiant
-  nombre_kilometre: Nombre de kilomètre
+  nombre_kilometre: Nombre de kilomètres
   nombre_salaries_periode_declaration: Nombre salariés pour la période de déclaration
   note_frais: Note de Frais
   note_frais_ajouter: Ajouter une note de frais
@@ -132,3 +132,5 @@ treso:
   type_kilometrique: Kilométrique
   type_classique: Classique
   type_inconnu: Inconnu
+  peages_ht: Péages HT
+  peages_tva: TVA Péages

@@ -12,7 +12,6 @@
 namespace App\Entity\Treso;
 
 use Doctrine\ORM\Mapping as ORM;
-use ErrorException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -81,6 +80,20 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     private $tauxKm;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="peageHT", type="decimal", precision=6, scale=2, nullable=true)
+     */
+    private $peageHT;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="tvaPeages", type="decimal", precision=6, scale=2, nullable=true, options={"default" : 20})
+     */
+    private $tvaPeages;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Compte")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -97,32 +110,23 @@ class NoteDeFraisDetail implements TresoDetailInterface {
         ];
     }
 
-    /**
-     * @return string
-     * @throws ErrorException
-     */
-    public function getStringType() {
-        if($this->type == 1)
-            return 'Classique';
-        elseif ($this->type == 2)
-            return 'Kilométrique';
-        else
-            throw new ErrorException("La note de frais n'est ni classique ni kilométrique.");
-    }
-
     public function getMontantHT()
     {
-        if (1 == $this->type) {
+        if ($this->type == 1) {
             return $this->prixHT;
+        } elseif ($this->type == 2) {
+            return ($this->kilometrage * ($this->tauxKm / 100)) + $this->peageHT;
         } else {
-            return $this->kilometrage * $this->tauxKm / 100;
+            return 0;
         }
     }
 
     public function getMontantTVA()
     {
-        if (1 == $this->type) {
+        if ($this->type == 1) {
             return $this->tauxTVA * $this->getMontantHT() / 100;
+        } elseif ($this->type == 2) {
+            return ($this->tvaPeages / 100) * $this->peageHT;
         } else {
             return 0;
         }
@@ -132,8 +136,6 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     {
         return $this->getMontantHT() + $this->getMontantTVA();
     }
-
-    // Getter Setter Auto Generated
 
     /**
      * Get id.
@@ -189,6 +191,29 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     public function getPrixHT()
     {
         return $this->prixHT;
+    }
+
+    /**
+     * Set peageHT.
+     *
+     * @param float $peageHT
+     *
+     * @return NoteDeFraisDetail
+     */
+    public function setPeageHT($peageHT)
+    {
+        $this->peageHT = $peageHT;
+        return $this;
+    }
+
+    /**
+     * Get peageHT.
+     *
+     * @return float
+     */
+    public function getPeageHT()
+    {
+        return $this->peageHT;
     }
 
     /**
@@ -328,4 +353,25 @@ class NoteDeFraisDetail implements TresoDetailInterface {
     {
         return $this->compte;
     }
+
+    /**
+     * Get TVA on peages
+     * @return float
+     */
+    public function getTvaPeages()
+    {
+        return $this->tvaPeages;
+    }
+
+    /**
+     * Set TVA on peages
+     * @param float $tvaPeages
+     * @return NoteDeFraisDetail
+     */
+    public function setTvaPeages(float $tvaPeages)
+    {
+        $this->tvaPeages = $tvaPeages;
+        return $this;
+    }
+
 }

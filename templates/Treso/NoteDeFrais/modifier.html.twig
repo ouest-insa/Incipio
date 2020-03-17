@@ -91,8 +91,7 @@
             <th>
                 Erreur : aucun NFDetail !
             </th>
-        {% endif %}
-        {% if form.details|length > 1 %}
+        {% elseif form.details|length > 1 %}
             <th>
                 Erreur : trop de NFDetails !
             </th>
@@ -100,33 +99,46 @@
 
         </table>
 
+    {% set detail = form.details|first %}
     <table class="table table-bordered table-striped standard" id="tableClassique">
         <tr id="prix">
             <th>
-                {{ form_label(form.details|first.prixHT) }}
-                {{ form_errors(form.details|first.prixHT) }}
+                {{ form_label(detail.prixHT) }}
+                {{ form_errors(detail.prixHT) }}
             </th>
-            <td>{{ form_widget(form.details|first.prixHT) }}</td>
+            <td>{{ form_widget(detail.prixHT) }}</td>
             <th>
-                {{ form_label(form.details|first.tauxTVA) }}
-                {{ form_errors(form.details|first.tauxTVA) }}
+                {{ form_label(detail.tauxTVA) }}
+                {{ form_errors(detail.tauxTVA) }}
             </th>
-            <td>{{ form_widget(form.details|first.tauxTVA, {value : 20}) }}</td>
+            <td>{{ form_widget(detail.tauxTVA, {value : 20}) }}</td>
         </tr>
     </table>
 
     <table class="table table-bordered table-striped standard" id="tableKm">
         <tr id="km">
             <th>
-                {{ form_label(form.details|first.kilometrage) }}
-                {{ form_errors(form.details|first.kilometrage) }}
+                {{ form_label(detail.kilometrage) }}
+                {{ form_errors(detail.kilometrage) }}
             </th>
-            <td>{{ form_widget(form.details|first.kilometrage) }}</td>
+            <td>{{ form_widget(detail.kilometrage) }}</td>
             <th>
-                {{ form_label(form.details|first.tauxKm) }}
-                {{ form_errors(form.details|first.tauxKm) }}
+                {{ form_label(detail.tauxKm) }}
+                {{ form_errors(detail.tauxKm) }}
             </th>
-            <td>{{ form_widget(form.details|first.tauxKm, {value : 14}) }}</td>
+            <td>{{ form_widget(detail.tauxKm, {value : 14}) }}</td>
+        </tr>
+        <tr id="km2">
+            <th>
+                {{ form_label(detail.peageHT) }}
+                {{ form_errors(detail.peageHT) }}
+            </th>
+            <td>{{ form_widget(detail.peageHT) }}</td>
+            <th>
+                {{ form_label(detail.tvaPeages) }}
+                {{ form_errors(detail.tvaPeages) }}
+            </th>
+            <td>{{ form_widget(detail.tvaPeages, {value : 20}) }}</td>
         </tr>
     </table>
 
@@ -137,67 +149,6 @@
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
-    <script type="text/javascript">
-        // Récupère le div qui contient la collection de tags
-        var collectionHolderDetails = $('#details');
-        var $addDetailButton = $("#addDetail");
-
-        jQuery(document).ready(function () {
-            var i = 0;
-            var j = 0;
-            $("tr#detail").each(function () {
-                addDeleteButton(this);
-            });
-
-
-            $addDetailButton.on('click', function (e) {
-                // empêche le lien de créer un « # » dans l'URL
-                e.preventDefault();
-
-                // ajoute un nouveau formulaire detail (voir le prochain bloc de code)
-                addTagForm(collectionHolderDetails, i, 'detail');
-                i++;
-            });
-
-        });
-
-
-        function addTagForm(collectionHolder, i, type) {
-            // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
-            var prototype = collectionHolder.attr('data-prototype');
-
-            // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
-            // la longueur de la collection courante
-            var newForm = prototype.replace(/__name__/g, collectionHolderDetails.children().first().children().length);
-            newForm = '<tr id="' + type + i + '"><td></td><td>' + newForm + '</td></tr>';
-
-            // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
-            var $newForm = collectionHolder.append(newForm);
-            addDeleteButton($('#' + type + i));
-
-        }
-
-
-        function addDeleteButton($tag) {
-            var $delete = $('<button class="btn" id="myButtonDelete" class="btn">X</button>');
-            $($tag).children().first().append($delete);
-
-            $delete.on('click', function (e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                //CONFIRM confirmation suppression
-                var message = "Êtes vous sûr de vouloir supprimer cette ligne ?";
-                bootbox.confirm(message, function (result) {
-                    if (result) {
-                        $tag.remove();
-                    }
-                });
-            });
-
-        }
-    </script>
-
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
             const selection = $('select[id$="_type"]');

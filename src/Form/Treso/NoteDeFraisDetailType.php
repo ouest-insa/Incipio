@@ -42,6 +42,15 @@ class NoteDeFraisDetailType extends AbstractType
                 'label' => 'Prix au kilomètre (en cts)',
                 'required' => false
             ])
+            ->add('peageHT', MoneyType::class, [
+                'label' => 'Montant de péages HT',
+                'required' => false
+            ])
+            ->add('tvaPeages', NumberType::class, [
+                'label' => 'Taux TVA péages (%)',
+                'empty_data' => 20,
+                'required' => false
+            ])
             ->add('type', ChoiceType::class, [
                 'label' => 'Type de la note',
                 'choices' => array_flip(NoteDeFraisDetail::getTypeChoices()),
