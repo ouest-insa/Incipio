@@ -53,7 +53,7 @@ class TraitementController extends AbstractController
 
     const DOCTYPE_FACTURE_SOLDE = 'FS';
 
-    const DOCTYPE_FACTURE_NOT_ETUDE = 'FNE';
+    //const DOCTYPE_FACTURE_NOT_ETUDE = 'FNE';
 
     const DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE = 'PVI';
 

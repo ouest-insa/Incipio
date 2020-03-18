@@ -67,10 +67,8 @@ class FactureController extends AbstractController
     public function ajouter(Request $request, ?Etude $etude, ConversionLettreFormatter $formatter)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!$etude)
-            $etude = $em
-                ->getRepository(Etude::class)
-                ->findOneBy(['id' => $_GET['id']]);
+        if (!$etude && isset($_GET['id']))
+            $etude = $em->getRepository(Etude::class)->findOneBy(['id' => $_GET['id']]);
 
         $facture = $this->createFacture($em, $etude, $formatter);
         $form = $this->createForm(FactureType::class, $facture);
@@ -118,8 +116,9 @@ class FactureController extends AbstractController
     {
         $deleteForm = $this->createDeleteForm($facture);
 
-        return $this->render('Treso/Facture/voir.html.twig', ['facture' => $facture,
-                                                              'delete_form' => $deleteForm->createView(),
+        return $this->render('Treso/Facture/voir.html.twig', [
+            'facture' => $facture,
+            'delete_form' => $deleteForm->createView(),
         ]);
     }
 

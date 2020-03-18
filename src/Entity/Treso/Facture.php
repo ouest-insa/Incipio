@@ -36,7 +36,7 @@ class Facture implements TresoDetailableInterface
 
     const TYPE_VENTE_SOLDE = 5;
 
-    const TYPE_NOT_ETUDE = 6;
+    //const TYPE_NOT_ETUDE = 6;
 
     /**
      * @var int
@@ -192,7 +192,7 @@ class Facture implements TresoDetailableInterface
             3 => TraitementController::DOCTYPE_FACTURE_ACOMTE,
             4 => TraitementController::DOCTYPE_FACTURE_INTERMEDIAIRE,
             5 => TraitementController::DOCTYPE_FACTURE_SOLDE,
-            6 => TraitementController::DOCTYPE_FACTURE_NOT_ETUDE
+           // 6 => TraitementController::DOCTYPE_FACTURE_NOT_ETUDE
         ];
         return $type[$this->type];
     }
@@ -217,8 +217,8 @@ class Facture implements TresoDetailableInterface
             self::TYPE_VENTE_ACCOMPTE => 'FV - Facture d\'acompte',
             self::TYPE_VENTE_INTERMEDIAIRE => 'FV - Facture intermédiaire',
             self::TYPE_VENTE_SOLDE => 'FV - Facture de solde',
-            self::TYPE_NOT_ETUDE => 'FA - Facture d\'achat (hors étude)',
-            ];
+           // self::TYPE_NOT_ETUDE => 'FA - Facture d\'achat (hors étude)',
+        ];
     }
 
     /**
